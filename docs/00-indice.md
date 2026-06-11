@@ -29,6 +29,7 @@ Todo lo demas debe leerse como propuesta, fase futura o especificacion previa, n
 
 | Documento | Proposito | Estado |
 |---|---|---|
+| [../CLAUDE.md](../CLAUDE.md) | Reglas minimas de proyecto en la raiz: remite a `/docs`, protege la home/hero y fija validacion minima. | Activo (creado en FASE 0, 11/06/2026) |
 | [AGENTES.md](AGENTES.md) | Reglas de colaboracion, validacion y disciplina documental. | Activo |
 | [POLITICA_LIMPIEZA.md](POLITICA_LIMPIEZA.md) | Evitar duplicados, historicos activos y basura documental. | Activo |
 

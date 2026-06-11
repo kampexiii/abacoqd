@@ -389,6 +389,18 @@ class SettingsService
 
 ---
 
+## D14 — Gestor de paquetes JS unico: npm
+
+**Estado:** ✅ CERRADA (11/06/2026, cierre de FASE 0)
+
+**Decisión:** npm es el único gestor de paquetes JavaScript del proyecto. El lockfile activo es `package-lock.json`.
+
+**Acción ejecutada:** `pnpm-workspace.yaml` eliminado en FASE 0. Solo contenía configuración exclusiva de pnpm (`packages` + `publicHoistPattern` para `@inertiajs/core`), venía del starter kit como cortesía para usuarios de pnpm, no existía `pnpm-lock.yaml` y no había ninguna referencia a pnpm en `package.json`, `composer.json`, `vite.config.ts` ni en los workflows de CI.
+
+**Regla:** no introducir lockfiles ni configuración de otros gestores (pnpm, yarn, bun) sin pasar por el Guardian de Arquitectura.
+
+---
+
 ## Resumen de decisiones
 
 | ID | Decisión | Estado |
@@ -406,6 +418,7 @@ class SettingsService
 | D11 | SEO: tabla polimórfica `seo_metadata` | ✅ Cerrada |
 | D12 | Settings: caché obligatoria via `SettingsService` | ✅ Cerrada |
 | D13 | Prefijo variables CSS: `--abaco-color-*` para tokens internos | ✅ Cerrada |
+| D14 | Gestor de paquetes JS unico: npm (`pnpm-workspace.yaml` eliminado en FASE 0) | ✅ Cerrada |
 
 ## Dependencias consolidadas
 

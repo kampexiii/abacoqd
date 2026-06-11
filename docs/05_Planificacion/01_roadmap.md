@@ -43,24 +43,25 @@ Nota de auditoria: el roadmap anterior fue sobrescrito y no existe fuente real r
 
 ### Desviaciones y deuda detectadas en la auditoria
 
-| # | Hallazgo | Gravedad | Fase que lo resuelve |
+| # | Hallazgo | Gravedad | Estado |
 |---|---|---|---|
-| 1 | `.git/` existe pero esta vacio: no hay repositorio funcional ni historial | Bloqueante | FASE 0 |
-| 2 | `CLAUDE.md` no existe en la raiz, pero `AGENTES.md` y el indice lo referencian como documento de gobierno | Alta | FASE 0 |
-| 3 | `resources/js/pages/welcome.tsx` parece resto del starter y NO participa en la ruta `/` (la home real es `Public/Home.tsx`; la unica referencia a `welcome` es un `case` inerte del resolver de layouts en `app.tsx`). Revisar y eliminar solo despues de confirmar que no esta importado ni referenciado | Media | FASE 0 |
-| 4 | Textos publicos hardcodeados en `AbacoHero`, `FloatingHeader` (NAV_ITEMS), `Home` | Alta | FASE 2 y FASE 3 |
-| 5 | Boton de idioma "ES" del header decorativo, sin funcionalidad | Media | FASE 3 |
-| 6 | Dos secciones temporales de validacion visual en `Home.tsx` con copy de prueba | Media | FASE 1 |
-| 7 | `pnpm-workspace.yaml` conviviendo con `package-lock.json` (npm): señal mixta de gestor de paquetes | Baja | FASE 0 |
-| 8 | `AbacoDevPAletaColores.jpeg` ya no esta en la raiz aunque varios docs lo citan como fuente; los valores HEX/RGB si estan documentados | Baja | resuelto documentalmente |
-| 9 | `app.css` monolitico sin `tokens.css` (D2/D13 definen el formato de tokens pero no estan extraidos) | Media | FASE 1 |
+| 1 | `.git/` existia pero estaba vacio: sin repositorio funcional ni historial | Bloqueante | **Resuelto en FASE 0** (repo inicializado, commit inicial `5cb71b4`) |
+| 2 | `CLAUDE.md` no existia en la raiz pese a estar referenciado por `AGENTES.md` y el indice | Alta | **Resuelto en FASE 0** (creado `CLAUDE.md` minimo que remite a `/docs` y protege el hero) |
+| 3 | `resources/js/pages/welcome.tsx`: resto del starter sin ruta (la home real es `Public/Home.tsx`) | Media | **Resuelto en FASE 0** (eliminado junto a su `case 'welcome'` en `app.tsx` tras confirmar cero referencias; `/` sigue en `Public/Home.tsx`) |
+| 4 | Textos publicos hardcodeados en `AbacoHero`, `FloatingHeader` (NAV_ITEMS), `Home` | Alta | Pendiente — FASE 2 y FASE 3 |
+| 5 | Boton de idioma "ES" del header decorativo, sin funcionalidad | Media | Pendiente — FASE 3 |
+| 6 | Dos secciones temporales de validacion visual en `Home.tsx` con copy de prueba | Media | Pendiente — FASE 1 |
+| 7 | `pnpm-workspace.yaml` conviviendo con `package-lock.json` (npm) | Baja | **Resuelto en FASE 0** (eliminado: npm es el unico gestor, sin `pnpm-lock.yaml` ni referencias a pnpm; ver D14) |
+| 8 | `AbacoDevPAletaColores.jpeg` ya no esta en la raiz aunque varios docs lo citaban como fuente | Baja | Resuelto documentalmente (D3 anotada) |
+| 9 | `app.css` monolitico sin `tokens.css` (D2/D13 definen el formato de tokens pero no estan extraidos) | Media | Pendiente — FASE 1 |
+| 10 | `tests/Pest.php` tenia `RefreshDatabase` comentado: los 30 tests Feature con DB fallaban ("no such table: users"); ademas 12 archivos de test sin newline final (Pint) | Alta | **Resuelto en FASE 0** (linea restaurada y formato corregido con Pint; suite 39/39 verde) |
 
 ---
 
 ## Bloqueantes reales
 
-1. **Repositorio git vacio.** Toda la gobernanza del proyecto (POLITICA_LIMPIEZA, AGENTES) se apoya en "Git es el historico". Sin repositorio funcional no se puede eliminar nada con seguridad ni cerrar ninguna fase. Es la primera tarea de FASE 0 y bloquea el resto.
-2. **`CLAUDE.md` inexistente.** La gobernanza lo referencia. Hay que decidir en FASE 0: crearlo (minimo, apuntando a `/docs`) o corregir las referencias en `AGENTES.md` y el indice.
+1. ~~Repositorio git vacio~~ — **Resuelto el 11/06/2026:** repositorio inicializado con commit inicial `5cb71b4` (245 archivos; `.env`, `node_modules`, `vendor` y builds excluidos por `.gitignore`).
+2. ~~`CLAUDE.md` inexistente~~ — **Resuelto el 11/06/2026:** creado `CLAUDE.md` minimo en la raiz; remite a `/docs` como fuente de verdad y protege explicitamente la home y el hero.
 3. **Logos oficiales de empresas sin alta real.** No bloquea desarrollo (hay wordmarks), pero bloquea publicacion: ningun logo externo puede publicarse sin fuente y derechos verificados (`logos-manifest.json`).
 4. **Proveedor de correo de produccion sin decidir** (D10). No bloquea hasta FASE 6.
 5. **Textos legales y claims comerciales sin validar** por cliente/legal. No bloquea hasta FASE 5.
@@ -85,8 +86,8 @@ Nota de auditoria: el roadmap anterior fue sobrescrito y no existe fuente real r
 
 | Fase | Nombre | Estado |
 |---|---|---|
-| 0 | Limpieza, base tecnica y gobierno del proyecto | **Siguiente prioridad** |
-| 1 | Arquitectura frontend y base visual | Pendiente |
+| 0 | Limpieza, base tecnica y gobierno del proyecto | **Cerrada (11/06/2026)** |
+| 1 | Arquitectura frontend y base visual | **Siguiente prioridad** |
 | 2 | Arquitectura de datos de configuracion centralizada | Pendiente |
 | 3 | Sistema multilenguaje global | Pendiente |
 | 4 | Base de datos y modelos de negocio | Pendiente (modelo de datos ya cerrado documentalmente) |
@@ -101,6 +102,19 @@ El orden es secuencial: una fase no arranca sin cerrar los criterios de aceptaci
 ---
 
 ## FASE 0 — Limpieza, base tecnica y gobierno del proyecto
+
+**Estado: CERRADA el 11/06/2026.**
+
+Resultado del cierre:
+
+- Repositorio git inicializado; commit inicial `5cb71b4` con el estado base completo. Sin push (no hay remoto definido todavia).
+- `CLAUDE.md` minimo creado en la raiz (remite a `/docs`, protege home y hero, reglas duras y validacion minima).
+- `welcome.tsx` eliminado junto a su `case 'welcome'` en `app.tsx`, tras busqueda global con cero referencias. La ruta `/` sigue renderizando `Public/Home.tsx` con el hero intacto.
+- `pnpm-workspace.yaml` eliminado: npm es el unico gestor (solo existe `package-lock.json`; sin `pnpm-lock.yaml` ni referencias a pnpm en scripts/CI). Registrado como D14.
+- Hallazgo corregido durante validacion: `tests/Pest.php` tenia `RefreshDatabase` comentado (30 tests Feature fallaban por "no such table: users") y 12 archivos de test sin newline final. Restaurado y formateado con Pint.
+- Busqueda global de `old/backup/legacy/archive/_old/_backup/_legacy/_final/_v2`: cero resultados.
+- Validaciones en verde: `types:check` OK, `lint:check` OK, `build` OK (10,4s; aviso de chunk >500 kB por `three`, ya contemplado en FASE 8), `composer test` OK (Pint passed, PHPStan 0 errores, Pest 39/39 con 136 aserciones), `route:list` 44 rutas sin rutas muertas, `migrate:status` 5 migraciones del starter ejecutadas.
+- El hero y la landing no se tocaron (solo se eliminaron el `case` inerte de `app.tsx` y archivos sin uso).
 
 ### Objetivo
 
@@ -492,7 +506,5 @@ El modelo de datos cerrado (`collaborator_companies`, `projects`, `project_image
 ## Proximo paso exacto
 
 0. **Regla previa permanente:** el hero actual y la home `/` (`Public/Home.tsx`) quedan protegidos. Ninguna tarea de limpieza los toca.
-1. **FASE 0, tarea 1:** inicializar el repositorio git real y hacer el commit inicial de todo el proyecto. Nada se elimina ni refactoriza antes de tener historial.
-2. FASE 0, tarea 2: resolver la referencia a `CLAUDE.md` (crear minimo o corregir gobernanza).
-3. FASE 0, tarea 3: cerrar la limpieza real del starter **sin tocar la landing**: revisar `welcome.tsx` (resto del starter, no participa en `/`) y eliminarlo solo tras confirmar con busqueda global que no esta importado ni referenciado, junto a su `case 'welcome'` en `app.tsx`; aclarar `pnpm-workspace.yaml`; validar scripts; ejecutar las validaciones de FASE 0.
-4. Arrancar FASE 1 continuando desde debajo del hero (layout publico, footer, sistema de secciones, tokens, componentes base, accesibilidad, motion ligero).
+1. **FASE 0 cerrada el 11/06/2026** (git real con commit inicial, `CLAUDE.md` creado, starter limpio, validaciones en verde). Pendiente operativo menor fuera de fase: definir remoto git y hacer el primer push cuando el equipo lo decida.
+2. **Arrancar FASE 1** continuando desde debajo del hero: `PublicLayout`, footer corporativo, sistema de secciones, extraccion de `tokens.css` (D2/D13), componentes base, accesibilidad base, motion ligero (`use-in-view.ts`) y sustitucion de las dos secciones temporales de `Home.tsx`.
