@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 151 64" role="img" aria-labelledby="title">
+    <title>Abaco cube brand symbol</title>
+    <g fill="none" stroke="#087F8C" stroke-width="3.4" stroke-linecap="square" stroke-linejoin="miter">
+        <path d="M23 35H39L53 15" />
+        <path d="M39 35L53 55" />
+        <path d="M128 35H112L98 15" />
+        <path d="M112 35L98 55" />
+    </g>
+    <text x="75.5" y="49" text-anchor="middle" fill="#087F8C" font-family="Georgia, 'Times New Roman', serif" font-size="43" font-weight="400">A</text>
+</svg>

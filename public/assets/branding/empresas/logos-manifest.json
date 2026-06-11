@@ -1,0 +1,184 @@
+{
+    "version": 1,
+    "updated_at": "2026-06-11",
+    "naming_convention": "kebab-case",
+    "recommended_formats": ["svg", "png"],
+    "companies": [
+        {
+            "name": "Iberia",
+            "slug": "iberia",
+            "type": "colaboracion",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/iberia.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "Iksula",
+            "slug": "iksula",
+            "type": "colaboracion",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/iksula.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "Leroy Merlin",
+            "slug": "leroy-merlin",
+            "type": "colaboracion",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/leroy-merlin.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "IFW",
+            "slug": "ifw",
+            "type": "colaboracion",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/ifw.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "Devtia",
+            "slug": "devtia",
+            "type": "colaboracion",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/devtia.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "Malababa",
+            "slug": "malababa",
+            "type": "colaboracion",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/malababa.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "Jack & Jones",
+            "slug": "jack-and-jones",
+            "type": "colaboracion",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/jack-and-jones.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "Wible",
+            "slug": "wible",
+            "type": "colaboracion",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/wible.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "Cognodata",
+            "slug": "cognodata",
+            "type": "cliente_directo",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/cognodata.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "In Casa",
+            "slug": "in-casa",
+            "type": "cliente_directo",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/in-casa.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "Urban Fisio",
+            "slug": "urban-fisio",
+            "type": "cliente_directo",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/urban-fisio.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "Fantasy JP",
+            "slug": "fantasy-jp",
+            "type": "cliente_directo",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/fantasy-jp.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "RB",
+            "slug": "rb",
+            "type": "cliente_directo",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/rb.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "YoSEO Marketing",
+            "slug": "yoseo-marketing",
+            "type": "cliente_directo",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/yoseo-marketing.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "I Feel Web",
+            "slug": "i-feel-web",
+            "type": "cliente_directo",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/i-feel-web.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        },
+        {
+            "name": "Meliá Hotels International",
+            "slug": "melia-hotels-international",
+            "type": "cliente_directo",
+            "status": "pendiente_logo_oficial",
+            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
+            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/melia-hotels-international.svg",
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 88" role="img" aria-labelledby="title">
+  <title>Abaco Developments square icon</title>
+  <rect width="88" height="88" fill="#087F8C"/>
+  <g transform="translate(0 21) scale(.583)">
+    <g fill="none" stroke="#FFFFFF" stroke-width="1.15" stroke-linecap="square" stroke-linejoin="miter">
+      <path d="M23 35H39L53 15"/>
+      <path d="M39 35 53 55"/>
+      <path d="M128 35H112L98 15"/>
+      <path d="M112 35 98 55"/>
+    </g>
+    <text x="75.5" y="49" text-anchor="middle" fill="#FFFFFF" font-family="Georgia, 'Times New Roman', serif" font-size="43" font-weight="400">A</text>
+  </g>
+</svg>
