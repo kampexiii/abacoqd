@@ -2,14 +2,23 @@
 
 @import 'tw-animate-css';
 
+@import './tokens.css';
+
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+    /*
+     * Tipografía final AbacoQD = Poppins (docs/04_IDENTIDAD_UI_COMPONENTES.md §3).
+     * PENDIENTE TÉCNICO: self-host de Poppins (subset latin, font-display: swap).
+     * No hay archivos locales de Poppins en el repo y no se descargan binarios sin
+     * autorización; mientras tanto se declara la familia con fallback de sistema.
+     * Instrument Sans queda descartada como fuente final.
+     */
     --font-sans:
-        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+        'Poppins', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
 
@@ -59,6 +68,31 @@
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
+
+    --color-brand-primary: rgb(var(--abaco-color-brand-primary));
+    --color-brand-primary-hover: rgb(var(--abaco-color-brand-primary-hover));
+    --color-brand-secondary: rgb(var(--abaco-color-brand-secondary));
+    --color-brand-secondary-hover: rgb(var(--abaco-color-brand-secondary-hover));
+    --color-brand-accent: rgb(var(--abaco-color-brand-accent));
+    --color-brand-subtle: rgb(var(--abaco-color-brand-subtle));
+    --color-brand-neutral: rgb(var(--abaco-color-brand-neutral));
+
+    --color-surface-dark: rgb(var(--abaco-color-surface-dark));
+    --color-surface-dark-elevated: rgb(var(--abaco-color-surface-dark-elevated));
+    --color-surface-dark-strong: rgb(var(--abaco-color-surface-dark-strong));
+
+    /* Paleta AbacoQD qd-* expuesta como colores de Tailwind (bg-qd-*, text-qd-*) */
+    --color-qd-ink: var(--qd-ink);
+    --color-qd-surface: var(--qd-surface);
+    --color-qd-teal: var(--qd-teal);
+    --color-qd-teal-2: var(--qd-teal-2);
+    --color-qd-cyan: var(--qd-cyan);
+    --color-qd-lime: var(--qd-lime);
+    --color-qd-mist: var(--qd-mist);
+    --color-qd-bg: var(--qd-bg);
+    --color-qd-white: var(--qd-white);
+    --color-qd-text-high: var(--qd-text-high);
+    --color-qd-text-medium: var(--qd-text-medium);
 }
 
 :root {
@@ -863,156 +897,1696 @@
     color: rgba(242, 242, 242, 0.7);
 }
 
-.abaco-test-section {
+/* Sistema de animaciones ligeras para las secciones bajo el hero (FASE 1). */
+
+.abaco-reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity 640ms ease,
+        transform 640ms ease;
+}
+
+.abaco-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.abaco-stagger > * {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity 640ms ease,
+        transform 640ms ease;
+}
+
+.abaco-stagger.is-visible > * {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.abaco-stagger.is-visible > *:nth-child(1) {
+    transition-delay: 0ms;
+}
+
+.abaco-stagger.is-visible > *:nth-child(2) {
+    transition-delay: 90ms;
+}
+
+.abaco-stagger.is-visible > *:nth-child(3) {
+    transition-delay: 180ms;
+}
+
+.abaco-stagger.is-visible > *:nth-child(4) {
+    transition-delay: 270ms;
+}
+
+.abaco-stagger.is-visible > *:nth-child(5) {
+    transition-delay: 360ms;
+}
+
+.abaco-stagger.is-visible > *:nth-child(6) {
+    transition-delay: 450ms;
+}
+
+.abaco-card-hover {
+    transition:
+        transform 220ms ease,
+        border-color 220ms ease,
+        background-color 220ms ease,
+        box-shadow 220ms ease;
+}
+
+.abaco-card-hover:hover {
+    transform: translateY(-4px);
+    border-color: rgba(8, 127, 140, 0.42);
+    box-shadow: 0 24px 60px rgba(8, 127, 140, 0.14);
+}
+
+.dark .abaco-card-hover:hover {
+    border-color: rgba(122, 191, 191, 0.34);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
+}
+
+.abaco-glow-line {
     position: relative;
     overflow: hidden;
-    color: #11363b;
-    background:
-        radial-gradient(
-            circle at 18% 20%,
-            rgba(122, 191, 191, 0.26),
-            transparent 24rem
-        ),
-        radial-gradient(
-            circle at 82% 70%,
-            rgba(8, 127, 140, 0.12),
-            transparent 24rem
-        ),
-        linear-gradient(180deg, #ddeeee 0%, #f5fbfb 100%);
 }
 
-.dark .abaco-test-section {
-    color: #f2f2f2;
-    background:
-        radial-gradient(
-            circle at 20% 20%,
-            rgba(8, 140, 140, 0.22),
-            transparent 24rem
-        ),
-        radial-gradient(
-            circle at 82% 72%,
-            rgba(122, 191, 191, 0.12),
-            transparent 22rem
-        ),
-        linear-gradient(180deg, #030a0c 0%, #071b1e 100%);
+.abaco-glow-line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(8, 127, 140, 0.55),
+        transparent
+    );
+    transform: translateX(-100%);
+    transition: transform 1100ms ease;
 }
 
-.abaco-test-section__inner {
-    width: min(1120px, calc(100% - 2rem));
+.dark .abaco-glow-line::after {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(122, 191, 191, 0.5),
+        transparent
+    );
+}
+
+.abaco-glow-line.is-visible::after {
+    transform: translateX(100%);
+}
+
+.abaco-grid-surface {
+    position: relative;
+    background-image:
+        linear-gradient(rgba(8, 127, 140, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8, 127, 140, 0.07) 1px, transparent 1px);
+    background-size: 42px 42px;
+}
+
+.dark .abaco-grid-surface {
+    background-image:
+        linear-gradient(rgba(122, 191, 191, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(122, 191, 191, 0.08) 1px, transparent 1px);
+}
+
+/* Estructura compartida de secciones bajo el hero (FASE 1). */
+
+.abaco-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.abaco-section__inner {
+    width: min(1180px, calc(100% - 2.5rem));
     margin: 0 auto;
-    padding: 6.5rem 0;
+    padding: 6rem 0;
 }
 
-.abaco-test-section__inner--split {
-    display: grid;
-    grid-template-columns: minmax(0, 0.95fr) minmax(18rem, 0.65fr);
-    align-items: end;
-    gap: 3rem;
-}
-
-.abaco-test-section__eyebrow {
+.abaco-section-eyebrow {
     margin: 0 0 0.9rem;
-    color: #087f8c;
+    color: rgb(var(--abaco-color-brand-primary));
     font-size: 0.74rem;
     font-weight: 800;
-    letter-spacing: 0;
+    letter-spacing: 0.08em;
     line-height: 1.2;
     text-transform: uppercase;
 }
 
-.dark .abaco-test-section__eyebrow {
-    color: #7abfbf;
+.dark .abaco-section-eyebrow {
+    color: rgb(var(--abaco-color-brand-accent));
 }
 
-.abaco-test-section h2 {
-    max-width: 820px;
+.abaco-section-title {
+    max-width: 46rem;
     margin: 0;
+    color: #11363b;
     font-size: 2.35rem;
     font-weight: 650;
-    letter-spacing: 0;
-    line-height: 1.08;
+    letter-spacing: -0.01em;
+    line-height: 1.12;
     text-wrap: balance;
 }
 
-.abaco-test-section__lead {
-    max-width: 690px;
-    margin: 1.15rem 0 0;
-    color: rgba(17, 54, 59, 0.72);
+.dark .abaco-section-title {
+    color: #f2f2f2;
+}
+
+.abaco-section-lead {
+    max-width: 42rem;
+    margin: 1.1rem 0 0;
+    color: rgba(17, 54, 59, 0.7);
     font-size: 1.04rem;
     line-height: 1.65;
 }
 
-.dark .abaco-test-section__lead {
+.dark .abaco-section-lead {
     color: rgba(242, 242, 242, 0.68);
 }
 
-.abaco-test-cards {
-    display: grid;
-    margin-top: 2.6rem;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
+.abaco-section-intro--center {
+    text-align: center;
 }
 
-.abaco-test-card {
-    min-height: 13rem;
-    padding: 1.25rem;
+.abaco-section-intro--center .abaco-section-title,
+.abaco-section-intro--center .abaco-section-lead {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Transicion "De la energia al sistema". */
+
+.abaco-connector-line {
+    height: 2px;
+    margin: 2.75rem 0;
+    background: rgba(8, 127, 140, 0.16);
+    border-radius: 999px;
+}
+
+.dark .abaco-connector-line {
+    background: rgba(122, 191, 191, 0.16);
+}
+
+.abaco-transition-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.abaco-transition-card {
+    padding: 1.6rem;
     border: 1px solid rgba(8, 127, 140, 0.18);
-    background: rgba(255, 255, 255, 0.52);
-    border-radius: 8px;
-    box-shadow: 0 24px 70px rgba(8, 127, 140, 0.08);
-    transition:
-        transform 180ms ease,
-        border-color 180ms ease,
-        background-color 180ms ease;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(16px);
 }
 
-.dark .abaco-test-card {
+.dark .abaco-transition-card {
     border-color: rgba(122, 191, 191, 0.16);
-    background: rgba(255, 255, 255, 0.055);
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.16);
+    background: rgba(255, 255, 255, 0.04);
 }
 
-.abaco-test-card:hover {
-    transform: translateY(-3px);
-    border-color: rgba(8, 127, 140, 0.42);
-    background: rgba(255, 255, 255, 0.68);
+.abaco-transition-card__icon {
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    color: rgb(var(--abaco-color-brand-primary));
+    background: rgba(8, 127, 140, 0.12);
 }
 
-.dark .abaco-test-card:hover {
-    border-color: rgba(122, 191, 191, 0.34);
-    background: rgba(255, 255, 255, 0.08);
+.dark .abaco-transition-card__icon {
+    color: rgb(var(--abaco-color-brand-accent));
+    background: rgba(122, 191, 191, 0.12);
 }
 
-.abaco-test-card span {
-    color: #087f8c;
-    font-size: 0.76rem;
-    font-weight: 800;
-}
-
-.abaco-test-card h3 {
-    margin: 2.1rem 0 0;
-    font-size: 1.2rem;
+.abaco-transition-card h3 {
+    margin: 1.25rem 0 0;
+    color: #11363b;
+    font-size: 1.15rem;
     font-weight: 700;
 }
 
-.abaco-test-card p {
-    margin: 0.85rem 0 0;
+.dark .abaco-transition-card h3 {
+    color: #f2f2f2;
+}
+
+.abaco-transition-card p {
+    margin: 0.6rem 0 0;
     color: rgba(17, 54, 59, 0.68);
     line-height: 1.55;
 }
 
-.dark .abaco-test-card p {
+.dark .abaco-transition-card p {
     color: rgba(242, 242, 242, 0.64);
 }
 
-.abaco-test-section--growth {
-    min-height: 52svh;
-    border-top: 1px solid rgba(8, 127, 140, 0.12);
+/* Sistema Abaco. */
+
+.abaco-system-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 3rem;
 }
 
-.dark .abaco-test-section--growth {
-    border-top-color: rgba(122, 191, 191, 0.12);
+.abaco-system-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    margin-top: 1.75rem;
+    padding: 0 1.1rem;
+    border: 1px solid rgba(8, 127, 140, 0.32);
+    border-radius: 999px;
+    color: #087f8c;
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+        transform 180ms ease,
+        border-color 180ms ease;
+}
+
+.dark .abaco-system-cta {
+    border-color: rgba(122, 191, 191, 0.3);
+    color: #7abfbf;
+}
+
+.abaco-system-cta:hover {
+    transform: translateY(-1px);
+    border-color: rgba(8, 127, 140, 0.55);
+}
+
+.dark .abaco-system-cta:hover {
+    border-color: rgba(122, 191, 191, 0.5);
+}
+
+.abaco-system-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.abaco-system-diagram__visual {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 1;
+    margin: 0 auto;
+}
+
+.abaco-system-diagram__lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.abaco-system-diagram__line {
+    stroke: rgba(8, 127, 140, 0.35);
+    stroke-width: 0.4;
+    stroke-dasharray: 2 2;
+    opacity: 0;
+    transition: opacity 640ms ease;
+}
+
+.dark .abaco-system-diagram__line {
+    stroke: rgba(122, 191, 191, 0.35);
+}
+
+.abaco-system-diagram.is-visible .abaco-system-diagram__line {
+    opacity: 1;
+}
+
+.abaco-system-diagram__core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    width: 6.5rem;
+    height: 6.5rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgba(8, 127, 140, 0.35);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.65);
+    box-shadow: 0 0 60px rgba(8, 127, 140, 0.22);
+    color: #087f8c;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+}
+
+.dark .abaco-system-diagram__core {
+    border-color: rgba(122, 191, 191, 0.32);
+    background: rgba(8, 45, 51, 0.75);
+    box-shadow: 0 0 60px rgba(122, 191, 191, 0.18);
+    color: #7abfbf;
+}
+
+.abaco-system-diagram__node {
+    position: absolute;
+    display: flex;
+    width: 5.25rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 0.65rem 0.4rem;
+    transform: translate(-50%, -50%) scale(0.85);
+    border: 1px solid rgba(8, 127, 140, 0.2);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    color: #0f3a3f;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-align: center;
+    opacity: 0;
+    backdrop-filter: blur(10px);
+    transition:
+        opacity 560ms ease,
+        transform 560ms ease;
+}
+
+.dark .abaco-system-diagram__node {
+    border-color: rgba(122, 191, 191, 0.2);
+    background: rgba(8, 45, 51, 0.6);
+    color: #f2f2f2;
+}
+
+.abaco-system-diagram.is-visible .abaco-system-diagram__node {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.abaco-system-diagram__cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.abaco-system-diagram__card {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid rgba(8, 127, 140, 0.22);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.6);
+    color: #0f3a3f;
+    font-size: 0.74rem;
+    font-weight: 700;
+    backdrop-filter: blur(10px);
+}
+
+.dark .abaco-system-diagram__card {
+    border-color: rgba(122, 191, 191, 0.2);
+    background: rgba(8, 45, 51, 0.6);
+    color: #f2f2f2;
+}
+
+/* Servicios principales. */
+
+.abaco-services-grid {
+    display: grid;
+    margin-top: 3rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.abaco-service-card {
+    padding: 1.75rem;
+    border: 1px solid rgba(8, 127, 140, 0.16);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.dark .abaco-service-card {
+    border-color: rgba(122, 191, 191, 0.14);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.abaco-service-card__icon {
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: rgb(var(--abaco-color-brand-primary));
+    background: rgba(8, 127, 140, 0.12);
+}
+
+.dark .abaco-service-card__icon {
+    color: rgb(var(--abaco-color-brand-accent));
+    background: rgba(122, 191, 191, 0.12);
+}
+
+.abaco-service-card h3 {
+    margin: 1.25rem 0 0;
+    color: #11363b;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.dark .abaco-service-card h3 {
+    color: #f2f2f2;
+}
+
+.abaco-service-card p {
+    margin: 0.6rem 0 0;
+    color: rgba(17, 54, 59, 0.68);
+    font-size: 0.94rem;
+    line-height: 1.55;
+}
+
+.dark .abaco-service-card p {
+    color: rgba(242, 242, 242, 0.64);
+}
+
+/* Metodologia / Como trabajamos. */
+
+.abaco-methodology {
+    height: 240svh;
+    /* overflow visible: un ancestro con overflow hidden (.abaco-section) desactiva position sticky. */
+    overflow: visible;
+    background: linear-gradient(180deg, rgba(242, 242, 242, 0.55), rgba(176, 217, 217, 0.35));
+}
+
+.dark .abaco-methodology {
+    background: linear-gradient(180deg, rgb(var(--abaco-color-surface-dark)), rgb(var(--abaco-color-surface-dark-elevated)));
+}
+
+.abaco-methodology--static {
+    height: auto;
+}
+
+.abaco-methodology__sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+}
+
+.abaco-methodology--static .abaco-methodology__sticky {
+    position: relative;
+    height: auto;
+    padding: 4rem 0;
+}
+
+.abaco-methodology__bg {
+    position: absolute;
+    inset: 0;
+    opacity: clamp(0, calc(var(--mg-progress, 0) / 0.12), 1);
+}
+
+.abaco-methodology--static .abaco-methodology__bg {
+    opacity: 1;
+}
+
+.abaco-methodology__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    gap: 1.5rem;
+    padding: 5.5rem 0 2rem;
+}
+
+.abaco-methodology--static .abaco-methodology__inner {
+    height: auto;
+    gap: 2.5rem;
+}
+
+.abaco-methodology__intro {
+    flex-shrink: 0;
+}
+
+.abaco-methodology__grid {
+    position: relative;
+    display: grid;
+    flex: 1;
+    min-height: 0;
+    max-height: 42rem;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+    perspective: 1600px;
+}
+
+.abaco-methodology--static .abaco-methodology__grid {
+    grid-auto-rows: minmax(12rem, auto);
+    grid-template-rows: none;
+}
+
+.abaco-methodology__lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: clamp(0, calc((var(--mg-progress, 0) - 0.78) / 0.18), 1);
+    pointer-events: none;
+}
+
+.abaco-methodology--static .abaco-methodology__lines {
+    opacity: 1;
+}
+
+.abaco-methodology__line {
+    stroke: rgb(var(--abaco-color-brand-primary));
+    stroke-width: 0.3;
+    stroke-dasharray: 2 2;
+    opacity: 0.45;
+    vector-effect: non-scaling-stroke;
+}
+
+.dark .abaco-methodology__line {
+    stroke: rgb(var(--abaco-color-brand-accent));
+}
+
+@property --mg-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes abaco-neon-orbit {
+    to {
+        --mg-angle: 360deg;
+    }
+}
+
+.abaco-methodology-card {
+    --mg-p: clamp(0, calc((var(--mg-progress, 0) - var(--mg-start, 0)) / (var(--mg-end, 1) - var(--mg-start, 0))), 1);
+    position: relative;
+    opacity: var(--mg-p);
+    transform: translateY(calc((1 - var(--mg-p)) * 60px)) scale(calc(0.9 + 0.1 * var(--mg-p))) rotateX(calc((1 - var(--mg-p)) * 12deg));
+    filter: blur(calc((1 - var(--mg-p)) * 6px));
+    transform-style: preserve-3d;
+    min-height: 0;
+}
+
+/* Borde neon: cometa de color primario orbitando el exterior de la card. */
+.abaco-methodology-card::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 21px;
+    padding: 3px;
+    background: conic-gradient(
+        from var(--mg-angle),
+        transparent 0deg,
+        transparent 250deg,
+        rgba(8, 127, 140, 0.3) 300deg,
+        rgb(var(--abaco-color-brand-primary)) 335deg,
+        rgba(8, 127, 140, 0.3) 352deg,
+        transparent 360deg
+    );
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    filter: drop-shadow(0 0 6px rgba(8, 127, 140, 0.55));
+    animation: abaco-neon-orbit 4.5s linear infinite;
+    pointer-events: none;
+}
+
+.dark .abaco-methodology-card::before {
+    filter: drop-shadow(0 0 9px rgba(8, 127, 140, 0.8));
+}
+
+.abaco-methodology--static .abaco-methodology-card {
+    --mg-p: 1;
+    opacity: 1;
+    transform: none;
+    filter: none;
+}
+
+/* Paso 01: arranca en grande ocupando la seccion y se encoge hasta su celda. */
+.abaco-methodology-card:nth-child(2) {
+    grid-column: 1 / 5;
+    grid-row: 1 / 2;
+    --mg-start: 0.05;
+    --mg-end: 0.32;
+    z-index: 2;
+    opacity: 1;
+    filter: none;
+    transform: translate(calc((1 - var(--mg-p)) * 75%), calc((1 - var(--mg-p)) * 100%))
+        scale(calc(1 + (1 - var(--mg-p)) * 0.65));
+}
+
+.abaco-methodology-card:nth-child(3) {
+    grid-column: 7 / 11;
+    grid-row: 1 / 2;
+    --mg-start: 0.32;
+    --mg-end: 0.52;
+}
+
+.abaco-methodology-card:nth-child(4) {
+    grid-column: 4 / 8;
+    grid-row: 2 / 3;
+    --mg-start: 0.7;
+    --mg-end: 0.95;
+}
+
+.abaco-methodology-card:nth-child(5) {
+    grid-column: 1 / 5;
+    grid-row: 3 / 4;
+    --mg-start: 0.5;
+    --mg-end: 0.72;
+}
+
+.abaco-methodology-card:nth-child(6) {
+    grid-column: 7 / 11;
+    grid-row: 3 / 4;
+    --mg-start: 0.5;
+    --mg-end: 0.72;
+}
+
+.abaco-methodology-card__flip {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 10rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 18px;
+    perspective: 1200px;
+}
+
+.abaco-methodology-card__flip:focus-visible {
+    outline: 2px solid rgb(var(--abaco-color-brand-primary));
+    outline-offset: 4px;
+    border-radius: 18px;
+}
+
+.abaco-methodology-card__inner {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform-style: preserve-3d;
+}
+
+.abaco-methodology-card__flip:hover .abaco-methodology-card__inner,
+.abaco-methodology-card__flip:focus-visible .abaco-methodology-card__inner,
+.abaco-methodology-card__flip.is-flipped .abaco-methodology-card__inner {
+    transform: rotateY(180deg);
+}
+
+.abaco-methodology-card__face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 1.25rem;
+    border: 1px solid rgba(8, 127, 140, 0.18);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 18px 40px -28px rgba(8, 64, 70, 0.35);
+    overflow: hidden;
+    backface-visibility: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.dark .abaco-methodology-card__face {
+    border-color: rgba(8, 127, 140, 0.4);
+    background: rgba(8, 45, 51, 0.62);
+    box-shadow:
+        inset 0 1px 0 rgba(122, 191, 191, 0.12),
+        0 22px 48px -28px rgba(0, 0, 0, 0.6);
+}
+
+/* Cara frontal: numero, icono, titulo, divisor y resumen centrados. */
+.abaco-methodology-card__face--front {
+    align-items: center;
+    text-align: center;
+}
+
+.abaco-methodology-card__face--front::after {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    bottom: 0.9rem;
+    width: 3.4rem;
+    height: 1.7rem;
+    background-image: radial-gradient(circle, rgba(8, 127, 140, 0.35) 1px, transparent 1.4px);
+    background-size: 9px 9px;
+    pointer-events: none;
+}
+
+.dark .abaco-methodology-card__face--front::after {
+    background-image: radial-gradient(circle, rgba(122, 191, 191, 0.3) 1px, transparent 1.4px);
+}
+
+.abaco-methodology-card__face--back {
+    align-items: center;
+    text-align: center;
+    background: rgba(8, 127, 140, 0.07);
+    transform: rotateY(180deg);
+}
+
+.dark .abaco-methodology-card__face--back {
+    background: rgba(8, 63, 70, 0.72);
+}
+
+.abaco-methodology-card__number {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border: 1px solid rgba(8, 127, 140, 0.55);
+    border-radius: 50%;
+    color: rgb(var(--abaco-color-brand-primary));
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.dark .abaco-methodology-card__number {
+    border-color: rgba(122, 191, 191, 0.6);
+    color: rgb(var(--abaco-color-brand-accent));
+    box-shadow: 0 0 14px -4px rgba(122, 191, 191, 0.5);
+}
+
+.abaco-methodology-card__number::before,
+.abaco-methodology-card__number::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 1.8rem;
+    height: 3px;
+    background-image: radial-gradient(circle, rgba(8, 127, 140, 0.45) 1.2px, transparent 1.6px);
+    background-size: 8px 3px;
+    background-repeat: repeat-x;
+    transform: translateY(-50%);
+}
+
+.dark .abaco-methodology-card__number::before,
+.dark .abaco-methodology-card__number::after {
+    background-image: radial-gradient(circle, rgba(122, 191, 191, 0.45) 1.2px, transparent 1.6px);
+}
+
+.abaco-methodology-card__number::before {
+    right: calc(100% + 0.7rem);
+}
+
+.abaco-methodology-card__number::after {
+    left: calc(100% + 0.7rem);
+}
+
+.abaco-methodology-card__icon {
+    color: rgb(var(--abaco-color-brand-primary));
+}
+
+.dark .abaco-methodology-card__icon {
+    color: rgb(var(--abaco-color-brand-accent));
+    filter: drop-shadow(0 0 10px rgba(122, 191, 191, 0.45));
+}
+
+.abaco-methodology-card__title {
+    margin: 0;
+    color: rgba(17, 54, 59, 0.92);
+    font-size: 1.08rem;
+    font-weight: 700;
+}
+
+.dark .abaco-methodology-card__title {
+    color: rgba(242, 242, 242, 0.94);
+}
+
+.abaco-methodology-card__divider {
+    position: relative;
+    width: 4.5rem;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(8, 127, 140, 0.7), transparent);
+}
+
+.abaco-methodology-card__divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgb(var(--abaco-color-brand-primary));
+    box-shadow: 0 0 8px rgba(8, 127, 140, 0.8);
+    transform: translate(-50%, -50%);
+}
+
+.dark .abaco-methodology-card__divider {
+    background: linear-gradient(90deg, transparent, rgba(122, 191, 191, 0.75), transparent);
+}
+
+.dark .abaco-methodology-card__divider::after {
+    background: rgb(var(--abaco-color-brand-accent));
+    box-shadow: 0 0 8px rgba(122, 191, 191, 0.8);
+}
+
+.abaco-methodology-card__summary {
+    margin: 0;
+    color: rgba(17, 54, 59, 0.68);
+    font-size: 0.88rem;
+    line-height: 1.45;
+}
+
+.dark .abaco-methodology-card__summary {
+    color: rgba(242, 242, 242, 0.7);
+}
+
+/* Cara trasera: titulo secundario, detalle y mini puntos. */
+.abaco-methodology-card__back-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.abaco-methodology-card__back-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 1.9rem;
+    height: 1.9rem;
+    border: 1px solid rgba(8, 127, 140, 0.55);
+    border-radius: 50%;
+    color: rgb(var(--abaco-color-brand-primary));
+}
+
+.dark .abaco-methodology-card__back-icon {
+    border-color: rgba(122, 191, 191, 0.6);
+    color: rgb(var(--abaco-color-brand-accent));
+}
+
+.abaco-methodology-card__back-title {
+    position: relative;
+    padding-bottom: 0.35rem;
+    color: rgba(17, 54, 59, 0.92);
+    font-size: 0.98rem;
+    font-weight: 700;
+}
+
+.dark .abaco-methodology-card__back-title {
+    color: rgba(242, 242, 242, 0.94);
+}
+
+.abaco-methodology-card__back-title::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 2rem;
+    height: 2px;
+    background: rgb(var(--abaco-color-brand-primary));
+    transform: translateX(-50%);
+}
+
+.dark .abaco-methodology-card__back-title::after {
+    background: rgb(var(--abaco-color-brand-accent));
+}
+
+.abaco-methodology-card__detail {
+    margin: 0;
+    color: rgba(17, 54, 59, 0.72);
+    font-size: 0.78rem;
+    line-height: 1.45;
+}
+
+.dark .abaco-methodology-card__detail {
+    color: rgba(242, 242, 242, 0.74);
+}
+
+.abaco-methodology-card__points {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.4rem 0.5rem;
+}
+
+.abaco-methodology-card__point {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    padding: 0.32rem 0.65rem;
+    border: 1px solid rgba(8, 127, 140, 0.28);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.55);
+    color: rgba(17, 54, 59, 0.78);
+    font-size: 0.72rem;
+    line-height: 1.25;
+}
+
+.dark .abaco-methodology-card__point {
+    border-color: rgba(122, 191, 191, 0.3);
+    background: rgba(8, 45, 51, 0.55);
+    color: rgba(242, 242, 242, 0.78);
+}
+
+.abaco-methodology-card__point svg {
+    flex-shrink: 0;
+    color: rgb(var(--abaco-color-brand-primary));
+}
+
+.dark .abaco-methodology-card__point svg {
+    color: rgb(var(--abaco-color-brand-accent));
+}
+
+/* Paso 03 (Implementacion): card central protagonista (mas iluminada, mismo tamano). */
+.abaco-methodology-card:nth-child(4) .abaco-methodology-card__face {
+    border-color: rgba(8, 127, 140, 0.35);
+    box-shadow:
+        0 0 55px -18px rgba(8, 127, 140, 0.5),
+        0 18px 40px -28px rgba(8, 64, 70, 0.35);
+}
+
+.dark .abaco-methodology-card:nth-child(4) .abaco-methodology-card__face {
+    border-color: rgba(122, 191, 191, 0.5);
+    box-shadow:
+        inset 0 1px 0 rgba(122, 191, 191, 0.16),
+        0 0 65px -15px rgba(8, 127, 140, 0.65),
+        0 22px 48px -28px rgba(0, 0, 0, 0.6);
+}
+
+@media (max-height: 820px) {
+    .abaco-methodology-card__face {
+        padding: 1rem 1.1rem;
+    }
+
+    .abaco-methodology-card__detail {
+        font-size: 0.74rem;
+    }
+
+    .abaco-methodology-card__point {
+        font-size: 0.68rem;
+        padding: 0.26rem 0.55rem;
+    }
+
+    .abaco-methodology-card__summary {
+        font-size: 0.82rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .abaco-methodology {
+        height: auto;
+    }
+
+    .abaco-methodology__sticky {
+        position: relative;
+        height: auto;
+        padding: 4rem 0;
+    }
+
+    .abaco-methodology__inner {
+        height: auto;
+        gap: 2.5rem;
+    }
+
+    .abaco-methodology__grid {
+        grid-auto-rows: minmax(12rem, auto);
+        grid-template-rows: none;
+    }
+
+    .abaco-methodology__bg,
+    .abaco-methodology__intro,
+    .abaco-methodology__lines,
+    .abaco-methodology-card {
+        filter: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .abaco-methodology-card__inner {
+        transition: none;
+    }
+
+    .abaco-methodology-card::before {
+        animation: none;
+    }
+}
+
+/* Socios & Clientes. */
+
+.abaco-partners-grid {
+    display: grid;
+    margin-top: 3rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.abaco-partner-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    padding: 1.6rem;
+    border: 1px solid rgba(8, 127, 140, 0.16);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.dark .abaco-partner-card {
+    border-color: rgba(122, 191, 191, 0.14);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.abaco-partner-card__names {
+    margin: 0;
+    color: rgba(17, 54, 59, 0.6);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.dark .abaco-partner-card__names {
+    color: rgba(242, 242, 242, 0.56);
+}
+
+.abaco-partner-card__names span {
+    color: rgb(var(--abaco-color-brand-primary));
+}
+
+.dark .abaco-partner-card__names span {
+    color: rgb(var(--abaco-color-brand-accent));
+}
+
+.abaco-partner-card h3 {
+    margin: 0;
+    color: #11363b;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.dark .abaco-partner-card h3 {
+    color: #f2f2f2;
+}
+
+.abaco-partner-card__description {
+    margin: 0;
+    flex-grow: 1;
+    color: rgba(17, 54, 59, 0.68);
+    font-size: 0.92rem;
+    line-height: 1.55;
+}
+
+.dark .abaco-partner-card__description {
+    color: rgba(242, 242, 242, 0.64);
+}
+
+.abaco-partner-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.25rem;
+    color: #087f8c;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.dark .abaco-partner-card__cta {
+    color: #7abfbf;
+}
+
+.abaco-partner-card__cta:hover {
+    text-decoration: underline;
+}
+
+/* Resenas / confianza. */
+
+.abaco-testimonials-grid {
+    display: grid;
+    margin-top: 3rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.abaco-testimonial-card,
+.abaco-testimonial-panel {
+    padding: 1.75rem;
+    border: 1px solid rgba(8, 127, 140, 0.16);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.dark .abaco-testimonial-card,
+.dark .abaco-testimonial-panel {
+    border-color: rgba(122, 191, 191, 0.14);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.abaco-testimonial-card__quote-icon {
+    color: rgb(var(--abaco-color-brand-primary));
+}
+
+.dark .abaco-testimonial-card__quote-icon {
+    color: rgb(var(--abaco-color-brand-accent));
+}
+
+.abaco-testimonial-card__stars {
+    display: flex;
+    gap: 0.2rem;
+    margin-top: 0.75rem;
+    color: rgb(var(--abaco-color-brand-primary));
+}
+
+.dark .abaco-testimonial-card__stars {
+    color: rgb(var(--abaco-color-brand-accent));
+}
+
+.abaco-testimonial-card p {
+    margin: 0.9rem 0 0;
+    color: rgba(17, 54, 59, 0.72);
+    font-size: 0.96rem;
+    line-height: 1.6;
+}
+
+.dark .abaco-testimonial-card p {
+    color: rgba(242, 242, 242, 0.68);
+}
+
+.abaco-testimonial-card span {
+    display: block;
+    margin-top: 0.9rem;
+    color: rgba(17, 54, 59, 0.55);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.dark .abaco-testimonial-card span {
+    color: rgba(242, 242, 242, 0.5);
+}
+
+.abaco-testimonial-panel h3 {
+    margin: 0;
+    color: #11363b;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.dark .abaco-testimonial-panel h3 {
+    color: #f2f2f2;
+}
+
+.abaco-testimonial-panel p {
+    margin: 0.6rem 0 0;
+    color: rgba(17, 54, 59, 0.68);
+    font-size: 0.92rem;
+    line-height: 1.55;
+}
+
+.dark .abaco-testimonial-panel p {
+    color: rgba(242, 242, 242, 0.64);
+}
+
+.abaco-testimonial-panel__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+}
+
+.abaco-testimonial-panel__primary,
+.abaco-testimonial-panel__secondary {
+    display: inline-flex;
+    min-height: 2.6rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 180ms ease;
+}
+
+.abaco-testimonial-panel__primary {
+    color: #ffffff;
+    background: linear-gradient(135deg, #087f8c, #088c8c);
+}
+
+.abaco-testimonial-panel__secondary {
+    border: 1px solid rgba(8, 127, 140, 0.3);
+    color: #087f8c;
+}
+
+.dark .abaco-testimonial-panel__secondary {
+    border-color: rgba(122, 191, 191, 0.3);
+    color: #7abfbf;
+}
+
+.abaco-testimonial-panel__primary:hover,
+.abaco-testimonial-panel__secondary:hover {
+    transform: translateY(-1px);
+}
+
+/* Casos destacados. */
+
+.abaco-cases-grid {
+    display: grid;
+    margin-top: 3rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.abaco-case-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.6rem;
+    border: 1px solid rgba(8, 127, 140, 0.16);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.dark .abaco-case-card {
+    border-color: rgba(122, 191, 191, 0.14);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.abaco-case-card__visual {
+    display: flex;
+    height: 8rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    color: rgb(var(--abaco-color-brand-primary));
+    background:
+        radial-gradient(circle at 30% 30%, rgba(8, 127, 140, 0.18), transparent 70%),
+        rgba(8, 127, 140, 0.06);
+}
+
+.dark .abaco-case-card__visual {
+    color: rgb(var(--abaco-color-brand-accent));
+    background:
+        radial-gradient(circle at 30% 30%, rgba(122, 191, 191, 0.18), transparent 70%),
+        rgba(122, 191, 191, 0.06);
+}
+
+.abaco-case-card__sector {
+    color: rgb(var(--abaco-color-brand-primary));
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.dark .abaco-case-card__sector {
+    color: rgb(var(--abaco-color-brand-accent));
+}
+
+.abaco-case-card h3 {
+    margin: 0;
+    color: #11363b;
+    font-size: 1.08rem;
+    font-weight: 700;
+}
+
+.dark .abaco-case-card h3 {
+    color: #f2f2f2;
+}
+
+.abaco-case-card p {
+    margin: 0;
+    flex-grow: 1;
+    color: rgba(17, 54, 59, 0.68);
+    font-size: 0.92rem;
+    line-height: 1.55;
+}
+
+.dark .abaco-case-card p {
+    color: rgba(242, 242, 242, 0.64);
+}
+
+.abaco-case-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #087f8c;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.dark .abaco-case-card__cta {
+    color: #7abfbf;
+}
+
+.abaco-case-card__cta:hover {
+    text-decoration: underline;
+}
+
+/* Insights / Blog. */
+
+.abaco-blog-grid {
+    display: grid;
+    margin-top: 3rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+}
+
+.abaco-blog-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.6rem;
+    border: 1px solid rgba(8, 127, 140, 0.16);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.dark .abaco-blog-card {
+    border-color: rgba(122, 191, 191, 0.14);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.abaco-blog-card__category {
+    align-self: flex-start;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(8, 127, 140, 0.12);
+    color: rgb(var(--abaco-color-brand-primary));
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.dark .abaco-blog-card__category {
+    background: rgba(122, 191, 191, 0.12);
+    color: rgb(var(--abaco-color-brand-accent));
+}
+
+.abaco-blog-card h3 {
+    margin: 0;
+    color: #11363b;
+    font-size: 1.08rem;
+    font-weight: 700;
+}
+
+.dark .abaco-blog-card h3 {
+    color: #f2f2f2;
+}
+
+.abaco-blog-card p {
+    margin: 0;
+    flex-grow: 1;
+    color: rgba(17, 54, 59, 0.68);
+    font-size: 0.92rem;
+    line-height: 1.55;
+}
+
+.dark .abaco-blog-card p {
+    color: rgba(242, 242, 242, 0.64);
+}
+
+.abaco-blog-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #087f8c;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.dark .abaco-blog-card__cta {
+    color: #7abfbf;
+}
+
+.abaco-blog-card__cta:hover {
+    text-decoration: underline;
+}
+
+/* CTA final. */
+
+.abaco-cta-section {
+    padding: 2rem 0;
+}
+
+.abaco-cta-panel {
+    position: relative;
+    overflow: hidden;
+    padding: 4rem 2rem;
+    border-radius: 24px;
+    color: #f2f2f2;
+    text-align: center;
+    background: linear-gradient(160deg, #061b20, #083f46);
+    box-shadow: 0 40px 100px rgba(8, 127, 140, 0.28);
+}
+
+.abaco-cta-panel::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    width: 60%;
+    height: 60%;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(122, 191, 191, 0.35), transparent 70%);
+    filter: blur(10px);
+}
+
+.abaco-cta-panel h2 {
+    position: relative;
+    max-width: 42rem;
+    margin: 0 auto;
+    font-size: 2.15rem;
+    font-weight: 650;
+    line-height: 1.15;
+    text-wrap: balance;
+}
+
+.abaco-cta-panel p {
+    position: relative;
+    max-width: 34rem;
+    margin: 1rem auto 0;
+    color: rgba(242, 242, 242, 0.78);
+    font-size: 1.04rem;
+    line-height: 1.6;
+}
+
+.abaco-cta-panel__actions {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem;
+    margin-top: 2.25rem;
+}
+
+.abaco-cta-panel__primary,
+.abaco-cta-panel__secondary {
+    display: inline-flex;
+    min-height: 2.85rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0 1.4rem;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 180ms ease;
+}
+
+.abaco-cta-panel__primary {
+    color: #061b20;
+    background: linear-gradient(135deg, #7abfbf, #b0d9d9);
+    box-shadow: 0 18px 44px rgba(122, 191, 191, 0.3);
+}
+
+.abaco-cta-panel__secondary {
+    border: 1px solid rgba(242, 242, 242, 0.32);
+    color: #f2f2f2;
+}
+
+.abaco-cta-panel__primary:hover,
+.abaco-cta-panel__secondary:hover {
+    transform: translateY(-1px);
+}
+
+.abaco-cta-panel__primary:focus-visible,
+.abaco-cta-panel__secondary:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+}
+
+/* Footer corporativo. */
+
+.abaco-footer {
+    background: rgb(var(--abaco-color-surface-dark));
+    color: rgba(242, 242, 242, 0.82);
+}
+
+.abaco-footer__inner {
+    width: min(1180px, calc(100% - 2.5rem));
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(14rem, 1.4fr) repeat(4, minmax(0, 1fr));
+    gap: 2.5rem;
+    padding: 4.5rem 0 3rem;
+}
+
+.abaco-footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.abaco-footer__brand p {
+    margin: 0;
+    max-width: 22rem;
+    color: rgba(242, 242, 242, 0.62);
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.abaco-footer__social {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: rgba(242, 242, 242, 0.55);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.abaco-footer__social a {
+    display: inline-flex;
+    width: 2.25rem;
+    height: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(122, 191, 191, 0.24);
+    border-radius: 999px;
+    color: #7abfbf;
+    transition:
+        border-color 180ms ease,
+        transform 180ms ease;
+}
+
+.abaco-footer__social a:hover {
+    border-color: rgba(122, 191, 191, 0.5);
+    transform: translateY(-1px);
+}
+
+.abaco-footer__column h3 {
+    margin: 0 0 1rem;
+    color: #f2f2f2;
+    font-size: 0.86rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.abaco-footer__column ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.abaco-footer__column a {
+    color: rgba(242, 242, 242, 0.64);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 180ms ease;
+}
+
+.abaco-footer__column a:hover {
+    color: #7abfbf;
+}
+
+.abaco-footer__contact li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    color: rgba(242, 242, 242, 0.64);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.abaco-footer__contact svg {
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+    color: #7abfbf;
+}
+
+.abaco-footer__contact a {
+    color: rgba(242, 242, 242, 0.64);
+    text-decoration: none;
+}
+
+.abaco-footer__contact a:hover {
+    color: #7abfbf;
+}
+
+.abaco-footer__contact-label {
+    display: block;
+    margin-bottom: 0.15rem;
+    color: rgba(242, 242, 242, 0.4);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.abaco-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: min(1180px, calc(100% - 2.5rem));
+    margin: 0 auto;
+    padding: 1.75rem 0 2.5rem;
+    border-top: 1px solid rgba(122, 191, 191, 0.12);
+    color: rgba(242, 242, 242, 0.5);
+    font-size: 0.82rem;
+}
+
+.abaco-footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.abaco-footer__legal a {
+    color: rgba(242, 242, 242, 0.5);
+    text-decoration: none;
+}
+
+.abaco-footer__legal a:hover {
+    color: #7abfbf;
 }
 
 @keyframes abaco-particle-drift {
@@ -1095,31 +2669,109 @@
     }
 }
 
+@media (max-width: 1024px) {
+    .abaco-services-grid,
+    .abaco-partners-grid,
+    .abaco-testimonials-grid,
+    .abaco-cases-grid,
+    .abaco-blog-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media (max-width: 760px) {
-    .abaco-test-section__inner {
-        width: min(100% - 1.5rem, 40rem);
-        padding: 4.6rem 0;
+    .abaco-section__inner {
+        padding: 4.5rem 0;
     }
 
-    .abaco-test-section__inner--split,
-    .abaco-test-cards {
+    .abaco-section-title {
+        font-size: 1.85rem;
+    }
+
+    .abaco-transition-cards,
+    .abaco-services-grid,
+    .abaco-partners-grid,
+    .abaco-testimonials-grid,
+    .abaco-cases-grid,
+    .abaco-blog-grid {
         grid-template-columns: 1fr;
     }
 
-    .abaco-test-section__inner--split {
+    .abaco-system-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
+    .abaco-methodology {
+        height: auto;
+    }
+
+    .abaco-methodology__sticky {
+        position: relative;
+        height: auto;
+        padding: 3.5rem 0;
+    }
+
+    .abaco-methodology__inner {
+        height: auto;
+        padding: 0;
+        gap: 2rem;
+    }
+
+    .abaco-methodology__grid {
+        flex: none;
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
         gap: 1rem;
+        perspective: none;
     }
 
-    .abaco-test-section h2 {
-        font-size: 2rem;
+    .abaco-methodology__lines {
+        display: none;
     }
 
-    .abaco-test-section__lead {
-        font-size: 0.98rem;
+    .abaco-methodology-card,
+    .abaco-methodology-card:nth-child(2),
+    .abaco-methodology-card:nth-child(3),
+    .abaco-methodology-card:nth-child(4),
+    .abaco-methodology-card:nth-child(5),
+    .abaco-methodology-card:nth-child(6) {
+        grid-column: auto;
+        grid-row: auto;
+        opacity: 1;
+        transform: none;
+        filter: none;
     }
 
-    .abaco-test-card {
-        min-height: 11.25rem;
+    .abaco-methodology-card__flip {
+        min-height: 17.5rem;
+    }
+
+    .abaco-methodology-card__points {
+        grid-template-columns: 1fr;
+    }
+
+    .abaco-cta-panel {
+        padding: 3rem 1.5rem;
+    }
+
+    .abaco-cta-panel h2 {
+        font-size: 1.7rem;
+    }
+
+    .abaco-footer__inner {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 2.25rem;
+        padding: 3.5rem 0 2.5rem;
+    }
+
+    .abaco-footer__brand {
+        grid-column: span 2;
+    }
+
+    .abaco-footer__bottom {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
 
@@ -1240,4 +2892,229 @@
     .abaco-header__nav a {
         transition: none;
     }
+
+    .abaco-reveal,
+    .abaco-stagger > *,
+    .abaco-card-hover,
+    .abaco-glow-line::after {
+        transition: none;
+    }
+
+    .abaco-reveal,
+    .abaco-stagger > * {
+        opacity: 1;
+        transform: none;
+    }
+
+    .abaco-glow-line::after {
+        transform: translateX(100%);
+    }
+}
+
+/* ==========================================================================
+   Sistema público AbacoQD — layout global (FASE 1)
+   docs/07_VISTAS/PUBLIC_09_LAYOUT_GLOBAL.md · docs/04_IDENTIDAD_UI_COMPONENTES.md
+   ========================================================================== */
+
+/* Skip-link accesible: oculto hasta foco (docs: "Saltar al contenido") */
+.qd-skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 90;
+    transform: translateY(-150%);
+    padding: 0.6rem 1rem;
+    border-radius: 0.625rem;
+    background: var(--qd-ink);
+    color: var(--qd-white);
+    font-weight: 600;
+    box-shadow: 0 12px 30px -16px rgba(7, 17, 26, 0.7);
+    transition: transform 180ms ease-out;
+}
+
+.qd-skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 2px solid var(--qd-lime);
+    outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Wave Background global — fondo vivo, no protagonista (docs §8)
+   Capa fija detrás de todo el contenido público, pointer-events: none.
+   -------------------------------------------------------------------------- */
+.qd-wave {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+    background: var(--wave-bg);
+}
+
+.qd-wave__layer {
+    position: absolute;
+    inset: -25%;
+    opacity: var(--wave-opacity);
+    will-change: transform;
+    filter: blur(60px);
+}
+
+.qd-wave__layer--a {
+    background:
+        radial-gradient(
+            40% 38% at 22% 30%,
+            var(--wave-primary),
+            transparent 70%
+        ),
+        radial-gradient(
+            44% 40% at 78% 64%,
+            var(--wave-secondary),
+            transparent 72%
+        );
+    animation: qd-wave-drift-a
+        calc(var(--wave-duration) / var(--wave-speed-factor) * 0.25) ease-in-out
+        infinite alternate;
+}
+
+.qd-wave__layer--b {
+    background:
+        radial-gradient(
+            34% 34% at 68% 24%,
+            var(--wave-accent),
+            transparent 70%
+        ),
+        radial-gradient(
+            40% 38% at 30% 78%,
+            var(--wave-primary),
+            transparent 74%
+        );
+    animation: qd-wave-drift-b
+        calc(var(--wave-duration) / var(--wave-speed-factor) * 0.3) ease-in-out
+        infinite alternate;
+}
+
+@keyframes qd-wave-drift-a {
+    from {
+        transform: translate3d(-3%, -2%, 0) scale(1.05);
+    }
+    to {
+        transform: translate3d(4%, 3%, 0) scale(1.12);
+    }
+}
+
+@keyframes qd-wave-drift-b {
+    from {
+        transform: translate3d(3%, 2%, 0) scale(1.08);
+    }
+    to {
+        transform: translate3d(-4%, -3%, 0) scale(1.02);
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Superficie de cristal translúcido (legibilidad sobre el wave) — docs §8
+   -------------------------------------------------------------------------- */
+.qd-glass {
+    background: var(--surface-glass-bg);
+    border: 1px solid var(--surface-glass-border);
+    backdrop-filter: blur(var(--surface-glass-blur));
+    -webkit-backdrop-filter: blur(var(--surface-glass-blur));
+    box-shadow: var(--surface-glass-shadow);
+}
+
+/* --------------------------------------------------------------------------
+   Botones flotantes transversales (accesibilidad izq. / chatbot der.)
+   Posición/z-index según docs/07_VISTAS/PUBLIC_09_LAYOUT_GLOBAL.md §capas
+   -------------------------------------------------------------------------- */
+.qd-fab {
+    position: fixed;
+    bottom: max(1.25rem, env(safe-area-inset-bottom));
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 9999px;
+    transition:
+        transform 200ms ease-out,
+        box-shadow 200ms ease-out;
+}
+
+.qd-fab:hover {
+    transform: scale(1.04);
+}
+
+.qd-fab--left {
+    left: max(1.25rem, env(safe-area-inset-left));
+}
+
+.qd-fab--right {
+    right: max(1.25rem, env(safe-area-inset-right));
+}
+
+/* --------------------------------------------------------------------------
+   Widget de accesibilidad — clases aplicadas a <html> (docs §6)
+   Persistidas en localStorage por AccessibilityFab.
+   -------------------------------------------------------------------------- */
+html.a11y-text-large {
+    font-size: 112.5%;
+}
+
+html.a11y-text-xlarge {
+    font-size: 125%;
+}
+
+html.a11y-spacing body {
+    line-height: 1.85;
+    letter-spacing: 0.015em;
+}
+
+html.a11y-underline-links a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+html.a11y-readable-font,
+html.a11y-readable-font body {
+    font-family:
+        ui-sans-serif, system-ui, 'Segoe UI', Roboto, Helvetica, Arial,
+        sans-serif;
+}
+
+html.a11y-high-contrast {
+    --qd-text-high: #03080c;
+    --qd-text-medium: #1d2a31;
+}
+
+html.a11y-high-contrast.dark {
+    --qd-text-high: #ffffff;
+    --qd-text-medium: #e6f0f2;
+}
+
+html.a11y-focus-strong :focus-visible {
+    outline: 3px solid var(--qd-teal-2) !important;
+    outline-offset: 3px !important;
+}
+
+html.dark.a11y-focus-strong :focus-visible {
+    outline-color: var(--qd-lime) !important;
+}
+
+/* Pausa de animaciones: reduced-motion del SO + opción del widget */
+@media (prefers-reduced-motion: reduce) {
+    .qd-wave__layer,
+    .qd-fab {
+        animation: none;
+        transition: none;
+    }
+}
+
+html.a11y-reduce-motion *,
+html.a11y-reduce-motion *::before,
+html.a11y-reduce-motion *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
 }

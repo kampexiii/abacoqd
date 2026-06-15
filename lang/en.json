@@ -1,0 +1,357 @@
+{
+    "navigation": {
+        "primaryAriaLabel": "Main navigation",
+        "sectionsAriaLabel": "Sections",
+        "brandHome": "Abaco Developments — Home",
+        "languageSwitch": "Switch language to Spanish",
+        "openMenu": "Open menu",
+        "menuTitle": "Menu",
+        "themeLight": "Switch to light mode",
+        "themeDark": "Switch to dark mode",
+        "themeSystem": "Switch to system mode",
+        "items": {
+            "metodologia": "Methodology",
+            "servicios": "Services",
+            "proyectos": "Projects",
+            "quienesSomos": "About us",
+            "blog": "Blog",
+            "contacto": "Contact"
+        }
+    },
+    "layout": {
+        "skipToContent": "Skip to content"
+    },
+    "a11y": {
+        "openLabel": "Accessibility options",
+        "title": "Accessibility",
+        "description": "Adjust reading and motion to your needs.",
+        "textSize": {
+            "label": "Text size",
+            "normal": "Normal",
+            "large": "Large",
+            "xlarge": "Extra large"
+        },
+        "highContrast": "High contrast",
+        "spacing": "Increased spacing",
+        "underlineLinks": "Underline links",
+        "reduceMotion": "Pause animations",
+        "readableFont": "Readable font",
+        "focusStrong": "Stronger focus",
+        "reset": "Reset"
+    },
+    "chatbot": {
+        "openLabel": "Open assistant",
+        "title": "Abaco Assistant",
+        "intro": "We answer your questions or connect you with the team.",
+        "welcome": "Hi, how can we help? Write to us or use the shortcuts below.",
+        "suggestionsTitle": "Frequent questions",
+        "suggestions": {
+            "services": "What services do you offer?",
+            "time": "How long does a project take?",
+            "budget": "How is a project quoted?"
+        },
+        "fallbackTitle": "Prefer to talk to the team?",
+        "goToContact": "Go to Contact",
+        "whatsapp": "WhatsApp"
+    },
+    "home": {
+        "hero": {
+            "eyebrow": "CONSULTING · CRM · DATA · AUTOMATION",
+            "titleLine1": "CRM, data and automation",
+            "titleLine2Prefix": "to build",
+            "titleHighlight": "stronger loyalty",
+            "titleLine3": "with your customers",
+            "subtitle": "Ábaco Developments helps companies connect technology, analytics and commercial processes to improve customer relationships and make better decisions.",
+            "ctaPrimary": "Book a consultation",
+            "ctaSecondary": "View services",
+            "actionsAriaLabel": "Actions"
+        },
+        "transition": {
+            "eyebrow": "FROM ENERGY TO SYSTEM",
+            "title": "We turn data, processes and technology into smarter commercial systems.",
+            "lead": "Every customer interaction is a signal. We connect those signals with your processes and technology so they work as a single system.",
+            "cards": {
+                "crm": {
+                    "title": "CRM & Loyalty",
+                    "description": "A single view of every customer to build relationships that last."
+                },
+                "data": {
+                    "title": "Data & BI",
+                    "description": "Connected, visual information to decide with confidence and speed."
+                },
+                "automation": {
+                    "title": "Automation",
+                    "description": "Processes that run themselves so your team can focus on growth."
+                }
+            }
+        },
+        "system": {
+            "eyebrow": "THE ÁBACO SYSTEM",
+            "title": "We design systems that connect customer, data and automation.",
+            "lead": "A connected information core for every channel: CRM, data, BI, AI and automation working on the same foundation.",
+            "cta": "Discover our approach",
+            "diagram": {
+                "core": "Ábaco",
+                "nodes": {
+                    "crm": "CRM",
+                    "data": "Data",
+                    "bi": "BI",
+                    "ai": "AI",
+                    "automation": "Automation"
+                },
+                "cards": {
+                    "crm": "Customer view",
+                    "data": "Data panel",
+                    "automation": "Active flow"
+                }
+            }
+        },
+        "services": {
+            "eyebrow": "SERVICES",
+            "title": "Core services",
+            "lead": "Capabilities that combine according to your business needs, from diagnosis to day-to-day operation.",
+            "items": {
+                "crm": {
+                    "title": "CRM & Loyalty",
+                    "description": "Strategy and tools to know, segment and build loyalty with your customers."
+                },
+                "data": {
+                    "title": "Data Analytics / BI",
+                    "description": "Clear dashboards and connected data for faster decisions."
+                },
+                "automation": {
+                    "title": "Commercial automation",
+                    "description": "Workflows that remove repetitive tasks and speed up your sales operation."
+                },
+                "ai": {
+                    "title": "AI applied to business",
+                    "description": "Models and assistants that power real processes, without unnecessary complexity."
+                },
+                "transformation": {
+                    "title": "Digital transformation",
+                    "description": "End-to-end support to modernise processes, data and tools."
+                },
+                "consulting": {
+                    "title": "Technology consulting",
+                    "description": "Diagnosis and technology roadmap tailored to your business."
+                }
+            }
+        },
+        "methodology": {
+            "eyebrow": "METHODOLOGY",
+            "title": "How we work",
+            "description": "A collaborative process to design custom systems that connect data, processes and people according to each client's reality.",
+            "steps": {
+                "diagnosis": {
+                    "title": "Diagnosis",
+                    "front": "We understand your business, your processes and your friction points.",
+                    "backTitle": "What we analyse",
+                    "back": "We map needs, current tools, available data, internal processes and improvement opportunities before designing any solution.",
+                    "points": {
+                        "p1": "Current processes",
+                        "p2": "Tools in use",
+                        "p3": "Available data",
+                        "p4": "Real team problems"
+                    }
+                },
+                "strategy": {
+                    "title": "Strategy & Design",
+                    "front": "We define a tailored architecture, not a generic template.",
+                    "backTitle": "What we design",
+                    "back": "We design the ideal system for each client: CRM, data, automation, integrations, roles, flows and priorities.",
+                    "points": {
+                        "p1": "Custom architecture",
+                        "p2": "Workflows",
+                        "p3": "Required integrations",
+                        "p4": "Priorities per phase"
+                    }
+                },
+                "implementation": {
+                    "title": "Implementation",
+                    "front": "We build the system on a solid, scalable technical foundation.",
+                    "backTitle": "What we build",
+                    "back": "We develop, connect tools, validate flows and prepare a solution ready to operate in the client's day-to-day.",
+                    "points": {
+                        "p1": "Technical configuration",
+                        "p2": "Custom development",
+                        "p3": "Tool connections",
+                        "p4": "Functional validation"
+                    }
+                },
+                "adoption": {
+                    "title": "Adoption",
+                    "front": "We support the team so the system is actually used.",
+                    "backTitle": "How we roll it out",
+                    "back": "We train the team, adjust the solution with real feedback and provide operational documentation to ease the transition.",
+                    "points": {
+                        "p1": "Training",
+                        "p2": "Feedback-driven adjustments",
+                        "p3": "Operational documentation",
+                        "p4": "Initial support"
+                    }
+                },
+                "improvement": {
+                    "title": "Continuous improvement",
+                    "front": "We measure, optimise and evolve the system with the business.",
+                    "backTitle": "How it evolves",
+                    "back": "We review data, results and new processes to adapt the solution to each client stage and keep improving performance.",
+                    "points": {
+                        "p1": "Results measurement",
+                        "p2": "Flow optimisation",
+                        "p3": "New needs",
+                        "p4": "System evolution"
+                    }
+                }
+            }
+        },
+        "partners": {
+            "eyebrow": "PARTNERS & CLIENTS",
+            "title": "Partners & Clients",
+            "lead": "Our own projects and collaborations with consultancies and brands across different sectors.",
+            "cta": "View case",
+            "with": "with",
+            "items": {
+                "melia": {
+                    "partner": "Meliá Hotels International",
+                    "project": "Centralised Customer Master",
+                    "description": "A single customer view for an international hotel chain."
+                },
+                "leroyMerlin": {
+                    "partner": "Leroy Merlin",
+                    "project": "CRM and marketing automation platform",
+                    "description": "CRM technology and marketing automation for retail, in collaboration with Cognodata."
+                },
+                "jackJones": {
+                    "partner": "Jack & Jones",
+                    "project": "eCommerce, UI/UX and maintenance",
+                    "description": "Ongoing evolution of the online store and user experience, in collaboration with Iksula."
+                },
+                "malababa": {
+                    "partner": "Malababa",
+                    "project": "SEM strategy and measurement",
+                    "description": "Digital acquisition and analytics for a fashion brand, in collaboration with I Feel Web."
+                },
+                "iberia": {
+                    "partner": "Iberia",
+                    "project": "Corporate reporting in Power BI",
+                    "description": "Data dashboards for corporate and commercial tracking."
+                }
+            }
+        },
+        "testimonials": {
+            "eyebrow": "TRUST",
+            "title": "What people say about Ábaco",
+            "lead": "We are building this space with real feedback from those who already work with us.",
+            "cards": {
+                "first": {
+                    "quote": "Verified reviews pending connection with our public profile.",
+                    "role": "Review pending publication"
+                },
+                "second": {
+                    "quote": "Verified reviews pending connection with our public profile.",
+                    "role": "Review pending publication"
+                }
+            },
+            "panel": {
+                "title": "Help us grow",
+                "description": "Verified reviews pending connection with our public profile.",
+                "leaveReview": "Leave a review",
+                "viewProfile": "View Google profile"
+            }
+        },
+        "cases": {
+            "eyebrow": "FEATURED CASES",
+            "title": "Featured cases",
+            "lead": "A sample of how we apply CRM, data and automation in real projects.",
+            "cta": "View case",
+            "items": {
+                "hospitality": {
+                    "sector": "Hospitality",
+                    "title": "Customer master for an international hotel chain",
+                    "summary": "Centralised customer data to improve personalisation and loyalty."
+                },
+                "retail": {
+                    "sector": "Retail",
+                    "title": "CRM and marketing automation for retail",
+                    "summary": "Implementation of a CRM platform connected to marketing automation."
+                },
+                "reporting": {
+                    "sector": "Data & Reporting",
+                    "title": "Corporate reporting in Power BI",
+                    "summary": "Tracking dashboards for management and commercial teams."
+                }
+            }
+        },
+        "blog": {
+            "eyebrow": "INSIGHTS",
+            "title": "Insights on CRM, loyalty and data",
+            "lead": "Practical ideas and learnings about technology applied to your customer relationships.",
+            "cta": "Read more",
+            "items": {
+                "loyalty": {
+                    "category": "CRM & Loyalty",
+                    "title": "How to build a loyalty programme that works",
+                    "summary": "Keys to designing lasting relationships with your customers."
+                },
+                "data": {
+                    "category": "Data & BI",
+                    "title": "From scattered data to clear decisions",
+                    "summary": "How to unify your data sources into useful dashboards."
+                },
+                "automation": {
+                    "category": "Commercial automation",
+                    "title": "Automating without losing the human touch",
+                    "summary": "Where to automate commercial processes, and where not to."
+                }
+            }
+        },
+        "cta": {
+            "title": "Turn your data and commercial processes into a smarter relationship with your customers.",
+            "subtitle": "Let's talk about how we can help you grow.",
+            "primaryCta": "Book a consultation",
+            "secondaryCta": "Contact Ábaco"
+        }
+    },
+    "footer": {
+        "ariaLabel": "Footer",
+        "brand": {
+            "line1": "Custom development powered by AI.",
+            "line2": "An initiative by Abaco Developments.",
+            "tagline": "We build with strategy, design and technology."
+        },
+        "explore": {
+            "title": "Explore",
+            "inicio": "Home",
+            "metodologia": "Methodology",
+            "servicios": "Services",
+            "proyectos": "Projects",
+            "quienesSomos": "About us",
+            "blog": "Blog",
+            "contacto": "Contact"
+        },
+        "services": {
+            "title": "Services",
+            "web": "Web development",
+            "apps": "Custom applications",
+            "automation": "Automation",
+            "uxui": "UX/UI design",
+            "consulting": "Digital consulting"
+        },
+        "contact": {
+            "title": "Contact",
+            "whatsappLabel": "WhatsApp",
+            "linkedin": "Abaco Developments on LinkedIn"
+        },
+        "institutional": {
+            "coFunded": "Co-funded by the European Union",
+            "funds": "European Funds",
+            "fse": "European Social Fund Plus (ESF+)"
+        },
+        "legal": {
+            "copyright": "© 2026 Abaco Developments. All rights reserved.",
+            "privacy": "Privacy",
+            "cookies": "Cookies",
+            "notice": "Legal notice"
+        }
+    }
+}

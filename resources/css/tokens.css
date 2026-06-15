@@ -1,0 +1,85 @@
+/**
+ * Tokens de marca Abaco Developments (D2 + D13).
+ * Variables RGB triplete sin funcion rgb(), prefijo --abaco-color-*.
+ * Mapeadas al espacio de Tailwind (--color-*) en app.css @theme.
+ */
+
+:root {
+    --abaco-color-brand-primary: 8 127 140;
+    --abaco-color-brand-primary-hover: 6 106 117;
+    --abaco-color-brand-secondary: 8 140 140;
+    --abaco-color-brand-secondary-hover: 7 120 120;
+    --abaco-color-brand-accent: 122 191 191;
+    --abaco-color-brand-subtle: 176 217 217;
+    --abaco-color-brand-neutral: 242 242 242;
+
+    --abaco-color-surface-dark: 6 27 32;
+    --abaco-color-surface-dark-elevated: 8 45 51;
+    --abaco-color-surface-dark-strong: 8 63 70;
+}
+
+/**
+ * Sistema de diseño AbacoQD — paleta qd-* (docs/04_IDENTIDAD_UI_COMPONENTES.md §2).
+ * Fuente única de color de la web pública final. Pendiente de ratificar 16/06.
+ * Hex directo para usar como color de tema en Tailwind v4 (admite modificador
+ * de opacidad: bg-qd-teal/20). Tripletes *-rgb para glows/rgba en componentes.
+ */
+
+:root {
+    --qd-ink: #07111a;
+    --qd-surface: #0d1b26;
+    --qd-teal: #18b7b0;
+    --qd-teal-2: #0f8f95;
+    --qd-cyan: #39c6e6;
+    --qd-lime: #b7f34a;
+    --qd-mist: #e8eff0;
+    --qd-bg: #f5f8f8;
+    --qd-white: #ffffff;
+
+    /* Texto secundario por tema (alto / medio) */
+    --qd-text-high: #4a5a63;
+    --qd-text-medium: #5b6770;
+
+    /* Tripletes para rgba()/glow controlado */
+    --qd-ink-rgb: 7 17 26;
+    --qd-surface-rgb: 13 27 38;
+    --qd-teal-rgb: 24 183 176;
+    --qd-teal-2-rgb: 15 143 149;
+    --qd-cyan-rgb: 57 198 230;
+    --qd-lime-rgb: 183 243 74;
+
+    /* Wave Background global — variante clara (docs §8) */
+    --wave-bg: #f6f8f7;
+    --wave-primary: #18b7b0;
+    --wave-secondary: #39c6e6;
+    --wave-accent: #a3e635;
+    --wave-opacity: 0.22;
+    --wave-duration: 48s;
+    --wave-speed-factor: 0.25;
+
+    /* Superficie de cristal translúcido — variante clara (docs §8) */
+    --surface-glass-bg: rgba(255, 255, 255, 0.76);
+    --surface-glass-border: rgba(13, 17, 23, 0.08);
+    --surface-glass-blur: 14px;
+    --surface-glass-shadow: 0 18px 48px -28px rgba(7, 17, 26, 0.45);
+    --surface-glass-opacity: 0.76;
+}
+
+.dark {
+    /* Texto secundario en oscuro */
+    --qd-text-high: #d6e2e5;
+    --qd-text-medium: #9db0b8;
+
+    /* Wave Background global — variante oscura (docs §8) */
+    --wave-bg: #07111a;
+    --wave-primary: #18b7b0;
+    --wave-secondary: #0f8f95;
+    --wave-accent: #39c6e6;
+    --wave-opacity: 0.3;
+
+    /* Superficie de cristal translúcido — variante oscura (docs §8) */
+    --surface-glass-bg: rgba(13, 23, 38, 0.62);
+    --surface-glass-border: rgba(255, 255, 255, 0.1);
+    --surface-glass-shadow: 0 22px 60px -30px rgba(0, 0, 0, 0.6);
+    --surface-glass-opacity: 0.62;
+}

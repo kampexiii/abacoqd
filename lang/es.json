@@ -1,0 +1,357 @@
+{
+    "navigation": {
+        "primaryAriaLabel": "Navegación principal",
+        "sectionsAriaLabel": "Secciones",
+        "brandHome": "Abaco Developments — Inicio",
+        "languageSwitch": "Cambiar idioma a inglés",
+        "openMenu": "Abrir menú",
+        "menuTitle": "Menú",
+        "themeLight": "Activar modo claro",
+        "themeDark": "Activar modo oscuro",
+        "themeSystem": "Activar modo sistema",
+        "items": {
+            "metodologia": "Metodología",
+            "servicios": "Servicios",
+            "proyectos": "Proyectos",
+            "quienesSomos": "Quiénes somos",
+            "blog": "Blog",
+            "contacto": "Contacto"
+        }
+    },
+    "layout": {
+        "skipToContent": "Saltar al contenido"
+    },
+    "a11y": {
+        "openLabel": "Opciones de accesibilidad",
+        "title": "Accesibilidad",
+        "description": "Ajusta la lectura y el movimiento a tus necesidades.",
+        "textSize": {
+            "label": "Tamaño de texto",
+            "normal": "Normal",
+            "large": "Grande",
+            "xlarge": "Muy grande"
+        },
+        "highContrast": "Contraste alto",
+        "spacing": "Espaciado ampliado",
+        "underlineLinks": "Subrayar enlaces",
+        "reduceMotion": "Pausar animaciones",
+        "readableFont": "Fuente legible",
+        "focusStrong": "Foco reforzado",
+        "reset": "Restablecer"
+    },
+    "chatbot": {
+        "openLabel": "Abrir asistente",
+        "title": "Asistente Abaco",
+        "intro": "Resolvemos tus dudas o te ponemos en contacto con el equipo.",
+        "welcome": "Hola, ¿en qué podemos ayudarte? Escríbenos o usa los accesos directos de abajo.",
+        "suggestionsTitle": "Preguntas frecuentes",
+        "suggestions": {
+            "services": "¿Qué servicios ofrecéis?",
+            "time": "¿Cuánto tarda un proyecto?",
+            "budget": "¿Cómo se presupuesta?"
+        },
+        "fallbackTitle": "¿Prefieres hablar con el equipo?",
+        "goToContact": "Ir a Contacto",
+        "whatsapp": "WhatsApp"
+    },
+    "home": {
+        "hero": {
+            "eyebrow": "CONSULTORÍA · CRM · DATOS · AUTOMATIZACIÓN",
+            "titleLine1": "CRM, datos y automatización",
+            "titleLine2Prefix": "para",
+            "titleHighlight": "fidelizar mejor",
+            "titleLine3": "a tus clientes",
+            "subtitle": "Ábaco Developments ayuda a empresas a conectar tecnología, analítica y procesos comerciales para mejorar la relación con sus clientes y tomar mejores decisiones.",
+            "ctaPrimary": "Reservar una consulta",
+            "ctaSecondary": "Ver servicios",
+            "actionsAriaLabel": "Acciones"
+        },
+        "transition": {
+            "eyebrow": "DE LA ENERGÍA AL SISTEMA",
+            "title": "Convertimos datos, procesos y tecnología en sistemas comerciales más inteligentes.",
+            "lead": "Cada interacción con un cliente es una señal. Conectamos esas señales con tus procesos y tu tecnología para que trabajen como un solo sistema.",
+            "cards": {
+                "crm": {
+                    "title": "CRM & Fidelización",
+                    "description": "Una vista única de cada cliente para construir relaciones que duran en el tiempo."
+                },
+                "data": {
+                    "title": "Datos & BI",
+                    "description": "Información conectada y visual para decidir con seguridad y rapidez."
+                },
+                "automation": {
+                    "title": "Automatización",
+                    "description": "Procesos que se ejecutan solos para que tu equipo se enfoque en crecer."
+                }
+            }
+        },
+        "system": {
+            "eyebrow": "SISTEMA ÁBACO",
+            "title": "Diseñamos sistemas que conectan cliente, dato y automatización.",
+            "lead": "Un núcleo de información conectado a cada canal: CRM, datos, BI, IA y automatización funcionando sobre la misma base.",
+            "cta": "Conoce nuestro enfoque",
+            "diagram": {
+                "core": "Ábaco",
+                "nodes": {
+                    "crm": "CRM",
+                    "data": "Datos",
+                    "bi": "BI",
+                    "ai": "IA",
+                    "automation": "Automatización"
+                },
+                "cards": {
+                    "crm": "Vista de cliente",
+                    "data": "Panel de datos",
+                    "automation": "Flujo activo"
+                }
+            }
+        },
+        "services": {
+            "eyebrow": "SERVICIOS",
+            "title": "Servicios principales",
+            "lead": "Capacidades que se combinan según el momento de tu negocio, desde el diagnóstico hasta la operación diaria.",
+            "items": {
+                "crm": {
+                    "title": "CRM & Fidelización",
+                    "description": "Estrategia y herramientas para conocer, segmentar y fidelizar a tus clientes."
+                },
+                "data": {
+                    "title": "Analítica de datos / BI",
+                    "description": "Paneles claros y datos conectados para decisiones más rápidas."
+                },
+                "automation": {
+                    "title": "Automatización comercial",
+                    "description": "Flujos que eliminan tareas repetitivas y aceleran tu operación comercial."
+                },
+                "ai": {
+                    "title": "IA aplicada a negocio",
+                    "description": "Modelos y asistentes que potencian procesos reales, sin complejidad innecesaria."
+                },
+                "transformation": {
+                    "title": "Transformación digital",
+                    "description": "Acompañamiento integral para modernizar procesos, datos y herramientas."
+                },
+                "consulting": {
+                    "title": "Consultoría tecnológica",
+                    "description": "Diagnóstico y hoja de ruta tecnológica adaptada a tu negocio."
+                }
+            }
+        },
+        "methodology": {
+            "eyebrow": "METODOLOGÍA",
+            "title": "Cómo trabajamos",
+            "description": "Un proceso colaborativo para diseñar sistemas personalizados que conectan datos, procesos y personas según la realidad de cada cliente.",
+            "steps": {
+                "diagnosis": {
+                    "title": "Diagnóstico",
+                    "front": "Entendemos tu negocio, tus procesos y tus puntos de fricción.",
+                    "backTitle": "Qué analizamos",
+                    "back": "Mapeamos necesidades, herramientas actuales, datos disponibles, procesos internos y oportunidades de mejora antes de diseñar cualquier solución.",
+                    "points": {
+                        "p1": "Procesos actuales",
+                        "p2": "Herramientas en uso",
+                        "p3": "Datos disponibles",
+                        "p4": "Problemas reales del equipo"
+                    }
+                },
+                "strategy": {
+                    "title": "Estrategia & Diseño",
+                    "front": "Definimos una arquitectura a medida, no una plantilla genérica.",
+                    "backTitle": "Qué diseñamos",
+                    "back": "Diseñamos el sistema ideal para cada cliente: CRM, datos, automatización, integraciones, roles, flujos y prioridades.",
+                    "points": {
+                        "p1": "Arquitectura personalizada",
+                        "p2": "Flujos de trabajo",
+                        "p3": "Integraciones necesarias",
+                        "p4": "Prioridades por fase"
+                    }
+                },
+                "implementation": {
+                    "title": "Implementación",
+                    "front": "Construimos el sistema con una base técnica sólida y escalable.",
+                    "backTitle": "Qué construimos",
+                    "back": "Desarrollamos, conectamos herramientas, validamos flujos y preparamos una solución lista para operar en el día a día del cliente.",
+                    "points": {
+                        "p1": "Configuración técnica",
+                        "p2": "Desarrollo a medida",
+                        "p3": "Conexión de herramientas",
+                        "p4": "Validación funcional"
+                    }
+                },
+                "adoption": {
+                    "title": "Adopción",
+                    "front": "Acompañamos al equipo para que el sistema se use de verdad.",
+                    "backTitle": "Cómo lo implantamos",
+                    "back": "Formamos al equipo, ajustamos la solución con feedback real y dejamos documentación operativa para facilitar la transición.",
+                    "points": {
+                        "p1": "Formación",
+                        "p2": "Ajustes con feedback",
+                        "p3": "Documentación operativa",
+                        "p4": "Soporte inicial"
+                    }
+                },
+                "improvement": {
+                    "title": "Mejora continua",
+                    "front": "Medimos, optimizamos y evolucionamos el sistema con el negocio.",
+                    "backTitle": "Cómo evoluciona",
+                    "back": "Revisamos datos, resultados y nuevos procesos para adaptar la solución a cada etapa del cliente y seguir mejorando el rendimiento.",
+                    "points": {
+                        "p1": "Medición de resultados",
+                        "p2": "Optimización de flujos",
+                        "p3": "Nuevas necesidades",
+                        "p4": "Evolución del sistema"
+                    }
+                }
+            }
+        },
+        "partners": {
+            "eyebrow": "SOCIOS & CLIENTES",
+            "title": "Socios & Clientes",
+            "lead": "Proyectos propios y en colaboración con consultoras y marcas de distintos sectores.",
+            "cta": "Ver caso",
+            "with": "con",
+            "items": {
+                "melia": {
+                    "partner": "Meliá Hotels International",
+                    "project": "Maestro de Clientes Centralizado",
+                    "description": "Visión única de cliente para una cadena hotelera internacional."
+                },
+                "leroyMerlin": {
+                    "partner": "Leroy Merlin",
+                    "project": "Plataforma CRM y Marketing Automation",
+                    "description": "Tecnología de CRM y automatización de marketing para retail, en colaboración con Cognodata."
+                },
+                "jackJones": {
+                    "partner": "Jack & Jones",
+                    "project": "eCommerce, UI/UX y mantenimiento",
+                    "description": "Evolución continua de la tienda online y experiencia de usuario, en colaboración con Iksula."
+                },
+                "malababa": {
+                    "partner": "Malababa",
+                    "project": "Estrategia SEM y medición",
+                    "description": "Captación digital y analítica para una marca de moda, en colaboración con I Feel Web."
+                },
+                "iberia": {
+                    "partner": "Iberia",
+                    "project": "Reporting corporativo en Power BI",
+                    "description": "Paneles de datos para seguimiento corporativo y áreas comerciales."
+                }
+            }
+        },
+        "testimonials": {
+            "eyebrow": "CONFIANZA",
+            "title": "Lo que dicen de Ábaco",
+            "lead": "Estamos construyendo este espacio con opiniones reales de quienes ya trabajan con nosotros.",
+            "cards": {
+                "first": {
+                    "quote": "Reseñas verificadas pendientes de conexión con perfil público.",
+                    "role": "Reseña en proceso de publicación"
+                },
+                "second": {
+                    "quote": "Reseñas verificadas pendientes de conexión con perfil público.",
+                    "role": "Reseña en proceso de publicación"
+                }
+            },
+            "panel": {
+                "title": "Ayúdanos a crecer",
+                "description": "Reseñas verificadas pendientes de conexión con perfil público.",
+                "leaveReview": "Dejar una reseña",
+                "viewProfile": "Ver perfil de Google"
+            }
+        },
+        "cases": {
+            "eyebrow": "CASOS DESTACADOS",
+            "title": "Casos destacados",
+            "lead": "Una muestra de cómo aplicamos CRM, datos y automatización en proyectos reales.",
+            "cta": "Ver caso",
+            "items": {
+                "hospitality": {
+                    "sector": "Hostelería",
+                    "title": "Maestro de clientes para una cadena hotelera internacional",
+                    "summary": "Centralización de datos de cliente para mejorar personalización y fidelización."
+                },
+                "retail": {
+                    "sector": "Retail",
+                    "title": "CRM y automatización de marketing para retail",
+                    "summary": "Implementación de una plataforma de CRM conectada con marketing automation."
+                },
+                "reporting": {
+                    "sector": "Datos & Reporting",
+                    "title": "Reporting corporativo en Power BI",
+                    "summary": "Paneles de seguimiento para dirección y áreas comerciales."
+                }
+            }
+        },
+        "blog": {
+            "eyebrow": "INSIGHTS",
+            "title": "Insights sobre CRM, fidelización y datos",
+            "lead": "Ideas y aprendizajes prácticos sobre tecnología aplicada a la relación con tus clientes.",
+            "cta": "Leer más",
+            "items": {
+                "loyalty": {
+                    "category": "CRM y Fidelización",
+                    "title": "Cómo construir un programa de fidelización que funcione",
+                    "summary": "Claves para diseñar relaciones duraderas con tus clientes."
+                },
+                "data": {
+                    "category": "Datos y BI",
+                    "title": "De los datos dispersos a decisiones claras",
+                    "summary": "Cómo unificar tus fuentes de datos en paneles útiles."
+                },
+                "automation": {
+                    "category": "Automatización comercial",
+                    "title": "Automatizar sin perder el toque humano",
+                    "summary": "Dónde automatizar procesos comerciales y dónde no."
+                }
+            }
+        },
+        "cta": {
+            "title": "Convierte tus datos y procesos comerciales en una relación más inteligente con tus clientes.",
+            "subtitle": "Hablemos de cómo podemos ayudarte a crecer.",
+            "primaryCta": "Reservar consulta",
+            "secondaryCta": "Contactar con Ábaco"
+        }
+    },
+    "footer": {
+        "ariaLabel": "Pie de página",
+        "brand": {
+            "line1": "Desarrollos a medida potenciados por IA.",
+            "line2": "Iniciativa de Abaco Developments.",
+            "tagline": "Construimos con estrategia, diseño y tecnología."
+        },
+        "explore": {
+            "title": "Explorar",
+            "inicio": "Inicio",
+            "metodologia": "Metodología",
+            "servicios": "Servicios",
+            "proyectos": "Proyectos",
+            "quienesSomos": "Quiénes somos",
+            "blog": "Blog",
+            "contacto": "Contacto"
+        },
+        "services": {
+            "title": "Servicios",
+            "web": "Desarrollo web",
+            "apps": "Aplicaciones a medida",
+            "automation": "Automatización",
+            "uxui": "Diseño UX/UI",
+            "consulting": "Consultoría digital"
+        },
+        "contact": {
+            "title": "Contacto",
+            "whatsappLabel": "WhatsApp",
+            "linkedin": "LinkedIn de Abaco Developments"
+        },
+        "institutional": {
+            "coFunded": "Cofinanciado por la Unión Europea",
+            "funds": "Fondos Europeos",
+            "fse": "Fondo Social Europeo Plus (FSE+)"
+        },
+        "legal": {
+            "copyright": "© 2026 Abaco Developments. Todos los derechos reservados.",
+            "privacy": "Privacidad",
+            "cookies": "Cookies",
+            "notice": "Aviso legal"
+        }
+    }
+}
