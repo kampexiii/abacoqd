@@ -2,16 +2,28 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
-// Derivado del símbolo real, sin fondo y con teal de marca para verse en
-// light y dark sin depender de blanco puro.
-const LOGO_TEXTURE_PATH =
-    '/assets/branding/marca/simbolos/abaco-cube-brand.svg';
+// Isotipo AbacoQD (símbolo A con líneas de velocidad). Mismo asset que marca el
+// header/footer; se aplica a las caras del cubo y a los fragmentos al descomponer.
+// Variante "ink" (trazo oscuro) en tema claro, variante "inverse" (trazo claro +
+// teal/cian) en tema oscuro para mantener contraste contra el cristal del cubo.
+const LOGO_TEXTURE_PATH_LIGHT =
+    '/assets/branding/marca/logos/abacoqd-isotipo.svg';
+const LOGO_TEXTURE_PATH_DARK =
+    '/assets/branding/marca/logos/abacoqd-isotipo-inverse.svg';
 
 const CUBE_SIZE = 2.16;
 const CAMERA_Z = 4.7;
 const FOV = 36;
 const INTRO_DURATION = 3.1;
 const INTRO_SCALE = 7;
+const CUBE_BRAND_BLUE = 0x18b7b0;
+const CUBE_BRAND_BLUE_DEEP = 0x087f8c;
+const CUBE_GLOW_BLUE = 0x39c6e6;
+const CUBE_ICE_BLUE = 0xdffaff;
+const CUBE_GLASS_BLUE_DARK = 0xc8eef4;
+const CUBE_GLASS_BLUE_LIGHT = 0xaad6da;
+const CUBE_FRAGMENT_GLASS_DARK = 0x123b43;
+const CUBE_FRAGMENT_GLASS_LIGHT = 0xb7e1e6;
 
 // Pseudo-aleatorio determinista: misma disposición en cada carga.
 const rand = (seed: number) => {
@@ -79,8 +91,9 @@ const FRAGMENTS: readonly FragmentSpec[] = Array.from(
     },
 );
 
-// Rasteriza el SVG real en alta resolución. El canvas recorta la línea
-// "ABACO DEVELOPMENTS" inferior y deja solo el símbolo (líneas + A).
+// Crea la textura canvas compartida por caras y fragmentos. El contenido se
+// pinta a posteriori con `paintLogoTexture` (permite repintar al cambiar de
+// tema sin recrear materiales).
 const createLogoTexture = () => {
     const canvas = document.createElement('canvas');
     canvas.width = 1024;
@@ -89,15 +102,44 @@ const createLogoTexture = () => {
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
 
-    fetch(LOGO_TEXTURE_PATH)
+    return texture;
+};
+
+// Rasteriza el SVG del isotipo en alta resolución sobre la textura existente,
+// conservando su proporción y centrándolo en el canvas ancho del plano del
+// cubo (no se deforma aunque el isotipo sea más cuadrado que el plano).
+const paintLogoTexture = (texture: THREE.CanvasTexture, path: string) => {
+    const canvas = texture.image as HTMLCanvasElement;
+    const canvasW = canvas.width;
+    const canvasH = canvas.height;
+
+    fetch(path)
         .then((response) => response.text())
         .then((markup) => {
-            // Sin width/height explícitos el navegador rasteriza el SVG a
-            // ~257px y los trazos finos desaparecen al escalar; se inyectan
-            // dimensiones grandes y se rasteriza desde un blob.
+            // Sin width/height explícitos el navegador rasteriza el SVG pequeño
+            // y los trazos finos desaparecen al escalar; se inyectan dimensiones
+            // grandes preservando la proporción del viewBox. Los atributos
+            // width/height originales del SVG se retiran antes: dejarlos
+            // duplicados invalida el XML y el <img> nunca llega a cargar.
+            const viewBox = markup.match(
+                /viewBox="0 0 ([\d.]+) ([\d.]+)"/,
+            );
+            const svgRatio = viewBox
+                ? Number(viewBox[1]) / Number(viewBox[2])
+                : canvasW / canvasH;
+            const drawH = canvasH;
+            const drawW = Math.round(drawH * svgRatio);
+            const offsetX = Math.round((canvasW - drawW) / 2);
             const sized = markup.replace(
-                '<svg ',
-                '<svg width="1024" height="434" ',
+                /<svg([^>]*)>/,
+                (_match, attrs: string) => {
+                    const cleaned = attrs.replace(
+                        /\s(?:width|height)="[^"]*"/g,
+                        '',
+                    );
+
+                    return `<svg width="${drawW}" height="${drawH}"${cleaned}>`;
+                },
             );
             const blob = new Blob([sized], { type: 'image/svg+xml' });
             const url = URL.createObjectURL(blob);
@@ -106,8 +148,8 @@ const createLogoTexture = () => {
                 const context = canvas.getContext('2d');
 
                 if (context) {
-                    context.clearRect(0, 0, 1024, 432);
-                    context.drawImage(image, 0, 0, 1024, 434);
+                    context.clearRect(0, 0, canvasW, canvasH);
+                    context.drawImage(image, offsetX, 0, drawW, drawH);
                     texture.needsUpdate = true;
                 }
 
@@ -117,8 +159,6 @@ const createLogoTexture = () => {
             image.src = url;
         })
         .catch(() => undefined);
-
-    return texture;
 };
 
 const ENERGY_VERTEX_SHADER = `
@@ -176,19 +216,16 @@ const ENERGY_FRAGMENT_SHADER = `
         float veinA = pow(clamp(swirlA * swirlB + swirlC * 0.42, 0.0, 1.0), 1.6);
         float veinB = pow(0.5 + 0.5 * sin(vPosition.y * 11.0 - uTime * 2.05 + vWave * 4.0), 2.0);
         float plasma = clamp(veinA * 1.16 + veinB * 0.62 + body * 0.2, 0.0, 2.0);
-        float whiteVeins = clamp(pow(veinA, 1.28) * 0.62 + veinB * 0.3 + body * 0.46, 0.0, 1.0);
-        vec3 teal = vec3(0.031, 0.498, 0.549);
-        vec3 brandCyan = vec3(0.031, 0.549, 0.549);
-        vec3 electricCyan = vec3(0.5, 0.98, 1.0);
-        vec3 cyan = vec3(0.94, 1.0, 1.0);
-        vec3 mint = vec3(0.81, 0.99, 1.0);
-        vec3 white = vec3(0.94, 1.0, 1.0);
-        vec3 brandTint = mix(teal, brandCyan, 0.64 + veinA * 0.16);
-        vec3 color = mix(white, cyan, 0.22 + plasma * 0.08 + body * 0.08);
-        color = mix(color, electricCyan, clamp(0.28 + veinA * 0.24 + veinB * 0.24, 0.0, 0.7));
-        color = mix(color, mint, 0.12 + veinB * 0.12 + body * 0.06);
-        color = mix(color, brandTint, clamp(0.02 + plasma * 0.018, 0.0, 0.08));
-        color = mix(color, white, 0.78 + whiteVeins * 0.18 + body * 0.04);
+        float highlights = clamp(pow(veinA, 1.28) * 0.42 + veinB * 0.26 + body * 0.28, 0.0, 1.0);
+        vec3 brandBlue = vec3(0.094, 0.718, 0.690);
+        vec3 deepBlue = vec3(0.031, 0.498, 0.549);
+        vec3 glowBlue = vec3(0.224, 0.776, 0.902);
+        vec3 iceBlue = vec3(0.78, 0.965, 1.0);
+        vec3 nearWhite = vec3(0.94, 1.0, 1.0);
+        vec3 color = mix(deepBlue, brandBlue, 0.52 + veinA * 0.22);
+        color = mix(color, glowBlue, clamp(0.2 + plasma * 0.18 + veinB * 0.18, 0.0, 0.64));
+        color = mix(color, iceBlue, clamp(0.08 + highlights * 0.3 + body * 0.08, 0.0, 0.42));
+        color = mix(color, nearWhite, clamp(highlights * 0.16 + body * 0.03 + uBoost * 0.08, 0.0, 0.24));
         float alpha = (0.05 + plasma * 0.3 + veinA * 0.14 + body * 0.08)
             * edgeMask
             * (0.48 + 0.52 * facing)
@@ -196,7 +233,7 @@ const ENERGY_FRAGMENT_SHADER = `
             * uThemeAlpha
             * (1.0 + uBoost * 1.45);
 
-        gl_FragColor = vec4(color * (5.2 + plasma * 3.4 + whiteVeins * 2.0 + body * 0.75 + uBoost * 1.55) * uThemeBoost, alpha);
+        gl_FragColor = vec4(color * (4.6 + plasma * 3.1 + highlights * 1.15 + body * 0.7 + uBoost * 1.4) * uThemeBoost, alpha);
     }
 `;
 
@@ -404,17 +441,17 @@ export default function AbacoCrystalCube() {
         const root = new THREE.Group();
         scene.add(root);
 
-        scene.add(new THREE.AmbientLight(0xb0d9d9, 1.1));
+        scene.add(new THREE.AmbientLight(CUBE_ICE_BLUE, 1.05));
 
-        const keyLight = new THREE.DirectionalLight(0xffffff, 1.9);
+        const keyLight = new THREE.DirectionalLight(CUBE_ICE_BLUE, 1.65);
         keyLight.position.set(2.8, 3.5, 4.2);
         scene.add(keyLight);
 
-        const tealLight = new THREE.PointLight(0x7abfbf, 5.4, 10);
+        const tealLight = new THREE.PointLight(CUBE_GLOW_BLUE, 5.2, 10);
         tealLight.position.set(-1.8, -0.2, 1.8);
         scene.add(tealLight);
 
-        const innerLight = new THREE.PointLight(0x088c8c, 4.2, 4.5);
+        const innerLight = new THREE.PointLight(CUBE_BRAND_BLUE, 4.4, 4.5);
         root.add(innerLight);
 
         const glassGeometry = new THREE.BoxGeometry(
@@ -425,9 +462,9 @@ export default function AbacoCrystalCube() {
         const glassMaterial = new THREE.MeshPhysicalMaterial({
             clearcoat: 1,
             clearcoatRoughness: 0.05,
-            color: 0xd2ecee,
+            color: CUBE_GLASS_BLUE_DARK,
             depthWrite: false,
-            emissive: 0x66c2c8,
+            emissive: CUBE_BRAND_BLUE,
             emissiveIntensity: 0,
             envMapIntensity: 1.2,
             ior: 1.5,
@@ -445,7 +482,7 @@ export default function AbacoCrystalCube() {
         const edgeGeometry = new THREE.EdgesGeometry(glassGeometry);
         const edgeMaterial = new THREE.LineBasicMaterial({
             blending: THREE.AdditiveBlending,
-            color: 0x7abfbf,
+            color: CUBE_BRAND_BLUE,
             opacity: 0.4,
             transparent: true,
         });
@@ -454,8 +491,8 @@ export default function AbacoCrystalCube() {
 
         const fineEdgeMaterial = new THREE.LineBasicMaterial({
             blending: THREE.AdditiveBlending,
-            color: 0xffffff,
-            opacity: 0.12,
+            color: CUBE_ICE_BLUE,
+            opacity: 0.09,
             transparent: true,
         });
         const fineEdges = new THREE.LineSegments(
@@ -468,9 +505,10 @@ export default function AbacoCrystalCube() {
         const logoTexture = createLogoTexture();
         const logoGeometry = new THREE.PlaneGeometry(1.9, 0.8);
         const logoMaterial = new THREE.MeshBasicMaterial({
+            color: CUBE_ICE_BLUE,
             depthWrite: false,
             map: logoTexture,
-            opacity: 0.94,
+            opacity: 0.82,
             transparent: true,
         });
         const logo = new THREE.Mesh(logoGeometry, logoMaterial);
@@ -481,10 +519,10 @@ export default function AbacoCrystalCube() {
             logoGeometry,
             new THREE.MeshBasicMaterial({
                 blending: THREE.AdditiveBlending,
+                color: CUBE_GLOW_BLUE,
                 depthWrite: false,
                 map: logoTexture,
-                color: 0xe6ffff,
-                opacity: 0.16,
+                opacity: 0.15,
                 transparent: true,
             }),
         );
@@ -495,9 +533,10 @@ export default function AbacoCrystalCube() {
         const backLogo = new THREE.Mesh(
             logoGeometry,
             new THREE.MeshBasicMaterial({
+                color: CUBE_ICE_BLUE,
                 depthWrite: false,
                 map: logoTexture,
-                opacity: 0.48,
+                opacity: 0.38,
                 transparent: true,
             }),
         );
@@ -509,10 +548,10 @@ export default function AbacoCrystalCube() {
             logoGeometry,
             new THREE.MeshBasicMaterial({
                 blending: THREE.AdditiveBlending,
+                color: CUBE_GLOW_BLUE,
                 depthWrite: false,
                 map: logoTexture,
-                color: 0xe6ffff,
-                opacity: 0.11,
+                opacity: 0.1,
                 transparent: true,
             }),
         );
@@ -557,28 +596,33 @@ export default function AbacoCrystalCube() {
         const fragmentLogoGeometry = new THREE.PlaneGeometry(0.58, 0.242);
         const fragmentCoreMaterial = new THREE.MeshBasicMaterial({
             blending: THREE.AdditiveBlending,
-            color: 0x9dd8d8,
+            color: CUBE_GLOW_BLUE,
             depthWrite: false,
-            opacity: 0.55,
+            opacity: 0.48,
             transparent: true,
         });
         const createFragmentMaterial = (emissive: number, opacity: number) =>
             new THREE.MeshPhysicalMaterial({
-                clearcoat: 0.6,
-                clearcoatRoughness: 0.15,
-                color: 0x0c3338,
-                emissive: 0x087f8c,
+                clearcoat: 0.9,
+                clearcoatRoughness: 0.06,
+                color: CUBE_FRAGMENT_GLASS_DARK,
+                depthWrite: false,
+                emissive: CUBE_BRAND_BLUE,
                 emissiveIntensity: emissive,
-                envMapIntensity: 0.6,
-                metalness: 0.05,
+                envMapIntensity: 0.82,
+                ior: 1.45,
+                metalness: 0,
                 opacity,
-                roughness: 0.3,
+                roughness: 0.08,
+                side: THREE.DoubleSide,
+                thickness: 0.54,
+                transmission: 0.76,
                 transparent: true,
             });
         const createFragmentEdgeMaterial = (opacity: number) =>
             new THREE.LineBasicMaterial({
                 blending: THREE.AdditiveBlending,
-                color: 0x7abfbf,
+                color: CUBE_BRAND_BLUE,
                 opacity,
                 transparent: true,
             });
@@ -603,18 +647,21 @@ export default function AbacoCrystalCube() {
             THREE.MeshBasicMaterial
         > = {
             far: new THREE.MeshBasicMaterial({
+                color: CUBE_ICE_BLUE,
                 depthWrite: false,
                 map: logoTexture,
                 opacity: 0.16,
                 transparent: true,
             }),
             macro: new THREE.MeshBasicMaterial({
+                color: CUBE_ICE_BLUE,
                 depthWrite: false,
                 map: logoTexture,
                 opacity: 0.28,
                 transparent: true,
             }),
             near: new THREE.MeshBasicMaterial({
+                color: CUBE_ICE_BLUE,
                 depthWrite: false,
                 map: logoTexture,
                 opacity: 0.48,
@@ -708,25 +755,37 @@ export default function AbacoCrystalCube() {
             edgeMaterial.blending = dark
                 ? THREE.AdditiveBlending
                 : THREE.NormalBlending;
-            edgeMaterial.color.set(dark ? 0x7abfbf : 0x087f8c);
-            themeState.edgeOpacity = dark ? 0.4 : 0.6;
+            edgeMaterial.color.set(
+                dark ? CUBE_BRAND_BLUE : CUBE_BRAND_BLUE_DEEP,
+            );
+            themeState.edgeOpacity = dark ? 0.52 : 0.66;
             fineEdges.visible = dark;
-            glassMaterial.color.set(dark ? 0xd2ecee : 0xaad6da);
-            glassMaterial.opacity = dark ? 0.07 : 0.16;
+            glassMaterial.color.set(
+                dark ? CUBE_GLASS_BLUE_DARK : CUBE_GLASS_BLUE_LIGHT,
+            );
+            glassMaterial.opacity = dark ? 0.075 : 0.15;
             const energyMaterial = energyInner.material as THREE.ShaderMaterial;
             energyMaterial.blending = THREE.AdditiveBlending;
-            energyMaterial.uniforms.uThemeAlpha.value = dark ? 1.12 : 1.68;
-            energyMaterial.uniforms.uThemeBoost.value = dark ? 1.45 : 2.35;
+            energyMaterial.uniforms.uThemeAlpha.value = dark ? 1.05 : 1.42;
+            energyMaterial.uniforms.uThemeBoost.value = dark ? 1.2 : 1.78;
             energyMaterial.needsUpdate = true;
             (['far', 'macro', 'near'] as const).forEach((tier) => {
-                fragmentMaterials[tier].color.set(dark ? 0x0c3338 : 0x9fcfd4);
+                fragmentMaterials[tier].color.set(
+                    dark
+                        ? CUBE_FRAGMENT_GLASS_DARK
+                        : CUBE_FRAGMENT_GLASS_LIGHT,
+                );
                 fragmentEdgeMaterials[tier].blending = dark
                     ? THREE.AdditiveBlending
                     : THREE.NormalBlending;
                 fragmentEdgeMaterials[tier].color.set(
-                    dark ? 0x7abfbf : 0x087f8c,
+                    dark ? CUBE_BRAND_BLUE : CUBE_BRAND_BLUE_DEEP,
                 );
             });
+            paintLogoTexture(
+                logoTexture,
+                dark ? LOGO_TEXTURE_PATH_DARK : LOGO_TEXTURE_PATH_LIGHT,
+            );
         };
 
         applyTheme();
@@ -743,14 +802,10 @@ export default function AbacoCrystalCube() {
         const layout = () => {
             const mountRect = mount.getBoundingClientRect();
             const zoneRect = zone.getBoundingClientRect();
-            const hero = mount.closest('.abaco-hero');
+            const hero = mount.closest('.qd-hero');
             const copyRect =
                 hero
-                    ?.querySelector('.abaco-hero__copy')
-                    ?.getBoundingClientRect() ?? null;
-            const railsRect =
-                hero
-                    ?.querySelector('.abaco-brand-rails')
+                    ?.querySelector('.qd-hero__copy')
                     ?.getBoundingClientRect() ?? null;
             const width = Math.max(1, mountRect.width);
             const height = Math.max(1, mountRect.height);
@@ -787,11 +842,9 @@ export default function AbacoCrystalCube() {
             // 0.8: deja sitio a la diagonal del cubo rotado (~+37% de la arista)
             const cubePx = zoneRect.height * 0.8;
             restScale = ((cubePx / height) * (halfH * 2)) / CUBE_SIZE;
-            // Zonas protegidas: topbar, bloque de texto y carrusel.
+            // Zonas protegidas: topbar y bloque de texto central.
             const topLimit = mountRect.top + 96;
-            const bottomLimit = railsRect
-                ? railsRect.top - 10
-                : mountRect.bottom - 90;
+            const bottomLimit = mountRect.bottom - 90;
             const copyBottom = copyRect
                 ? copyRect.bottom + 16
                 : mountRect.top + height * 0.5;
@@ -857,7 +910,7 @@ export default function AbacoCrystalCube() {
         const updateScrollState = () => {
             scrollFrameRef.current = null;
 
-            const hero = mount.closest('.abaco-hero');
+            const hero = mount.closest('.qd-hero');
 
             if (!hero) {
                 return;
@@ -899,12 +952,12 @@ export default function AbacoCrystalCube() {
 
             return Boolean(
                 target.closest(
-                    'a, button, input, textarea, select, [role="button"], .abaco-header, .abaco-hero__copy, .abaco-brand-rails',
+                    'a, button, input, textarea, select, [role="button"], .qd-hero__copy',
                 ),
             );
         };
 
-        const hero = mount.closest('.abaco-hero');
+        const hero = mount.closest('.qd-hero');
         const handleHeroPointerDown = (event: Event) => {
             const pointerEvent = event as PointerEvent;
 
@@ -1046,8 +1099,11 @@ export default function AbacoCrystalCube() {
             sharedTime.value = elapsed;
             sharedBoost.value = boost;
             glassMaterial.emissiveIntensity = boost * 1.3;
-            edgeMaterial.opacity = themeState.edgeOpacity + boost * 0.55;
-            fineEdgeMaterial.opacity = 0.12 + boost * 0.5;
+            edgeMaterial.opacity = Math.min(
+                1,
+                themeState.edgeOpacity + boost * 0.42,
+            );
+            fineEdgeMaterial.opacity = 0.08 + boost * 0.3;
             innerLight.intensity =
                 (3.8 +
                     Math.sin(elapsed * 1.9) * 1.3 * motionScale +
@@ -1059,11 +1115,11 @@ export default function AbacoCrystalCube() {
                 energyInner.material as THREE.ShaderMaterial
             ).uniforms.uAlpha.value = 1.42 * softenedVisibility;
             logoMaterial.opacity =
-                0.92 + Math.sin(elapsed * 1.15) * 0.04 * motionScale;
+                0.74 + Math.sin(elapsed * 1.15) * 0.03 * motionScale;
             backLogo.material.opacity =
-                0.34 + Math.sin(elapsed * 0.8 + 1.2) * 0.04 * motionScale;
-            logoGlow.material.opacity = 0.14 + boost * 0.28;
-            backLogoGlow.material.opacity = 0.08 + boost * 0.18;
+                0.3 + Math.sin(elapsed * 0.8 + 1.2) * 0.03 * motionScale;
+            logoGlow.material.opacity = 0.13 + boost * 0.2;
+            backLogoGlow.material.opacity = 0.08 + boost * 0.14;
 
             renderer.render(scene, camera);
             frameId = window.requestAnimationFrame(animate);

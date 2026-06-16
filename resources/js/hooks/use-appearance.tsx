@@ -11,6 +11,7 @@ export type UseAppearanceReturn = {
 
 const listeners = new Set<() => void>();
 let currentAppearance: Appearance = 'system';
+let systemThemeListenerBound = false;
 
 const prefersDark = (): boolean => {
     if (typeof window === 'undefined') {
@@ -68,7 +69,13 @@ const mediaQuery = (): MediaQueryList | null => {
     return window.matchMedia('(prefers-color-scheme: dark)');
 };
 
-const handleSystemThemeChange = (): void => applyTheme(currentAppearance);
+const handleSystemThemeChange = (): void => {
+    applyTheme(currentAppearance);
+
+    if (currentAppearance === 'system') {
+        notify();
+    }
+};
 
 export function initializeTheme(): void {
     if (typeof window === 'undefined') {
@@ -83,8 +90,10 @@ export function initializeTheme(): void {
     currentAppearance = getStoredAppearance();
     applyTheme(currentAppearance);
 
-    // Set up system theme change listener
-    mediaQuery()?.addEventListener('change', handleSystemThemeChange);
+    if (!systemThemeListenerBound) {
+        mediaQuery()?.addEventListener('change', handleSystemThemeChange);
+        systemThemeListenerBound = true;
+    }
 }
 
 export function useAppearance(): UseAppearanceReturn {

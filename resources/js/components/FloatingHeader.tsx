@@ -62,18 +62,18 @@ export default function FloatingHeader() {
                     aria-label={t('navigation.brandHome')}
                 >
                     <img
-                        src="/assets/branding/marca/logos/abaco.svg"
-                        alt="Abaco Developments"
-                        width={156}
+                        src="/assets/branding/marca/logos/abacoqd-lockup.svg"
+                        alt="AbacoQD"
+                        width={115}
                         height={32}
-                        className="h-7 w-auto dark:hidden"
+                        className="h-8 w-auto dark:hidden"
                     />
                     <img
-                        src="/assets/branding/marca/logos/abaco-white.svg"
-                        alt="Abaco Developments"
-                        width={156}
+                        src="/assets/branding/marca/logos/abacoqd-lockup-inverse.svg"
+                        alt="AbacoQD"
+                        width={115}
                         height={32}
-                        className="hidden h-7 w-auto dark:block"
+                        className="hidden h-8 w-auto dark:block"
                     />
                 </a>
 

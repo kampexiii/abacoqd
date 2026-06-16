@@ -56,15 +56,22 @@
     },
     "home": {
         "hero": {
-            "eyebrow": "CONSULTORÍA · CRM · DATOS · AUTOMATIZACIÓN",
-            "titleLine1": "CRM, datos y automatización",
-            "titleLine2Prefix": "para",
-            "titleHighlight": "fidelizar mejor",
-            "titleLine3": "a tus clientes",
-            "subtitle": "Ábaco Developments ayuda a empresas a conectar tecnología, analítica y procesos comerciales para mejorar la relación con sus clientes y tomar mejores decisiones.",
+            "eyebrow": "IA · DESARROLLO RÁPIDO · A MEDIDA",
+            "titlePrefix": "Desarrollos rápidos a medida, ",
+            "titleHighlight": "impulsados por IA",
+            "subtitle": "Creamos soluciones digitales ágiles, económicas y adaptadas a cada cliente.",
             "ctaPrimary": "Reservar una consulta",
             "ctaSecondary": "Ver servicios",
-            "actionsAriaLabel": "Acciones"
+            "actionsAriaLabel": "Acciones principales",
+            "cubeAria": "Cubo de cristal de Abaco Developments en movimiento",
+            "benefitsAria": "Beneficios principales",
+            "benefits": {
+                "ai": "IA & automatización",
+                "custom": "Desarrollos a medida",
+                "fast": "Entregas rápidas",
+                "price": "Precios competitivos",
+                "tech": "Tecnología moderna"
+            }
         },
         "transition": {
             "eyebrow": "DE LA ENERGÍA AL SISTEMA",
@@ -138,70 +145,70 @@
             }
         },
         "methodology": {
-            "eyebrow": "METODOLOGÍA",
-            "title": "Cómo trabajamos",
-            "description": "Un proceso colaborativo para diseñar sistemas personalizados que conectan datos, procesos y personas según la realidad de cada cliente.",
+            "eyebrow": "CÓMO TRABAJAMOS",
+            "statement": {
+                "line1": "CODE.",
+                "line2": "QUICK.",
+                "line3": "DELIVER."
+            },
+            "quote": "Tres ideas. Una misma dirección: desarrollar más rápido, con más criterio y mejor resultado.",
+            "link": "Ver cómo trabajamos",
+            "stepsAria": "Pasos de nuestra metodología",
+            "stepLabel": "Paso",
+            "deliverableLabel": "Entregable",
+            "cube": {
+                "aria": "Proceso de trabajo AbacoQD en 6 pasos",
+                "prev": "Paso anterior",
+                "next": "Paso siguiente"
+            },
             "steps": {
-                "diagnosis": {
-                    "title": "Diagnóstico",
-                    "front": "Entendemos tu negocio, tus procesos y tus puntos de fricción.",
-                    "backTitle": "Qué analizamos",
-                    "back": "Mapeamos necesidades, herramientas actuales, datos disponibles, procesos internos y oportunidades de mejora antes de diseñar cualquier solución.",
-                    "points": {
-                        "p1": "Procesos actuales",
-                        "p2": "Herramientas en uso",
-                        "p3": "Datos disponibles",
-                        "p4": "Problemas reales del equipo"
-                    }
+                "analysis": {
+                    "title": "Análisis",
+                    "front": "Entendemos la idea y el proceso real a acelerar.",
+                    "back": "Definimos el alcance real antes de escribir una línea de código. Entregable: alcance claro.",
+                    "description": "Entendemos tu idea, tu proceso y qué necesita acelerarse. Revisamos el contexto, los objetivos y las prioridades reales antes de proponer nada. Así evitamos construir sobre supuestos y partimos de un alcance claro.",
+                    "deliverable": "Alcance claro"
                 },
-                "strategy": {
-                    "title": "Estrategia & Diseño",
-                    "front": "Definimos una arquitectura a medida, no una plantilla genérica.",
-                    "backTitle": "Qué diseñamos",
-                    "back": "Diseñamos el sistema ideal para cada cliente: CRM, datos, automatización, integraciones, roles, flujos y prioridades.",
-                    "points": {
-                        "p1": "Arquitectura personalizada",
-                        "p2": "Flujos de trabajo",
-                        "p3": "Integraciones necesarias",
-                        "p4": "Prioridades por fase"
-                    }
+                "study": {
+                    "title": "Estudio inicial",
+                    "front": "Primera sesión de diagnóstico y encaje antes de decidir.",
+                    "back": "Una sesión para entender objetivo, contexto y encaje. Entregable: síntesis inicial de enfoque y siguiente fase.",
+                    "description": "Planteamos una primera dirección visual o funcional antes de avanzar. Revisamos referencias, necesidades y posibles enfoques para tu proyecto. El resultado es una base concreta sobre la que decidir con criterio.",
+                    "deliverable": "Primer enfoque"
                 },
-                "implementation": {
-                    "title": "Implementación",
-                    "front": "Construimos el sistema con una base técnica sólida y escalable.",
-                    "backTitle": "Qué construimos",
-                    "back": "Desarrollamos, conectamos herramientas, validamos flujos y preparamos una solución lista para operar en el día a día del cliente.",
-                    "points": {
-                        "p1": "Configuración técnica",
-                        "p2": "Desarrollo a medida",
-                        "p3": "Conexión de herramientas",
-                        "p4": "Validación funcional"
-                    }
+                "proposal": {
+                    "title": "Propuesta / enfoque",
+                    "front": "Alcance, enfoque y dirección definidos a partir del estudio.",
+                    "back": "Propuesta de desarrollo con alcance, enfoque y dirección claros. Entregable: propuesta clara.",
+                    "description": "Definimos alcance, prioridades y una ruta de desarrollo realista. Acordamos qué se construye primero y por qué, con tiempos orientativos y decisiones técnicas justificadas. Decides con la información completa sobre la mesa.",
+                    "deliverable": "Propuesta clara"
                 },
-                "adoption": {
-                    "title": "Adopción",
-                    "front": "Acompañamos al equipo para que el sistema se use de verdad.",
-                    "backTitle": "Cómo lo implantamos",
-                    "back": "Formamos al equipo, ajustamos la solución con feedback real y dejamos documentación operativa para facilitar la transición.",
-                    "points": {
-                        "p1": "Formación",
-                        "p2": "Ajustes con feedback",
-                        "p3": "Documentación operativa",
-                        "p4": "Soporte inicial"
-                    }
+                "development": {
+                    "title": "Desarrollo",
+                    "front": "Construcción con IA supervisada y herramientas internas.",
+                    "back": "Desarrollo con IA supervisada y control técnico senior. Entregable: iteraciones visibles.",
+                    "description": "Construimos con IA supervisada, criterio técnico y entregas visibles. Cada avance se revisa y se ajusta sobre la marcha, manteniendo el control humano sobre las decisiones clave. Sigues el progreso en iteraciones reales, no en promesas.",
+                    "deliverable": "Iteraciones funcionales"
                 },
-                "improvement": {
-                    "title": "Mejora continua",
-                    "front": "Medimos, optimizamos y evolucionamos el sistema con el negocio.",
-                    "backTitle": "Cómo evoluciona",
-                    "back": "Revisamos datos, resultados y nuevos procesos para adaptar la solución a cada etapa del cliente y seguir mejorando el rendimiento.",
-                    "points": {
-                        "p1": "Medición de resultados",
-                        "p2": "Optimización de flujos",
-                        "p3": "Nuevas necesidades",
-                        "p4": "Evolución del sistema"
-                    }
+                "review": {
+                    "title": "Revisión",
+                    "front": "Pruebas, revisión técnica y ajustes.",
+                    "back": "Pruebas, revisión técnica y ajustes finales. Entregable: versión validada.",
+                    "description": "Probamos, ajustamos y validamos la solución antes de publicarla. Revisamos funcionamiento, rendimiento y detalles visuales con calma. Solo avanzamos cuando el resultado cumple con lo acordado.",
+                    "deliverable": "Versión validada"
+                },
+                "delivery": {
+                    "title": "Entrega",
+                    "front": "Despliegue seguro y puesta en producción.",
+                    "back": "Despliegue seguro de la solución. Entregable: solución en producción.",
+                    "description": "Desplegamos la solución y dejamos una base preparada para crecer. Te explicamos cómo funciona y qué puede ampliarse más adelante. A partir de aquí, el proyecto queda en producción y listo para evolucionar.",
+                    "deliverable": "Solución en producción"
                 }
+            },
+            "bridge": {
+                "label": "Estudio inicial",
+                "message": "Antes de pedirte que avances, preferimos enseñarte cómo podría verse.",
+                "support": "Incluimos un primer estudio para analizar tu idea y plantear una dirección inicial antes de tomar una decisión."
             }
         },
         "partners": {

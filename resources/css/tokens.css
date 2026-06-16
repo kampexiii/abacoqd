@@ -53,7 +53,7 @@
     --wave-primary: #18b7b0;
     --wave-secondary: #39c6e6;
     --wave-accent: #a3e635;
-    --wave-opacity: 0.22;
+    --wave-opacity: 0.6;
     --wave-duration: 48s;
     --wave-speed-factor: 0.25;
 
@@ -71,11 +71,11 @@
     --qd-text-medium: #9db0b8;
 
     /* Wave Background global — variante oscura (docs §8) */
-    --wave-bg: #07111a;
+    --wave-bg: #0a1722;
     --wave-primary: #18b7b0;
     --wave-secondary: #0f8f95;
     --wave-accent: #39c6e6;
-    --wave-opacity: 0.3;
+    --wave-opacity: 0.55;
 
     /* Superficie de cristal translúcido — variante oscura (docs §8) */
     --surface-glass-bg: rgba(13, 23, 38, 0.62);

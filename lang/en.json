@@ -56,15 +56,22 @@
     },
     "home": {
         "hero": {
-            "eyebrow": "CONSULTING · CRM · DATA · AUTOMATION",
-            "titleLine1": "CRM, data and automation",
-            "titleLine2Prefix": "to build",
-            "titleHighlight": "stronger loyalty",
-            "titleLine3": "with your customers",
-            "subtitle": "Ábaco Developments helps companies connect technology, analytics and commercial processes to improve customer relationships and make better decisions.",
+            "eyebrow": "AI · FAST DEVELOPMENT · CUSTOM-BUILT",
+            "titlePrefix": "Fast, custom development, ",
+            "titleHighlight": "powered by AI",
+            "subtitle": "We build agile, cost-effective digital solutions tailored to every client.",
             "ctaPrimary": "Book a consultation",
             "ctaSecondary": "View services",
-            "actionsAriaLabel": "Actions"
+            "actionsAriaLabel": "Main actions",
+            "cubeAria": "Abaco Developments crystal cube in motion",
+            "benefitsAria": "Key benefits",
+            "benefits": {
+                "ai": "AI & automation",
+                "custom": "Custom development",
+                "fast": "Fast delivery",
+                "price": "Competitive pricing",
+                "tech": "Modern technology"
+            }
         },
         "transition": {
             "eyebrow": "FROM ENERGY TO SYSTEM",
@@ -138,70 +145,70 @@
             }
         },
         "methodology": {
-            "eyebrow": "METHODOLOGY",
-            "title": "How we work",
-            "description": "A collaborative process to design custom systems that connect data, processes and people according to each client's reality.",
+            "eyebrow": "HOW WE WORK",
+            "statement": {
+                "line1": "CODE.",
+                "line2": "QUICK.",
+                "line3": "DELIVER."
+            },
+            "quote": "Three ideas. One direction: build faster, with more judgement and a better result.",
+            "link": "See how we work",
+            "stepsAria": "Our methodology steps",
+            "stepLabel": "Step",
+            "deliverableLabel": "Deliverable",
+            "cube": {
+                "aria": "AbacoQD workflow in 6 steps",
+                "prev": "Previous step",
+                "next": "Next step"
+            },
             "steps": {
-                "diagnosis": {
-                    "title": "Diagnosis",
-                    "front": "We understand your business, your processes and your friction points.",
-                    "backTitle": "What we analyse",
-                    "back": "We map needs, current tools, available data, internal processes and improvement opportunities before designing any solution.",
-                    "points": {
-                        "p1": "Current processes",
-                        "p2": "Tools in use",
-                        "p3": "Available data",
-                        "p4": "Real team problems"
-                    }
+                "analysis": {
+                    "title": "Analysis",
+                    "front": "We understand the idea and the real process to accelerate.",
+                    "back": "We define the real scope before writing a line of code. Deliverable: clear scope.",
+                    "description": "We understand your idea, your process and what needs to accelerate. We review the context, goals and real priorities before proposing anything. This way we avoid building on assumptions and start from a clear scope.",
+                    "deliverable": "Clear scope"
                 },
-                "strategy": {
-                    "title": "Strategy & Design",
-                    "front": "We define a tailored architecture, not a generic template.",
-                    "backTitle": "What we design",
-                    "back": "We design the ideal system for each client: CRM, data, automation, integrations, roles, flows and priorities.",
-                    "points": {
-                        "p1": "Custom architecture",
-                        "p2": "Workflows",
-                        "p3": "Required integrations",
-                        "p4": "Priorities per phase"
-                    }
+                "study": {
+                    "title": "Initial study",
+                    "front": "A first diagnostic and fit session before deciding.",
+                    "back": "A session to understand goal, context and fit. Deliverable: initial synthesis of approach and next phase.",
+                    "description": "We outline a first visual or functional direction before moving forward. We look at references, needs and possible approaches for your project. The result is a concrete foundation to decide on with confidence.",
+                    "deliverable": "Initial direction"
                 },
-                "implementation": {
-                    "title": "Implementation",
-                    "front": "We build the system on a solid, scalable technical foundation.",
-                    "backTitle": "What we build",
-                    "back": "We develop, connect tools, validate flows and prepare a solution ready to operate in the client's day-to-day.",
-                    "points": {
-                        "p1": "Technical configuration",
-                        "p2": "Custom development",
-                        "p3": "Tool connections",
-                        "p4": "Functional validation"
-                    }
+                "proposal": {
+                    "title": "Proposal / approach",
+                    "front": "Scope, approach and direction defined from the study.",
+                    "back": "A development proposal with clear scope, approach and direction. Deliverable: clear proposal.",
+                    "description": "We define scope, priorities and a realistic development roadmap. We agree what gets built first and why, with indicative timelines and justified technical decisions. You decide with the full picture in front of you.",
+                    "deliverable": "Clear proposal"
                 },
-                "adoption": {
-                    "title": "Adoption",
-                    "front": "We support the team so the system is actually used.",
-                    "backTitle": "How we roll it out",
-                    "back": "We train the team, adjust the solution with real feedback and provide operational documentation to ease the transition.",
-                    "points": {
-                        "p1": "Training",
-                        "p2": "Feedback-driven adjustments",
-                        "p3": "Operational documentation",
-                        "p4": "Initial support"
-                    }
+                "development": {
+                    "title": "Development",
+                    "front": "Build with supervised AI and internal tooling.",
+                    "back": "Development with supervised AI and senior technical control. Deliverable: visible iterations.",
+                    "description": "We build with supervised AI, technical judgement and visible deliveries. Every step is reviewed and adjusted along the way, keeping human control over key decisions. You follow progress through real iterations, not promises.",
+                    "deliverable": "Working iterations"
                 },
-                "improvement": {
-                    "title": "Continuous improvement",
-                    "front": "We measure, optimise and evolve the system with the business.",
-                    "backTitle": "How it evolves",
-                    "back": "We review data, results and new processes to adapt the solution to each client stage and keep improving performance.",
-                    "points": {
-                        "p1": "Results measurement",
-                        "p2": "Flow optimisation",
-                        "p3": "New needs",
-                        "p4": "System evolution"
-                    }
+                "review": {
+                    "title": "Review",
+                    "front": "Testing, technical review and adjustments.",
+                    "back": "Testing, technical review and final adjustments. Deliverable: validated version.",
+                    "description": "We test, adjust and validate the solution before publishing it. We carefully review functionality, performance and visual details. We only move forward once the result meets what was agreed.",
+                    "deliverable": "Validated version"
+                },
+                "delivery": {
+                    "title": "Delivery",
+                    "front": "Secure deployment to production.",
+                    "back": "Secure deployment of the solution. Deliverable: solution in production.",
+                    "description": "We deploy the solution and leave a base ready to grow. We explain how it works and what can be extended later. From here, the project is live in production and ready to evolve.",
+                    "deliverable": "Solution in production"
                 }
+            },
+            "bridge": {
+                "label": "Initial study",
+                "message": "Before asking you to move forward, we'd rather show you how it could look.",
+                "support": "We include a first study to analyse your idea and outline an initial direction before you decide."
             }
         },
         "partners": {

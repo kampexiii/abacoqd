@@ -1,0 +1,20 @@
+<svg width="720" height="200" viewBox="0 0 720 200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Logotipo AbacoQD (monocromo blanco)</title>
+  <desc id="desc">Lockup horizontal monocromo blanco para fondos oscuros o usos de una sola tinta.</desc>
+  <g transform="translate(0,16)">
+    <path d="M115 31L164 28L162 32L160 34L148 33L147 32L135 32L134 31H115Z" fill="#FFFFFF" opacity=".55"/>
+    <path d="M154 45L81 49L150 52Z" fill="#FFFFFF" opacity=".8"/>
+    <path d="M42 60H114" stroke="#FFFFFF" stroke-width="3" stroke-linecap="square" opacity=".7"/>
+    <path d="M139 67L80 72L136 74Z" fill="#FFFFFF" opacity=".8"/>
+    <path d="M130 84L49 86L126 90Z" fill="#FFFFFF" opacity=".6"/>
+    <path d="M121 97H112L111 98H89L96 98L97 99H118L119 100L121 98Z" fill="#FFFFFF" opacity=".8"/>
+    <path d="M115 108L17 111L112 114Z" fill="#FFFFFF" opacity=".55"/>
+    <path d="M104 124L92 125L91 126H75L74 127H67L82 127L83 128H96L97 129H102L104 126Z" fill="#FFFFFF" opacity=".8"/>
+    <path d="M95 140L94 139H90L89 140H82L81 141L55 142H68L69 143H92Z" fill="#FFFFFF" opacity=".8"/>
+    <path d="M211 55L187 93L194 108L178 109L165 130H202L214 155H255Z" fill="#FFFFFF"/>
+    <path d="M231 22H177L97 155H140L208 43L222 41Z" fill="#FFFFFF"/>
+  </g>
+
+  <text x="300" y="120" font-family="Poppins, ui-sans-serif, system-ui, sans-serif" font-weight="700" font-size="92" letter-spacing="-1" fill="#FFFFFF">abacoqd</text>
+  <text x="301" y="160" font-family="Poppins, ui-sans-serif, system-ui, sans-serif" font-weight="600" font-size="23" letter-spacing="8" fill="#FFFFFF" opacity=".85">QUICK DEVELOPMENTS</text>
+</svg>

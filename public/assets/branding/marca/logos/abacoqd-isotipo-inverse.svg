@@ -1,0 +1,41 @@
+<svg width="266" height="168" viewBox="0 0 266 168" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Logotipo AbacoQD (inverso)</title>
+  <desc id="desc">Versión inversa para fondos oscuros: trazo principal claro y verde turquesa de marca.</desc>
+  <defs>
+    <linearGradient id="teal-main-inv" x1="165" y1="155" x2="256" y2="55" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0F8F95"/>
+      <stop offset="0.52" stop-color="#18B7B0"/>
+      <stop offset="1" stop-color="#39C6E6"/>
+    </linearGradient>
+    <linearGradient id="teal-line-inv" x1="0" y1="112" x2="155" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D6E2E5"/>
+      <stop offset="0.55" stop-color="#7FC3C0"/>
+      <stop offset="1" stop-color="#18B7B0"/>
+    </linearGradient>
+    <linearGradient id="teal-line-2-inv" x1="50" y1="86" x2="154" y2="86" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D6E2E5"/>
+      <stop offset="0.62" stop-color="#73BEBB"/>
+      <stop offset="1" stop-color="#18B7B0"/>
+    </linearGradient>
+    <linearGradient id="light-main" x1="97" y1="155" x2="231" y2="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F5F8F8"/>
+      <stop offset="1" stop-color="#E8EFF0"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M115 31L164 28L162 32L160 34L148 33L147 32L135 32L134 31H115Z" fill="url(#teal-line-2-inv)" opacity=".75"/>
+  <path d="M154 45L81 49L150 52Z" fill="#22C3BB"/>
+  <path d="M42 60H114" stroke="#D6E2E5" stroke-width="3" stroke-linecap="square"/>
+  <path d="M139 67L80 72L136 74Z" fill="#E8EFF0"/>
+  <path d="M130 84L49 86L126 90Z" fill="url(#teal-line-2-inv)"/>
+  <path d="M121 97H112L111 98H89L96 98L97 99H118L119 100L121 98Z" fill="#22C3BB" opacity=".85"/>
+  <path d="M115 108L17 111L112 114Z" fill="url(#teal-line-inv)"/>
+  <path d="M104 124L92 125L91 126H75L74 127H67L82 127L83 128H96L97 129H102L104 126Z" fill="#22C3BB" opacity=".9"/>
+  <path d="M95 140L94 139H90L89 140H82L81 141L55 142H68L69 143H92Z" fill="#22C3BB"/>
+
+  <!-- Cuerpo turquesa visible de la A -->
+  <path d="M211 55L187 93L194 108L178 109L165 130H202L214 155H255Z" fill="url(#teal-main-inv)"/>
+
+  <!-- Trazo principal claro (inverso) -->
+  <path d="M231 22H177L97 155H140L208 43L222 41Z" fill="url(#light-main)"/>
+</svg>

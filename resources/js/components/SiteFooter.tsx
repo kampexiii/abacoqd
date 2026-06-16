@@ -51,11 +51,11 @@ export default function SiteFooter() {
                 {/* Columna Marca */}
                 <div className="flex flex-col gap-4">
                     <img
-                        src="/assets/branding/marca/logos/abaco-white.svg"
-                        alt="Abaco Developments"
-                        width={168}
-                        height={34}
-                        className="h-8 w-auto"
+                        src="/assets/branding/marca/logos/abacoqd-lockup-inverse.svg"
+                        alt="AbacoQD"
+                        width={130}
+                        height={36}
+                        className="h-9 w-auto"
                     />
                     <p className="max-w-xs text-sm leading-relaxed text-qd-text-medium">
                         {t('footer.brand.line1')}
