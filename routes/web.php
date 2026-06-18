@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'Public/Home')->name('home');
 Route::inertia('/metodologia', 'Public/Methodology')->name('methodology.show');
+Route::inertia('/servicios', 'Public/Services')->name('services.show');
 
 Route::get('/contacto', [ContactController::class, 'create'])->name('contact.show');
 Route::post('/contacto', [ContactController::class, 'store'])

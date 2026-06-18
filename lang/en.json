@@ -531,6 +531,74 @@
             "secondary": "Contact us"
         }
     },
+    "servicesPage": {
+        "metaTitle": "Services | Abaco Developments",
+        "hero": {
+            "eyebrow": "SERVICES",
+            "title": "Fast solutions for real needs.",
+            "subtitle": "Custom development, supervised AI and clear processes so your business can move forward without unnecessary complexity."
+        },
+        "heroTagline": {
+            "title": "Technology applied with judgement.",
+            "subtitle": "Each service starts from a concrete need and ends in a useful solution."
+        },
+        "cardCta": "Ask about this service",
+        "items": {
+            "web": {
+                "title": "Fast web development",
+                "description": "Modern, secure websites and platforms optimised to communicate better, load fast and evolve with your business.",
+                "chips": ["Fast web", "Technical SEO", "Performance"]
+            },
+            "apps": {
+                "title": "Custom applications",
+                "description": "Software adapted to your processes and goals, maintainable and designed to grow without forcing your operation into a template.",
+                "chips": ["SaaS", "Web app", "Scalable"]
+            },
+            "ai": {
+                "title": "AI automation",
+                "description": "We automate repetitive work and integrate supervised AI to speed up decisions without losing human control.",
+                "chips": ["Supervised AI", "Automations", "Efficiency"]
+            },
+            "crm": {
+                "title": "CRM, data and processes",
+                "description": "We organise your data and processes so you can see the business clearly and make better operational decisions.",
+                "chips": ["CRM", "Business intelligence", "Processes"]
+            },
+            "integrations": {
+                "title": "Digital integrations",
+                "description": "We connect your tools and platforms so everything works together without unnecessary friction.",
+                "chips": ["APIs", "Integrations", "Connectivity"]
+            },
+            "mvp": {
+                "title": "MVPs and prototypes",
+                "description": "We validate your idea with a first functional version to learn quickly, reduce risk and prepare the next step.",
+                "chips": ["MVP", "Prototypes", "Validation"]
+            }
+        },
+        "choose": {
+            "title": "How to choose the right service",
+            "items": {
+                "urgency": {
+                    "title": "Urgency",
+                    "description": "If you need results now, we prioritise fast solutions focused on immediate impact."
+                },
+                "complexity": {
+                    "title": "Complexity",
+                    "description": "We assess the scope and technology needed to propose an efficient, sustainable solution."
+                },
+                "integration": {
+                    "title": "Integration with existing processes",
+                    "description": "We make sure the solution fits your current operation and improves the business without friction."
+                }
+            }
+        },
+        "cta": {
+            "title": "Not sure exactly what you need?",
+            "subtitle": "Tell us about your project and we will help you find the right solution for your business.",
+            "primary": "Tell us about your project",
+            "secondary": "Book a meeting"
+        }
+    },
     "errors": {
         "brand": "AbacoQD",
         "404": {
