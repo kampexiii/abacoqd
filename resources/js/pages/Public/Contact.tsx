@@ -13,6 +13,7 @@ import FormField, {
     formFieldSelectClass,
 } from '@/components/public/FormField';
 import HoneypotField from '@/components/public/HoneypotField';
+import PublicPageHero from '@/components/public/PublicPageHero';
 import { SITE_CONFIG } from '@/config/site';
 import { useInView } from '@/hooks/use-in-view';
 import { useLanguage } from '@/hooks/use-language';
@@ -46,19 +47,15 @@ export default function Contact({
         <PublicLayout>
             <Head title="Contacto | Abaco Developments" />
 
-            <section className="bg-qd-mist dark:bg-qd-surface">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8">
-                    <p className="text-sm font-semibold tracking-wide text-qd-teal-2 dark:text-qd-teal">
-                        {t('contact.eyebrow')}
-                    </p>
-                    <h1 className="mt-2 text-3xl font-bold text-qd-ink sm:text-4xl dark:text-qd-white">
-                        {t('contact.title')}
-                    </h1>
-                    <p className="mt-3 max-w-xl text-qd-text-high">
-                        {t('contact.subtitle')}
-                    </p>
-                </div>
-            </section>
+            <PublicPageHero
+                eyebrow={t('contact.eyebrow')}
+                title={t('contact.title')}
+                subtitle={t('contact.subtitle')}
+                currentLabel={t('navigation.items.contacto')}
+                taglineTitle={t('contact.heroTagline.title')}
+                taglineSubtitle={t('contact.heroTagline.subtitle')}
+                taglineIcon={MessageCircle}
+            />
 
             <section className="bg-qd-white dark:bg-qd-ink">
                 <div

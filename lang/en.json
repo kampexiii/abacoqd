@@ -3,6 +3,7 @@
         "primaryAriaLabel": "Main navigation",
         "sectionsAriaLabel": "Sections",
         "brandHome": "Abaco Developments — Home",
+        "breadcrumbHome": "Home",
         "languageSwitch": "Switch language to Spanish",
         "openMenu": "Open menu",
         "menuTitle": "Menu",
@@ -353,6 +354,10 @@
         "eyebrow": "CONTACT",
         "title": "Tell us about your project",
         "subtitle": "Write to us and we will reply as soon as possible.",
+        "heroTagline": {
+            "title": "Human reply. Technical judgement.",
+            "subtitle": "We guide you with a clear first approach."
+        },
         "context": {
             "title": "What happens when you write?",
             "steps": {

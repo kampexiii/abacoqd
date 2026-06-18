@@ -3,6 +3,7 @@
         "primaryAriaLabel": "Navegación principal",
         "sectionsAriaLabel": "Secciones",
         "brandHome": "Abaco Developments — Inicio",
+        "breadcrumbHome": "Inicio",
         "languageSwitch": "Cambiar idioma a inglés",
         "openMenu": "Abrir menú",
         "menuTitle": "Menú",
@@ -353,6 +354,10 @@
         "eyebrow": "CONTACTO",
         "title": "Cuéntanos tu proyecto",
         "subtitle": "Escríbenos y te respondemos lo antes posible.",
+        "heroTagline": {
+            "title": "Respuesta humana. Criterio técnico.",
+            "subtitle": "Te orientamos con un primer enfoque claro."
+        },
         "context": {
             "title": "¿Qué pasa cuando escribes?",
             "steps": {
