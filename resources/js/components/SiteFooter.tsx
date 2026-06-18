@@ -17,7 +17,7 @@ type FooterLink = { key: string; href: string };
 
 const EXPLORE_LINKS: readonly FooterLink[] = [
     { key: 'inicio', href: '/' },
-    { key: 'metodologia', href: '#metodologia' },
+    { key: 'metodologia', href: '/metodologia' },
     { key: 'servicios', href: '#servicios' },
     { key: 'proyectos', href: '#colaboraciones' },
     { key: 'quienesSomos', href: '/quienes-somos' },

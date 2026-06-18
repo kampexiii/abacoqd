@@ -28,7 +28,7 @@ import { cn } from '@/lib/utils';
 type NavItem = { key: string; href: string };
 
 const NAV_ITEMS: readonly NavItem[] = [
-    { key: 'metodologia', href: '#metodologia' },
+    { key: 'metodologia', href: '/metodologia' },
     { key: 'servicios', href: '#servicios' },
     { key: 'proyectos', href: '#colaboraciones' },
     { key: 'quienesSomos', href: '/quienes-somos' },
