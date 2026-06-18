@@ -649,6 +649,24 @@
             "primary": "Consultar este servicio",
             "secondary": "Reserva hora"
         },
+        "benefits": {
+            "agility": {
+                "title": "Enfoque ágil",
+                "description": "Trabajamos por iteraciones para entregar valor desde el inicio."
+            },
+            "quality": {
+                "title": "Calidad y estándares",
+                "description": "Código limpio, accesible y optimizado para buscadores."
+            },
+            "support": {
+                "title": "Acompañamiento real",
+                "description": "No solo desarrollamos, te ayudamos a crecer."
+            },
+            "technology": {
+                "title": "Tecnología actual",
+                "description": "Usamos tecnologías modernas y escalables."
+            }
+        },
         "items": {
             "web": {
                 "title": "Desarrollo web rápido",
@@ -656,7 +674,8 @@
                 "problems": [
                     "Necesitas una web profesional que explique bien tu propuesta y genere una buena primera impresión.",
                     "Tu web actual no refleja tu marca, carga lento o no acompaña el recorrido del usuario.",
-                    "Quieres lanzar una campaña, servicio o producto y necesitas una base digital cuidada."
+                    "Quieres lanzar una campaña, servicio o producto y necesitas una base digital cuidada.",
+                    "Buscas rendimiento, SEO técnico y experiencia de usuario desde el inicio."
                 ],
                 "capabilities": [
                     "Diseño UI/UX a medida",
@@ -673,7 +692,8 @@
                 "problems": [
                     "Trabajas con hojas, correos o herramientas separadas que ya no escalan bien.",
                     "Necesitas un panel interno o producto digital con permisos y flujos propios.",
-                    "Tu proceso tiene reglas concretas que una herramienta genérica no resuelve con claridad."
+                    "Tu proceso tiene reglas concretas que una herramienta genérica no resuelve con claridad.",
+                    "Buscas una base mantenible que pueda adaptarse a nuevos usos."
                 ],
                 "capabilities": [
                     "Arquitectura funcional",
@@ -690,7 +710,8 @@
                 "problems": [
                     "Tu equipo repite tareas de clasificación, respuesta o preparación de información.",
                     "Quieres incorporar IA sin perder control sobre criterios, datos y revisión final.",
-                    "Necesitas conectar automatizaciones con herramientas que ya usa el negocio."
+                    "Necesitas conectar automatizaciones con herramientas que ya usa el negocio.",
+                    "Buscas automatizar sin convertir la IA en una caja negra."
                 ],
                 "capabilities": [
                     "Diseño de flujos con IA",
@@ -707,7 +728,8 @@
                 "problems": [
                     "La información comercial está dispersa y cuesta entender el estado real de cada oportunidad.",
                     "Necesitas ordenar etapas, responsables y datos clave para trabajar con más criterio.",
-                    "Quieres conectar CRM, reporting y procesos sin crear más trabajo manual."
+                    "Quieres conectar CRM, reporting y procesos sin crear más trabajo manual.",
+                    "Buscas tomar decisiones con datos más fiables y trazables."
                 ],
                 "capabilities": [
                     "Modelado de datos",
@@ -724,7 +746,8 @@
                 "problems": [
                     "Tus herramientas no comparten información y el equipo acaba duplicando tareas.",
                     "Necesitas conectar formularios, CRM, automatizaciones, reporting o plataformas externas.",
-                    "Quieres reducir puntos manuales sin sustituir todo tu sistema actual."
+                    "Quieres reducir puntos manuales sin sustituir todo tu sistema actual.",
+                    "Buscas que los sistemas intercambien datos con control y claridad."
                 ],
                 "capabilities": [
                     "APIs REST",
@@ -741,7 +764,8 @@
                 "problems": [
                     "Tienes una idea pero necesitas verla funcionando antes de invertir en una versión completa.",
                     "Quieres contrastar flujos, pantallas o hipótesis con una base usable.",
-                    "Necesitas una primera versión ordenada que pueda evolucionar si el enfoque encaja."
+                    "Necesitas una primera versión ordenada que pueda evolucionar si el enfoque encaja.",
+                    "Buscas reducir incertidumbre sin construir más de lo necesario."
                 ],
                 "capabilities": [
                     "Definición de alcance",
@@ -759,7 +783,8 @@
             "problems": [
                 "Necesitas ordenar una necesidad digital antes de construir.",
                 "Quieres entender qué solución encaja con tu contexto actual.",
-                "Buscas una base clara para avanzar sin añadir complejidad innecesaria."
+                "Buscas una base clara para avanzar sin añadir complejidad innecesaria.",
+                "Quieres una solución preparada para evolucionar con criterio."
             ],
             "capabilities": [
                 "Análisis inicial",

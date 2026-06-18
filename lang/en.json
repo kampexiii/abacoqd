@@ -649,6 +649,24 @@
             "primary": "Ask about this service",
             "secondary": "Book a meeting"
         },
+        "benefits": {
+            "agility": {
+                "title": "Agile focus",
+                "description": "We work in iterations to deliver value from the start."
+            },
+            "quality": {
+                "title": "Quality and standards",
+                "description": "Clean, accessible code optimised for search engines."
+            },
+            "support": {
+                "title": "Real guidance",
+                "description": "We do not just build, we help you grow."
+            },
+            "technology": {
+                "title": "Current technology",
+                "description": "We use modern and scalable technologies."
+            }
+        },
         "items": {
             "web": {
                 "title": "Fast web development",
@@ -656,7 +674,8 @@
                 "problems": [
                     "You need a professional website that explains your offer clearly and creates a strong first impression.",
                     "Your current website does not reflect your brand, loads slowly or does not support the user journey.",
-                    "You want to launch a campaign, service or product and need a polished digital foundation."
+                    "You want to launch a campaign, service or product and need a polished digital foundation.",
+                    "You need performance, technical SEO and user experience from the beginning."
                 ],
                 "capabilities": [
                     "Custom UI/UX design",
@@ -673,7 +692,8 @@
                 "problems": [
                     "You work with spreadsheets, email or separate tools that no longer scale well.",
                     "You need an internal panel or digital product with custom permissions and workflows.",
-                    "Your process has specific rules that a generic tool does not solve clearly."
+                    "Your process has specific rules that a generic tool does not solve clearly.",
+                    "You need a maintainable base that can adapt to new uses."
                 ],
                 "capabilities": [
                     "Functional architecture",
@@ -690,7 +710,8 @@
                 "problems": [
                     "Your team repeats classification, response or information-preparation tasks.",
                     "You want to introduce AI without losing control over criteria, data and final review.",
-                    "You need to connect automations with tools the business already uses."
+                    "You need to connect automations with tools the business already uses.",
+                    "You want automation without turning AI into a black box."
                 ],
                 "capabilities": [
                     "AI flow design",
@@ -707,7 +728,8 @@
                 "problems": [
                     "Commercial information is scattered and it is hard to understand the real status of each opportunity.",
                     "You need to organise stages, owners and key data to work with better judgement.",
-                    "You want to connect CRM, reporting and processes without creating more manual work."
+                    "You want to connect CRM, reporting and processes without creating more manual work.",
+                    "You need decisions based on more reliable and traceable data."
                 ],
                 "capabilities": [
                     "Data modelling",
@@ -724,7 +746,8 @@
                 "problems": [
                     "Your tools do not share information and the team ends up duplicating tasks.",
                     "You need to connect forms, CRM, automations, reporting or external platforms.",
-                    "You want to reduce manual steps without replacing your whole current system."
+                    "You want to reduce manual steps without replacing your whole current system.",
+                    "You need systems to exchange data with control and clarity."
                 ],
                 "capabilities": [
                     "REST APIs",
@@ -741,7 +764,8 @@
                 "problems": [
                     "You have an idea but need to see it working before investing in a full version.",
                     "You want to test flows, screens or assumptions with a usable base.",
-                    "You need a first organised version that can evolve if the approach fits."
+                    "You need a first organised version that can evolve if the approach fits.",
+                    "You want to reduce uncertainty without building more than needed."
                 ],
                 "capabilities": [
                     "Scope definition",
@@ -759,7 +783,8 @@
             "problems": [
                 "You need to organise a digital need before building.",
                 "You want to understand which solution fits your current context.",
-                "You are looking for a clear base to move forward without unnecessary complexity."
+                "You are looking for a clear base to move forward without unnecessary complexity.",
+                "You want a solution prepared to evolve with good judgement."
             ],
             "capabilities": [
                 "Initial analysis",
