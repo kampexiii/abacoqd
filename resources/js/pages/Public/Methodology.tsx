@@ -28,7 +28,7 @@ import { show as contactShow } from '@/routes/contact';
  * (sección B — página interna). No rehace la sección de metodología de la
  * landing (statement + cube-effect carousel en `MethodologySection.tsx`,
  * intacta); reutiliza el mismo contenido de los 6 pasos (`home.methodology.*`)
- * en un timeline propio para esta página.
+ * en una columna de proceso propia para esta página, sin timeline en zigzag.
  *
  * Los pasos siguen siendo contenido estático (`lang/*.json`), igual que en la
  * landing: `methodology_steps` ya existe en BD con el mismo contenido
@@ -75,165 +75,193 @@ export default function Methodology() {
     // Una llamada de hook por paso (lista fija de 6): cada tarjeta entra y
     // "rellena" su tramo de línea al 25% de visibilidad. Respeta
     // prefers-reduced-motion (useInView marca todo visible de inicio).
-    const step0 = useInView<HTMLLIElement>({ threshold: 0.25 });
-    const step1 = useInView<HTMLLIElement>({ threshold: 0.25 });
-    const step2 = useInView<HTMLLIElement>({ threshold: 0.25 });
-    const step3 = useInView<HTMLLIElement>({ threshold: 0.25 });
-    const step4 = useInView<HTMLLIElement>({ threshold: 0.25 });
-    const step5 = useInView<HTMLLIElement>({ threshold: 0.25 });
+    const step0 = useInView<HTMLLIElement>({ threshold: 0.2 });
+    const step1 = useInView<HTMLLIElement>({ threshold: 0.2 });
+    const step2 = useInView<HTMLLIElement>({ threshold: 0.2 });
+    const step3 = useInView<HTMLLIElement>({ threshold: 0.2 });
+    const step4 = useInView<HTMLLIElement>({ threshold: 0.2 });
+    const step5 = useInView<HTMLLIElement>({ threshold: 0.2 });
     const stepViews = [step0, step1, step2, step3, step4, step5];
 
     return (
         <PublicLayout>
             <Head title="Metodología de trabajo | Abaco Developments" />
 
-            {/* 1. Hero compacto */}
-            <section className="relative overflow-hidden bg-qd-mist dark:bg-qd-surface">
+            {/* 1. Hero compacto — banda oscura puntual, máxima presencia */}
+            <section className="relative overflow-hidden bg-qd-ink">
                 <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/3 sm:block"
+                    className="pointer-events-none absolute inset-y-0 right-0 w-2/3 opacity-60 sm:w-1/2"
                     style={{
                         backgroundImage:
-                            'repeating-linear-gradient(115deg, rgba(24,183,176,0.2) 0px, rgba(24,183,176,0.2) 2px, transparent 2px, transparent 26px)',
+                            'repeating-linear-gradient(115deg, rgba(24,183,176,0.22) 0px, rgba(24,183,176,0.22) 1.5px, transparent 1.5px, transparent 28px)',
+                        maskImage: 'linear-gradient(to left, black, transparent)',
                     }}
                 />
                 <div className="relative mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
                     <nav aria-label="Breadcrumb" className="mb-6">
-                        <ol className="flex items-center gap-1.5 text-xs text-qd-text-medium">
+                        <ol className="flex items-center gap-1.5 text-xs text-white/50">
                             <li>
-                                <a href="/" className="hover:text-qd-teal-2 dark:hover:text-qd-teal">
+                                <a href="/" className="hover:text-qd-teal">
                                     {t('methodologyPage.breadcrumbHome')}
                                 </a>
                             </li>
                             <li aria-hidden="true">
                                 <ChevronRight size={12} />
                             </li>
-                            <li aria-current="page" className="font-medium text-qd-ink dark:text-qd-white">
+                            <li aria-current="page" className="font-medium text-white">
                                 {t('methodologyPage.breadcrumbCurrent')}
                             </li>
                         </ol>
                     </nav>
 
-                    <p className="text-sm font-semibold tracking-wide text-qd-teal-2 dark:text-qd-teal">
+                    <p className="text-sm font-semibold tracking-wide text-qd-teal">
                         {t('methodologyPage.eyebrow')}
                     </p>
-                    <h1 className="mt-2 max-w-2xl text-3xl font-bold text-qd-ink sm:text-4xl dark:text-qd-white">
+                    <h1 className="mt-3 max-w-2xl text-4xl font-bold text-white sm:text-5xl">
                         {t('methodologyPage.title')}
                     </h1>
-                    <p className="mt-3 max-w-xl text-qd-text-high">
+                    <p className="mt-4 max-w-xl text-base text-white/70 sm:text-lg">
                         {t('methodologyPage.subtitle')}
                     </p>
                 </div>
             </section>
 
-            {/* 2. Timeline de 6 pasos */}
-            <section className="bg-qd-white dark:bg-qd-ink">
-                <div className="mx-auto max-w-[860px] px-5 py-16 sm:px-8">
-                    <ol
-                        aria-label={t('methodologyPage.timelineAria')}
-                        className="relative flex flex-col gap-10"
-                    >
-                        {STEPS.map((step, index) => {
-                            const { ref, inView } = stepViews[index];
-                            const number = String(index + 1).padStart(2, '0');
-                            const isLast = index === STEPS.length - 1;
-                            const isEven = index % 2 === 0;
+            {/* 2. Bloque principal de proceso — columna fija + cards grandes */}
+            <section className="bg-qd-bg dark:bg-qd-ink">
+                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
+                    <div className="grid gap-12 lg:grid-cols-[2fr_3fr] lg:gap-10">
+                        {/* Columna izquierda: statement, semi-sticky */}
+                        <div className="lg:sticky lg:top-28 lg:self-start">
+                            <p className="flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-qd-teal-2 uppercase dark:text-qd-teal">
+                                <span
+                                    aria-hidden="true"
+                                    className="inline-block h-[7px] w-[7px] rounded-full bg-qd-teal"
+                                />
+                                {t('home.methodology.eyebrow')}
+                            </p>
 
-                            return (
-                                <li
-                                    key={step.key}
-                                    ref={ref}
-                                    className={cn(
-                                        'grid grid-cols-[40px_1fr] gap-4 transition-all duration-500 ease-out lg:grid-cols-[1fr_56px_1fr] lg:gap-6',
-                                        inView
-                                            ? 'translate-x-0 opacity-100'
-                                            : 'translate-x-4 opacity-0',
-                                    )}
-                                >
-                                    {/* Columna número + línea: izquierda en mobile, centro en desktop */}
-                                    <div className="order-1 flex flex-col items-center lg:order-2">
-                                        <span
-                                            aria-hidden="true"
-                                            className={cn(
-                                                'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 text-sm font-bold transition-colors duration-500',
-                                                inView
-                                                    ? 'border-qd-teal-2 bg-qd-teal-2 text-white dark:border-qd-teal dark:bg-qd-teal dark:text-qd-ink'
-                                                    : 'border-qd-mist text-qd-text-medium dark:border-white/15',
-                                            )}
-                                        >
-                                            {number}
-                                        </span>
-                                        {!isLast && (
+                            <h2 className="mt-5 text-4xl leading-[0.95] font-extrabold tracking-tight sm:text-5xl">
+                                <span className="block bg-linear-to-r from-qd-teal to-qd-cyan bg-clip-text text-transparent">
+                                    {t('home.methodology.statement.line1')}
+                                </span>
+                                <span className="block text-qd-ink dark:text-qd-white">
+                                    {t('home.methodology.statement.line2')}
+                                </span>
+                                <span className="block bg-linear-to-r from-qd-teal to-qd-cyan bg-clip-text text-transparent">
+                                    {t('home.methodology.statement.line3')}
+                                </span>
+                            </h2>
+
+                            <p className="mt-6 max-w-md text-base leading-relaxed text-qd-text-high">
+                                {t('methodologyPage.process.intro')}
+                            </p>
+
+                            <a
+                                href={bookingShow.url()}
+                                className="group mt-7 inline-flex items-center gap-2 text-sm font-semibold text-qd-teal-2 transition-colors hover:text-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:text-qd-teal dark:focus-visible:outline-qd-lime"
+                            >
+                                {t('methodologyPage.process.cta')}
+                                <ArrowRight
+                                    aria-hidden="true"
+                                    size={16}
+                                    className="transition-transform duration-200 group-hover:translate-x-0.5"
+                                />
+                            </a>
+                        </div>
+
+                        {/* Columna derecha: 6 cards de proceso, sin zigzag */}
+                        <ol aria-label={t('methodologyPage.timelineAria')} className="flex flex-col gap-6">
+                            {STEPS.map((step, index) => {
+                                const { ref, inView } = stepViews[index];
+                                const number = String(index + 1).padStart(2, '0');
+                                const isLast = index === STEPS.length - 1;
+                                const description = step.key === 'study'
+                                    ? t('methodologyPage.studyDescription')
+                                    : t(`home.methodology.steps.${step.key}.description`);
+
+                                return (
+                                    <li
+                                        key={step.key}
+                                        ref={ref}
+                                        className={cn(
+                                            'flex gap-4 transition-all duration-500 ease-out sm:gap-5',
+                                            inView
+                                                ? 'translate-y-0 opacity-100'
+                                                : 'translate-y-3 opacity-0',
+                                        )}
+                                    >
+                                        {/* Número + línea */}
+                                        <div className="flex w-12 shrink-0 flex-col items-center">
                                             <span
                                                 aria-hidden="true"
                                                 className={cn(
-                                                    'mt-1 w-px flex-1 transition-colors duration-700',
+                                                    'flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 text-base font-bold transition-colors duration-500',
                                                     inView
-                                                        ? 'bg-gradient-to-b from-qd-teal-2 to-qd-lime'
-                                                        : 'bg-qd-mist dark:bg-white/10',
+                                                        ? 'border-qd-teal-2 bg-qd-teal-2 text-white dark:border-qd-teal dark:bg-qd-teal dark:text-qd-ink'
+                                                        : 'border-qd-mist bg-qd-white text-qd-text-medium dark:border-white/15 dark:bg-transparent',
                                                 )}
-                                            />
-                                        )}
-                                    </div>
+                                            >
+                                                {number}
+                                            </span>
+                                            {!isLast && (
+                                                <span
+                                                    aria-hidden="true"
+                                                    className={cn(
+                                                        'mt-1 w-px flex-1 transition-colors duration-700',
+                                                        inView
+                                                            ? 'bg-gradient-to-b from-qd-teal-2 to-qd-lime'
+                                                            : 'bg-qd-mist dark:bg-white/10',
+                                                    )}
+                                                />
+                                            )}
+                                        </div>
 
-                                    {/* Tarjeta del paso */}
-                                    <div
-                                        className={cn(
-                                            'order-2 rounded-2xl border p-5',
-                                            isEven
-                                                ? 'lg:order-1 lg:text-right'
-                                                : 'lg:order-3 lg:text-left',
-                                            step.highlighted
-                                                ? 'border-qd-teal-2/50 shadow-[0_0_0_1px_rgba(15,143,149,0.15),0_18px_40px_-24px_rgba(24,183,176,0.45)] dark:border-qd-teal/50'
-                                                : 'border-qd-mist dark:border-white/10',
-                                        )}
-                                    >
+                                        {/* Card */}
                                         <div
                                             className={cn(
-                                                'flex items-center gap-2',
-                                                isEven && 'lg:flex-row-reverse',
+                                                'flex-1 rounded-2xl border bg-qd-white p-6 sm:p-7 dark:bg-white/[0.03]',
+                                                step.highlighted
+                                                    ? 'border-qd-teal-2/60 shadow-[0_0_0_1px_rgba(15,143,149,0.18),0_22px_45px_-28px_rgba(24,183,176,0.5)] dark:border-qd-teal/50'
+                                                    : 'border-qd-mist dark:border-white/10',
                                             )}
                                         >
-                                            <step.icon
-                                                aria-hidden="true"
-                                                size={18}
-                                                className="text-qd-teal-2 dark:text-qd-teal"
-                                            />
-                                            <h2 className="text-lg font-semibold text-qd-ink dark:text-qd-white">
-                                                {t(`home.methodology.steps.${step.key}.title`)}
-                                            </h2>
-                                        </div>
-                                        <p className="mt-2 text-sm leading-relaxed text-qd-text-high">
-                                            {t(`home.methodology.steps.${step.key}.description`)}
-                                        </p>
-                                        <p
-                                            className={cn(
-                                                'mt-3 inline-flex items-center gap-1.5 rounded-full bg-qd-mist px-3 py-1 text-xs font-medium text-qd-text-high dark:bg-white/5',
-                                                isEven && 'lg:flex-row-reverse',
-                                            )}
-                                        >
-                                            {t('home.methodology.deliverableLabel')}:{' '}
-                                            {t(`home.methodology.steps.${step.key}.deliverable`)}
-                                        </p>
-                                    </div>
+                                            <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                                                <div className="flex items-start gap-4">
+                                                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-qd-teal-2/10 text-qd-teal-2 dark:bg-qd-teal/10 dark:text-qd-teal">
+                                                        <step.icon aria-hidden="true" size={22} strokeWidth={1.8} />
+                                                    </span>
+                                                    <div>
+                                                        <h3 className="text-xl font-semibold text-qd-ink dark:text-qd-white">
+                                                            {t(`home.methodology.steps.${step.key}.title`)}
+                                                        </h3>
+                                                        <p className="mt-2 max-w-md text-sm leading-relaxed text-qd-text-high">
+                                                            {description}
+                                                        </p>
+                                                    </div>
+                                                </div>
 
-                                    {/* Espaciador del otro lado (solo desktop) */}
-                                    <div
-                                        className={cn(
-                                            'hidden lg:block',
-                                            isEven ? 'lg:order-3' : 'lg:order-1',
-                                        )}
-                                    />
-                                </li>
-                            );
-                        })}
-                    </ol>
+                                                <div className="shrink-0 border-t border-qd-mist pt-3 sm:max-w-[150px] sm:border-t-0 sm:border-l sm:pt-0 sm:pl-5 sm:text-right dark:border-white/10">
+                                                    <p className="text-[11px] font-semibold tracking-[0.14em] text-qd-text-medium uppercase">
+                                                        {t('home.methodology.deliverableLabel')}
+                                                    </p>
+                                                    <p className="mt-1 text-sm font-semibold text-qd-ink dark:text-qd-white">
+                                                        {t(`home.methodology.steps.${step.key}.deliverable`)}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                );
+                            })}
+                        </ol>
+                    </div>
                 </div>
             </section>
 
             {/* 3. Herramientas propias aplicadas a tu proyecto */}
             <section className="bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 text-qd-white sm:px-8">
+                <div className="mx-auto max-w-[1240px] px-5 py-16 text-qd-white sm:px-8 sm:py-20">
                     <p className="text-sm font-semibold tracking-wide text-qd-lime">
                         {t('methodologyPage.tools.eyebrow')}
                     </p>
@@ -245,15 +273,15 @@ export default function Methodology() {
                         {TOOLS.map((tool) => (
                             <div
                                 key={tool.key}
-                                className="rounded-2xl border border-white/10 p-5"
+                                className="rounded-2xl border border-white/10 bg-white/[0.02] p-7"
                             >
-                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-qd-teal/10 text-qd-teal">
-                                    <tool.icon aria-hidden="true" size={20} />
+                                <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-qd-teal/10 text-qd-teal">
+                                    <tool.icon aria-hidden="true" size={22} />
                                 </span>
-                                <h3 className="mt-4 font-semibold">
+                                <h3 className="mt-5 text-lg font-semibold">
                                     {t(`methodologyPage.tools.items.${tool.key}.title`)}
                                 </h3>
-                                <p className="mt-1.5 text-sm leading-relaxed text-qd-text-medium">
+                                <p className="mt-2 text-sm leading-relaxed text-qd-text-medium">
                                     {t(`methodologyPage.tools.items.${tool.key}.description`)}
                                 </p>
                             </div>
@@ -263,48 +291,67 @@ export default function Methodology() {
             </section>
 
             {/* 4. En qué se traduce para ti */}
-            <section className="bg-qd-white dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8">
-                    <h2 className="max-w-xl text-2xl font-bold text-qd-ink sm:text-3xl dark:text-qd-white">
-                        {t('methodologyPage.benefits.title')}
-                    </h2>
+            <section className="bg-qd-bg dark:bg-qd-ink">
+                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
+                    <div className="rounded-3xl border border-qd-mist bg-qd-white p-8 sm:p-10 dark:border-white/10 dark:bg-white/[0.03]">
+                        <h2 className="max-w-xl text-2xl font-bold text-qd-ink sm:text-3xl dark:text-qd-white">
+                            {t('methodologyPage.benefits.title')}
+                        </h2>
 
-                    <div className="mt-10 grid gap-6 sm:grid-cols-3">
-                        {BENEFITS.map((benefit) => (
-                            <div key={benefit.key} className="flex items-start gap-3">
-                                <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-qd-mist text-qd-teal-2 dark:bg-white/5 dark:text-qd-teal">
-                                    <benefit.icon aria-hidden="true" size={18} />
-                                </span>
-                                <p className="text-base leading-relaxed text-qd-text-high">
-                                    {t(`methodologyPage.benefits.items.${benefit.key}`)}
-                                </p>
-                            </div>
-                        ))}
+                        <div className="mt-10 grid gap-8 sm:grid-cols-3 sm:gap-6">
+                            {BENEFITS.map((benefit, index) => (
+                                <div
+                                    key={benefit.key}
+                                    className={cn(
+                                        'sm:pl-6',
+                                        index > 0 &&
+                                            'border-t border-qd-mist pt-6 sm:border-t-0 sm:border-l sm:pt-0 dark:border-white/10',
+                                    )}
+                                >
+                                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-qd-teal-2/10 text-qd-teal-2 dark:bg-qd-teal/10 dark:text-qd-teal">
+                                        <benefit.icon aria-hidden="true" size={20} />
+                                    </span>
+                                    <h3 className="mt-4 text-lg font-semibold text-qd-ink dark:text-qd-white">
+                                        {t(`methodologyPage.benefits.items.${benefit.key}.title`)}
+                                    </h3>
+                                    <p className="mt-1.5 text-sm leading-relaxed text-qd-text-high">
+                                        {t(`methodologyPage.benefits.items.${benefit.key}.description`)}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* 5. CTA final */}
+            {/* 5. CTA final — cierre de página */}
             <section className="bg-qd-ink">
-                <div className="mx-auto flex max-w-[1240px] flex-col items-start gap-6 px-5 py-16 text-qd-white sm:px-8 sm:flex-row sm:items-center sm:justify-between">
-                    <h2 className="text-2xl font-bold sm:text-3xl">
-                        {t('methodologyPage.cta.title')}
-                    </h2>
-                    <div className="flex flex-wrap items-center gap-3">
-                        <a
-                            href={bookingShow.url()}
-                            className="inline-flex items-center gap-2 rounded-xl bg-qd-lime px-5 py-3 text-sm font-semibold text-qd-ink transition hover:brightness-95"
-                        >
-                            {t('methodologyPage.cta.primary')}
-                            <Send aria-hidden="true" size={16} />
-                        </a>
-                        <a
-                            href={contactShow.url()}
-                            className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold text-qd-white transition hover:border-qd-teal hover:text-qd-teal"
-                        >
-                            {t('methodologyPage.cta.secondary')}
-                            <ArrowRight aria-hidden="true" size={16} />
-                        </a>
+                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
+                    <div className="flex flex-col gap-8 rounded-3xl border border-white/10 bg-white/[0.03] p-8 sm:flex-row sm:items-center sm:justify-between sm:p-12">
+                        <div>
+                            <h2 className="text-2xl font-bold text-white sm:text-3xl">
+                                {t('methodologyPage.cta.title')}
+                            </h2>
+                            <p className="mt-2 max-w-md text-sm text-white/60 sm:text-base">
+                                {t('methodologyPage.cta.subtitle')}
+                            </p>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-3">
+                            <a
+                                href={bookingShow.url()}
+                                className="inline-flex items-center gap-2 rounded-xl bg-qd-lime px-5 py-3 text-sm font-semibold text-qd-ink transition hover:brightness-95"
+                            >
+                                {t('methodologyPage.cta.primary')}
+                                <Send aria-hidden="true" size={16} />
+                            </a>
+                            <a
+                                href={contactShow.url()}
+                                className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:border-qd-teal hover:text-qd-teal"
+                            >
+                                {t('methodologyPage.cta.secondary')}
+                                <ArrowRight aria-hidden="true" size={16} />
+                            </a>
+                        </div>
                     </div>
                 </div>
             </section>

@@ -468,6 +468,11 @@
         "breadcrumbHome": "Inicio",
         "breadcrumbCurrent": "Metodología",
         "timelineAria": "Pasos de nuestra metodología",
+        "process": {
+            "intro": "La rapidez no viene de hacer más, sino de hacer mejor. Seguimos un método propio que combina IA, herramientas avanzadas y control humano en cada decisión.",
+            "cta": "Reservar reunión"
+        },
+        "studyDescription": "Antes de construir, analizamos si la idea tiene sentido, qué alcance necesita y qué camino conviene seguir.",
         "tools": {
             "eyebrow": "HERRAMIENTAS PROPIAS",
             "title": "Aplicado a tu proyecto, no a una plantilla.",
@@ -489,15 +494,25 @@
         "benefits": {
             "title": "En qué se traduce para ti.",
             "items": {
-                "time": "Tiempos más cortos que un desarrollo tradicional, sin saltarnos pasos.",
-                "price": "Precio competitivo gracias a herramientas propias, no a recortar calidad.",
-                "fit": "Una solución adaptada de verdad a tu proceso, no una plantilla genérica."
+                "time": {
+                    "title": "Menos pasos ciegos",
+                    "description": "Entiendes el camino, las decisiones y los próximos pasos."
+                },
+                "price": {
+                    "title": "Precio competitivo",
+                    "description": "Gracias a herramientas propias, no a recortar calidad."
+                },
+                "fit": {
+                    "title": "Solución adaptada",
+                    "description": "A tu proceso, tu realidad y tu forma de trabajar."
+                }
             }
         },
         "cta": {
-            "title": "Empezamos por tu análisis.",
-            "primary": "Reserva hora",
-            "secondary": "Cuéntanos tu proyecto"
+            "title": "Empezamos por entender el problema.",
+            "subtitle": "Sin compromiso. Hablamos de tu caso y vemos cómo podemos ayudarte.",
+            "primary": "Reservar reunión",
+            "secondary": "Contactar"
         }
     },
     "errors": {

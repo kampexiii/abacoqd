@@ -468,6 +468,11 @@
         "breadcrumbHome": "Home",
         "breadcrumbCurrent": "Methodology",
         "timelineAria": "Our methodology steps",
+        "process": {
+            "intro": "Speed doesn't come from doing more, but from doing better. We follow our own method that combines AI, advanced tooling and human control at every decision.",
+            "cta": "Book a meeting"
+        },
+        "studyDescription": "Before building, we check whether the idea makes sense, what scope it needs and which path to follow.",
         "tools": {
             "eyebrow": "OUR OWN TOOLS",
             "title": "Applied to your project, not a template.",
@@ -489,15 +494,25 @@
         "benefits": {
             "title": "What this means for you.",
             "items": {
-                "time": "Shorter timelines than traditional development, without skipping steps.",
-                "price": "Competitive pricing thanks to our own tools, not cut corners.",
-                "fit": "A solution genuinely adapted to your process, not a generic template."
+                "time": {
+                    "title": "Fewer blind steps",
+                    "description": "You understand the path, the decisions and the next steps."
+                },
+                "price": {
+                    "title": "Competitive pricing",
+                    "description": "Thanks to our own tools, not cut corners."
+                },
+                "fit": {
+                    "title": "A tailored solution",
+                    "description": "To your process, your reality and how you work."
+                }
             }
         },
         "cta": {
-            "title": "We start with your analysis.",
-            "primary": "Book a time",
-            "secondary": "Tell us your project"
+            "title": "Let's start by understanding the problem.",
+            "subtitle": "No commitment. We talk about your case and see how we can help.",
+            "primary": "Book a meeting",
+            "secondary": "Contact us"
         }
     },
     "errors": {
