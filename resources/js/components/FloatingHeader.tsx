@@ -13,6 +13,7 @@ import {
     SheetTrigger,
 } from '@/components/ui/sheet';
 import { useAppearance } from '@/hooks/use-appearance';
+import { useCurrentUrl } from '@/hooks/use-current-url';
 import { useLanguage } from '@/hooks/use-language';
 import { cn } from '@/lib/utils';
 
@@ -21,18 +22,16 @@ import { cn } from '@/lib/utils';
  * públicas. docs/07_VISTAS/PUBLIC_09_LAYOUT_GLOBAL.md.
  *
  * Nav final (6 ítems; el logo cubre Inicio). SIN CTA de reserva en topbar.
- * Destinos provisionales a anclas de home mientras no existan las páginas
- * dedicadas; migran a rutas al publicarse (comportamiento documentado).
  */
 
 type NavItem = { key: string; href: string };
 
 const NAV_ITEMS: readonly NavItem[] = [
     { key: 'metodologia', href: '/metodologia' },
-    { key: 'servicios', href: '#servicios' },
-    { key: 'proyectos', href: '#colaboraciones' },
+    { key: 'servicios', href: '/servicios' },
+    { key: 'proyectos', href: '/proyectos' },
     { key: 'quienesSomos', href: '/quienes-somos' },
-    { key: 'blog', href: '#blog' },
+    { key: 'blog', href: '/blog' },
     { key: 'contacto', href: '/contacto' },
 ] as const;
 
@@ -42,6 +41,7 @@ export default function FloatingHeader() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const { appearance } = useAppearance();
+    const { isCurrentOrParentUrl } = useCurrentUrl();
     const { locale, setLocale, t } = useLanguage();
 
     const nextLocale = locale === 'es' ? 'en' : 'es';
@@ -112,20 +112,27 @@ export default function FloatingHeader() {
                     className="hidden items-center gap-7 lg:flex"
                     aria-label={t('navigation.sectionsAriaLabel')}
                 >
-                    {NAV_ITEMS.map((item) => (
-                        <a
-                            key={item.key}
-                            href={item.href}
-                            className={cn(
-                                'text-[15px] font-medium transition-colors duration-150 hover:text-qd-teal-2 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime',
-                                isScrolled
-                                    ? 'text-qd-text-medium'
-                                    : 'text-qd-ink/85 dark:text-qd-white/90',
-                            )}
-                        >
-                            {t(`navigation.items.${item.key}`)}
-                        </a>
-                    ))}
+                    {NAV_ITEMS.map((item) => {
+                        const isActive = isCurrentOrParentUrl(item.href);
+
+                        return (
+                            <a
+                                key={item.key}
+                                href={item.href}
+                                aria-current={isActive ? 'page' : undefined}
+                                className={cn(
+                                    'relative py-1 text-[15px] font-medium transition-colors duration-150 after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-qd-teal-2 after:transition-transform after:duration-200 after:ease-out hover:text-qd-teal-2 hover:after:scale-x-100 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 motion-reduce:after:transition-none dark:after:bg-qd-teal dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime',
+                                    isScrolled
+                                        ? 'text-qd-text-medium'
+                                        : 'text-qd-ink/85 dark:text-qd-white/90',
+                                    isActive &&
+                                        'text-qd-teal-2 after:scale-x-100 dark:text-qd-teal',
+                                )}
+                            >
+                                {t(`navigation.items.${item.key}`)}
+                            </a>
+                        );
+                    })}
                 </nav>
 
                 <div className="flex items-center gap-1.5">

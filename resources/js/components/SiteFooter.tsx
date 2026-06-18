@@ -18,10 +18,10 @@ type FooterLink = { key: string; href: string };
 const EXPLORE_LINKS: readonly FooterLink[] = [
     { key: 'inicio', href: '/' },
     { key: 'metodologia', href: '/metodologia' },
-    { key: 'servicios', href: '#servicios' },
-    { key: 'proyectos', href: '#colaboraciones' },
+    { key: 'servicios', href: '/servicios' },
+    { key: 'proyectos', href: '/proyectos' },
     { key: 'quienesSomos', href: '/quienes-somos' },
-    { key: 'blog', href: '#blog' },
+    { key: 'blog', href: '/blog' },
     { key: 'contacto', href: '/contacto' },
 ] as const;
 
@@ -163,7 +163,7 @@ export default function SiteFooter() {
                         {SERVICE_LINKS.map((key) => (
                             <li key={key}>
                                 <a
-                                    href="#servicios"
+                                    href="/servicios"
                                     className="text-sm text-qd-text-medium transition-colors hover:text-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-lime"
                                 >
                                     {t(`footer.services.${key}`)}

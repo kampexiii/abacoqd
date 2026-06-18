@@ -26,7 +26,7 @@ import { useLanguage } from '@/hooks/use-language';
 
 // Destino del CTA de reserva: sistema propio de citas (FASE 3).
 const RESERVA_HREF = '/reserva';
-const SERVICIOS_HREF = '#servicios';
+const SERVICIOS_HREF = '/servicios';
 
 const BENEFITS: readonly { key: string; icon: LucideIcon }[] = [
     { key: 'ai', icon: Sparkles },

@@ -26,9 +26,9 @@ type RecoveryLink = {
 
 const RECOVERY_LINKS: readonly RecoveryLink[] = [
     { key: 'home', href: '/' },
-    { key: 'services', href: '/#servicios' },
-    { key: 'projects', href: '/#colaboraciones' },
-    { key: 'blog', href: '/#blog' },
+    { key: 'services', href: '/servicios' },
+    { key: 'projects', href: '/proyectos' },
+    { key: 'blog', href: '/blog' },
     { key: 'contact', href: '/contacto' },
 ] as const;
 
