@@ -45,7 +45,7 @@ export default function PublicPageHero({
                 }}
             />
             <div className="relative mx-auto max-w-[1240px] px-5 pt-28 pb-16 sm:px-8 sm:pt-32 sm:pb-20">
-                <div className="flex items-start justify-between gap-10">
+                <div className="flex items-center justify-between gap-10">
                     <div className="max-w-2xl">
                         <nav aria-label="Breadcrumb" className="mb-6">
                             <ol className="flex items-center gap-1.5 text-xs text-qd-text-medium">

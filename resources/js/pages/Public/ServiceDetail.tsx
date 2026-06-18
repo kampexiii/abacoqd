@@ -5,7 +5,6 @@ import {
     CheckCircle2,
     ClipboardCheck,
     Compass,
-    GitBranch,
     LockKeyhole,
     Sparkles,
     ShieldCheck,
@@ -28,7 +27,7 @@ import {
     resolveServiceKey,
     SERVICE_PRESENTATION,
 } from './Services';
-import type { LocalizedText, PublicService } from './Services';
+import type { LocalizedText, PublicService, ServiceKey } from './Services';
 
 type ServiceDetailRecord = PublicService & {
     readonly description: LocalizedText;
@@ -51,15 +50,23 @@ const DETAIL_BENEFITS: readonly {
     { key: 'technology', icon: LockKeyhole },
 ] as const;
 
+const SERVICE_DETAIL_IMAGES: Record<ServiceKey, string> = {
+    web: '/assets/services/details/desarrollo-web-rapido.webp',
+    apps: '/assets/services/details/aplicaciones-a-medida.webp',
+    ai: '/assets/services/details/automatizacion-con-ia.webp',
+    crm: '/assets/services/details/crm-datos-y-procesos.webp',
+    integrations: '/assets/services/details/integraciones-digitales.webp',
+    mvp: '/assets/services/details/mvps-y-prototipos.webp',
+};
+
 const PROCESS_STEPS: readonly {
     key: 'understand' | 'scope' | 'build' | 'review' | 'deliver';
-    icon: LucideIcon;
 }[] = [
-    { key: 'understand', icon: Target },
-    { key: 'scope', icon: Compass },
-    { key: 'build', icon: GitBranch },
-    { key: 'review', icon: ClipboardCheck },
-    { key: 'deliver', icon: CheckCircle2 },
+    { key: 'understand' },
+    { key: 'scope' },
+    { key: 'build' },
+    { key: 'review' },
+    { key: 'deliver' },
 ] as const;
 
 function serviceSlug(service: PublicService, locale: Locale): string {
@@ -103,85 +110,6 @@ function resolveSettingsCapabilities(
         .filter((capacity): capacity is string => capacity.length > 0);
 }
 
-function ServiceDeviceMockup({
-    title,
-    summary,
-}: {
-    readonly title: string;
-    readonly summary: string;
-}) {
-    return (
-        <div className="relative mx-auto flex min-h-64 max-w-md items-end justify-center">
-            <div className="absolute inset-x-6 bottom-0 h-4 rounded-full bg-qd-ink/15 blur-xl dark:bg-black/40" />
-
-            <div className="relative w-full rounded-[20px] border border-qd-ink/12 bg-qd-ink p-2 shadow-[0_28px_80px_-38px_rgba(7,17,26,0.65)] dark:border-white/12">
-                <div className="overflow-hidden rounded-2xl border border-white/10 bg-qd-ink">
-                    <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-3">
-                        <span className="size-2 rounded-full bg-qd-teal" />
-                        <span className="size-2 rounded-full bg-qd-cyan/80" />
-                        <span className="size-2 rounded-full bg-qd-lime/70" />
-                        <span className="ml-auto h-1.5 w-16 rounded-full bg-white/14" />
-                    </div>
-
-                    <div className="relative min-h-52 overflow-hidden px-6 py-7">
-                        <div
-                            aria-hidden="true"
-                            className="absolute inset-0 opacity-35"
-                            style={{
-                                backgroundImage:
-                                    'linear-gradient(rgba(24,183,176,0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(24,183,176,0.25) 1px, transparent 1px)',
-                                backgroundSize: '28px 28px',
-                            }}
-                        />
-                        <div
-                            aria-hidden="true"
-                            className="absolute top-8 right-10 size-28 rotate-45 border border-qd-teal/70 shadow-[0_0_50px_rgba(24,183,176,0.32)]"
-                        >
-                            <span className="absolute inset-x-1/2 top-0 h-full w-px bg-qd-teal/35" />
-                            <span className="absolute inset-y-1/2 left-0 h-px w-full bg-qd-teal/35" />
-                        </div>
-                        <div className="relative max-w-52">
-                            <p className="text-xs font-semibold tracking-[0.16em] text-qd-teal uppercase">
-                                AbacoQD
-                            </p>
-                            <h3 className="mt-4 text-2xl leading-tight font-bold text-qd-white">
-                                {title}
-                            </h3>
-                            <p className="mt-3 line-clamp-3 text-xs leading-relaxed text-white/62">
-                                {summary}
-                            </p>
-                            <span className="mt-5 inline-flex h-8 items-center rounded-lg bg-qd-teal px-3 text-xs font-bold text-qd-ink">
-                                {title}
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div className="mx-auto mt-2 h-1.5 w-20 rounded-full bg-qd-ink/30 dark:bg-white/15" />
-            </div>
-
-            <div className="absolute right-2 bottom-5 w-24 rounded-[22px] border border-qd-ink/14 bg-qd-ink p-1.5 shadow-[0_24px_70px_-34px_rgba(7,17,26,0.7)] dark:border-white/15">
-                <div className="overflow-hidden rounded-[17px] border border-white/10 bg-qd-surface">
-                    <div className="mx-auto mt-2 h-1 w-8 rounded-full bg-white/18" />
-                    <div className="px-3 pt-5 pb-3">
-                        <div className="h-2 w-10 rounded-full bg-qd-teal/70" />
-                        <div className="mt-3 h-8 rounded-xl bg-white/8" />
-                        <div className="mt-2 grid grid-cols-2 gap-1.5">
-                            {[0, 1, 2, 3].map((index) => (
-                                <span
-                                    key={index}
-                                    className="h-6 rounded-lg border border-qd-teal/20 bg-qd-teal/10"
-                                />
-                            ))}
-                        </div>
-                        <div className="mt-3 h-1.5 w-12 rounded-full bg-white/16" />
-                        <div className="mt-1.5 h-1.5 w-9 rounded-full bg-white/10" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
-
 export default function ServiceDetail({ service }: ServiceDetailProps) {
     const { t, locale } = useLanguage();
     const serviceKey = resolveServiceKey(service.slug);
@@ -193,7 +121,7 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
     const summary =
         localizedText(service.summary, locale) ||
         t(`${translationPath}.summary`);
-    const description = localizedText(service.description, locale) || summary;
+    const detailImageSrc = SERVICE_DETAIL_IMAGES[serviceKey ?? 'web'];
     const slug = serviceSlug(service, locale);
     const contactUrl = contactShow.url({
         query: {
@@ -246,7 +174,7 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
             />
 
             <section className="bg-qd-white dark:bg-qd-ink">
-                <div className="mx-auto grid max-w-[1240px] px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[1fr_1.08fr_1.45fr_1fr]">
+                <div className="mx-auto grid max-w-[1536px] px-5 py-12 sm:px-8 sm:py-16 xl:px-10 lg:grid-cols-[minmax(220px,0.95fr)_minmax(260px,1fr)_minmax(520px,1.85fr)_minmax(220px,0.9fr)]">
                     <section
                         aria-labelledby="service-solves-title"
                         className="border-b border-qd-ink/10 pb-8 lg:border-r lg:border-b-0 lg:pr-7 lg:pb-0 dark:border-white/10"
@@ -314,32 +242,19 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
                     </section>
 
                     <section
-                        aria-labelledby="service-visual-title"
-                        className="border-b border-qd-ink/10 py-8 lg:border-r lg:border-b-0 lg:px-7 lg:py-0 dark:border-white/10"
+                        aria-label={title}
+                        className="border-b border-qd-ink/10 py-8 lg:min-h-[430px] lg:border-r lg:border-b-0 lg:px-7 lg:py-0 dark:border-white/10"
                     >
-                        <h2
-                            id="service-visual-title"
-                            className="flex items-center gap-3 text-lg font-bold text-qd-ink dark:text-qd-white"
+                        <figure
+                            className="h-full overflow-hidden rounded-[24px] border border-qd-ink/10 bg-qd-white shadow-[0_26px_90px_-48px_rgba(7,17,26,0.55)] dark:border-white/10 dark:bg-qd-surface"
                         >
-                            <Sparkles
-                                aria-hidden="true"
-                                size={21}
-                                className="text-qd-teal-2 dark:text-qd-teal"
+                            <img
+                                src={detailImageSrc}
+                                alt={title}
+                                loading="lazy"
+                                className="aspect-[16/9] h-full min-h-72 w-full object-cover lg:min-h-full"
                             />
-                            {t('serviceDetail.visual.title')}
-                        </h2>
-                        <p className="mt-3 text-sm leading-relaxed text-qd-text-high">
-                            {description}
-                        </p>
-                        <div
-                            aria-hidden="true"
-                            className="mt-6 overflow-hidden rounded-2xl border border-qd-ink/10 bg-linear-to-br from-qd-mist to-qd-white p-4 shadow-[0_18px_60px_-42px_rgba(7,17,26,0.42)] dark:border-white/10 dark:from-qd-surface dark:to-qd-ink"
-                        >
-                            <ServiceDeviceMockup
-                                title={title}
-                                summary={summary}
-                            />
-                        </div>
+                        </figure>
                     </section>
 
                     <section
@@ -389,7 +304,7 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
                             'radial-gradient(circle at 18% 18%, rgba(24,183,176,0.22), transparent 30%), radial-gradient(circle at 84% 10%, rgba(183,243,74,0.12), transparent 22%), repeating-linear-gradient(115deg, rgba(24,183,176,0.11) 0px, rgba(24,183,176,0.11) 1px, transparent 1px, transparent 42px)',
                     }}
                 />
-                <div className="relative mx-auto max-w-[1240px] px-5 py-14 sm:px-8 sm:py-16">
+                <div className="relative mx-auto max-w-[1536px] px-5 py-14 sm:px-8 sm:py-16 xl:px-10">
                     <div className="text-center">
                         <h2 className="text-2xl font-bold sm:text-3xl">
                             {t('serviceDetail.cta.title')}

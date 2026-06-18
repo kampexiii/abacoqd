@@ -637,9 +637,6 @@
                 }
             }
         },
-        "visual": {
-            "title": "Technical view"
-        },
         "capabilities": {
             "title": "Capabilities"
         },

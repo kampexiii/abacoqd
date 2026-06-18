@@ -8,13 +8,15 @@
  * leerse igual en modo claro y oscuro (cara de cristal translúcida con borde
  * teal; isotipo a color sobre claro / versión inversa sobre oscuro).
  */
+// translateZ = mitad de la arista de la cara (w-44 = 176px → 88px) para que
+// las 6 caras cierren el cubo. El cubo solo se muestra en `sm:` y superiores.
 const FACE_TRANSFORMS: readonly string[] = [
-    'translateZ(64px)',
-    'rotateY(180deg) translateZ(64px)',
-    'rotateY(90deg) translateZ(64px)',
-    'rotateY(-90deg) translateZ(64px)',
-    'rotateX(90deg) translateZ(64px)',
-    'rotateX(-90deg) translateZ(64px)',
+    'translateZ(88px)',
+    'rotateY(180deg) translateZ(88px)',
+    'rotateY(90deg) translateZ(88px)',
+    'rotateY(-90deg) translateZ(88px)',
+    'rotateX(90deg) translateZ(88px)',
+    'rotateX(-90deg) translateZ(88px)',
 ];
 
 function CubeFace({ transform }: { readonly transform: string }) {
@@ -26,12 +28,12 @@ function CubeFace({ transform }: { readonly transform: string }) {
             <img
                 src="/assets/branding/marca/logos/abacoqd-isotipo.svg"
                 alt=""
-                className="h-12 w-12 opacity-90 dark:hidden"
+                className="h-16 w-16 opacity-90 dark:hidden"
             />
             <img
                 src="/assets/branding/marca/logos/abacoqd-isotipo-inverse.svg"
                 alt=""
-                className="hidden h-12 w-12 opacity-90 dark:block"
+                className="hidden h-16 w-16 opacity-90 dark:block"
             />
         </div>
     );
@@ -41,7 +43,7 @@ export default function MethodologyCube() {
     return (
         <div
             aria-hidden="true"
-            className="hidden h-32 w-32 shrink-0 perspective-[900px] sm:block sm:h-36 sm:w-36"
+            className="hidden h-44 w-44 shrink-0 perspective-[1000px] sm:block"
         >
             <div
                 className="relative h-full w-full animate-[qd-mini-cube-spin_16s_linear_infinite] transform-3d motion-reduce:animate-none"
