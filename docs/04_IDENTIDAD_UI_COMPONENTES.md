@@ -112,6 +112,7 @@ Inventario observado en los mockups finales (`mockups/abacoqd-web.pen`). Poppins
 ### Topbar (header flotante)
 
 - Pastilla flotante centrada (~1240 px), `cornerRadius ~20`, borde fino, sombra suave. Fondo blanco (light) / `qd-surface` (dark).
+- La estructura de `FloatingHeader` se conserva protegida: arriba del todo (`scrollY <= 8`) la pastilla visual es transparente para integrarse con el Hero; al hacer scroll (`scrollY > 8`) recupera fondo translúcido, borde, blur y sombra suave.
 - **Izquierda:** logo real de marca pública (`Abaco Developments`); si se ratifica la evolución `AbacoQD`, usar isotipo `A` + wordmark validado. Click → Inicio.
 - **Centro:** nav `Metodología / Servicios / Proyectos / Quiénes somos / Blog / Contacto` (~15 px, gris medio; activo en teal).
 - **Derecha:** `ES` + chevron (idioma) y toggle de tema (sol/luna).
@@ -129,7 +130,7 @@ Inventario observado en los mockups finales (`mockups/abacoqd-web.pen`). Poppins
 - Punto teal de 7 px + texto en MAYÚSCULAS, Poppins 600, ~12 px, tracking ~2.5.
 - Color del texto: `qd-teal-2` (light) / `qd-teal` (dark). Dot siempre `qd-teal`.
 - Alineado a la izquierda del bloque (excepto Hero y CTA final, centrados).
-- Variantes: `CÓMO TRABAJAMOS`, `SERVICIOS`, `PORTAFOLIOS`, `BLOG`, `EMPECEMOS`.
+- Variantes: `CÓMO TRABAJAMOS`, `SERVICIOS`, `COLABORACIONES`, `BLOG`, `EMPECEMOS`.
 
 ### Botones
 
@@ -154,9 +155,9 @@ Inventario observado en los mockups finales (`mockups/abacoqd-web.pen`). Poppins
 - **Bloque "Estudio inicial gratuito"** (metodología): banda horizontal `01 · Análisis → [icono pen-tool + ESTUDIO INICIAL + chip Gratuito + mensaje + apoyo] → 02 · Propuesta`. Card elevada con borde teal/cian y glow.
 - **CTA final aprobado**: bloque centrado con logo AbacoQD/Abaco Developments según marca validada, eyebrow `EMPECEMOS`, titular `El 40% del tiempo de un desarrollador se pierde manteniendo código.`, apoyo, badges `Desarrollo a medida` y `Respuesta estratégica < 24h`, mockup tipo editor/código con sidebar, archivo `app.js`, panel `Vista previa`, estado `Sistema optimizado`, CTA principal lime `Empieza a ahorrar tiempo` y secundario `Ver cómo trabajamos`. El diseño claro/oscuro, el mockup, el titular y la intención de menos mantenimiento y más tiempo para crecer están aprobados.
 
-### Carrusel circular / cards de Colaboraciones
+### Noria orbital / cards de Colaboraciones
 
-- Circunferencia tipo reloj o carrusel de cards; centro = botón-pivote con flecha. Logos/proyectos en burbujas o cards de **cristal esmerilado** (translúcido + desenfoque del fondo) sobre el semicírculo derecho: aparecen a las 12, punto fuerte a las 3 (activo, mayor y opaco), desaparecen hacia las 6. Escala y opacidad interpoladas por ángulo.
+- Circunferencia amplia tipo reloj/noria; centro = botón-pivote con flecha. Logos/proyectos en burbujas o cards de **cristal esmerilado** (translúcido + desenfoque del fondo) sobre el semicírculo derecho: giro horario continuo, aparecen a las 12, punto fuerte a las 3 (activo, mayor, nítido y opaco), desaparecen hacia las 6 y siguen ocultos de 7 a 11 hasta reaparecer en 12. Escala y opacidad interpoladas por ángulo.
 - Logos por tema: a color en claro; en oscuro versión clara/monocroma si existe. Anillo de órbita sutil, indicador del activo, partículas. Datos = `partners`, `projects` y `partner_project`.
 
 ### Franja de beneficios (hero)

@@ -53,7 +53,10 @@ Orden definitivo (6 ítems; el logo cubre Inicio):
 - Menú: panel deslizante (Radix Dialog) a pantalla completa, fondo ink: nav apilada grande (Poppins 600), idioma y tema al pie. Transición 250 ms; cierre por esc/overlay; focus trap.
 
 ### Comportamiento scroll
-- Se mantiene el comportamiento flotante actual (sin cambios estructurales).
+- Se mantiene la estructura protegida de `FloatingHeader`; solo cambia su superficie visual.
+- En `scrollY <= 8`, la pastilla visual permanece transparente: sin fondo sólido, borde visible, sombra ni blur marcado, integrada con el Hero sin ocultar enlaces ni controles.
+- En `scrollY > 8`, aparece progresivamente la superficie flotante con fondo translúcido, borde, blur y sombra suave para mejorar legibilidad y clicabilidad.
+- El comportamiento respeta claro/oscuro/sistema, responsive y reduced motion; el menú mobile conserva su propio panel legible.
 
 ---
 

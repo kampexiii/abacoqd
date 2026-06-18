@@ -1,7 +1,11 @@
 import { Head } from '@inertiajs/react';
 
 import AbacoHero from '@/components/AbacoHero';
+import BlogSection from '@/components/sections/BlogSection';
+import CollaborationsSection from '@/components/sections/CollaborationsSection';
+import FinalCtaSection from '@/components/sections/FinalCtaSection';
 import MethodologySection from '@/components/sections/MethodologySection';
+import ServicesSection from '@/components/sections/ServicesSection';
 import PublicLayout from '@/layouts/public-layout';
 
 /**
@@ -11,18 +15,20 @@ import PublicLayout from '@/layouts/public-layout';
  * Orden final de la landing (7 secciones): Hero · Metodología · Servicios ·
  * Colaboraciones · Blog · CTA final · Footer.
  *
- * Bloque 2: marco global (PublicLayout) + Hero definitivo (cubo conservado) +
- * Metodología landing. Servicios, Colaboraciones, Blog y CTA final se
- * reconstruyen desde el mockup final en bloques siguientes. Las secciones
- * legacy (Transición, Sistema, Testimonios, Casos, Partners) quedan ELIMINADAS
- * de la landing por no existir en la documentación final.
+ * Footer global montado por PublicLayout. Las secciones legacy (Transición,
+ * Sistema, Testimonios, Casos, Partners) quedan fuera por no existir en la
+ * documentación final.
  */
 export default function Home() {
     return (
-        <PublicLayout>
+        <PublicLayout waveHiddenUntilElementId="hero">
             <Head title="Abaco Developments — Consultoría tecnológica, CRM e IA aplicada" />
             <AbacoHero />
             <MethodologySection />
+            <ServicesSection />
+            <CollaborationsSection />
+            <BlogSection />
+            <FinalCtaSection />
         </PublicLayout>
     );
 }

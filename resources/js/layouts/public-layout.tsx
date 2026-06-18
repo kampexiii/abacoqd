@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 import AccessibilityFab from '@/components/a11y/AccessibilityFab';
 import ChatbotFab from '@/components/chat/ChatbotFab';
 import FloatingHeader from '@/components/FloatingHeader';
+import WaveBackground from '@/components/public/WaveBackground';
 import SiteFooter from '@/components/SiteFooter';
-import WaveBackground from '@/components/WaveBackground';
 import { useLanguage } from '@/hooks/use-language';
 
 /**
@@ -16,16 +16,24 @@ import { useLanguage } from '@/hooks/use-language';
  * Estructura: skip-link · header · main#contenido (un único <main>/h1 por vista)
  * · footer · botones flotantes transversales.
  */
-export default function PublicLayout({ children }: { children: ReactNode }) {
+type PublicLayoutProps = {
+    readonly children: ReactNode;
+    readonly waveHiddenUntilElementId?: string;
+};
+
+export default function PublicLayout({
+    children,
+    waveHiddenUntilElementId,
+}: PublicLayoutProps) {
     const { t } = useLanguage();
 
     return (
-        <div className="relative min-h-svh font-sans text-qd-ink dark:text-qd-white">
+        <div className="qd-public-shell relative isolate min-h-svh overflow-x-clip bg-qd-bg font-sans text-qd-ink dark:bg-qd-ink dark:text-qd-white">
             <a href="#contenido" className="qd-skip-link">
                 {t('layout.skipToContent')}
             </a>
 
-            <WaveBackground />
+            <WaveBackground hiddenUntilElementId={waveHiddenUntilElementId} />
 
             <FloatingHeader />
 

@@ -1,184 +1,184 @@
 {
     "version": 1,
-    "updated_at": "2026-06-11",
+    "updated_at": "2026-06-12",
     "naming_convention": "kebab-case",
-    "recommended_formats": ["svg", "png"],
+    "recommended_formats": ["svg", "webp", "png"],
     "companies": [
         {
             "name": "Iberia",
             "slug": "iberia",
             "type": "colaboracion",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
+            "status": "verificado_oficial_svg",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/iberia.svg",
             "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/iberia.svg",
             "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "source_url": "https://www.iberia.com/akastatic/images/logo_iberia_pos.svg",
+            "source_notes": "SVG oficial descargado desde Iberia."
         },
         {
             "name": "Iksula",
             "slug": "iksula",
             "type": "colaboracion",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
-            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/iksula.svg",
+            "status": "pendiente_fuente_verificable",
+            "original_path": null,
+            "optimized_light_path": null,
             "optimized_dark_path": null,
             "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "source_notes": "Sitio protegido por Cloudflare y sin asset público verificable localizado durante la búsqueda."
         },
         {
             "name": "Leroy Merlin",
             "slug": "leroy-merlin",
             "type": "colaboracion",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
+            "status": "verificado_fuente_publica_svg",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/leroy-merlin.svg",
             "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/leroy-merlin.svg",
             "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "source_url": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Leroy_Merlin_-_logo_%28France%2C_1995-%29.svg",
+            "source_notes": "SVG obtenido desde Wikimedia Commons; la web oficial bloqueó la descarga automatizada."
         },
         {
             "name": "IFW",
             "slug": "ifw",
             "type": "colaboracion",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
-            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/ifw.svg",
+            "status": "pendiente_fuente_verificable",
+            "original_path": null,
+            "optimized_light_path": null,
             "optimized_dark_path": null,
             "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "source_notes": "No se ha podido identificar una fuente pública fiable del logotipo bajo la marca IFW."
         },
         {
             "name": "Devtia",
             "slug": "devtia",
             "type": "colaboracion",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
-            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/devtia.svg",
-            "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "status": "verificado_oficial_raster_a_webp",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/devtia-wordmark.png",
+            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/devtia.webp",
+            "optimized_dark_path": "public/assets/branding/empresas/colaboraciones/optimizados/devtia-dark.webp",
+            "source_url": "https://devtia.com/images/footer-logo.png",
+            "source_notes": "PNG oficial convertido a WEBP. Se generó variante clara para contraste a partir del wordmark monocromo."
         },
         {
             "name": "Malababa",
             "slug": "malababa",
             "type": "colaboracion",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
-            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/malababa.svg",
-            "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "status": "verificado_oficial_raster_a_webp",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/malababa.png",
+            "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/malababa.webp",
+            "optimized_dark_path": "public/assets/branding/empresas/colaboraciones/optimizados/malababa-dark.webp",
+            "source_url": "https://malababa.imgix.net/media/logo/default/logo-blanco.png",
+            "source_notes": "PNG oficial en blanco sobre transparencia convertido a WEBP; se derivó una variante oscura para fondos claros."
         },
         {
             "name": "Jack & Jones",
             "slug": "jack-and-jones",
             "type": "colaboracion",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
+            "status": "verificado_fuente_publica_svg",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/jack-and-jones.svg",
             "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/jack-and-jones.svg",
             "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "source_url": "https://upload.wikimedia.org/wikipedia/commons/7/78/Jack_%26_Jones_logo.svg",
+            "source_notes": "SVG obtenido desde Wikimedia Commons; no se localizó una descarga directa estable desde la web oficial."
         },
         {
             "name": "Wible",
             "slug": "wible",
             "type": "colaboracion",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/colaboraciones/originales/",
+            "status": "verificado_oficial_svg_con_variante_ui",
+            "original_path": "public/assets/branding/empresas/colaboraciones/originales/wible.svg",
             "optimized_light_path": "public/assets/branding/empresas/colaboraciones/optimizados/wible.svg",
-            "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "optimized_dark_path": "public/assets/branding/empresas/colaboraciones/optimizados/wible-dark.svg",
+            "source_url": "https://wible-es.s3.eu-west-1.amazonaws.com/wp-content/uploads/2025/09/29083342/Logo-WIBLE-SVG-1.svg",
+            "source_notes": "SVG oficial en blanco. Se conservó el original como variante dark y se creó una variante clara equivalente para fondos claros."
         },
         {
             "name": "Cognodata",
             "slug": "cognodata",
             "type": "cliente_directo",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
+            "status": "verificado_oficial_svg",
+            "original_path": "public/assets/branding/empresas/clientes-directos/originales/cognodata.svg",
             "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/cognodata.svg",
             "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "source_url": "https://www.cognodata.com/wp-content/themes/cognodata/assets/images/cognodata-logotipo_audensiel-01.svg",
+            "source_notes": "SVG oficial descargado desde Cognodata."
         },
         {
             "name": "In Casa",
             "slug": "in-casa",
             "type": "cliente_directo",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
-            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/in-casa.svg",
-            "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "status": "verificado_oficial_raster_a_webp",
+            "original_path": "public/assets/branding/empresas/clientes-directos/originales/in-casa.jpg",
+            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/in-casa.webp",
+            "optimized_dark_path": "public/assets/branding/empresas/clientes-directos/optimizados/in-casa-dark.webp",
+            "source_url": "https://www.incasa.es/wp-content/uploads/2020/03/logo_incasa.jpg",
+            "source_notes": "JPG oficial convertido a WEBP. La variante dark procede de https://www.incasa.es/wp-content/uploads/2020/04/INCASA_BLANCO-300x102.png."
         },
         {
             "name": "Urban Fisio",
             "slug": "urban-fisio",
             "type": "cliente_directo",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
+            "status": "verificado_oficial_svg",
+            "original_path": "public/assets/branding/empresas/clientes-directos/originales/urban-fisio.svg",
             "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/urban-fisio.svg",
             "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "source_url": "https://www.urbanfisio.com/wp-content/themes/urbanfisiotheme/img/logo.svg",
+            "source_notes": "SVG oficial descargado desde Urban Fisio."
         },
         {
             "name": "Fantasy JP",
             "slug": "fantasy-jp",
             "type": "cliente_directo",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
-            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/fantasy-jp.svg",
+            "status": "pendiente_fuente_verificable",
+            "original_path": null,
+            "optimized_light_path": null,
             "optimized_dark_path": null,
             "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "source_notes": "Se localizaron dominios y recursos no confiables, pero ninguna fuente pública verificable del logotipo."
         },
         {
             "name": "RB",
             "slug": "rb",
             "type": "cliente_directo",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
-            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/rb.svg",
+            "status": "pendiente_empresa_no_identificada",
+            "original_path": null,
+            "optimized_light_path": null,
             "optimized_dark_path": null,
             "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "source_notes": "La marca RB es demasiado ambigua y no se ha podido atribuir un logotipo fiable al proyecto sin más contexto."
         },
         {
             "name": "YoSEO Marketing",
             "slug": "yoseo-marketing",
             "type": "cliente_directo",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
-            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/yoseo-marketing.svg",
-            "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "status": "verificado_oficial_raster_a_webp",
+            "original_path": "public/assets/branding/empresas/clientes-directos/originales/yoseo-marketing.png",
+            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/yoseo-marketing.webp",
+            "optimized_dark_path": "public/assets/branding/empresas/clientes-directos/optimizados/yoseo-marketing-dark.webp",
+            "source_url": "https://www.yoseomarketing.com/wp-content/uploads/2022/04/Logo-yoSEO1.png",
+            "source_notes": "PNG oficial convertido a WEBP. Se generó variante dark manteniendo el acento azul y elevando el contraste del texto."
         },
         {
             "name": "I Feel Web",
             "slug": "i-feel-web",
             "type": "cliente_directo",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
-            "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/i-feel-web.svg",
+            "status": "pendiente_dominio_inactivo",
+            "original_path": null,
+            "optimized_light_path": null,
             "optimized_dark_path": null,
             "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "source_notes": "No se encontró una web corporativa activa con asset público fiable; el dominio localizado parece expirado o reciclado."
         },
         {
             "name": "Meliá Hotels International",
             "slug": "melia-hotels-international",
             "type": "cliente_directo",
-            "status": "pendiente_logo_oficial",
-            "original_path": "public/assets/branding/empresas/clientes-directos/originales/",
+            "status": "verificado_oficial_svg",
+            "original_path": "public/assets/branding/empresas/clientes-directos/originales/melia-hotels-international.svg",
             "optimized_light_path": "public/assets/branding/empresas/clientes-directos/optimizados/melia-hotels-international.svg",
             "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "Añadir enlace a brand kit o fuente oficial antes de publicar."
+            "source_url": "https://www.meliahotelsinternational.com/PublishingImages/melia_hotels_international.svg",
+            "source_notes": "SVG oficial descargado desde Meliá Hotels International."
         }
     ]
 }

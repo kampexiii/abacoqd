@@ -24,9 +24,10 @@ Esta carpeta separa claramente la marca propia del proyecto de los logos de empr
 ## Formatos y tamaños recomendados
 
 - Priorizar `SVG` siempre que exista versión oficial.
-- Si solo existe `PNG`, exportar una versión web ligera y recortada sin fondo innecesario.
+- Si solo existe `PNG` o `JPG`, conservar el original descargado y exportar una versión `WEBP` ligera para uso web.
 - Mantener una altura visual homogénea en los logos del hero.
 - No deformar proporciones; usar siempre integración con `object-contain`.
+- Si una marca solo publica una variante monocroma para fondo oscuro, documentar en `logos-manifest.json` cualquier variante de contraste generada para la UI.
 
 ## Publicación y marca
 

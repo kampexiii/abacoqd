@@ -115,32 +115,47 @@
         },
         "services": {
             "eyebrow": "SERVICIOS",
-            "title": "Servicios principales",
-            "lead": "Capacidades que se combinan según el momento de tu negocio, desde el diagnóstico hasta la operación diaria.",
+            "titlePrefix": "Soluciones rápidas para necesidades ",
+            "titleHighlight": "reales",
+            "lead": "Diseñamos y desarrollamos herramientas digitales modernas, adaptadas a la realidad de cada proyecto.",
+            "cta": "Consultar",
+            "ctaQuestion": "¿No encaja exactamente con lo que necesitas?",
+            "ctaSupport": "Lo estudiamos contigo y planteamos una solución ajustada a tu caso.",
+            "ctaBtn": "Cuéntanos tu idea",
             "items": {
-                "crm": {
-                    "title": "CRM & Fidelización",
-                    "description": "Estrategia y herramientas para conocer, segmentar y fidelizar a tus clientes."
+                "web": {
+                    "title": "Desarrollo web rápido",
+                    "description": "Sitios y aplicaciones web a medida, construidos con tecnología moderna y entregados en plazos reales.",
+                    "chips": ["React / Vite", "Laravel", "SEO técnico"]
                 },
-                "data": {
-                    "title": "Analítica de datos / BI",
-                    "description": "Paneles claros y datos conectados para decisiones más rápidas."
-                },
-                "automation": {
-                    "title": "Automatización comercial",
-                    "description": "Flujos que eliminan tareas repetitivas y aceleran tu operación comercial."
+                "apps": {
+                    "title": "Aplicaciones a medida",
+                    "description": "Herramientas internas o de cliente diseñadas para el proceso exacto que necesitas resolver.",
+                    "chips": ["Panel de control", "API propia", "Multi-rol"]
                 },
                 "ai": {
-                    "title": "IA aplicada a negocio",
-                    "description": "Modelos y asistentes que potencian procesos reales, sin complejidad innecesaria."
+                    "title": "Automatización con IA",
+                    "description": "Flujos que procesan, clasifican o responden sin intervención manual, supervisados con criterio técnico.",
+                    "chips": ["Flujos con IA", "Webhooks", "Procesos auto."]
                 },
-                "transformation": {
-                    "title": "Transformación digital",
-                    "description": "Acompañamiento integral para modernizar procesos, datos y herramientas."
+                "crm": {
+                    "title": "CRM, datos y procesos",
+                    "description": "Centraliza la información de cliente y conecta tu operación comercial con los datos que importan.",
+                    "chips": ["Vista unificada", "KPIs", "Segmentación"]
                 },
-                "consulting": {
-                    "title": "Consultoría tecnológica",
-                    "description": "Diagnóstico y hoja de ruta tecnológica adaptada a tu negocio."
+                "integrations": {
+                    "title": "Integraciones digitales",
+                    "description": "Conectamos tus herramientas actuales entre sí para que trabajen como un solo sistema coherente.",
+                    "chips": ["REST / GraphQL", "Webhooks", "ERPs y CRMs"]
+                },
+                "mvp": {
+                    "title": "MVPs y prototipos",
+                    "description": "De la idea al producto funcional en el menor tiempo posible, con calidad real desde el primer día.",
+                    "chips": [
+                        "Entrega rápida",
+                        "Stack moderno",
+                        "Validación real"
+                    ]
                 }
             }
         },
@@ -289,34 +304,78 @@
                 }
             }
         },
+        "collaborations": {
+            "eyebrow": "COLABORACIONES",
+            "title": "Proyectos y colaboraciones que conectan experiencia, tecnología y negocio",
+            "lead": "Trabajamos sobre proyectos propios, colaborativos o desarrollados junto a partners, siempre adaptando la solución al contexto real de cada cliente.",
+            "cta": "Ver proyectos",
+            "visualAria": "Logos de colaboraciones y partners pendientes de permiso de publicación"
+        },
         "blog": {
-            "eyebrow": "INSIGHTS",
-            "title": "Insights sobre CRM, fidelización y datos",
-            "lead": "Ideas y aprendizajes prácticos sobre tecnología aplicada a la relación con tus clientes.",
-            "cta": "Leer más",
+            "eyebrow": "BLOG",
+            "title": "Ideas sobre desarrollo, IA y soluciones digitales a medida",
+            "lead": "Compartimos aprendizajes, criterios técnicos y recursos para entender mejor cómo la tecnología puede acelerar procesos reales.",
+            "cta": "Leer artículo",
+            "ctaAll": "Ver todos los artículos",
             "items": {
-                "loyalty": {
-                    "category": "CRM y Fidelización",
-                    "title": "Cómo construir un programa de fidelización que funcione",
-                    "summary": "Claves para diseñar relaciones duraderas con tus clientes."
-                },
-                "data": {
-                    "category": "Datos y BI",
-                    "title": "De los datos dispersos a decisiones claras",
-                    "summary": "Cómo unificar tus fuentes de datos en paneles útiles."
+                "ai": {
+                    "category": "IA",
+                    "title": "Cómo la IA está acelerando el desarrollo a medida",
+                    "summary": "Un marco práctico para usar IA sin perder criterio técnico, control ni calidad en el resultado.",
+                    "meta": "DEMO · 4 min de lectura"
                 },
                 "automation": {
-                    "category": "Automatización comercial",
-                    "title": "Automatizar sin perder el toque humano",
-                    "summary": "Dónde automatizar procesos comerciales y dónde no."
+                    "category": "Automatización",
+                    "title": "Procesos internos que puedes automatizar desde el primer mes",
+                    "summary": "Ideas de flujos sencillos para reducir tareas repetitivas y conectar herramientas desde el inicio.",
+                    "meta": "DEMO · 3 min de lectura"
+                },
+                "planning": {
+                    "category": "Proyecto digital",
+                    "title": "Cómo plantear un proyecto digital a medida",
+                    "summary": "Qué conviene decidir antes de construir: alcance, prioridades, riesgos y primera versión útil.",
+                    "meta": "DEMO · 5 min de lectura"
                 }
             }
         },
         "cta": {
-            "title": "Convierte tus datos y procesos comerciales en una relación más inteligente con tus clientes.",
-            "subtitle": "Hablemos de cómo podemos ayudarte a crecer.",
-            "primaryCta": "Reservar consulta",
-            "secondaryCta": "Contactar con Ábaco"
+            "eyebrow": "EMPECEMOS",
+            "title": "El 40% del tiempo de un desarrollador se pierde manteniendo código.",
+            "lead": "AbacoQD construye software y herramientas a medida pensados para durar: menos mantenimiento, más tiempo para crecer.",
+            "badgeDev": "Desarrollo a medida",
+            "badgeReply": "Respuesta estratégica < 24h",
+            "badgesAria": "Ventajas principales del cierre de conversión",
+            "primaryCta": "Empieza a ahorrar tiempo",
+            "secondaryCta": "Ver cómo trabajamos"
+        }
+    },
+    "errors": {
+        "brand": "AbacoQD",
+        "404": {
+            "metaTitle": "Página no encontrada",
+            "title": "Esta página no existe.",
+            "subtitle": "Puede que el enlace haya cambiado o que la dirección no esté escrita correctamente. Puedes volver al inicio o saltar a una sección pública.",
+            "recoveryAria": "Enlaces de recuperación",
+            "links": {
+                "home": "Inicio",
+                "services": "Servicios",
+                "projects": "Proyectos",
+                "blog": "Blog",
+                "contact": "Contacto"
+            }
+        },
+        "500": {
+            "metaTitle": "Error del servidor",
+            "title": "Algo ha fallado de nuestro lado.",
+            "subtitle": "Vuelve a intentarlo en unos minutos.",
+            "reload": "Recargar",
+            "home": "Ir al inicio"
+        },
+        "503": {
+            "metaTitle": "Mantenimiento",
+            "title": "Mejorando la plataforma.",
+            "subtitle": "Volvemos enseguida.",
+            "status": "Servicio temporalmente no disponible"
         }
     },
     "footer": {

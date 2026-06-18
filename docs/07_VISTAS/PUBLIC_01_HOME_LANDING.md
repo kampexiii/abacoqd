@@ -50,7 +50,7 @@ Capturas a exportar en `docs/assets/mockups/landing/` (export manual por bug de 
 ## Sistema transversal
 
 - **Paleta y tipografía:** ver `04_IDENTIDAD_UI_COMPONENTES.md`. Poppins en todo; teal primario, cyan apoyo, lime solo acento.
-- **Eyebrow de sección:** punto teal 7 px + texto MAYÚSCULAS (Poppins 600, ~12 px, tracking ~2.5), **alineado a la izquierda**, color teal (`#0F8F95` claro / `#18B7B0` oscuro). Excepciones: Hero (centrado) y CTA final (`EMPECEMOS`). Labels: `CÓMO TRABAJAMOS`, `SERVICIOS`, `PORTAFOLIOS`, `BLOG`.
+- **Eyebrow de sección:** punto teal 7 px + texto MAYÚSCULAS (Poppins 600, ~12 px, tracking ~2.5), **alineado a la izquierda**, color teal (`#0F8F95` claro / `#18B7B0` oscuro). Excepciones: Hero (centrado) y CTA final (`EMPECEMOS`). Labels: `CÓMO TRABAJAMOS`, `SERVICIOS`, `COLABORACIONES`, `BLOG`.
 - **Logo:** solo en topbar, CTA final y footer. Nunca como encabezado de cada sección, ni el chip "Ábaco Quick Developments".
 - **Topbar:** logo → Inicio; nav `Metodología / Servicios / Proyectos / Quiénes somos / Blog / Contacto`; derecha selector de idioma + toggle claro/oscuro/sistema. **Sin CTA de reserva** (solo en Hero y CTA final). Detalle global en `PUBLIC_09_LAYOUT_GLOBAL.md`.
 - **Reserva:** el CTA de reserva vive **solo** en Hero y CTA final.
@@ -173,7 +173,7 @@ Capturas a exportar en `docs/assets/mockups/landing/` (export manual por bug de 
 
 **Objetivo.** Mostrar proyectos, marcas y empresas vinculadas a trabajos reales mediante una sección pública de landing llamada **Colaboraciones**, dando acceso al proyecto o al listado de **Proyectos** (`/proyectos`). Integra socios/clientes y confianza sin convertir el nombre público en una etiqueta interna. Detalle completo de la sección y de la página en `PUBLIC_04_PROYECTOS.md`.
 
-**Estructura visual.** Layout split: izquierda eyebrow `PORTAFOLIOS` + H2 `Proyectos y marcas con las que trabajamos` + subtítulo (bloque ~360 px); derecha composición orbital/logos/cards con botón-pivote como centro. Si hay proyectos destacados, la card activa muestra título, partner publicable y CTA `Ver proyecto`.
+**Estructura visual.** Layout split: izquierda eyebrow `COLABORACIONES` + H2 `Proyectos y colaboraciones que conectan experiencia, tecnología y negocio` + subtítulo `Trabajamos sobre proyectos propios, colaborativos o desarrollados junto a partners, siempre adaptando la solución al contexto real de cada cliente.`; derecha composición orbital amplia tipo noria/reloj con logos/cards glass y botón-pivote como centro. Si no hay permisos confirmados, los logos se tratan como `DEMO` / pendientes de confirmación.
 
 **Maquetación desktop.** Botón-flecha = centro de la circunferencia, a la derecha a la altura del medio del bloque de texto. Los logos viajan por el **semicírculo derecho** como las horas de un reloj: aparecen en las 12 (tenues, pequeños), alcanzan su punto fuerte en las 3 (tamaño y opacidad máximos, activo, alineado en horizontal con el botón) y desaparecen al llegar a las 6. La mitad izquierda del círculo no se usa.
 
@@ -201,7 +201,7 @@ Capturas a exportar en `docs/assets/mockups/landing/` (export manual por bug de 
 
 **Objetivo.** Puente contenido → conversión con 3 posts destacados. Va después de Colaboraciones y antes del CTA final.
 
-**Estructura visual.** Encabezado (eyebrow `BLOG` + título `Ideas para desarrollar mejor, más rápido y con más criterio` con `más criterio` en teal/cian + subtítulo + a la derecha CTA `Ver todos los artículos →` outline teal) + composición editorial dinámica.
+**Estructura visual.** Encabezado (eyebrow `BLOG` + título `Ideas sobre desarrollo, IA y soluciones digitales a medida` + subtítulo + a la derecha CTA `Ver todos los artículos →` outline teal) + composición editorial dinámica.
 
 **Maquetación desktop.** 1 post principal grande a la izquierda + 2 secundarios apilados a la derecha, con jerarquía clara (no grid plana de 3 iguales).
 
@@ -209,8 +209,8 @@ Capturas a exportar en `docs/assets/mockups/landing/` (export manual por bug de 
 
 **Posts (contenido mockup):**
 - Principal — `IA`: `Cómo la IA está acelerando el desarrollo a medida` — editor de código (`procesarLead`) + flujo IA (Nuevo lead → IA clasifica → Actualizar CRM / Enviar email) + icono cerebro. Estado destacado/hover (borde teal luminoso, glow), dots de carrusel y línea de progreso de lectura.
-- Secundario 1 — `Desarrollo`: `Cuándo elegir una solución a medida frente a una plantilla` — paneles UI comparados (a medida vs plantilla).
-- Secundario 2 — `Automatización`: `Procesos internos que puedes automatizar desde el primer mes` — workflow (Pedido recibido → Extraer datos → Enviar confirmación → Actualizar hoja).
+- Secundario 1 — `Automatización`: `Procesos internos que puedes automatizar desde el primer mes` — workflow (Pedido recibido → Extraer datos → Enviar confirmación → Actualizar hoja).
+- Secundario 2 — `Proyecto digital`: `Cómo plantear un proyecto digital a medida` — paneles abstractos de brief, alcance y primera versión útil.
 
 **Animaciones propias.** Fade-up por scroll; principal con lift + borde teal y zoom sutil del visual en hover; flecha de `Leer artículo` con movimiento; dots de carrusel con estado activo; línea de progreso de lectura. El editor de código y la caja IA se mantienen oscuros en ambos temas; el resto invierte claro/oscuro.
 

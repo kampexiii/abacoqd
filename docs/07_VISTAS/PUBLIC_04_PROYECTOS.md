@@ -38,13 +38,13 @@ Demostrar experiencia y confianza con proyectos reales o, si todavía no hay per
 
 ## Sección Colaboraciones en landing
 
-**Estructura visual.** Layout split: izquierda eyebrow `COLABORACIONES`, H2 `Empresas con las que hemos trabajado`, subtítulo `Marcas y equipos que confiaron en AbacoQD para construir, lanzar y escalar sus productos digitales.`; derecha composición orbital/logos/proyectos con botón-pivote. Cuando haya proyectos destacados, la pieza activa muestra nombre de proyecto, partner visible y CTA `Ver proyecto`.
+**Estructura visual.** Layout split: izquierda eyebrow `COLABORACIONES`, H2 `Proyectos y colaboraciones que conectan experiencia, tecnología y negocio`, subtítulo `Trabajamos sobre proyectos propios, colaborativos o desarrollados junto a partners, siempre adaptando la solución al contexto real de cada cliente.`; derecha composición orbital amplia tipo noria/reloj con botón-pivote. Las burbujas de marcas son glass/translúcidas y de tamaño suficiente para leer el logo. Cuando haya proyectos destacados, la pieza activa muestra nombre de proyecto, partner visible y CTA `Ver proyecto`. Si los permisos no están confirmados, los logos se muestran solo con tratamiento `DEMO` / pendiente de confirmación.
 
-**Desktop.** Texto a la izquierda y carrusel orbital o carrusel de cards a la derecha. La pieza activa puede alternar entre logo de partner y card de proyecto. El botón-pivote lleva al proyecto o al listado público de Proyectos (`/proyectos`).
+**Desktop.** Texto a la izquierda y órbita a la derecha. La noria gira en sentido horario: las marcas empiezan a aparecer en las 12, alcanzan máximo tamaño/opacidad/nitidez en las 3, desaparecen en las 6 y continúan ocultas de 7 a 11 hasta reaparecer en las 12. La pieza activa puede alternar entre logo de partner y card de proyecto. El botón-pivote lleva al proyecto o al listado público de Proyectos (`/proyectos`).
 
 **Mobile.** Texto arriba; debajo, carrusel horizontal de cards/logos o estado compacto. El activo siempre tiene texto legible, no solo logo.
 
-**Animaciones propias.** Movimiento orbital o carrusel con pausa en hover/focus; active card con escala/opacidad controlada; reduced motion congela el set.
+**Animaciones propias.** Movimiento orbital continuo con cálculo por posición angular, pausa en hover/focus; active card con escala/opacidad controlada; reduced motion congela el set.
 
 **Estados vacíos en landing.** Si no hay proyectos ni logos publicables, se muestra un bloque honesto: `Primeros casos en preparación` + CTAs `Ver servicios` y `Cuéntanos tu proyecto`. No se publican logos falsos ni cards de demo sin marca visible de demo.
 

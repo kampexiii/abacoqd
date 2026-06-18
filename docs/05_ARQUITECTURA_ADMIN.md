@@ -1,4 +1,4 @@
-# Arquitectura admin y contenido editable — AbacoQD
+Ñ# Arquitectura admin y contenido editable — AbacoQD
 
 Última revisión: 14 de junio de 2026.
 

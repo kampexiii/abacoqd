@@ -49,13 +49,14 @@
     --qd-lime-rgb: 183 243 74;
 
     /* Wave Background global — variante clara (docs §8) */
-    --wave-bg: #f6f8f7;
-    --wave-primary: #18b7b0;
-    --wave-secondary: #39c6e6;
-    --wave-accent: #a3e635;
-    --wave-opacity: 0.6;
-    --wave-duration: 48s;
-    --wave-speed-factor: 0.25;
+    --qd-wave-bg:
+        radial-gradient(circle at 50% 0%, rgba(24, 183, 176, 0.16), transparent 36%),
+        linear-gradient(180deg, var(--qd-bg), var(--qd-mist));
+    --qd-wave-line-from: rgba(15, 143, 149, 0.42);
+    --qd-wave-line-to: rgba(57, 198, 230, 0.36);
+    --qd-wave-line-soft: rgba(24, 183, 176, 0.28);
+    --qd-wave-opacity: 0.78;
+    --qd-wave-speed-factor: 0.5;
 
     /* Superficie de cristal translúcido — variante clara (docs §8) */
     --surface-glass-bg: rgba(255, 255, 255, 0.76);
@@ -71,11 +72,13 @@
     --qd-text-medium: #9db0b8;
 
     /* Wave Background global — variante oscura (docs §8) */
-    --wave-bg: #0a1722;
-    --wave-primary: #18b7b0;
-    --wave-secondary: #0f8f95;
-    --wave-accent: #39c6e6;
-    --wave-opacity: 0.55;
+    --qd-wave-bg:
+        radial-gradient(circle at 50% 0%, rgba(24, 183, 176, 0.16), transparent 34%),
+        linear-gradient(180deg, var(--qd-ink), var(--qd-surface));
+    --qd-wave-line-from: rgba(57, 198, 230, 0.22);
+    --qd-wave-line-to: rgba(24, 183, 176, 0.18);
+    --qd-wave-line-soft: rgba(15, 143, 149, 0.14);
+    --qd-wave-opacity: 0.5;
 
     /* Superficie de cristal translúcido — variante oscura (docs §8) */
     --surface-glass-bg: rgba(13, 23, 38, 0.62);

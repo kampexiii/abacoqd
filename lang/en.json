@@ -115,32 +115,47 @@
         },
         "services": {
             "eyebrow": "SERVICES",
-            "title": "Core services",
-            "lead": "Capabilities that combine according to your business needs, from diagnosis to day-to-day operation.",
+            "titlePrefix": "Fast solutions for real ",
+            "titleHighlight": "needs",
+            "lead": "We design and build modern digital tools, scalable and adapted to the reality of each project.",
+            "cta": "Learn more",
+            "ctaQuestion": "Doesn't quite fit what you need?",
+            "ctaSupport": "We'll study it together and propose a solution tailored to your case.",
+            "ctaBtn": "Tell us your idea",
             "items": {
-                "crm": {
-                    "title": "CRM & Loyalty",
-                    "description": "Strategy and tools to know, segment and build loyalty with your customers."
+                "web": {
+                    "title": "Fast web development",
+                    "description": "Custom websites and web apps built with modern technology and delivered on real timelines.",
+                    "chips": ["React / Vite", "Laravel", "Technical SEO"]
                 },
-                "data": {
-                    "title": "Data Analytics / BI",
-                    "description": "Clear dashboards and connected data for faster decisions."
-                },
-                "automation": {
-                    "title": "Commercial automation",
-                    "description": "Workflows that remove repetitive tasks and speed up your sales operation."
+                "apps": {
+                    "title": "Custom applications",
+                    "description": "Internal or client-facing tools designed around the exact process you need to solve.",
+                    "chips": ["Control panel", "Own API", "Multi-role"]
                 },
                 "ai": {
-                    "title": "AI applied to business",
-                    "description": "Models and assistants that power real processes, without unnecessary complexity."
+                    "title": "AI automation",
+                    "description": "Flows that process, classify or respond without manual intervention, supervised with technical judgement.",
+                    "chips": ["AI flows", "Webhooks", "Auto. processes"]
                 },
-                "transformation": {
-                    "title": "Digital transformation",
-                    "description": "End-to-end support to modernise processes, data and tools."
+                "crm": {
+                    "title": "CRM, data & processes",
+                    "description": "Centralise customer information and connect your commercial operation with the data that matters.",
+                    "chips": ["Unified view", "KPIs", "Segmentation"]
                 },
-                "consulting": {
-                    "title": "Technology consulting",
-                    "description": "Diagnosis and technology roadmap tailored to your business."
+                "integrations": {
+                    "title": "Digital integrations",
+                    "description": "We connect your existing tools so they work together as a single coherent system.",
+                    "chips": ["REST / GraphQL", "Webhooks", "ERPs & CRMs"]
+                },
+                "mvp": {
+                    "title": "MVPs & prototypes",
+                    "description": "From idea to working product in the shortest time possible, with real quality from day one.",
+                    "chips": [
+                        "Fast delivery",
+                        "Modern stack",
+                        "Real validation"
+                    ]
                 }
             }
         },
@@ -289,34 +304,78 @@
                 }
             }
         },
+        "collaborations": {
+            "eyebrow": "COLLABORATIONS",
+            "title": "Projects and collaborations that connect experience, technology and business",
+            "lead": "We work on our own projects, collaborative initiatives or projects developed alongside partners, always adapting the solution to each client's real context.",
+            "cta": "View projects",
+            "visualAria": "Collaboration and partner logos pending publication permission"
+        },
         "blog": {
-            "eyebrow": "INSIGHTS",
-            "title": "Insights on CRM, loyalty and data",
-            "lead": "Practical ideas and learnings about technology applied to your customer relationships.",
-            "cta": "Read more",
+            "eyebrow": "BLOG",
+            "title": "Ideas on development, AI and custom digital solutions",
+            "lead": "We share lessons, technical judgement and resources to better understand how technology can accelerate real processes.",
+            "cta": "Read article",
+            "ctaAll": "View all articles",
             "items": {
-                "loyalty": {
-                    "category": "CRM & Loyalty",
-                    "title": "How to build a loyalty programme that works",
-                    "summary": "Keys to designing lasting relationships with your customers."
-                },
-                "data": {
-                    "category": "Data & BI",
-                    "title": "From scattered data to clear decisions",
-                    "summary": "How to unify your data sources into useful dashboards."
+                "ai": {
+                    "category": "AI",
+                    "title": "How AI is accelerating custom development",
+                    "summary": "A practical framework for using AI without losing technical judgement, control or quality.",
+                    "meta": "DEMO · 4 min read"
                 },
                 "automation": {
-                    "category": "Commercial automation",
-                    "title": "Automating without losing the human touch",
-                    "summary": "Where to automate commercial processes, and where not to."
+                    "category": "Automation",
+                    "title": "Internal processes you can automate from the first month",
+                    "summary": "Simple flow ideas to reduce repetitive work and connect tools from the start.",
+                    "meta": "DEMO · 3 min read"
+                },
+                "planning": {
+                    "category": "Digital project",
+                    "title": "How to frame a custom digital project",
+                    "summary": "What to decide before building: scope, priorities, risks and the first useful version.",
+                    "meta": "DEMO · 5 min read"
                 }
             }
         },
         "cta": {
-            "title": "Turn your data and commercial processes into a smarter relationship with your customers.",
-            "subtitle": "Let's talk about how we can help you grow.",
-            "primaryCta": "Book a consultation",
-            "secondaryCta": "Contact Ábaco"
+            "eyebrow": "LET'S START",
+            "title": "40% of a developer's time is lost maintaining code.",
+            "lead": "AbacoQD builds software and custom tools designed to last: less maintenance, more time to grow.",
+            "badgeDev": "Custom development",
+            "badgeReply": "Strategic reply < 24h",
+            "badgesAria": "Main advantages in the final conversion block",
+            "primaryCta": "Start saving time",
+            "secondaryCta": "See how we work"
+        }
+    },
+    "errors": {
+        "brand": "AbacoQD",
+        "404": {
+            "metaTitle": "Page not found",
+            "title": "This page does not exist.",
+            "subtitle": "The link may have changed or the address may be incorrect. You can go back home or jump to a public section.",
+            "recoveryAria": "Recovery links",
+            "links": {
+                "home": "Home",
+                "services": "Services",
+                "projects": "Projects",
+                "blog": "Blog",
+                "contact": "Contact"
+            }
+        },
+        "500": {
+            "metaTitle": "Server error",
+            "title": "Something failed on our side.",
+            "subtitle": "Please try again in a few minutes.",
+            "reload": "Reload",
+            "home": "Go home"
+        },
+        "503": {
+            "metaTitle": "Maintenance",
+            "title": "Improving the platform.",
+            "subtitle": "We will be back shortly.",
+            "status": "Service temporarily unavailable"
         }
     },
     "footer": {

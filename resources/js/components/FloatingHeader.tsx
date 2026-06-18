@@ -1,5 +1,5 @@
 import { Menu } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import ThemeTogglerButton, {
     getNextThemeMode,
@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/sheet';
 import { useAppearance } from '@/hooks/use-appearance';
 import { useLanguage } from '@/hooks/use-language';
+import { cn } from '@/lib/utils';
 
 /**
  * Topbar canónica AbacoQD (pastilla flotante) — reutilizada por todas las vistas
@@ -39,6 +40,7 @@ const HEADER_THEME_MODES = ['light', 'dark', 'system'] as const;
 
 export default function FloatingHeader() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
     const { appearance } = useAppearance();
     const { locale, setLocale, t } = useLanguage();
 
@@ -50,12 +52,41 @@ export default function FloatingHeader() {
         system: t('navigation.themeSystem'),
     } as const;
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const nextIsScrolled = window.scrollY > 8;
+
+            setIsScrolled((currentIsScrolled) =>
+                currentIsScrolled === nextIsScrolled
+                    ? currentIsScrolled
+                    : nextIsScrolled,
+            );
+        };
+
+        handleScroll();
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     return (
         <header
             className="fixed inset-x-0 top-4 z-40 px-4"
             aria-label={t('navigation.primaryAriaLabel')}
         >
-            <div className="qd-glass mx-auto flex h-14 w-full max-w-[1240px] items-center justify-between gap-4 rounded-[20px] px-4 sm:px-6">
+            <div
+                data-scrolled={isScrolled}
+                className={cn(
+                    'mx-auto flex h-14 w-full max-w-[1240px] items-center justify-between gap-4 rounded-[20px] border px-4 text-qd-ink sm:px-6 dark:text-qd-white',
+                    'transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 ease-out motion-reduce:transition-none',
+                    isScrolled
+                        ? 'border-white/70 bg-qd-white/80 shadow-[0_18px_60px_rgba(7,17,26,0.10)] backdrop-blur-xl dark:border-white/10 dark:bg-qd-surface/80 dark:shadow-[0_18px_70px_rgba(0,0,0,0.28)]'
+                        : 'backdrop-blur-0 border-transparent bg-transparent shadow-none',
+                )}
+            >
                 <a
                     href="/"
                     className="flex shrink-0 items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:focus-visible:outline-qd-lime"
@@ -85,7 +116,12 @@ export default function FloatingHeader() {
                         <a
                             key={item.key}
                             href={item.href}
-                            className="text-[15px] font-medium text-qd-text-medium transition-colors duration-150 hover:text-qd-teal-2 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime"
+                            className={cn(
+                                'text-[15px] font-medium transition-colors duration-150 hover:text-qd-teal-2 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime',
+                                isScrolled
+                                    ? 'text-qd-text-medium'
+                                    : 'text-qd-ink/85 dark:text-qd-white/90',
+                            )}
                         >
                             {t(`navigation.items.${item.key}`)}
                         </a>
@@ -97,7 +133,12 @@ export default function FloatingHeader() {
                         type="button"
                         onClick={() => setLocale(nextLocale)}
                         aria-label={t('navigation.languageSwitch')}
-                        className="rounded-lg px-2.5 py-1.5 text-sm font-semibold text-qd-text-medium transition-colors duration-150 hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime"
+                        className={cn(
+                            'rounded-lg px-2.5 py-1.5 text-sm font-semibold transition-colors duration-150 hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime',
+                            isScrolled
+                                ? 'text-qd-text-medium'
+                                : 'text-qd-ink/85 dark:text-qd-white/90',
+                        )}
                     >
                         {locale.toUpperCase()}
                     </button>
@@ -115,7 +156,12 @@ export default function FloatingHeader() {
                             <button
                                 type="button"
                                 aria-label={t('navigation.openMenu')}
-                                className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-qd-text-high transition-colors hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 lg:hidden dark:focus-visible:outline-qd-lime"
+                                className={cn(
+                                    'inline-flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 lg:hidden dark:focus-visible:outline-qd-lime',
+                                    isScrolled
+                                        ? 'text-qd-text-high'
+                                        : 'text-qd-ink/90 dark:text-qd-white',
+                                )}
                             >
                                 <Menu aria-hidden="true" size={22} />
                             </button>

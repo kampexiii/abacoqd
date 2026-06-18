@@ -7,6 +7,8 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -27,4 +29,21 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*'),
         );
+
+        $exceptions->respond(function (SymfonyResponse $response): SymfonyResponse {
+            $request = request();
+            $status = $response->getStatusCode();
+
+            if (
+                $request->is('api/*') ||
+                $request->expectsJson() ||
+                ! in_array($status, [404, 500, 503], true)
+            ) {
+                return $response;
+            }
+
+            return Inertia::render('Errors/Show', [
+                'status' => $status,
+            ])->toResponse($request)->setStatusCode($status);
+        });
     })->create();
