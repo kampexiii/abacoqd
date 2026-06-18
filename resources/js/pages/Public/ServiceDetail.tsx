@@ -174,10 +174,12 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
             />
 
             <section className="bg-qd-white dark:bg-qd-ink">
-                <div className="mx-auto grid max-w-[1536px] px-5 py-12 sm:px-8 sm:py-16 xl:px-10 lg:grid-cols-[minmax(220px,0.95fr)_minmax(260px,1fr)_minmax(520px,1.85fr)_minmax(220px,0.9fr)]">
+                <div className="mx-auto max-w-[1536px] px-5 py-12 sm:px-8 sm:py-16 xl:px-10">
+                    {/* Fila 1: Qué resolvemos (25%) · Cómo lo abordamos (25%) · Imagen (50%) */}
+                    <div className="grid gap-8 lg:grid-cols-[1fr_1fr_2fr] lg:gap-0">
                     <section
                         aria-labelledby="service-solves-title"
-                        className="border-b border-qd-ink/10 pb-8 lg:border-r lg:border-b-0 lg:pr-7 lg:pb-0 dark:border-white/10"
+                        className="border-b border-qd-ink/10 pb-8 lg:border-r lg:border-b-0 lg:pr-8 lg:pb-0 dark:border-white/10"
                     >
                         <h2
                             id="service-solves-title"
@@ -209,7 +211,7 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
 
                     <section
                         aria-labelledby="service-approach-title"
-                        className="border-b border-qd-ink/10 py-8 lg:border-r lg:border-b-0 lg:px-7 lg:py-0 dark:border-white/10"
+                        className="border-b border-qd-ink/10 py-8 lg:border-r lg:border-b-0 lg:px-8 lg:py-0 dark:border-white/10"
                     >
                         <h2
                             id="service-approach-title"
@@ -243,7 +245,7 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
 
                     <section
                         aria-label={title}
-                        className="border-b border-qd-ink/10 py-8 lg:min-h-[430px] lg:border-r lg:border-b-0 lg:px-7 lg:py-0 dark:border-white/10"
+                        className="py-8 lg:min-h-[430px] lg:py-0 lg:pl-8"
                     >
                         <figure
                             className="h-full overflow-hidden rounded-[24px] border border-qd-ink/10 bg-qd-white shadow-[0_26px_90px_-48px_rgba(7,17,26,0.55)] dark:border-white/10 dark:bg-qd-surface"
@@ -257,9 +259,12 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
                         </figure>
                     </section>
 
+                    </div>
+
+                    {/* Fila 2: Capacidades a ancho completo, chips en horizontal */}
                     <section
                         aria-labelledby="service-capabilities-title"
-                        className="pt-8 lg:pl-7 lg:pt-0"
+                        className="mt-12 border-t border-qd-ink/10 pt-8 dark:border-white/10"
                     >
                         <h2
                             id="service-capabilities-title"
@@ -272,7 +277,7 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
                             />
                             {t('serviceDetail.capabilities.title')}
                         </h2>
-                        <div className="mt-6 flex flex-col gap-2.5">
+                        <div className="mt-6 flex flex-wrap gap-2.5">
                             {capabilities.map((capability, index) => (
                                 <span
                                     key={`${capability}-${index}`}
