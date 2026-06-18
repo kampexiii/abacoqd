@@ -349,6 +349,118 @@
             "secondaryCta": "Ver cómo trabajamos"
         }
     },
+    "contact": {
+        "eyebrow": "CONTACTO",
+        "title": "Cuéntanos tu proyecto",
+        "subtitle": "Escríbenos y te respondemos lo antes posible.",
+        "context": {
+            "title": "¿Qué pasa cuando escribes?",
+            "steps": {
+                "read": "Lo leemos con calma.",
+                "evaluate": "Lo valoramos con criterio técnico.",
+                "reply": "Te respondemos con un primer enfoque."
+            },
+            "alternativeTitle": "¿Prefieres hablar directamente?",
+            "alternativeCta": "Reserva hora",
+            "trustHuman": "Respuesta humana, sin spam.",
+            "trustPrivacy": "Tus datos se tratan según nuestra",
+            "trustPrivacyLink": "política de privacidad"
+        },
+        "details": {
+            "email": "Email",
+            "phone": "Teléfono",
+            "whatsapp": "WhatsApp / contacto directo Andrés",
+            "address": "Dirección"
+        },
+        "form": {
+            "name": "Nombre",
+            "company": "Empresa",
+            "email": "Email",
+            "phone": "Teléfono",
+            "service": "Servicio de interés",
+            "serviceOther": "Otro / no lo sé",
+            "servicePlaceholder": "Selecciona un servicio",
+            "message": "Mensaje",
+            "messagePlaceholder": "Cuéntanos qué necesitas, para qué proceso y en qué plazos.",
+            "privacyConsent": "He leído y acepto la",
+            "privacyConsentLink": "política de privacidad",
+            "marketingConsent": "Quiero recibir comunicaciones comerciales de Abaco Developments.",
+            "submit": "Enviar mensaje",
+            "submitting": "Enviando…"
+        },
+        "success": {
+            "title": "Mensaje recibido.",
+            "subtitle": "Lo revisamos y te respondemos con un primer enfoque lo antes posible.",
+            "cta": "Reservar una hora"
+        },
+        "error": "No hemos podido enviar tu mensaje. Revisa los datos e inténtalo de nuevo."
+    },
+    "booking": {
+        "eyebrow": "RESERVA HORA",
+        "title": "Reserva una hora con nosotros",
+        "subtitle": "Una primera sesión para entender tu caso y proponerte un enfoque.",
+        "stepsTitle": "Qué vamos a ver",
+        "steps": {
+            "process": {
+                "title": "Tu proceso",
+                "description": "Nos cuentas cómo trabajas hoy y qué te gustaría mejorar."
+            },
+            "needs": {
+                "title": "Lo que necesitas",
+                "description": "Identificamos juntos prioridades reales y restricciones."
+            },
+            "approach": {
+                "title": "Primer enfoque",
+                "description": "Te proponemos una primera dirección concreta para avanzar."
+            }
+        },
+        "dayLabel": "Elige un día",
+        "slotLabel": "Elige una hora",
+        "durationLabel": "Duración aproximada",
+        "minutes": "min",
+        "form": {
+            "title": "Tus datos",
+            "name": "Nombre",
+            "company": "Empresa",
+            "email": "Email",
+            "phone": "Teléfono",
+            "service": "Servicio de interés",
+            "servicePlaceholder": "Selecciona un servicio",
+            "message": "Mensaje (opcional)",
+            "messagePlaceholder": "Cuéntanos brevemente tu caso.",
+            "privacyConsent": "He leído y acepto la",
+            "privacyConsentLink": "política de privacidad",
+            "marketingConsent": "Quiero recibir comunicaciones comerciales de Abaco Developments.",
+            "submit": "Confirmar reserva",
+            "submitting": "Reservando…",
+            "backToSlots": "Cambiar hora"
+        },
+        "summary": {
+            "title": "Resumen de tu reserva",
+            "day": "Día",
+            "hour": "Hora",
+            "duration": "Duración aproximada",
+            "name": "Nombre",
+            "email": "Email",
+            "nextStep": "Te enviaremos un resumen y nos pondremos en contacto antes de la sesión."
+        },
+        "confirmation": {
+            "title": "Reserva confirmada.",
+            "subtitle": "Te esperamos. Si necesitas cambiar la hora, escríbenos."
+        },
+        "empty": {
+            "title": "Ahora mismo no hay citas abiertas.",
+            "subtitle": "Puedes escribirnos y te responderemos lo antes posible.",
+            "cta": "Ir a contacto"
+        },
+        "alternative": {
+            "title": "¿Prefieres escribirnos primero?",
+            "cta": "Ir a contacto"
+        },
+        "afterTitle": "Qué pasa después",
+        "afterDescription": "Tras la sesión te enviamos un resumen con el enfoque propuesto y los próximos pasos.",
+        "error": "Esta franja ya no está disponible. Elige otra hora."
+    },
     "errors": {
         "brand": "AbacoQD",
         "404": {
@@ -381,8 +493,7 @@
     "footer": {
         "ariaLabel": "Pie de página",
         "brand": {
-            "line1": "Desarrollos a medida potenciados por IA.",
-            "line2": "Iniciativa de Abaco Developments.",
+            "line1": "Desarrollamos productos digitales rápidos, claros y preparados para escalar.",
             "tagline": "Construimos con estrategia, diseño y tecnología."
         },
         "explore": {
@@ -409,9 +520,10 @@
             "linkedin": "LinkedIn de Abaco Developments"
         },
         "institutional": {
+            "title": "Financiación",
             "coFunded": "Cofinanciado por la Unión Europea",
             "funds": "Fondos Europeos",
-            "fse": "Fondo Social Europeo Plus (FSE+)"
+            "fse": "Cofinanciado por la Unión Europea (FSE+). Subvención para la contratación de jóvenes - Comunidad de Madrid."
         },
         "legal": {
             "copyright": "© 2026 Abaco Developments. Todos los derechos reservados.",

@@ -22,7 +22,7 @@ const EXPLORE_LINKS: readonly FooterLink[] = [
     { key: 'proyectos', href: '#colaboraciones' },
     { key: 'quienesSomos', href: '/quienes-somos' },
     { key: 'blog', href: '#blog' },
-    { key: 'contacto', href: '#contacto' },
+    { key: 'contacto', href: '/contacto' },
 ] as const;
 
 const SERVICE_LINKS = ['web', 'apps', 'automation', 'uxui', 'consulting'] as const;
@@ -33,15 +33,43 @@ const LEGAL_LINKS: readonly FooterLink[] = [
     { key: 'notice', href: '/aviso-legal' },
 ] as const;
 
+const fondosEuropeosLogo =
+    '/assets/branding/institucional/optimizados/fondos-europeos.svg';
+
+function EuropeanUnionFlag() {
+    const starAngles = Array.from({ length: 12 }, (_, index) => index * 30);
+
+    return (
+        <svg
+            aria-label="Bandera de la Unión Europea"
+            className="h-8 w-12 shrink-0"
+            viewBox="0 0 48 32"
+            role="img"
+        >
+            <rect width="48" height="32" fill="#003399" rx="1.5" />
+            <g transform="translate(24 16)">
+                {starAngles.map((angle) => (
+                    <path
+                        key={angle}
+                        d="M0 -2.85 .67 -.88 2.74 -.88 1.07 .34 1.69 2.34 0 1.12 -1.69 2.34 -1.07 .34 -2.74 -.88 -.67 -.88Z"
+                        fill="#FFCC00"
+                        transform={`rotate(${angle}) translate(0 -9.6)`}
+                    />
+                ))}
+            </g>
+        </svg>
+    );
+}
+
 export default function SiteFooter() {
     const { t } = useLanguage();
 
     return (
         <footer
+            id="footer"
             className="relative border-t border-white/10 bg-qd-ink text-qd-white"
             aria-label={t('footer.ariaLabel')}
         >
-            {/* glow radial teal tenue */}
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(60%_100%_at_50%_0%,rgba(24,183,176,0.16),transparent_70%)]"
@@ -49,22 +77,62 @@ export default function SiteFooter() {
 
             <div className="relative mx-auto grid w-full max-w-[1240px] gap-10 px-5 py-14 sm:px-8 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
                 {/* Columna Marca */}
-                <div className="flex flex-col gap-4">
+                <div className="flex max-w-[352px] flex-col">
                     <img
                         src="/assets/branding/marca/logos/abacoqd-lockup-inverse.svg"
-                        alt="AbacoQD"
-                        width={130}
-                        height={36}
-                        className="h-9 w-auto"
+                        alt="AbacoQD Quick Developments"
+                        width={164}
+                        height={46}
+                        className="h-auto w-[164px]"
                     />
-                    <p className="max-w-xs text-sm leading-relaxed text-qd-text-medium">
+
+                    <p className="mt-[22px] text-[15px] leading-[1.7] font-semibold text-[#94a3ad]">
                         {t('footer.brand.line1')}
-                        <br />
-                        {t('footer.brand.line2')}
                     </p>
-                    <p className="max-w-xs text-sm leading-relaxed text-qd-text-high">
+
+                    <p className="mt-[18px] text-[13px] leading-6 font-bold text-[#b7c4cc]">
                         {t('footer.brand.tagline')}
                     </p>
+
+                    <div className="mt-[16px] h-px w-full bg-white/8" />
+
+                    <section
+                        className="mt-[14px]"
+                        aria-labelledby="footer-financing-title"
+                    >
+                        <h2
+                            id="footer-financing-title"
+                            className="text-[10px] leading-none font-extrabold tracking-[0.28em] text-[#18b7b0] uppercase"
+                        >
+                            {t('footer.institutional.title')}
+                        </h2>
+
+                        <div className="mt-[13px] flex items-center gap-[12px]">
+                            <EuropeanUnionFlag />
+                            <p className="text-[11px] leading-4 font-extrabold text-[#c4cbd1]">
+                                {t('footer.institutional.coFunded')}
+                            </p>
+                        </div>
+
+                        <div className="mt-[12px] flex flex-wrap items-center gap-2">
+                            <span className="inline-flex h-[30px] items-center rounded-[8px] border border-white/12 bg-[#101a25] px-3 text-[11px] font-extrabold text-[#c8d0d6]">
+                                be now Partner
+                            </span>
+                            <span className="inline-flex h-[30px] items-center rounded-[8px] border border-white/12 bg-white px-3">
+                                <img
+                                    src={fondosEuropeosLogo}
+                                    alt={t('footer.institutional.funds')}
+                                    width={100}
+                                    height={21}
+                                    className="h-[16px] w-auto"
+                                />
+                            </span>
+                        </div>
+
+                        <p className="mt-[12px] text-[11px] leading-[1.45] font-medium text-[#7e8c96]">
+                            {t('footer.institutional.fse')}
+                        </p>
+                    </section>
                 </div>
 
                 {/* Columna Explorar */}
@@ -155,14 +223,6 @@ export default function SiteFooter() {
                         <Linkedin aria-hidden="true" size={18} />
                     </a>
                 </div>
-            </div>
-
-            {/* Franja institucional discreta (UE / FSE+ / Fondos Europeos).
-                PENDIENTE: logos oficiales y ubicación final (docs §decisiones). */}
-            <div className="relative mx-auto w-full max-w-[1240px] border-t border-white/10 px-5 py-5 sm:px-8">
-                <p className="text-xs leading-relaxed text-qd-text-medium">
-                    {t('footer.institutional.coFunded')} · {t('footer.institutional.funds')} · {t('footer.institutional.fse')}
-                </p>
             </div>
 
             {/* Barra legal */}

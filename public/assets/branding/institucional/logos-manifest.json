@@ -1,0 +1,41 @@
+{
+    "version": 1,
+    "updated_at": "2026-06-18",
+    "naming_convention": "kebab-case",
+    "recommended_formats": ["svg", "webp", "png"],
+    "logos": [
+        {
+            "name": "Cofinanciado por la Unión Europea",
+            "slug": "eu-cofinanciado",
+            "type": "institucional",
+            "status": "verificado_oficial_raster_a_webp",
+            "original_path": "public/assets/branding/institucional/originales/eu-cofinanciado.png",
+            "optimized_light_path": "public/assets/branding/institucional/optimizados/eu-cofinanciado.webp",
+            "optimized_dark_path": "public/assets/branding/institucional/optimizados/eu-cofinanciado-dark.webp",
+            "source_url": "https://ec.europa.eu/regional_policy/sources/information-sources/logo-download-center/co-funded_es.zip",
+            "source_notes": "Paquete oficial \"co-funded_es.zip\" del Logo Download Centre de la Comisión Europea (DG REGIO), variante horizontal en español. Se usó la versión POS (color, fondo claro) y la versión WHITE (texto/bandera en blanco, fondo oscuro) tal cual las distribuye la Comisión, solo redimensionadas y convertidas a WEBP. Uso obligatorio y gratuito para beneficiarios de fondos UE; no requiere licencia adicional."
+        },
+        {
+            "name": "Fondos Europeos",
+            "slug": "fondos-europeos",
+            "type": "institucional",
+            "status": "verificado_fuente_publica_svg_sin_variante_oscura",
+            "original_path": "public/assets/branding/institucional/originales/fondos-europeos.svg",
+            "optimized_light_path": "public/assets/branding/institucional/optimizados/fondos-europeos.svg",
+            "optimized_dark_path": null,
+            "source_url": "https://upload.wikimedia.org/wikipedia/commons/0/03/Logotipo_de_los_Fondos_Europeos.svg",
+            "source_notes": "SVG bajo licencia CC BY 4.0, atribuido a Gobierno de España (recreación de TheRichic en Wikimedia Commons) del logotipo oficial de identidad de la Secretaría General de Fondos Europeos. No se localizó una variante oficial en blanco/negativa para fondo oscuro; en la UI se muestra sobre una tarjeta clara para no recolorear el original. Pendiente sustituir por el archivo oficial directo de fondoseuropeos.hacienda.gob.es si se consigue."
+        },
+        {
+            "name": "be now Partner",
+            "slug": "benow-partner",
+            "type": "institucional",
+            "status": "pendiente_fuente_verificable",
+            "original_path": null,
+            "optimized_light_path": null,
+            "optimized_dark_path": null,
+            "source_url": null,
+            "source_notes": "No se ha podido identificar con confianza la empresa/red \"be now Partner\" (rayo entre \"be\" y \"now\", bloques rosa/amarillo) en búsquedas web; los resultados encontrados (despacho de abogados Benow Partners Madrid, fintech india Benow, ticketing alemán BeNow) no coinciden con el diseño aportado por el cliente. Pendiente de que el cliente facilite el archivo o la web oficial."
+        }
+    ]
+}
