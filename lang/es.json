@@ -461,6 +461,45 @@
         "afterDescription": "Tras la sesión te enviamos un resumen con el enfoque propuesto y los próximos pasos.",
         "error": "Esta franja ya no está disponible. Elige otra hora."
     },
+    "methodologyPage": {
+        "eyebrow": "METODOLOGÍA",
+        "title": "Rápido porque hay método.",
+        "subtitle": "Proceso optimizado con IA supervisada y control técnico en cada fase.",
+        "breadcrumbHome": "Inicio",
+        "breadcrumbCurrent": "Metodología",
+        "timelineAria": "Pasos de nuestra metodología",
+        "tools": {
+            "eyebrow": "HERRAMIENTAS PROPIAS",
+            "title": "Aplicado a tu proyecto, no a una plantilla.",
+            "items": {
+                "analysis": {
+                    "title": "Análisis acelerado",
+                    "description": "Procesos internos para entender tu caso y acotar el alcance sin dar vueltas."
+                },
+                "ai": {
+                    "title": "Desarrollo asistido por IA con control senior",
+                    "description": "La IA acelera la construcción; el criterio técnico decide qué se queda."
+                },
+                "delivery": {
+                    "title": "Entrega y documentación automatizadas",
+                    "description": "Lo que se publica queda explicado y preparado para evolucionar."
+                }
+            }
+        },
+        "benefits": {
+            "title": "En qué se traduce para ti.",
+            "items": {
+                "time": "Tiempos más cortos que un desarrollo tradicional, sin saltarnos pasos.",
+                "price": "Precio competitivo gracias a herramientas propias, no a recortar calidad.",
+                "fit": "Una solución adaptada de verdad a tu proceso, no una plantilla genérica."
+            }
+        },
+        "cta": {
+            "title": "Empezamos por tu análisis.",
+            "primary": "Reserva hora",
+            "secondary": "Cuéntanos tu proyecto"
+        }
+    },
     "errors": {
         "brand": "AbacoQD",
         "404": {

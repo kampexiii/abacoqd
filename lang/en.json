@@ -461,6 +461,45 @@
         "afterDescription": "After the session we send you a summary with the proposed approach and next steps.",
         "error": "This slot is no longer available. Please choose another time."
     },
+    "methodologyPage": {
+        "eyebrow": "METHODOLOGY",
+        "title": "Fast because there's a method.",
+        "subtitle": "A process optimised with supervised AI and technical control at every stage.",
+        "breadcrumbHome": "Home",
+        "breadcrumbCurrent": "Methodology",
+        "timelineAria": "Our methodology steps",
+        "tools": {
+            "eyebrow": "OUR OWN TOOLS",
+            "title": "Applied to your project, not a template.",
+            "items": {
+                "analysis": {
+                    "title": "Accelerated analysis",
+                    "description": "Internal processes to understand your case and scope it without going back and forth."
+                },
+                "ai": {
+                    "title": "AI-assisted development with senior control",
+                    "description": "AI speeds up the build; technical judgement decides what stays."
+                },
+                "delivery": {
+                    "title": "Automated delivery and documentation",
+                    "description": "What gets published is explained and ready to evolve."
+                }
+            }
+        },
+        "benefits": {
+            "title": "What this means for you.",
+            "items": {
+                "time": "Shorter timelines than traditional development, without skipping steps.",
+                "price": "Competitive pricing thanks to our own tools, not cut corners.",
+                "fit": "A solution genuinely adapted to your process, not a generic template."
+            }
+        },
+        "cta": {
+            "title": "We start with your analysis.",
+            "primary": "Book a time",
+            "secondary": "Tell us your project"
+        }
+    },
     "errors": {
         "brand": "AbacoQD",
         "404": {

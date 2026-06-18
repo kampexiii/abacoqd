@@ -5,6 +5,7 @@ use App\Http\Controllers\Public\ContactController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'Public/Home')->name('home');
+Route::inertia('/metodologia', 'Public/Methodology')->name('methodology.show');
 
 Route::get('/contacto', [ContactController::class, 'create'])->name('contact.show');
 Route::post('/contacto', [ContactController::class, 'store'])
