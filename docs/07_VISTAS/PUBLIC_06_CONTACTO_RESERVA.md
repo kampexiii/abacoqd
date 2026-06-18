@@ -1,20 +1,23 @@
 # Vista pública — Contacto y Reserva
 
-Última revisión: 14 de junio de 2026. Documento consolidado (contacto + reserva).
+Última revisión: 18 de junio de 2026. Documento consolidado (contacto + reserva). **Fase 3 (contacto + reserva) cerrada e implementada.**
 
 ## Identificación
 
 | Campo | Contacto | Reserva |
 |---|---|---|
 | Ruta ES | `/contacto` | `/reserva` |
-| Ruta EN | `/en/contact` | `/en/book` |
+| Ruta EN | pendiente (sin enrutado por idioma todavía, ver nota) | pendiente (idem) |
 | Prioridad | Base (producto definitivo 30/06) | Base |
-| Componente previsto | `resources/js/pages/Public/Contact.tsx` | `resources/js/pages/Public/Booking.tsx` |
-| Entidades | `contact_messages`, `booking_settings`, `settings` | `booking_settings`, `settings` |
+| Componente | `resources/js/pages/Public/Contact.tsx` | `resources/js/pages/Public/Booking.tsx` |
+| Controlador | `App\Http\Controllers\Public\ContactController` | `App\Http\Controllers\Public\BookingController` |
+| Entidades | `contact_messages`, `services`, `settings` | `appointment_days`, `appointment_slots`, `appointment_bookings`, `services` |
 
 Modelo de datos en `docs/02_MODELO_DATOS.md` (no se redefine). Paleta y componentes en `04_IDENTIDAD_UI_COMPONENTES.md`.
 
-> La reserva es **agnóstica al proveedor** vía `booking_settings`, con **fallback al formulario de contacto**. No hay sistema de reservas propio. **No hay ítem `Reserva`/`Reservar` en la topbar** (ver `PUBLIC_09_LAYOUT_GLOBAL.md`): los CTA de reserva viven en hero, CTA final y bloques contextuales.
+> **Decisión cerrada 18/06/2026**: la reserva usa un **sistema propio de citas** (`appointment_days`/`appointment_slots`/`appointment_bookings`), no un proveedor externo (Cal.com/Calendly/Amelia) ni un embed de terceros. `booking_settings` queda transicional sin uso real. **No hay ítem `Reserva`/`Reservar` en la topbar** (ver `PUBLIC_09_LAYOUT_GLOBAL.md`): los CTA de reserva viven en hero, CTA final y bloques contextuales.
+>
+> **Nota de enrutado**: el sitio todavía no tiene rutas localizadas por idioma (tampoco `/` las tiene); el idioma es un toggle cliente (`useLanguage`/`lang/*.json`) sobre una única URL. Las rutas `/en/contact` y `/en/book` documentadas son el objetivo de la Fase 6 (SEO/multilenguaje) y no existen aún; no se documentan como implementadas.
 
 ## Datos de contacto confirmados
 
@@ -130,85 +133,85 @@ El chatbot puede abrir esta vista como fallback, pasar al usuario a WhatsApp `+3
 
 ---
 
-# B. Reserva (agnóstica al proveedor)
+# B. Reserva (sistema propio de citas)
 
 ## Objetivo
 
-Destino de todos los botones `Reserva hora` del sitio (hero, CTA final, bloques contextuales — **nunca topbar**). Convierte con fricción mínima. El proveedor está pendiente; la vista se diseña agnóstica y siempre con fallback a contacto. Recomendación documental de cierre: `Cal.com` si el sitio no depende de WordPress; `Calendly` como opción rápida; `Amelia` solo si el stack final fuera WordPress.
+Destino de todos los botones `Reserva hora` del sitio (hero, CTA final, bloques contextuales — **nunca topbar**). El admin crea días y franjas disponibles (`appointment_days`/`appointment_slots`); el usuario elige día → hora → completa sus datos → confirma. Sin proveedor externo, sin embed de terceros, sin cookies no técnicas en esta vista.
 
 ## Estructura visual
 
-Bandas: `ink (cabecera) → white (pasos + reserva) → mist (alternativa) → ink (footer)`. El botón de reserva es el lime más prominente del sitio.
+Bandas: `ink (cabecera) → white (pasos) → mist (selector + formulario / confirmación / vacío) → white (alternativa)`. El botón de reserva es el lime más prominente del sitio.
 
 1. **Cabecera compacta** — fondo `qd-ink`; eyebrow lime `RESERVA HORA`; H1 `Reserva una hora con nosotros`; subcopy `Una primera sesión para entender tu caso y proponerte un enfoque.` Sin prometer duración, disponibilidad ni gratuidad no confirmadas.
-2. **Qué vamos a ver** — fondo `qd-white`; 3 pasos numerados con icono: `Tu proceso`, `Lo que necesitas`, `Primer enfoque`.
-3. **Bloque de reserva** (núcleo, agnóstico) — controlado por `booking_settings` (`provider`, `booking_url`, `is_enabled`):
-   - **Variante A — embed**: contenedor centrado máx. ~900 px con el widget; skeleton con shimmer mientras carga; fallback a botón externo si el script falla. El embed de terceros implica cookies/script externo → coordinar con consentimiento (ver `PUBLIC_07_LEGAL_COOKIES_PRIVACIDAD.md`).
-   - **Variante B — enlace externo** (por defecto si no hay decisión firme): card centrada con icono calendario, texto corto y botón lime grande `Abrir calendario de reserva →` (nueva pestaña). Sin scripts de terceros.
-4. **Alternativa sin agenda** — banda `qd-mist`: `¿Prefieres escribirnos primero?` + enlace a `/contacto`.
-5. **Qué pasa después** — 2–3 líneas: tras la sesión enviamos un resumen con el enfoque propuesto.
+2. **Qué vamos a ver** — fondo `qd-white`; 3 pasos numerados: `Tu proceso`, `Lo que necesitas`, `Primer enfoque`. Se oculta si ya hay una reserva confirmada en esta visita.
+3. **Selector y formulario** (núcleo) — fondo `qd-mist`, 3 columnas en desktop (apiladas en mobile):
+   - **Columna día**: lista de `appointment_days` disponibles (`is_available`, sin `admin_blocked`, fecha futura) con al menos una franja reservable.
+   - **Columna hora**: franjas (`appointment_slots`) del día elegido que cumplen `isBookable()` (disponible, no bloqueada, con cupo y en el futuro).
+   - **Columna formulario**: aparece al elegir franja. Campos: nombre, empresa, email, teléfono, servicio de interés (opcional), mensaje (opcional), consentimiento de privacidad (obligatorio), comunicaciones comerciales (opcional), honeypot. Botón `Confirmar reserva`.
+4. **Confirmación** — al volver tras reservar, sustituye el selector por un resumen: día, hora, duración aproximada, nombre, email y siguiente paso. No se reexpone el selector en esa misma carga (evita doble reserva visual).
+5. **Alternativa sin agenda** — banda final: `¿Prefieres escribirnos primero?` + enlace a `/contacto`, y texto de "qué pasa después".
 6. **Footer global**.
 
 ## Desktop
 
-- Pasos en 3 columnas horizontales; bloque de reserva centrado.
+- 3 columnas (día / hora / formulario); pasos en 3 columnas horizontales.
 
 ## Mobile
 
-- Pasos apilados; card/embed a ancho cómodo; botón a ancho completo.
+- Columnas apiladas: día → hora → formulario; botón a ancho completo.
 
-## Animaciones propias
+## Interacción / comportamiento
 
-- Mínimas y funcionales: stagger de entrada de los pasos, skeleton del embed, hover del botón (scale ~1.02 + flecha). Respetan `prefers-reduced-motion`.
-
-## Interacción
-
-- La variante (A/B) se decide por `booking_settings`; sin configuración válida, se aplica el fallback de contacto.
-- Botón externo abre nueva pestaña y lo anuncia.
+- Selección progresiva: día → hora → formulario. Cambiar de día limpia la hora elegida (`Cambiar hora` permite deshacer la franja sin perder el día).
+- Envío: validación cliente + servidor (`StoreAppointmentBookingRequest`); reserva creada dentro de una transacción con bloqueo de fila (`AppointmentSlot::lockForUpdate()`) para que dos personas no puedan reservar la misma franja a la vez. Si la franja deja de estar disponible entre la carga y el envío, el servidor la rechaza con un error inline (`Esta franja ya no está disponible. Elige otra hora.`) y no crea la reserva.
+- Tras confirmar, el slot incrementa `reserved_count` y pasa a `reserved` si llega a `capacity`.
+- Protección: CSRF, honeypot (`prohibited`), rate limit por IP (`throttle:public-forms`, 6/min compartido con `/contacto`), sin envío de datos a analítica.
 
 ## Componentes usados
 
-Pasos numerados (estilo metodología), card de reserva, skeleton/shimmer, banda alternativa y botón primario lime.
+Pasos numerados (estilo metodología), listas de selección de día/hora, formulario (mismos inputs/checkbox que Contacto), panel de confirmación, estado vacío, banda alternativa y botón primario lime.
 
 ## Contenido editable
 
-- Eyebrow, H1, subcopy, textos de los 3 pasos y de "qué pasa después".
-- `provider`, `booking_url`, `is_enabled` desde `booking_settings`.
+- Eyebrow, H1, subcopy, textos de los 3 pasos y de "qué pasa después" (hoy en `lang/es.json`/`lang/en.json`; migran a `page_sections`/`settings` cuando se conecte esta vista al admin).
+- Días y franjas: CRUD de citas en el admin (Fase 5 del backlog); por ahora se gestionan vía base de datos/seeders de desarrollo, nunca con datos ficticios publicados como reales.
 
 ## Entidades relacionadas
 
-`booking_settings` (configuración del proveedor), `settings`. **Fallback** al formulario de `contact_messages`.
+`appointment_days`, `appointment_slots`, `appointment_bookings` (lectura y escritura), `services` (select opcional). `booking_settings` queda transicional sin uso real en esta vista.
 
 ## SEO
 
 - Title ES: `Reserva hora | Abaco Developments`. Indexable.
 - Canonical sobre `https://abacoqd.com/reserva`.
 - JSON-LD: `BreadcrumbList`; **sin** `Offer`/precios (pago pendiente de definir).
-- `hreflang` con `/en/book`.
+- `hreflang` con `/en/book`: pendiente de Fase 6 (enrutado por idioma no implementado todavía, ver nota de cabecera).
 
 ## Estados vacíos
 
-- `booking_settings.is_enabled = false` o sin `booking_url`: el bloque muestra el fallback de contacto/WhatsApp (`Estamos cerrando agenda; escríbenos o contacta por WhatsApp y te proponemos hora.`). Nunca un calendario roto.
-- Error de carga del embed → botón externo automático.
+- Sin `appointment_days` disponibles (o ninguno con franjas reservables): bloque honesto `Ahora mismo no hay citas abiertas. Puedes escribirnos y te responderemos lo antes posible.` con CTA a `/contacto`. Nunca un selector vacío o roto.
+- Franja reservada entre carga y envío: error inline, sin perder los datos ya escritos en el formulario.
 
 ## Accesibilidad
 
-- Si hay iframe: `title` descriptivo y alternativa equivalente por enlace (variante B siempre disponible como fallback).
-- Pasos como lista ordenada.
-- Botón externo avisa de nueva pestaña (`aria-label` + icono).
+- Labels siempre visibles; errores con `role="alert"` junto al campo.
+- Día/hora seleccionados marcados con `aria-pressed` en los botones de selección.
+- Honeypot invisible también para lectores de pantalla (`aria-hidden`, `tabIndex={-1}`).
 
 ## Relación con chatbot
 
-El asistente puede explicar cómo reservar, redirigir al calendario configurado o sugerir contacto si la reserva está inactiva. Si el proveedor falla, el chatbot no oculta el fallback visible de la página.
+El asistente puede explicar cómo reservar, enlazar a `/reserva` o sugerir `/contacto` si no hay citas abiertas. No reserva en nombre del usuario ni inventa disponibilidad.
 
 ## Modo claro/oscuro
 
-- Cabecera `ink` fija; banda de pasos/reserva (`white`) y alternativa (`mist`) definen variante dark; el lime del botón se mantiene como acento.
+- Cabecera `ink` fija; banda de pasos (`white`) y selector/confirmación (`mist`) definen variante dark; el lime del botón se mantiene como acento.
 
-## Decisiones abiertas (contacto + reserva)
+## Pendiente (no bloqueante para el flujo actual)
 
-- Proveedor de reserva definitivo y consentimiento de cookies si hay embed de terceros.
-- Duración/formato de la sesión y si se comunica como gratuita.
-- Pago: pendiente de definir (sin precios en esta vista).
+- Página de cancelación pública vía `cancellation_token` (el modelo ya genera el token; falta la ruta/vista).
+- Email de confirmación al reservar (requiere stack de mail configurado).
+- Generador de franjas automático y bloqueo manual desde el admin (Fase 5).
 - Notificación interna de mensajes (email al equipo / panel).
 - Texto legal definitivo del consentimiento (con la página de privacidad), pendiente de revisión jurídica final.
+- Enrutado `/en/contact` y `/en/book` (Fase 6, multilenguaje por URL).

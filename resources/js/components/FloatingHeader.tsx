@@ -33,7 +33,7 @@ const NAV_ITEMS: readonly NavItem[] = [
     { key: 'proyectos', href: '#colaboraciones' },
     { key: 'quienesSomos', href: '/quienes-somos' },
     { key: 'blog', href: '#blog' },
-    { key: 'contacto', href: '#contacto' },
+    { key: 'contacto', href: '/contacto' },
 ] as const;
 
 const HEADER_THEME_MODES = ['light', 'dark', 'system'] as const;

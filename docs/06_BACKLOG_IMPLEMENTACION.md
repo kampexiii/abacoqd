@@ -81,6 +81,8 @@ Roadmap orientado al producto completo del 30/06. **Fase 2 (modelo de datos y mi
 
 **Objetivo.** Construir las vistas públicas documentadas.
 
+**Avance (18/06/2026).** `/contacto` y `/reserva` implementados y validados (formulario real con `contact_messages`; sistema propio de citas con `appointment_days`/`appointment_slots`/`appointment_bookings`, transacción + bloqueo de fila contra doble reserva). CTAs de hero, CTA final, topbar y footer conectados a estas rutas. Resto de vistas de esta fase (`/metodologia`, `/servicios`, `/proyectos`, `/quienes-somos`, `/blog`, legales) siguen pendientes.
+
 **Alcance.**
 
 - Home completa con orden final.

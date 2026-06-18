@@ -232,7 +232,7 @@ export default function ServicesSection() {
                                             ))}
                                         </div>
                                     )}
-                                    <a href="#contacto" className="qd-srv-card__cta">
+                                    <a href="/contacto" className="qd-srv-card__cta">
                                         {t('home.services.cta')}
                                         <ArrowRight size={14} aria-hidden />
                                     </a>
@@ -253,7 +253,7 @@ export default function ServicesSection() {
                         <p className="qd-srv-bottom__q">{t('home.services.ctaQuestion')}</p>
                         <p className="qd-srv-bottom__p">{t('home.services.ctaSupport')}</p>
                     </div>
-                    <a href="#contacto" className="qd-srv-bottom__btn">
+                    <a href="/contacto" className="qd-srv-bottom__btn">
                         {t('home.services.ctaBtn')}
                         <ArrowRight size={15} aria-hidden />
                     </a>

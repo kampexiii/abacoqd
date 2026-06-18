@@ -219,7 +219,7 @@ export default function FinalCtaSection() {
                     </div>
 
                     <div className="qd-cta-actions">
-                        <a href="#contacto" className="qd-cta-btn-primary">
+                        <a href="/reserva" className="qd-cta-btn-primary">
                             {t('home.cta.primaryCta')}
                             <Send aria-hidden="true" size={16} />
                         </a>

@@ -24,9 +24,8 @@ import { useLanguage } from '@/hooks/use-language';
  * WaveBackground global compartido. La topbar la monta PublicLayout.
  */
 
-// Destino del CTA de reserva. Provisional hasta que exista la ruta /reserva;
-// cambiar aquí cuando se publique el flujo de reserva (un solo punto).
-const RESERVA_HREF = '#contacto';
+// Destino del CTA de reserva: sistema propio de citas (FASE 3).
+const RESERVA_HREF = '/reserva';
 const SERVICIOS_HREF = '#servicios';
 
 const BENEFITS: readonly { key: string; icon: LucideIcon }[] = [

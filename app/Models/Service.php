@@ -11,6 +11,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
+/**
+ * @property string|null $slug_es Columna generada (`virtualAsJson`) a partir de `slug->es`.
+ * @property string|null $slug_en Columna generada (`virtualAsJson`) a partir de `slug->en`.
+ */
 #[Fillable([
     'title',
     'slug',

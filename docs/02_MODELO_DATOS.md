@@ -50,7 +50,7 @@ Donde se necesita un CTA local a una entidad (`page_sections`, `section_blocks`,
 | Blog | Bilingüe, slug por idioma con unicidad de BD, `featured_order` para fijar el orden de los 3 destacados de landing |
 | SEO | `seo_metadata` único por entidad/página e idioma; sin duplicar con columnas embebidas |
 | Legal/cookies | Textos en `settings.legal`/`page_sections`; consentimiento en frontend salvo necesidad de auditoría server-side |
-| Reservas | **Sistema propio de citas** (`appointment_days`/`appointment_slots`/`appointment_bookings`), decisión cerrada el 18/06/2026 — sustituye el enfoque agnóstico de `booking_settings`. Modelo y migraciones de citas se documentan al cerrar esa fase; `booking_settings` queda transicional hasta entonces |
+| Reservas | **Sistema propio de citas** (`appointment_days`/`appointment_slots`/`appointment_bookings`), cerrado el 18/06/2026 — sustituye el enfoque agnóstico de `booking_settings`, que queda transicional sin uso real |
 | Chatbot | `faqs`; conversación persistida queda fuera salvo decisión posterior |
 | Tema/accesibilidad | Preferencias públicas en frontend/localStorage; defaults en `settings` |
 | Navegación | `settings.navigation`, no CRUD de menús en el producto base |
@@ -136,7 +136,25 @@ El consentimiento de privacidad es obligatorio (`privacy_accepted_at`); el comer
 
 `provider`, `url`, `is_enabled`, `fallback_to_contact`, `settings` (json), timestamps.
 
-Pendiente de sustitución por el sistema propio de citas (`appointment_days`/`appointment_slots`/`appointment_bookings`, ver Fase 3) cuando se cierre esa fase; hasta entonces sigue activo como configuración/fallback documental.
+Superado por el sistema propio de citas (`appointment_days`/`appointment_slots`/`appointment_bookings`, cerrado el 18/06/2026). Se conserva la tabla sin sembrar contenido nuevo por si se necesita un fallback de configuración puntual; no se usa para la reserva real.
+
+### `appointment_days`
+
+`date` (único), `title` nullable, `notes` nullable, `is_available`, `max_bookings` nullable, `admin_blocked`, `block_reason` nullable, `sort_order`, timestamps.
+
+Representa un día con franjas potencialmente reservables. El admin activa/desactiva el día completo (`is_available`) o lo bloquea puntualmente (`admin_blocked` + `block_reason`) sin borrar sus franjas. Sin campo `language`: el día no es contenido público traducible, es un dato operativo.
+
+### `appointment_slots`
+
+`appointment_day_id`, `starts_at`, `ends_at`, `duration_minutes` (default 120), `status` (enum `AppointmentSlotStatus`: `available`/`reserved`/`blocked`/`cancelled`/`expired`), `admin_blocked`, `block_reason` nullable, `capacity` (default 1), `reserved_count` (default 0), `notes` nullable, timestamps.
+
+Una franja solo es reservable (`AppointmentSlot::isBookable()`) si `status = available`, no está bloqueada, `reserved_count < capacity` y `starts_at` es futuro. `scopeAvailable()` aplica exactamente esos cuatro filtros para la vista pública.
+
+### `appointment_bookings`
+
+`appointment_slot_id`, `service_id` nullable, `name`, `company` nullable, `email`, `phone` nullable, `message` nullable, `status` (enum `AppointmentBookingStatus`: `pending`/`confirmed`/`cancelled`/`completed`/`no_show`), `cancellation_token` (único, autogenerado), `cancelled_at` nullable, `privacy_consent_accepted_at`, `marketing_consent_accepted_at` nullable, `ip_address` nullable, `user_agent` nullable, `admin_notes` nullable, timestamps.
+
+La reserva se crea dentro de una transacción con `lockForUpdate()` sobre la franja para evitar doble reserva concurrente; al confirmar, incrementa `reserved_count` y marca la franja `reserved` si alcanza `capacity`. Cancelación por token seguro preparada en el modelo; la página pública de cancelación queda pendiente de una fase posterior.
 
 ### `reviews` 🌐
 
@@ -215,14 +233,13 @@ Completado en Fase 2 (18/06/2026), en este orden:
 10. `reviews`.
 11. `team_members`.
 12. `users.role` y permisos admin (modelo cerrado; CRUDs admin pendientes de Fase 5 del backlog).
-
-Pendiente para la fase de citas: `appointment_days`, `appointment_slots`, `appointment_bookings`.
+13. `appointment_days`, `appointment_slots`, `appointment_bookings` (cerrado el 18/06/2026 junto con `/contacto` y `/reserva`).
 
 ## Checklist de cierre de Fase 2
 
 - [x] Aprobar nombres finales de entidades/campos (arquitectura JSON cerrada el 18/06/2026).
 - [x] Aprobar este modelo y crear migraciones (`database/migrations/2026_06_15_*`, validadas con `composer test` y `migrate:fresh --seed`).
-- [x] Confirmar proveedor de reserva: sistema propio (no Cal.com/Calendly), pendiente de migrar tablas de citas.
+- [x] Confirmar proveedor de reserva: sistema propio (no Cal.com/Calendly); `appointment_days`/`appointment_slots`/`appointment_bookings` migrados y validados el 18/06/2026.
 - [ ] Confirmar teléfono legal visible principal.
 - [ ] Confirmar revisión jurídica final de aviso legal, privacidad y cookies.
 - [ ] Confirmar stack definitivo de analítica/cookies y CMP.

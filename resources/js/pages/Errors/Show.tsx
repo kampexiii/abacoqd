@@ -29,7 +29,7 @@ const RECOVERY_LINKS: readonly RecoveryLink[] = [
     { key: 'services', href: '/#servicios' },
     { key: 'projects', href: '/#colaboraciones' },
     { key: 'blog', href: '/#blog' },
-    { key: 'contact', href: '/#contacto' },
+    { key: 'contact', href: '/contacto' },
 ] as const;
 
 const STATUS_ICONS: Record<KnownErrorStatus, LucideIcon> = {

@@ -83,7 +83,7 @@ export default function ChatbotFab() {
                         </p>
                         <div className="flex flex-col gap-2">
                             <a
-                                href="#contacto"
+                                href="/contacto"
                                 className="inline-flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm text-qd-text-high transition-colors hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime"
                             >
                                 <MessageCircle aria-hidden="true" size={16} className="text-qd-teal" />
