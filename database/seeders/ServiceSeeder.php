@@ -79,7 +79,7 @@ class ServiceSeeder extends Seeder
                     'is_featured' => false,
                     'is_active' => true,
                     'show_on_home' => true,
-                    'is_detail_enabled' => false,
+                    'is_detail_enabled' => true,
                     'settings' => null,
                 ],
             );

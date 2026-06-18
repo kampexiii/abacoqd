@@ -599,6 +599,178 @@
             "secondary": "Book a meeting"
         }
     },
+    "serviceDetail": {
+        "hero": {
+            "eyebrow": "SERVICE",
+            "primary": "Ask about this service",
+            "secondary": "Book a meeting"
+        },
+        "heroTagline": {
+            "title": "A service connected to your context.",
+            "subtitle": "We first understand the case, then define a useful solution."
+        },
+        "solves": {
+            "title": "What we solve"
+        },
+        "approach": {
+            "title": "How we approach it",
+            "steps": {
+                "understand": {
+                    "title": "Understand the case",
+                    "description": "We review goals, context, constraints and users before proposing a direction."
+                },
+                "scope": {
+                    "title": "Define scope",
+                    "description": "We turn the need into a clear scope, with priorities and dependencies visible."
+                },
+                "build": {
+                    "title": "Build",
+                    "description": "We develop in iterations, with supervised AI and technical judgement in every decision."
+                },
+                "review": {
+                    "title": "Review",
+                    "description": "We test functionality, experience and critical points before preparing delivery."
+                },
+                "deliver": {
+                    "title": "Deliver",
+                    "description": "We publish or prepare the solution, explain it and leave it ready to evolve."
+                }
+            }
+        },
+        "visual": {
+            "title": "Technical view"
+        },
+        "capabilities": {
+            "title": "Capabilities"
+        },
+        "cta": {
+            "title": "Want to apply this service to your project?",
+            "subtitle": "Tell us about your case and we will propose a clear way forward.",
+            "primary": "Ask about this service",
+            "secondary": "Book a meeting"
+        },
+        "items": {
+            "web": {
+                "title": "Fast web development",
+                "summary": "Modern, secure websites and platforms optimised to communicate better and evolve with your business.",
+                "problems": [
+                    "You need a professional website that explains your offer clearly and creates a strong first impression.",
+                    "Your current website does not reflect your brand, loads slowly or does not support the user journey.",
+                    "You want to launch a campaign, service or product and need a polished digital foundation."
+                ],
+                "capabilities": [
+                    "Custom UI/UX design",
+                    "Responsive development",
+                    "Technical on-page SEO",
+                    "Performance and Core Web Vitals",
+                    "Tool integrations",
+                    "Security and best practices"
+                ]
+            },
+            "apps": {
+                "title": "Custom applications",
+                "summary": "Software adapted to real processes to organise work, data and users without forcing your operation.",
+                "problems": [
+                    "You work with spreadsheets, email or separate tools that no longer scale well.",
+                    "You need an internal panel or digital product with custom permissions and workflows.",
+                    "Your process has specific rules that a generic tool does not solve clearly."
+                ],
+                "capabilities": [
+                    "Functional architecture",
+                    "Multi-role panels",
+                    "Custom workflows",
+                    "Internal APIs",
+                    "Data validation",
+                    "Maintainable base"
+                ]
+            },
+            "ai": {
+                "title": "AI automation",
+                "summary": "AI-assisted flows to reduce repetitive work and connect decisions with human supervision.",
+                "problems": [
+                    "Your team repeats classification, response or information-preparation tasks.",
+                    "You want to introduce AI without losing control over criteria, data and final review.",
+                    "You need to connect automations with tools the business already uses."
+                ],
+                "capabilities": [
+                    "AI flow design",
+                    "Human supervision",
+                    "Webhooks and integrations",
+                    "Information classification",
+                    "Internal assistants",
+                    "Process traceability"
+                ]
+            },
+            "crm": {
+                "title": "CRM, data and processes",
+                "summary": "Data and process structure to better understand customer relationships and operate with more clarity.",
+                "problems": [
+                    "Commercial information is scattered and it is hard to understand the real status of each opportunity.",
+                    "You need to organise stages, owners and key data to work with better judgement.",
+                    "You want to connect CRM, reporting and processes without creating more manual work."
+                ],
+                "capabilities": [
+                    "Data modelling",
+                    "360 customer view",
+                    "Commercial processes",
+                    "Operational dashboards",
+                    "Segmentation",
+                    "CRM integration"
+                ]
+            },
+            "integrations": {
+                "title": "Digital integrations",
+                "summary": "Connections between tools, APIs and platforms so your systems work together with less friction.",
+                "problems": [
+                    "Your tools do not share information and the team ends up duplicating tasks.",
+                    "You need to connect forms, CRM, automations, reporting or external platforms.",
+                    "You want to reduce manual steps without replacing your whole current system."
+                ],
+                "capabilities": [
+                    "REST APIs",
+                    "Webhooks",
+                    "Data synchronisation",
+                    "Platform connectors",
+                    "Validation and control",
+                    "Technical documentation"
+                ]
+            },
+            "mvp": {
+                "title": "MVPs and prototypes",
+                "summary": "First functional versions to validate approach, experience and feasibility before expanding scope.",
+                "problems": [
+                    "You have an idea but need to see it working before investing in a full version.",
+                    "You want to test flows, screens or assumptions with a usable base.",
+                    "You need a first organised version that can evolve if the approach fits."
+                ],
+                "capabilities": [
+                    "Scope definition",
+                    "Functional prototypes",
+                    "Flow design",
+                    "Technical validation",
+                    "Scalable base",
+                    "Evolution plan"
+                ]
+            }
+        },
+        "fallback": {
+            "title": "Digital service",
+            "summary": "A digital solution adapted to a concrete business need.",
+            "problems": [
+                "You need to organise a digital need before building.",
+                "You want to understand which solution fits your current context.",
+                "You are looking for a clear base to move forward without unnecessary complexity."
+            ],
+            "capabilities": [
+                "Initial analysis",
+                "Scope definition",
+                "Functional design",
+                "Iterative development",
+                "Technical review",
+                "Documented delivery"
+            ]
+        }
+    },
     "errors": {
         "brand": "AbacoQD",
         "404": {

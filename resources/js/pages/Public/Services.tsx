@@ -21,8 +21,14 @@ import { cn } from '@/lib/utils';
 import { show as bookingShow } from '@/routes/booking';
 import { show as contactShow } from '@/routes/contact';
 
-type ServiceKey = 'web' | 'apps' | 'ai' | 'crm' | 'integrations' | 'mvp';
-type MockupVariant =
+export type ServiceKey =
+    | 'web'
+    | 'apps'
+    | 'ai'
+    | 'crm'
+    | 'integrations'
+    | 'mvp';
+export type MockupVariant =
     | 'web'
     | 'dashboard'
     | 'flow'
@@ -30,76 +36,110 @@ type MockupVariant =
     | 'integration'
     | 'mvp';
 
-type ServiceItem = {
-    readonly key: ServiceKey;
+export type LocalizedText = {
+    readonly es?: string | null;
+    readonly en?: string | null;
+};
+
+export type PublicService = {
+    readonly id: number;
+    readonly title: LocalizedText;
+    readonly slug: LocalizedText;
+    readonly summary: LocalizedText;
+    readonly icon: string | null;
+    readonly isDetailEnabled: boolean;
+    readonly settings: unknown;
+};
+
+type ServicePresentation = {
     readonly number: string;
     readonly icon: LucideIcon;
     readonly mockup: MockupVariant;
-    readonly slug: Record<Locale, string>;
+    readonly fallbackSlug: Record<Locale, string>;
 };
 
-const SERVICES: readonly ServiceItem[] = [
-    {
-        key: 'web',
+export const SERVICE_PRESENTATION: Record<ServiceKey, ServicePresentation> = {
+    web: {
         number: '01',
         icon: Code2,
         mockup: 'web',
-        slug: {
+        fallbackSlug: {
             es: 'desarrollo-web-rapido',
             en: 'fast-web-development',
         },
     },
-    {
-        key: 'apps',
+    apps: {
         number: '02',
         icon: LayoutDashboard,
         mockup: 'dashboard',
-        slug: {
+        fallbackSlug: {
             es: 'aplicaciones-a-medida',
             en: 'custom-applications',
         },
     },
-    {
-        key: 'ai',
+    ai: {
         number: '03',
         icon: Cpu,
         mockup: 'flow',
-        slug: {
+        fallbackSlug: {
             es: 'automatizacion-con-ia',
             en: 'ai-automation',
         },
     },
-    {
-        key: 'crm',
+    crm: {
         number: '04',
         icon: BarChart2,
         mockup: 'data',
-        slug: {
+        fallbackSlug: {
             es: 'crm-datos-y-procesos',
             en: 'crm-data-and-processes',
         },
     },
-    {
-        key: 'integrations',
+    integrations: {
         number: '05',
         icon: GitMerge,
         mockup: 'integration',
-        slug: {
+        fallbackSlug: {
             es: 'integraciones-digitales',
             en: 'digital-integrations',
         },
     },
-    {
-        key: 'mvp',
+    mvp: {
         number: '06',
         icon: Rocket,
         mockup: 'mvp',
-        slug: {
+        fallbackSlug: {
             es: 'mvps-y-prototipos',
             en: 'mvps-and-prototypes',
         },
     },
-] as const;
+};
+
+const SERVICE_KEY_BY_SLUG: Record<string, ServiceKey> = {
+    'desarrollo-web-rapido': 'web',
+    'fast-web-development': 'web',
+    'aplicaciones-a-medida': 'apps',
+    'custom-applications': 'apps',
+    'automatizacion-con-ia': 'ai',
+    'ai-automation': 'ai',
+    'crm-datos-y-procesos': 'crm',
+    'crm-data-and-processes': 'crm',
+    'integraciones-digitales': 'integrations',
+    'digital-integrations': 'integrations',
+    'mvps-y-prototipos': 'mvp',
+    'mvps-and-prototypes': 'mvp',
+};
+
+export function resolveServiceKey(slug: LocalizedText): ServiceKey | null {
+    const esKey = slug.es ? SERVICE_KEY_BY_SLUG[slug.es] : null;
+    const enKey = slug.en ? SERVICE_KEY_BY_SLUG[slug.en] : null;
+
+    return esKey ?? enKey ?? null;
+}
+
+export function localizedText(value: LocalizedText, locale: Locale): string {
+    return value[locale] ?? value.es ?? value.en ?? '';
+}
 
 const CHIPS = [0, 1, 2] as const;
 
@@ -112,7 +152,11 @@ const CHOICE_CRITERIA: readonly {
     { key: 'integration', icon: GitMerge },
 ] as const;
 
-function ServiceMockup({ variant }: { readonly variant: MockupVariant }) {
+export function ServiceMockup({
+    variant,
+}: {
+    readonly variant: MockupVariant;
+}) {
     if (variant === 'flow') {
         return (
             <div className="relative flex h-full items-center justify-center">
@@ -238,7 +282,11 @@ function ServiceMockup({ variant }: { readonly variant: MockupVariant }) {
     );
 }
 
-export default function Services() {
+type ServicesProps = {
+    readonly services: readonly PublicService[];
+};
+
+export default function Services({ services }: ServicesProps) {
     const { t, locale } = useLanguage();
 
     return (
@@ -258,18 +306,30 @@ export default function Services() {
             <section id="servicios" className="bg-qd-white dark:bg-qd-ink">
                 <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
                     <div className="grid gap-6 lg:grid-cols-3">
-                        {SERVICES.map((service) => {
-                            const Icon = service.icon;
-                            const servicePath = `servicesPage.items.${service.key}`;
+                        {services.map((service) => {
+                            const serviceKey =
+                                resolveServiceKey(service.slug) ?? 'web';
+                            const presentation =
+                                SERVICE_PRESENTATION[serviceKey];
+                            const Icon = presentation.icon;
+                            const slug =
+                                localizedText(service.slug, locale) ||
+                                presentation.fallbackSlug[locale];
+                            const servicePath = `servicesPage.items.${serviceKey}`;
+                            const href = service.isDetailEnabled
+                                ? `/servicios/${slug}`
+                                : contactShow.url({
+                                      query: { servicio: slug },
+                                  });
 
                             return (
                                 <article
-                                    key={service.key}
+                                    key={service.id}
                                     className="group flex min-h-[460px] flex-col rounded-2xl border border-qd-mist bg-qd-white p-6 shadow-[0_18px_60px_-42px_rgba(7,17,26,0.35)] transition duration-300 hover:-translate-y-1 hover:border-qd-teal-2/70 hover:shadow-[0_24px_70px_-42px_rgba(15,143,149,0.45)] dark:border-qd-white/10 dark:bg-qd-white/5 dark:hover:border-qd-teal/70"
                                 >
                                     <div className="flex items-start justify-between gap-5">
                                         <span className="text-lg font-bold text-qd-teal-2 dark:text-qd-teal">
-                                            {service.number}
+                                            {presentation.number}
                                         </span>
                                         <span className="flex size-14 items-center justify-center rounded-2xl border border-qd-teal-2/30 bg-qd-teal-2/10 text-qd-teal-2 dark:border-qd-teal/35 dark:bg-qd-teal/10 dark:text-qd-teal">
                                             <Icon
@@ -281,10 +341,16 @@ export default function Services() {
                                     </div>
 
                                     <h2 className="mt-7 text-2xl leading-tight font-bold text-qd-ink dark:text-qd-white">
-                                        {t(`${servicePath}.title`)}
+                                        {localizedText(
+                                            service.title,
+                                            locale,
+                                        ) || t(`${servicePath}.title`)}
                                     </h2>
                                     <p className="mt-3 text-sm leading-relaxed text-qd-text-high">
-                                        {t(`${servicePath}.description`)}
+                                        {localizedText(
+                                            service.summary,
+                                            locale,
+                                        ) || t(`${servicePath}.description`)}
                                     </p>
 
                                     <div className="mt-5 flex flex-wrap gap-2">
@@ -305,17 +371,12 @@ export default function Services() {
                                         className="mt-6 h-36 overflow-hidden rounded-2xl bg-linear-to-br from-qd-mist to-qd-white p-3 dark:from-qd-surface dark:to-qd-ink"
                                     >
                                         <ServiceMockup
-                                            variant={service.mockup}
+                                            variant={presentation.mockup}
                                         />
                                     </div>
 
                                     <a
-                                        href={contactShow.url({
-                                            query: {
-                                                servicio:
-                                                    service.slug[locale],
-                                            },
-                                        })}
+                                        href={href}
                                         className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-bold text-qd-teal-2 transition hover:text-qd-teal dark:text-qd-teal"
                                     >
                                         {t('servicesPage.cardCta')}

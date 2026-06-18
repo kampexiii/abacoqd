@@ -599,6 +599,178 @@
             "secondary": "Reserva hora"
         }
     },
+    "serviceDetail": {
+        "hero": {
+            "eyebrow": "SERVICIO",
+            "primary": "Consultar este servicio",
+            "secondary": "Reserva hora"
+        },
+        "heroTagline": {
+            "title": "Servicio conectado a tu contexto.",
+            "subtitle": "Primero entendemos el caso; después definimos una solución útil."
+        },
+        "solves": {
+            "title": "Qué resolvemos"
+        },
+        "approach": {
+            "title": "Cómo lo abordamos",
+            "steps": {
+                "understand": {
+                    "title": "Entender el caso",
+                    "description": "Revisamos objetivo, contexto, restricciones y usuarios antes de proponer una dirección."
+                },
+                "scope": {
+                    "title": "Definir alcance",
+                    "description": "Convertimos la necesidad en un alcance claro, con prioridades y dependencias visibles."
+                },
+                "build": {
+                    "title": "Construir",
+                    "description": "Desarrollamos por iteraciones, con IA supervisada y criterio técnico en cada decisión."
+                },
+                "review": {
+                    "title": "Revisar",
+                    "description": "Probamos funcionamiento, experiencia y puntos críticos antes de preparar la entrega."
+                },
+                "deliver": {
+                    "title": "Entregar",
+                    "description": "Publicamos o dejamos la solución preparada, explicada y lista para evolucionar."
+                }
+            }
+        },
+        "visual": {
+            "title": "Vista técnica"
+        },
+        "capabilities": {
+            "title": "Capacidades"
+        },
+        "cta": {
+            "title": "¿Quieres aplicar este servicio a tu proyecto?",
+            "subtitle": "Cuéntanos tu caso y te proponemos una forma clara de avanzar.",
+            "primary": "Consultar este servicio",
+            "secondary": "Reserva hora"
+        },
+        "items": {
+            "web": {
+                "title": "Desarrollo web rápido",
+                "summary": "Sitios y plataformas web modernas, seguras y optimizadas para comunicar mejor y evolucionar con tu negocio.",
+                "problems": [
+                    "Necesitas una web profesional que explique bien tu propuesta y genere una buena primera impresión.",
+                    "Tu web actual no refleja tu marca, carga lento o no acompaña el recorrido del usuario.",
+                    "Quieres lanzar una campaña, servicio o producto y necesitas una base digital cuidada."
+                ],
+                "capabilities": [
+                    "Diseño UI/UX a medida",
+                    "Desarrollo responsive",
+                    "SEO técnico on-page",
+                    "Rendimiento y Core Web Vitals",
+                    "Integración con herramientas",
+                    "Seguridad y buenas prácticas"
+                ]
+            },
+            "apps": {
+                "title": "Aplicaciones a medida",
+                "summary": "Software adaptado a procesos reales para organizar trabajo, datos y usuarios sin forzar tu operación.",
+                "problems": [
+                    "Trabajas con hojas, correos o herramientas separadas que ya no escalan bien.",
+                    "Necesitas un panel interno o producto digital con permisos y flujos propios.",
+                    "Tu proceso tiene reglas concretas que una herramienta genérica no resuelve con claridad."
+                ],
+                "capabilities": [
+                    "Arquitectura funcional",
+                    "Paneles multirol",
+                    "Flujos de trabajo propios",
+                    "APIs internas",
+                    "Validación de datos",
+                    "Base mantenible"
+                ]
+            },
+            "ai": {
+                "title": "Automatización con IA",
+                "summary": "Flujos asistidos por IA para reducir trabajo repetitivo y conectar decisiones con supervisión humana.",
+                "problems": [
+                    "Tu equipo repite tareas de clasificación, respuesta o preparación de información.",
+                    "Quieres incorporar IA sin perder control sobre criterios, datos y revisión final.",
+                    "Necesitas conectar automatizaciones con herramientas que ya usa el negocio."
+                ],
+                "capabilities": [
+                    "Diseño de flujos con IA",
+                    "Supervisión humana",
+                    "Webhooks e integraciones",
+                    "Clasificación de información",
+                    "Asistentes internos",
+                    "Trazabilidad del proceso"
+                ]
+            },
+            "crm": {
+                "title": "CRM, datos y procesos",
+                "summary": "Estructura de datos y procesos para entender mejor la relación con clientes y operar con más claridad.",
+                "problems": [
+                    "La información comercial está dispersa y cuesta entender el estado real de cada oportunidad.",
+                    "Necesitas ordenar etapas, responsables y datos clave para trabajar con más criterio.",
+                    "Quieres conectar CRM, reporting y procesos sin crear más trabajo manual."
+                ],
+                "capabilities": [
+                    "Modelado de datos",
+                    "Vista cliente 360",
+                    "Procesos comerciales",
+                    "Dashboards operativos",
+                    "Segmentación",
+                    "Integración con CRM"
+                ]
+            },
+            "integrations": {
+                "title": "Integraciones digitales",
+                "summary": "Conexión entre herramientas, APIs y plataformas para que tus sistemas trabajen juntos con menos fricción.",
+                "problems": [
+                    "Tus herramientas no comparten información y el equipo acaba duplicando tareas.",
+                    "Necesitas conectar formularios, CRM, automatizaciones, reporting o plataformas externas.",
+                    "Quieres reducir puntos manuales sin sustituir todo tu sistema actual."
+                ],
+                "capabilities": [
+                    "APIs REST",
+                    "Webhooks",
+                    "Sincronización de datos",
+                    "Conectores entre plataformas",
+                    "Validación y control",
+                    "Documentación técnica"
+                ]
+            },
+            "mvp": {
+                "title": "MVPs y prototipos",
+                "summary": "Primeras versiones funcionales para validar enfoque, experiencia y viabilidad antes de ampliar alcance.",
+                "problems": [
+                    "Tienes una idea pero necesitas verla funcionando antes de invertir en una versión completa.",
+                    "Quieres contrastar flujos, pantallas o hipótesis con una base usable.",
+                    "Necesitas una primera versión ordenada que pueda evolucionar si el enfoque encaja."
+                ],
+                "capabilities": [
+                    "Definición de alcance",
+                    "Prototipos funcionales",
+                    "Diseño de flujo",
+                    "Validación técnica",
+                    "Base escalable",
+                    "Plan de evolución"
+                ]
+            }
+        },
+        "fallback": {
+            "title": "Servicio digital",
+            "summary": "Solución digital adaptada a una necesidad concreta de negocio.",
+            "problems": [
+                "Necesitas ordenar una necesidad digital antes de construir.",
+                "Quieres entender qué solución encaja con tu contexto actual.",
+                "Buscas una base clara para avanzar sin añadir complejidad innecesaria."
+            ],
+            "capabilities": [
+                "Análisis inicial",
+                "Definición de alcance",
+                "Diseño funcional",
+                "Desarrollo iterativo",
+                "Revisión técnica",
+                "Entrega documentada"
+            ]
+        }
+    },
     "errors": {
         "brand": "AbacoQD",
         "404": {

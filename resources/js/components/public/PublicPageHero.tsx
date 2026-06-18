@@ -1,5 +1,6 @@
 import { ChevronRight, Home, Rocket } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import type { ReactNode } from 'react';
 
 import { useLanguage } from '@/hooks/use-language';
 
@@ -13,6 +14,9 @@ type PublicPageHeroProps = {
     readonly taglineTitle: string;
     readonly taglineSubtitle: string;
     readonly taglineIcon?: LucideIcon;
+    readonly parentLabel?: string;
+    readonly parentHref?: string;
+    readonly actions?: ReactNode;
 };
 
 export default function PublicPageHero({
@@ -23,6 +27,9 @@ export default function PublicPageHero({
     taglineTitle,
     taglineSubtitle,
     taglineIcon: TaglineIcon = Rocket,
+    parentLabel,
+    parentHref,
+    actions,
 }: PublicPageHeroProps) {
     const { t } = useLanguage();
 
@@ -54,6 +61,21 @@ export default function PublicPageHero({
                                 <li aria-hidden="true">
                                     <ChevronRight size={12} />
                                 </li>
+                                {parentLabel && parentHref && (
+                                    <>
+                                        <li>
+                                            <a
+                                                href={parentHref}
+                                                className="hover:text-qd-teal-2 dark:hover:text-qd-teal"
+                                            >
+                                                {parentLabel}
+                                            </a>
+                                        </li>
+                                        <li aria-hidden="true">
+                                            <ChevronRight size={12} />
+                                        </li>
+                                    </>
+                                )}
                                 <li
                                     aria-current="page"
                                     className="font-medium text-qd-ink dark:text-qd-white"
@@ -87,6 +109,12 @@ export default function PublicPageHero({
                                 </span>
                             </p>
                         </div>
+
+                        {actions && (
+                            <div className="mt-7 flex flex-wrap gap-3">
+                                {actions}
+                            </div>
+                        )}
                     </div>
 
                     <MethodologyCube />
