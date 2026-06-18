@@ -793,6 +793,44 @@
             ]
         }
     },
+    "projectsPage": {
+        "metaTitle": "Projects | Abaco Developments",
+        "hero": {
+            "eyebrow": "PROJECTS",
+            "title": "Projects built to measure.",
+            "subtitle": "We only publish what we can show with permission and real context."
+        },
+        "heroTagline": {
+            "title": "Real projects, not templates.",
+            "subtitle": "Each case is published with permission and verified context."
+        },
+        "intro": {
+            "title": "We work on our own projects, collaborative ones and for partners who trust our approach.",
+            "line1": "Out of respect for confidentiality, not everything can be shown publicly.",
+            "line2": "Here you'll see a selection of projects we can share."
+        },
+        "card": {
+            "internalProject": "Internal project",
+            "viewProject": "View project",
+            "consultSimilar": "Ask about a similar project"
+        },
+        "partners": {
+            "title": "Partners we collaborate with",
+            "note": "We show these brands with their permission."
+        },
+        "empty": {
+            "title": "First cases in preparation.",
+            "subtitle": "We're preparing the projects that can be shown publicly with permission and real context.",
+            "services": "View services",
+            "contact": "Tell us about your project"
+        },
+        "cta": {
+            "title": "Your project could be next.",
+            "subtitle": "Let's talk about your idea and see how we can turn it into a real, effective solution.",
+            "primary": "Tell us about your project",
+            "secondary": "Book a time"
+        }
+    },
     "errors": {
         "brand": "AbacoQD",
         "404": {
