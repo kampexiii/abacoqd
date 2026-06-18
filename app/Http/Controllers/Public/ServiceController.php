@@ -10,6 +10,24 @@ use Inertia\Response;
 class ServiceController extends Controller
 {
     /**
+     * @var list<string>
+     */
+    private const INITIAL_PUBLIC_DETAIL_SLUGS = [
+        'desarrollo-web-rapido',
+        'fast-web-development',
+        'aplicaciones-a-medida',
+        'custom-applications',
+        'automatizacion-con-ia',
+        'ai-automation',
+        'crm-datos-y-procesos',
+        'crm-data-and-processes',
+        'integraciones-digitales',
+        'digital-integrations',
+        'mvps-y-prototipos',
+        'mvps-and-prototypes',
+    ];
+
+    /**
      * Show the public services listing from the canonical services table.
      */
     public function index(): Response
@@ -50,7 +68,7 @@ class ServiceController extends Controller
             })
             ->firstOrFail();
 
-        abort_unless($service->is_detail_enabled, 404);
+        abort_unless($this->hasPublicDetail($service), 404);
 
         return Inertia::render('Public/ServiceDetail', [
             'service' => [
@@ -71,8 +89,27 @@ class ServiceController extends Controller
             'slug' => $service->slug,
             'summary' => $service->summary,
             'icon' => $service->icon,
-            'isDetailEnabled' => $service->is_detail_enabled,
+            'isDetailEnabled' => $this->hasPublicDetail($service),
             'settings' => $service->settings,
         ];
+    }
+
+    private function hasPublicDetail(Service $service): bool
+    {
+        if ($service->is_detail_enabled) {
+            return true;
+        }
+
+        if (! is_array($service->slug)) {
+            return false;
+        }
+
+        foreach ($service->slug as $slug) {
+            if (is_string($slug) && in_array($slug, self::INITIAL_PUBLIC_DETAIL_SLUGS, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
