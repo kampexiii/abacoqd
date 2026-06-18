@@ -1,8 +1,8 @@
 # Backlog y roadmap de implementación — AbacoQD
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 18 de junio de 2026.
 
-Roadmap orientado al producto completo del 30/06. La fase actual es exclusivamente documental: no código, no migraciones, no dependencias.
+Roadmap orientado al producto completo del 30/06. **Fase 2 (modelo de datos y migraciones) cerrada** el 18/06/2026: existen migraciones, modelos, factories, seeders y tests validados con `composer test` y `migrate:fresh --seed`. La Fase 1 (base pública y layout global) tiene avance de código en curso sobre la landing aprobada (topbar, hero, secciones de Colaboraciones/CTA final, páginas de error). El resto del roadmap se trabaja fase a fase con checkpoint de validación antes de avanzar a la siguiente.
 
 ## Fase 0 — Documentación final y auditoría
 
@@ -48,22 +48,34 @@ Roadmap orientado al producto completo del 30/06. La fase actual es exclusivamen
 
 **Validación.** Build, types, lint, responsive, teclado, reduced motion.
 
-## Fase 2 — Modelo de datos y migraciones
+## Fase 2 — Modelo de datos y migraciones (cerrada 18/06/2026)
 
 **Objetivo.** Implementar el modelo conceptual aprobado.
 
 **Alcance.**
 
-`settings`, `page_sections`, `section_blocks`, `methodology_steps`, `services`, `partners`, `projects`, `partner_project`, `team_members`, `posts`, `post_categories`, `tags`, `post_tag`, `faqs`, `contact_messages`, `booking_settings`, `reviews`, `blog_subscribers`, `seo_metadata`, `users.role`.
+`settings`, `page_sections`, `section_blocks`, `methodology_steps`, `services`, `partners`, `projects`, `partner_project`, `team_members`, `posts`, `post_categories`, `tags`, `post_tag`, `faqs`, `contact_messages`, `booking_settings` (transicional), `reviews`, `blog_subscribers`, `seo_metadata`, `users.role`.
+
+**Decisiones cerradas en esta fase** (detalle en `docs/02_MODELO_DATOS.md`):
+
+- Contenido bilingüe en JSON embebido por fila (`{es, en}`), no fila-por-idioma con `language`/`translation_*_id`.
+- Slugs públicos con columnas generadas `slug_es`/`slug_en` y unicidad por idioma a nivel de base de datos.
+- SEO consolidado en `seo_metadata` (única fuente, sin columnas `seo_title`/`seo_description` embebidas en `services`/`projects`/`posts`).
+- `cta` como columna JSON única (`{label, url}` por idioma) en `page_sections`/`section_blocks`/`services`.
+- `projects.year` (entero) en vez de fecha completa.
+- `users.role` con 4 valores: `super_admin`, `admin`, `editor`, `viewer`.
+- Reserva: sistema propio de citas (ver Fase 3); `booking_settings` queda transicional.
 
 **Criterios.**
 
-- `services` sin entidad duplicada.
-- `partners` sin tabla paralela de empresas.
-- Proyectos (página) y sección Colaboraciones basados en `projects` + `partners`.
-- ES/EN desde creación.
-- Estados/visibilidad y SEO listos.
-- `team_members` preparado para Quiénes somos sin obligar a publicar equipo.
+- `services` sin entidad duplicada. ✅
+- `partners` sin tabla paralela de empresas. ✅
+- Proyectos (página) y sección Colaboraciones basados en `projects` + `partners`. ✅
+- ES/EN desde creación (JSON por fila). ✅
+- Estados/visibilidad y SEO listos. ✅
+- `team_members` preparado para Quiénes somos sin obligar a publicar equipo. ✅
+
+**Validación.** `composer test` (Pint + PHPStan + Pest, 42 tests / 160 aserciones) y `php artisan migrate:fresh --seed` sin errores.
 
 ## Fase 3 — Vistas públicas principales
 
@@ -78,7 +90,7 @@ Roadmap orientado al producto completo del 30/06. La fase actual es exclusivamen
 - `/proyectos` y detalle de proyecto.
 - `/quienes-somos`.
 - `/blog` y post.
-- `/contacto` y `/reserva`.
+- `/contacto` y `/reserva` (sistema propio de citas: `appointment_days`/`appointment_slots`/`appointment_bookings`).
 - `/aviso-legal`, `/privacidad`, `/cookies`.
 - 404/500/503.
 
@@ -123,7 +135,7 @@ Roadmap orientado al producto completo del 30/06. La fase actual es exclusivamen
 - Blog bilingüe, categorías, tags y destacados.
 - Suscriptores con double opt-in.
 - Mensajes de contacto.
-- Reserva agnóstica con fallback.
+- Reserva propia (`appointment_days`/`appointment_slots`/`appointment_bookings`) con fallback a contacto; sin doble reserva (transacción + bloqueo de fila).
 - SEO metadata, sitemap, robots, canonical, `hreflang`.
 - FAQs/chatbot.
 - Usuarios/roles.
@@ -132,7 +144,7 @@ Roadmap orientado al producto completo del 30/06. La fase actual es exclusivamen
 
 - Blog no publica contenido falso.
 - Mensajes protegidos con consentimiento.
-- Reserva nunca queda rota.
+- Reserva nunca queda rota; slots bloqueados/llenos/pasados nunca se muestran como disponibles.
 - SEO por idioma completo.
 - Chatbot redirige sin prometer datos no definidos.
 
@@ -160,7 +172,6 @@ Roadmap orientado al producto completo del 30/06. La fase actual es exclusivamen
 ## Pendientes que bloquean producción
 
 - Confirmar teléfono legal visible principal.
-- Proveedor de reserva.
 - Stack definitivo de analítica/cookies y CMP.
 - Revisión jurídica final de aviso legal, privacidad y cookies.
 - Ubicación obligatoria de logos UE/FSE+/Fondos Europeos y rutas finales de assets.

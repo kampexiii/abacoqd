@@ -1,8 +1,8 @@
 # Modelo de datos — AbacoQD
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 18 de junio de 2026.
 
-Fuente de verdad única del modelo conceptual de AbacoQD. Esta fase es solo documental: no crea migraciones, modelos, seeders ni CRUDs.
+Fuente de verdad única del modelo de datos de AbacoQD. **Fase 2 (modelo de datos y migraciones) cerrada**: las migraciones, modelos, factories y seeders descritos aquí ya existen en `database/migrations`, `app/Models`, `database/factories` y `database/seeders`, y están validados con `composer test` (Pint + PHPStan + Pest) y `php artisan migrate:fresh --seed`.
 
 ## Reglas duras
 
@@ -14,192 +14,157 @@ Fuente de verdad única del modelo conceptual de AbacoQD. Esta fase es solo docu
 - No se inventan clientes, proyectos, reseñas, métricas, logos ni precios. Los datos demo se marcan como demo y no se publican como reales.
 - Datos corporativos, contacto, legal, tema, accesibilidad, navegación y CTAs viven en `settings`.
 
+## Decisión cerrada: arquitectura de contenido bilingüe
+
+El contenido publicable usa **JSON embebido por fila**, no una fila por idioma enlazada con `language` + `translation_*_id`. Decisión cerrada el 18/06/2026, sustituyendo el patrón propuesto en la versión documental previa de este archivo; se adopta porque ya estaba implementada, probada (`tests/Feature/AbacoDataModelTest.php`) y es suficiente para el volumen real de AbacoQD.
+
+Reglas de esta arquitectura:
+
+- Cada campo traducible se guarda como objeto `{"es": "...", "en": "..."}` en una columna JSON. Nunca un valor único sin idioma para texto público (título, slug, resumen/descripción, SEO, CTA).
+- Los slugs viven dentro del JSON (`slug->es`, `slug->en`). Toda entidad con ruta pública por slug tiene además columnas generadas `slug_es`/`slug_en` (`virtualAs` sobre el JSON) con **índice único de base de datos**: no pueden existir dos filas con el mismo slug en el mismo idioma. Aplica a `methodology_steps`, `services`, `projects`, `posts`, `post_categories`, `tags`.
+- Si un idioma no tiene contenido completo, su slug/título puede quedar `null`; no se inventa traducción. Publicar o no un idioma incompleto se resuelve con `status`/`is_active`, nunca fabricando texto ni emitiendo `hreflang` falso.
+- Aplica JSON por campo a: `methodology_steps`, `services`, `projects`, `posts`, `post_categories`, `tags`, `faqs`, `reviews`, `page_sections`, `section_blocks`, y a `role`/`bio` de `team_members`.
+- `partners` (nombre/slug) y `team_members` (nombre/slug/contacto) quedan en texto plano sin JSON: un nombre propio de persona o empresa no cambia entre idiomas.
+
+## Decisión cerrada: SEO único en `seo_metadata`
+
+No se duplica SEO entre columnas embebidas y una tabla aparte. `seo_metadata` es la **única fuente** de título, descripción, canonical, OG, robots y datos estructurados, tanto para páginas estáticas (`page_key`) como para entidades (`seoable_type`/`seoable_id`), con una fila por idioma (`locale`). `services`, `projects` y `posts` no tienen columnas `seo_title`/`seo_description` propias.
+
+Únicos de base de datos: (`seoable_type`, `seoable_id`, `locale`) y (`page_key`, `locale`).
+
+## Decisión cerrada: `cta` como JSON único
+
+Donde se necesita un CTA local a una entidad (`page_sections`, `section_blocks`, `services`), se usa una columna `cta` JSON con forma `{"label": {"es": "...", "en": "..."}, "url": {"es": "...", "en": "..."}}`. No se crean columnas `cta_label`/`cta_url` separadas.
+
+## Decisión cerrada: `projects.year`
+
+`projects` guarda solo el año (`year`, entero nullable), no una fecha completa. Es suficiente para mostrar antigüedad en las cards de Proyectos/Colaboraciones.
+
 ## Decisiones vigentes
 
 | Tema | Decisión |
 |---|---|
-| Idiomas | ES/EN desde el inicio; entidades traducibles con `language` + `translation_*_id`; slugs por idioma |
-| Servicios | `services` para las seis líneas de servicio y sus detalles publicables |
+| Idiomas | ES/EN desde el inicio; contenido traducible en JSON `{es, en}` por campo; slugs públicos con columnas generadas `slug_es`/`slug_en` únicas por idioma |
+| Servicios | `services` para las seis líneas de servicio; estado `draft`/`published`/`hidden` vía enum `ServiceStatus` |
 | Proyectos / Colaboraciones | Página pública `Proyectos` y sección de landing `Colaboraciones`; datos internos en `projects`, `partners`, `partner_project` |
-| Blog | Bilingüe, slug/SEO por idioma y relación explícita ES↔EN |
+| Blog | Bilingüe, slug por idioma con unicidad de BD, `featured_order` para fijar el orden de los 3 destacados de landing |
+| SEO | `seo_metadata` único por entidad/página e idioma; sin duplicar con columnas embebidas |
 | Legal/cookies | Textos en `settings.legal`/`page_sections`; consentimiento en frontend salvo necesidad de auditoría server-side |
-| Reservas | `booking_settings` agnóstico; fallback a contacto |
+| Reservas | **Sistema propio de citas** (`appointment_days`/`appointment_slots`/`appointment_bookings`), decisión cerrada el 18/06/2026 — sustituye el enfoque agnóstico de `booking_settings`. Modelo y migraciones de citas se documentan al cerrar esa fase; `booking_settings` queda transicional hasta entonces |
 | Chatbot | `faqs`; conversación persistida queda fuera salvo decisión posterior |
 | Tema/accesibilidad | Preferencias públicas en frontend/localStorage; defaults en `settings` |
 | Navegación | `settings.navigation`, no CRUD de menús en el producto base |
+| Roles | `users.role` vía enum `UserRole`: `super_admin`, `admin`, `editor`, `viewer` |
 
 ## Entidades
 
 ### `settings`
 
-Configuración global. Campos: `group`, `key`, `value`, `type`, `is_public`, timestamps. Debe cachearse.
+`group`, `key`, `value` (json), `type`, `is_public`, `description`, timestamps. Único (`group`, `key`). Debe cachearse.
 
 Grupos mínimos: `company`, `contact`, `social`, `branding`, `navigation`, `seo`, `legal`, `cookies`, `analytics`, `institutional`, `legacy`, `accessibility`, `theme`, `booking`, `email`.
 
-Uso: datos corporativos, titular legal, dominio, emails, teléfono/WhatsApp, redes, logo, favicon, distintivos institucionales, tema por defecto, navegación final, textos legales base, política de cookies, defaults de accesibilidad, CTA global y datos SEO globales.
-
-Valores iniciales confirmados en `settings`:
-
-**Grupo `company`:**
-
-- `company.legal_name` = `ABACO DIGITAL DEVELOPMENTS, S.L.`
-- `company.trade_name` = `ABACO`
-- `company.cif` = `B-88229364`
-- `company.registry` = `Registro Mercantil de Madrid, Tomo 38273, Folio 65, Sección GNE, Hoja Nº 681002`
-- `company.address_line_1` = `Calle Núñez de Balboa 35 A`
-- `company.address_line_2` = `Piso 5, Oficina A1`
-- `company.postal_code` = `28001`
-- `company.city` = `Madrid`
-- `company.country` = `España`
-- `company.website` = `https://abacoqd.com/`
-
-**Grupo `contact`:**
-
-- `contact.phone` = `+34 91 020 00 89`
-- `contact.whatsapp` = `+34 647 51 81 00`
-- `contact.email_primary` = `info@abacodev.com`
-- `contact.email_secondary` = `abacodevelopments@gmail.com`
-- `contact.email_andres` = `andrescasanueva@abacodev.com`
-
-**Grupo `social`:**
-
-- `social.linkedin_url` = pendiente de cargar URL validada; única red publicable inicialmente.
-- `social.facebook_url` = pendiente de validación interna antes de publicar.
-
-**Grupo `legal`:**
-
-- `legal.owner` = `ABACO DIGITAL DEVELOPMENTS, S.L.`
-- `legal.cif` = `B-88229364`
-- `legal.registry` = `Registro Mercantil de Madrid, Tomo 38273, Folio 65, Sección GNE, Hoja Nº 681002`
-- `legal.privacy_contact_email` = `info@abacodev.com`
-
-**Grupo `seo`:**
-
-- `seo.canonical_domain` = `https://abacoqd.com/`
-- `seo.public_brand_name` = `Abaco Developments`
-
-**Grupo `legacy`:**
-
-- `legacy.previous_domain` = `https://abacodev.com/`
-- `legacy.previous_legal_url` = `https://www.abacodev.com/`
-- `legacy.redirect_policy` = `pendiente de confirmar`
-
-**Grupo `analytics`:**
-
-- `analytics.recommended_stack` = `GTM + GA4 + Search Console`
-- `analytics.recommended_cmp` = `CookieYes`
-- `analytics.optional_session_insights` = `Clarity`, solo si se aprueba y queda bloqueado por consentimiento.
-
-**Grupo `booking`:**
-
-- `booking.recommended_provider` = `Cal.com`
-- `booking.fast_option` = `Calendly`
-- `booking.wordpress_option` = `Amelia`, solo si el stack final fuera WordPress.
-
-**Grupo `institutional`:**
-
-- `institutional.benow_partner_logo` = pendiente de ruta definitiva.
-- `institutional.eu_cofunded_logo` = pendiente de ruta definitiva.
-- `institutional.european_funds_logo` = pendiente de ruta definitiva.
-- `institutional.eu_fse_text` = `Cofinanciado por la Unión Europea (FSE+) Subvención para la contratación de jóvenes - Comunidad de Madrid.`
-
-Los logos institucionales no son `partners` ni `projects` por defecto. Solo se moverían a una zona de Proyectos/Colaboraciones/Partners si el cliente confirma expresamente que deben mostrarse como credenciales públicas de ese bloque.
+Valores iniciales confirmados (sembrados por `SettingsSeeder`): datos de `ABACO DIGITAL DEVELOPMENTS, S.L.`, CIF `B-88229364`, Registro Mercantil de Madrid, dirección, dominio canónico `https://abacoqd.com/`, teléfono `+34 91 020 00 89`, WhatsApp `+34 647 51 81 00`, emails confirmados, dominio histórico `abacodev.com`, texto institucional FSE+ y recomendaciones documentales de analítica/CMP.
 
 ### `page_sections` 🌐
 
-Secciones editables de páginas públicas. Campos: `page`, `key`, `language`, `translation_page_section_id`, `title`, `subtitle`, `body`, `cta_label`, `cta_url`, `media_path`, `icon`, `sort_order`, `is_visible`, `metadata_json`, timestamps.
+`page`, `key`, `name`, `title` (json), `subtitle` (json), `content` (json), `cta` (json, ver convención de CTA), `media_path`, `icon`, `sort_order`, `is_active`, `show_on_home`, `settings` (json libre), timestamps. Único (`page`, `key`).
 
-Uso: home, metodología, servicios, proyectos, contacto, reserva, legales y CTAs.
+Uso: hero, metodología, servicios, proyectos, contacto, reserva, legales y CTAs.
 
-### `section_blocks` 🌐
+### `section_blocks`
 
-Bloques hijos de una sección. Campos: `page_section_id`, `title`, `body`, `icon`, `media_path`, `cta_label`, `cta_url`, `sort_order`, `is_visible`, `metadata_json`, timestamps.
-
-Uso: beneficios del hero, bloques de metodología, pasos visuales, columnas de contacto, módulos legales o CTA.
+`page_section_id`, `type`, `title` (json), `content` (json), `image`, `icon`, `cta` (json), `sort_order`, `is_active`, `settings` (json), timestamps.
 
 ### `methodology_steps` 🌐
 
-Pasos de la metodología. Campos: `title`, `slug`, `description`, `short_description`, `deliverable`, `icon`, `language`, `translation_methodology_step_id`, `sort_order`, `is_visible`, `is_featured`, timestamps.
+`number`, `title` (json), `slug` (json + `slug_es`/`slug_en` únicos), `summary` (json), `description` (json), `deliverable` (json), `icon`, `badge`, `is_free_initial_study`, `is_featured`, `sort_order`, `is_active`, `settings` (json), timestamps.
 
-Secuencia base: Análisis, Estudio inicial, Propuesta/enfoque, Desarrollo, Revisión, Entrega.
+Secuencia base: Análisis, Estudio inicial gratuito, Propuesta/enfoque, Desarrollo, Revisión, Entrega.
 
 ### `services` 🌐
 
-Servicios públicos. Campos: `title`, `slug`, `short_description`, `long_description`, `icon`, `image_path`, `technologies_json`, `cta_label`, `cta_url`, `language`, `translation_service_id`, `sort_order`, `is_visible`, `is_featured`, `is_detail_enabled`, `status` (`draft`, `published`, `hidden`), timestamps.
+`title` (json), `slug` (json + `slug_es`/`slug_en` únicos), `summary` (json), `description` (json), `icon`, `image`, `cta` (json), `status` (enum `ServiceStatus`: `draft`/`published`/`hidden`), `sort_order`, `is_featured`, `is_active`, `show_on_home`, `is_detail_enabled`, `settings` (json), timestamps.
+
+SEO de cada servicio vive en `seo_metadata` (`seoable_type = Service`), no en columnas embebidas.
 
 Servicios iniciales: Desarrollo web rápido, Aplicaciones a medida, Automatización con IA, CRM datos y procesos, Integraciones digitales, MVPs y prototipos.
 
-### `partners` 🌐
+### `partners` 🌐 (texto plano en nombre/slug; JSON solo en `description`)
 
-Entidad unificada para empresas, marcas, clientes, colaboradores y socios. Campos: `name`, `slug`, `type` (`collaborator`, `partner`, `client`, `brand`, `company` como valor descriptivo), `logo_path`, `logo_dark_path`, `logo_alt`, `website_url`, `description`, `social_links_json`, `is_visible`, `is_featured`, `show_in_projects`, `sort_order`, `language`, `translation_partner_id`, timestamps.
+`name`, `slug` (único), `type` (enum `PartnerType`: `client`/`collaborator`/`provider`/`institutional`/`other`), `logo`, `logo_dark`, `logo_alt`, `website`, `social_links` (json), `description` (json), `permission_status` (enum `PermissionStatus`: `pending`/`approved`/`rejected`/`unknown`), `permission_notes`, `show_on_home`, `show_in_collaborations`, `show_in_projects`, `is_featured`, `is_active`, `sort_order`, `settings` (json), timestamps.
 
-Un partner solo se muestra si hay permiso de uso de nombre/logo.
+Un partner solo se muestra si `permission_status = approved` y el flag de visibilidad correspondiente está activo.
 
 ### `projects` 🌐
 
-Proyectos/casos para la página Proyectos y la sección de landing Colaboraciones. Campos: `title`, `slug`, `summary`, `description`, `primary_partner_id` nullable, `cover_image_path`, `gallery_json`, `technologies_json`, `public_url`, `repository_url`, `status` (`draft`, `published`, `hidden`), `is_visible`, `is_featured`, `sort_order`, `project_date`, `language`, `translation_project_id`, `metadata_json`, timestamps.
+`title` (json), `slug` (json + `slug_es`/`slug_en` únicos), `summary` (json), `description` (json), `challenge`/`solution`/`result` (json, narrativa de caso), `cover_image`, `thumbnail_image`, `gallery` (json), `technologies` (json), `status` (enum `ProjectStatus`: `draft`/`published`/`hidden`), `year` (entero nullable, ver decisión cerrada), `client_name`, `client_partner_id` (FK nullable a `partners`), `github_url`, `external_url`, `permission_status` (enum `PermissionStatus`), `permission_notes`, `show_on_home`, `show_in_projects`, `show_in_collaborations`, `is_featured`, `is_active`, `sort_order`, `settings` (json), timestamps.
 
-Un proyecto propio puede no tener partner principal. Si hay partner, el rol se declara.
+SEO de cada proyecto vive en `seo_metadata`. Un proyecto propio puede no tener partner principal; si lo tiene, además puede tener N partners vía `partner_project` con rol declarado.
 
 ### `partner_project`
 
-Relación N:M entre partners y proyectos. Campos: `partner_id`, `project_id`, `role` (`client`, `collaborator`, `brand`, `technology_partner`, `other`), `sort_order`, timestamps.
+`partner_id`, `project_id`, `role` (`client`/`collaborator`/`brand`/`technology_partner`/`other`), `sort_order`, timestamps. Clave primaria compuesta (`partner_id`, `project_id`).
 
 ### `posts` 🌐
 
-Blog bilingüe. Campos: `title`, `slug`, `excerpt`, `content_json`, `image_path`, `post_category_id`, `author_id` nullable, `reading_time`, `language`, `translation_post_id`, `status` (`draft`, `scheduled`, `published`, `hidden`), `published_at`, `is_featured`, `featured_order`, timestamps.
+`post_category_id`, `user_id` (autor), `title` (json), `slug` (json + `slug_es`/`slug_en` únicos), `excerpt` (json), `content` (json estructurado), `featured_image`, `status` (enum `PostStatus`: `draft`/`scheduled`/`published`/`hidden`), `published_at`, `is_featured`, `featured_order` (orden manual entre destacados de landing), `show_on_home`, `reading_time`, `settings` (json), timestamps, soft deletes.
+
+SEO de cada post vive en `seo_metadata`. Selección de los 3 destacados de landing: `is_featured = true` + `featured_order` (1, 2, 3).
 
 ### `post_categories` 🌐, `tags` 🌐, `post_tag`
 
-`post_categories`: `name`, `slug`, `description`, `language`, `translation_post_category_id`, `sort_order`, `is_visible`, timestamps.
+`post_categories`: `name` (json), `slug` (json + `slug_es`/`slug_en` únicos), `description` (json), `sort_order`, `is_active`, timestamps.
 
-`tags`: `name`, `slug`, `language`, `translation_tag_id`, timestamps.
+`tags`: `name` (json), `slug` (json + `slug_es`/`slug_en` únicos), timestamps.
 
-`post_tag`: `post_id`, `tag_id`.
+`post_tag`: `post_id`, `tag_id`, timestamps.
 
 ### `faqs` 🌐
 
-Base del chatbot/asistente. Campos: `question`, `answer`, `intent`, `language`, `translation_faq_id`, `redirect_url`, `redirect_section`, `is_active`, `sort_order`, timestamps.
+`question` (json), `answer` (json), `category`, `intent`, `redirect_url`, `redirect_section`, `show_in_chatbot`, `show_on_page`, `sort_order`, `is_active`, timestamps.
 
-Uso: preguntas sobre servicios, metodología, proyectos, contacto, reserva, legal y privacidad.
+Uso: preguntas sobre servicios, metodología, proyectos, contacto, reserva, legal y privacidad, con redirección opcional a una URL o sección concreta.
 
 ### `contact_messages`
 
-Mensajes del formulario. Campos: `name`, `company`, `email`, `phone`, `message`, `service_id` nullable, `source`, `status`, `notes`, `privacy_consent_accepted_at`, `marketing_consent_accepted_at` nullable, `ip_address`, `user_agent`, timestamps.
+`service_id` (FK nullable), `name`, `email`, `phone`, `company`, `subject`, `message`, `preferred_contact_method`, `privacy_accepted_at`, `commercial_consent`, `commercial_consent_at`, `source`, `status`, `ip_address`, `user_agent`, `metadata` (json), timestamps.
 
-El consentimiento de privacidad es obligatorio. El consentimiento comercial es opcional y separado.
+El consentimiento de privacidad es obligatorio (`privacy_accepted_at`); el comercial es opcional y separado (`commercial_consent`/`commercial_consent_at`).
 
-### `booking_settings`
+### `booking_settings` (transicional)
 
-Reserva agnóstica. Campos: `provider`, `booking_url`, `is_enabled`, `title`, `body`, `cta_label`, `metadata_json`, timestamps. Sin proveedor válido, la vista usa fallback a contacto.
+`provider`, `url`, `is_enabled`, `fallback_to_contact`, `settings` (json), timestamps.
+
+Pendiente de sustitución por el sistema propio de citas (`appointment_days`/`appointment_slots`/`appointment_bookings`, ver Fase 3) cuando se cierre esa fase; hasta entonces sigue activo como configuración/fallback documental.
 
 ### `reviews` 🌐
 
-Reseñas reales con permiso. Campos: `author_name`, `company`, `role`, `rating`, `body`, `source`, `source_url`, `partner_id` nullable, `project_id` nullable, `language`, `translation_review_id`, `is_visible`, `is_featured`, `sort_order`, timestamps.
+`partner_id` (nullable), `project_id` (nullable), `author_name`, `author_role`, `company_name`, `content` (json), `rating`, `source`, `source_url`, `permission_status` (enum `PermissionStatus`), `permission_notes`, `show_on_home`, `is_featured`, `is_active`, `sort_order`, timestamps.
 
 No se simulan reseñas externas.
 
 ### `blog_subscribers`
 
-Suscripción al blog. Campos: `email`, `name`, `language`, `status` (`pending`, `confirmed`, `unsubscribed`), `confirmation_token`, `confirmed_at`, `unsubscribed_at`, `source`, `consent_ip`, timestamps.
+`email` (único), `name`, `locale`, `status` (enum `SubscriberStatus`: `pending`/`confirmed`/`unsubscribed`), `consent_accepted_at`, `confirmation_token` (único), `confirmed_at`, `unsubscribed_at`, `source`, `consent_ip`, timestamps.
 
 Requiere double opt-in y baja en un clic.
 
-### `team_members` 🌐
+### `team_members` 🌐 (texto plano en datos personales; JSON solo en `role`/`bio`)
 
-Miembros publicables para Quiénes somos. Campos: `name`, `slug`, `role`, `bio`, `photo_path`, `photo_alt`, `email`, `linkedin_url`, `github_url`, `personal_url`, `cv_path`, `language`, `translation_team_member_id`, `is_visible`, `sort_order`, timestamps.
+`name`, `slug` (único), `role` (json), `bio` (json), `photo`, `photo_alt`, `linkedin_url`, `github_url`, `personal_url`, `cv_path`, `email`, `sort_order`, `is_visible`, `is_active`, `settings` (json), timestamps.
 
-Si no hay miembros visibles, la vista muestra bloque corporativo y no un grid vacío.
+Si no hay miembros visibles, la vista pública usa bloque corporativo y no un grid vacío.
 
-### `seo_metadata` 🌐
+### `seo_metadata` 🌐 (polimórfica, fuente única de SEO)
 
-SEO polimórfico. Campos: `seoable_type`, `seoable_id`, `language`, `title`, `description`, `canonical_url`, `og_title`, `og_description`, `og_image_path`, `no_index`, `structured_data_json`, timestamps.
+`seoable_type`, `seoable_id` (nullable, para entidades), `page_key` (nullable, para páginas estáticas sin entidad), `locale`, `title`, `description`, `canonical_url`, `robots` (string: `index,follow`/`noindex,nofollow`/...), `og_title`, `og_description`, `og_image`, `schema_type`, `schema_data` (json), timestamps.
 
-Aplica a páginas, servicios, proyectos, posts, categorías y legales cuando proceda.
+Únicos: (`seoable_type`, `seoable_id`, `locale`) y (`page_key`, `locale`). Aplica a páginas, servicios, proyectos, posts, categorías y legales cuando proceda.
 
 ### `users`
 
-Usuarios del admin sobre el `users` del starter. Añadido conceptual: `role` (`super_admin`, `admin`, `editor`, `viewer`) cuando se implemente. No se crea tabla paralela de admin.
+`role` vía enum `UserRole`: `super_admin`, `admin`, `editor`, `viewer`. No se crea tabla paralela de admin.
 
 ## Cookies y consentimiento
 
@@ -210,13 +175,12 @@ Si se exige auditoría server-side de consentimientos, se documentará antes de 
 ## Relaciones clave
 
 - `page_sections` tiene muchos `section_blocks`.
-- `services` alimenta landing, listado, detalle y select de contacto.
-- `projects` alimenta la página Proyectos y la sección de landing Colaboraciones; `partners` aporta logos/relaciones; `partner_project` define roles.
-- `posts` pertenece a `post_categories` y se relaciona con `tags`.
-- `seo_metadata` es polimórfica y por idioma.
+- `services` alimenta landing, listado, detalle y select de contacto; su SEO vive en `seo_metadata` (`MorphMany`, una fila por idioma vía `seoMetadataFor($locale)`).
+- `projects` alimenta la página Proyectos y la sección de landing Colaboraciones; `partners` aporta logos/relaciones; `partner_project` define roles; su SEO vive en `seo_metadata`.
+- `posts` pertenece a `post_categories`, se relaciona con `tags` y su SEO vive en `seo_metadata`.
 - `contact_messages.service_id` enlaza con `services`.
 - `reviews` puede enlazar con `partners` y/o `projects`.
-- `faqs` puede redirigir a servicios, proyectos, posts, contacto, reserva o legales.
+- `faqs` puede redirigir a servicios, proyectos, posts, contacto, reserva o legales vía `redirect_url`/`redirect_section`.
 - `team_members` alimenta Quiénes somos solo cuando haya perfiles publicables.
 
 ## Mapa funcional
@@ -229,13 +193,15 @@ Si se exige auditoría server-side de consentimientos, se documentará antes de 
 | Proyectos | `/proyectos` · `/proyectos/{slug}` · `/en/projects` | `07_VISTAS/PUBLIC_04_PROYECTOS.md` | `projects`, `partners`, `partner_project`, `reviews`, `seo_metadata` |
 | Quiénes somos | `/quienes-somos` · `/en/about` | `07_VISTAS/PUBLIC_10_QUIENES_SOMOS.md` | `page_sections`, `section_blocks`, `team_members`, `partners`, `settings`, `seo_metadata` |
 | Blog | `/blog` · `/blog/{slug}` · `/en/blog` | `07_VISTAS/PUBLIC_05_BLOG.md` | `posts`, `post_categories`, `tags`, `post_tag`, `seo_metadata`, `blog_subscribers` |
-| Contacto / Reserva | `/contacto` · `/reserva` · `/en/contact` · `/en/book` | `07_VISTAS/PUBLIC_06_CONTACTO_RESERVA.md` | `contact_messages`, `booking_settings`, `settings`, `services` |
+| Contacto / Reserva | `/contacto` · `/reserva` · `/en/contact` · `/en/book` | `07_VISTAS/PUBLIC_06_CONTACTO_RESERVA.md` | `contact_messages`, `appointment_days`, `appointment_slots`, `appointment_bookings`, `settings`, `services` |
 | Legal / Cookies / Privacidad | `/aviso-legal`, `/privacidad`, `/cookies` | `07_VISTAS/PUBLIC_07_LEGAL_COOKIES_PRIVACIDAD.md` | `settings.legal`, `settings.cookies`, `page_sections`, `seo_metadata` |
 | Errores | 404 · 500 · 503 | `07_VISTAS/PUBLIC_08_ERRORES.md` | ninguna |
 | Layout global | todas | `07_VISTAS/PUBLIC_09_LAYOUT_GLOBAL.md` | `settings`, `faqs` |
 | Admin | `/admin/*` | `07_VISTAS/ADMIN_01..03` | todas según módulo |
 
 ## Orden conceptual de implementación
+
+Completado en Fase 2 (18/06/2026), en este orden:
 
 1. `settings` + navegación final + datos corporativos.
 2. `page_sections` + `section_blocks`.
@@ -244,21 +210,23 @@ Si se exige auditoría server-side de consentimientos, se documentará antes de 
 5. `partners`, `projects`, `partner_project`.
 6. `posts`, `post_categories`, `tags`, `post_tag`, `blog_subscribers`.
 7. `faqs`.
-8. `contact_messages`, `booking_settings`.
+8. `contact_messages`, `booking_settings` (transicional, ver Fase 3).
 9. `seo_metadata`.
 10. `reviews`.
 11. `team_members`.
-12. `users.role` y permisos admin.
+12. `users.role` y permisos admin (modelo cerrado; CRUDs admin pendientes de Fase 5 del backlog).
 
-## Checklist antes de migraciones
+Pendiente para la fase de citas: `appointment_days`, `appointment_slots`, `appointment_bookings`.
 
-- [ ] Aprobar nombres finales de entidades/campos.
+## Checklist de cierre de Fase 2
+
+- [x] Aprobar nombres finales de entidades/campos (arquitectura JSON cerrada el 18/06/2026).
+- [x] Aprobar este modelo y crear migraciones (`database/migrations/2026_06_15_*`, validadas con `composer test` y `migrate:fresh --seed`).
+- [x] Confirmar proveedor de reserva: sistema propio (no Cal.com/Calendly), pendiente de migrar tablas de citas.
 - [ ] Confirmar teléfono legal visible principal.
 - [ ] Confirmar revisión jurídica final de aviso legal, privacidad y cookies.
 - [ ] Confirmar stack definitivo de analítica/cookies y CMP.
 - [ ] Confirmar ubicación obligatoria de logos UE/FSE+/Fondos Europeos y rutas finales de assets.
 - [ ] Confirmar permisos de partners, logos, proyectos, capturas y reseñas.
-- [ ] Confirmar proveedor de reserva y si implica cookies no técnicas.
 - [ ] Confirmar política del estudio inicial y textos de CTA.
 - [ ] Confirmar copy ES/EN mínimo de servicios, proyectos, blog, contacto y legales.
-- [ ] Aprobar este modelo antes de crear migraciones.
