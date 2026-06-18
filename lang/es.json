@@ -464,13 +464,24 @@
     "methodologyPage": {
         "eyebrow": "METODOLOGÍA",
         "title": "Rápido porque hay método.",
-        "subtitle": "Proceso optimizado con IA supervisada y control técnico en cada fase.",
+        "subtitle": "Proceso optimizado con IA, supervisión experta y control técnico en cada fase.",
         "breadcrumbHome": "Inicio",
         "breadcrumbCurrent": "Metodología",
         "timelineAria": "Pasos de nuestra metodología",
+        "heroTagline": {
+            "title": "Menos fricción. Más control.",
+            "subtitle": "Resultados mejores en menos tiempo."
+        },
         "process": {
+            "eyebrow": "CÓMO TRABAJAMOS",
             "intro": "La rapidez no viene de hacer más, sino de hacer mejor. Seguimos un método propio que combina IA, herramientas avanzadas y control humano en cada decisión.",
-            "cta": "Reservar reunión"
+            "cta": "Reservar reunión",
+            "bullets": {
+                "vision": "Visión clara desde el inicio",
+                "data": "Decisiones basadas en datos",
+                "execution": "Ejecución ágil y controlada",
+                "delivery": "Entregas con impacto real"
+            }
         },
         "studyDescription": "Antes de construir, analizamos si la idea tiene sentido, qué alcance necesita y qué camino conviene seguir.",
         "tools": {

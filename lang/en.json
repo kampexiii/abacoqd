@@ -464,13 +464,24 @@
     "methodologyPage": {
         "eyebrow": "METHODOLOGY",
         "title": "Fast because there's a method.",
-        "subtitle": "A process optimised with supervised AI and technical control at every stage.",
+        "subtitle": "A process optimised with AI, expert supervision and technical control at every stage.",
         "breadcrumbHome": "Home",
         "breadcrumbCurrent": "Methodology",
         "timelineAria": "Our methodology steps",
+        "heroTagline": {
+            "title": "Less friction. More control.",
+            "subtitle": "Better results in less time."
+        },
         "process": {
+            "eyebrow": "HOW WE WORK",
             "intro": "Speed doesn't come from doing more, but from doing better. We follow our own method that combines AI, advanced tooling and human control at every decision.",
-            "cta": "Book a meeting"
+            "cta": "Book a meeting",
+            "bullets": {
+                "vision": "Clear vision from the start",
+                "data": "Data-driven decisions",
+                "execution": "Agile, controlled execution",
+                "delivery": "Delivery with real impact"
+            }
         },
         "studyDescription": "Before building, we check whether the idea makes sense, what scope it needs and which path to follow.",
         "tools": {

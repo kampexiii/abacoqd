@@ -3749,6 +3749,18 @@ html.a11y-reduce-motion *::after {
     }
 }
 
+/* Cubo decorativo ligero del hero de /metodologia (CSS puro, sin Three.js;
+   no reutiliza ni toca AbacoCrystalCube, que queda protegido). */
+@keyframes qd-mini-cube-spin {
+    from {
+        transform: rotateX(-18deg) rotateY(0deg);
+    }
+
+    to {
+        transform: rotateX(-18deg) rotateY(360deg);
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .qd-error-ambient-lines span {
         animation: none;
