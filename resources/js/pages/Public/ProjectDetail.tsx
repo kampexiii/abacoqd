@@ -6,17 +6,15 @@ import {
     Boxes,
     CalendarDays,
     CheckCircle2,
-    ChevronRight,
     Cpu,
     ExternalLink,
-    Home,
     Mountain,
     Target,
     Users,
     Zap,
 } from 'lucide-react';
 
-import MethodologyCube from '@/components/public/MethodologyCube';
+import PublicPageHero from '@/components/public/PublicPageHero';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
@@ -90,15 +88,6 @@ const optionalText = (
     locale: Locale,
 ): string => (value ? localizedText(value, locale) : '');
 
-const stringSetting = (
-    settings: Record<string, unknown>,
-    key: string,
-): string | null => {
-    const value = settings[key];
-
-    return typeof value === 'string' && value.length > 0 ? value : null;
-};
-
 const projectUrl = (project: RelatedProject, locale: Locale): string => {
     const slug = localizedText(project.slug, locale);
 
@@ -141,24 +130,6 @@ function BrandPattern({
     );
 }
 
-function ProjectHeroCubeVisual() {
-    return (
-        <div className="relative hidden min-h-[360px] flex-1 items-center justify-center lg:flex">
-            <div
-                aria-hidden="true"
-                className="absolute inset-0 rounded-full opacity-80 blur-3xl"
-                style={{
-                    background:
-                        'radial-gradient(circle at center, color-mix(in srgb, var(--qd-teal) 28%, transparent), transparent 62%)',
-                }}
-            />
-            <div className="relative flex size-80 items-center justify-center rounded-full border border-qd-teal/15 bg-qd-white/5 shadow-[0_36px_120px_rgba(0,0,0,0.28)] backdrop-blur-md dark:border-qd-white/10 dark:bg-qd-white/[0.04]">
-                <MethodologyCube />
-            </div>
-        </div>
-    );
-}
-
 export default function ProjectDetail({ project, related }: ProjectDetailProps) {
     const { t, locale } = useLanguage();
     const title = localizedText(project.title, locale);
@@ -167,9 +138,6 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
     const technologies = asStringList(project.technologies);
     const gallery = asStringList(project.gallery);
     const cover = project.coverImage ?? project.thumbnailImage ?? gallery[0] ?? null;
-    const publicNote =
-        stringSetting(project.settings, 'public_note') ??
-        (project.isApproved ? null : t('projectDetail.validation.pendingNote'));
     const contactUrl = contactShow.url({
         query: { proyecto: localizedText(project.slug, locale) },
     });
@@ -249,129 +217,51 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
             value: technologies.slice(0, 3).join(' · ') || t('projectDetail.validation.pendingShort'),
         },
     ] as const;
+    const metaTitle = `${meta[0].label}: ${meta[0].value} · ${meta[1].label}: ${meta[1].value}`;
+    const metaSubtitle = `${meta[2].label}: ${meta[2].value} · ${meta[3].label}: ${meta[3].value}`;
 
     return (
         <PublicLayout>
             <Head title={`${title} | Abaco Developments`} />
 
-            <section className="relative overflow-hidden bg-qd-ink pt-28 text-qd-white sm:pt-32">
-                <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 opacity-75"
-                    style={{
-                        backgroundImage:
-                            'linear-gradient(100deg, rgba(3,17,27,0.98) 0%, rgba(3,17,27,0.92) 43%, rgba(3,17,27,0.38) 100%), radial-gradient(circle at 55% 60%, rgba(24,183,176,0.18), transparent 32%), repeating-linear-gradient(165deg, rgba(57,198,230,0.16) 0px, rgba(57,198,230,0.16) 1px, transparent 1px, transparent 28px)',
-                    }}
-                />
-                <div className="relative mx-auto flex max-w-[1240px] gap-10 px-5 pb-20 sm:px-8 lg:min-h-[500px] lg:items-center">
-                    <div className="w-full max-w-2xl">
-                        <nav aria-label="Breadcrumb" className="mb-8">
-                            <ol className="flex flex-wrap items-center gap-2 text-xs text-qd-white/62">
-                                <li>
-                                    <a
-                                        href="/"
-                                        className="inline-flex items-center gap-1 transition hover:text-qd-teal"
-                                    >
-                                        <Home aria-hidden="true" size={12} />
-                                        {t('navigation.breadcrumbHome')}
-                                    </a>
-                                </li>
-                                <li aria-hidden="true">
-                                    <ChevronRight size={12} />
-                                </li>
-                                <li>
-                                    <a
-                                        href="/proyectos"
-                                        className="transition hover:text-qd-teal"
-                                    >
-                                        {t('navigation.items.proyectos')}
-                                    </a>
-                                </li>
-                                <li aria-hidden="true">
-                                    <ChevronRight size={12} />
-                                </li>
-                                <li className="font-medium text-qd-white" aria-current="page">
-                                    {title}
-                                </li>
-                            </ol>
-                        </nav>
-
-                        <p className="text-sm font-bold uppercase tracking-wide text-qd-teal">
-                            {t('projectDetail.hero.eyebrow')}
-                        </p>
-                        <h1 className="mt-4 max-w-[760px] text-4xl font-bold leading-tight text-qd-white sm:text-5xl">
-                            {title}
-                        </h1>
-                        <p className="mt-5 max-w-2xl text-base leading-relaxed text-qd-white/82 sm:text-lg">
-                            {summary || t('projectDetail.validation.pendingSection')}
-                        </p>
-
-                        {statusBadges.length > 0 && (
-                            <div className="mt-5 flex flex-wrap gap-2">
-                                {statusBadges.map((badge) => (
-                                    <span
-                                        key={badge}
-                                        className="inline-flex items-center gap-2 rounded-full border border-qd-lime/25 bg-qd-lime/10 px-3 py-1 text-xs font-bold text-qd-lime"
-                                    >
-                                        <span className="size-1.5 rounded-full bg-qd-lime" />
-                                        {badge}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
-
-                        <dl className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                            {meta.map((item) => {
-                                const Icon = item.icon;
-
-                                return (
-                                    <div
-                                        key={item.key}
-                                        className="border-l border-qd-white/10 pl-4 first:border-l-0 first:pl-0 sm:first:border-l sm:first:pl-4 lg:first:border-l-0 lg:first:pl-0"
-                                    >
-                                        <dt className="flex items-center gap-2 text-[11px] text-qd-white/58">
-                                            <Icon
-                                                aria-hidden="true"
-                                                size={14}
-                                                className="text-qd-teal"
-                                            />
-                                            {item.label}
-                                        </dt>
-                                        <dd className="mt-2 text-xs font-semibold leading-relaxed text-qd-white">
-                                            {item.value}
-                                        </dd>
-                                    </div>
-                                );
-                            })}
-                        </dl>
-
-                        {publicNote && (
-                            <p className="mt-5 max-w-2xl text-xs leading-relaxed text-qd-white/58">
-                                {publicNote}
-                            </p>
-                        )}
-
-                        <div className="mt-9 flex flex-wrap gap-4">
-                            <a
-                                href={contactUrl}
-                                className="inline-flex items-center gap-2 rounded-lg bg-qd-lime px-5 py-3 text-sm font-bold text-qd-ink transition hover:brightness-95"
+            <PublicPageHero
+                eyebrow={t('projectDetail.hero.eyebrow')}
+                title={title}
+                subtitle={summary || t('projectDetail.validation.pendingSection')}
+                currentLabel={title}
+                parentLabel={t('navigation.items.proyectos')}
+                parentHref="/proyectos"
+                taglineTitle={metaTitle}
+                taglineSubtitle={metaSubtitle}
+                taglineIcon={Cpu}
+                actions={
+                    <>
+                        {statusBadges.map((badge) => (
+                            <span
+                                key={badge}
+                                className="inline-flex items-center gap-2 rounded-xl border border-qd-teal-2/25 bg-qd-teal-2/10 px-4 py-3 text-sm font-bold text-qd-teal-2 dark:border-qd-lime/30 dark:bg-qd-lime/10 dark:text-qd-lime"
                             >
-                                {t('projectDetail.hero.primary')}
-                                <ArrowRight aria-hidden="true" size={16} />
-                            </a>
-                            <a
-                                href="#relacionados"
-                                className="inline-flex items-center gap-2 rounded-lg border border-qd-white/25 px-5 py-3 text-sm font-bold text-qd-white transition hover:border-qd-teal hover:text-qd-teal"
-                            >
-                                {t('projectDetail.hero.related')}
-                                <ArrowRight aria-hidden="true" size={16} />
-                            </a>
-                        </div>
-                    </div>
-
-                    <ProjectHeroCubeVisual />
-                </div>
-            </section>
+                                <span className="size-1.5 rounded-full bg-qd-teal-2 dark:bg-qd-lime" />
+                                {badge}
+                            </span>
+                        ))}
+                        <a
+                            href={contactUrl}
+                            className="inline-flex items-center gap-2 rounded-xl bg-qd-lime px-5 py-3 text-sm font-bold text-qd-ink transition hover:brightness-95"
+                        >
+                            {t('projectDetail.hero.primary')}
+                            <ArrowRight aria-hidden="true" size={16} />
+                        </a>
+                        <a
+                            href={bookingShow.url()}
+                            className="inline-flex items-center gap-2 rounded-xl border border-qd-ink/15 px-5 py-3 text-sm font-bold text-qd-ink transition hover:border-qd-teal-2 hover:text-qd-teal-2 dark:border-qd-white/20 dark:text-qd-white dark:hover:border-qd-teal dark:hover:text-qd-teal"
+                        >
+                            {t('projectDetail.hero.secondary')}
+                            <CalendarDays aria-hidden="true" size={16} />
+                        </a>
+                    </>
+                }
+            />
 
             <section className="bg-qd-white dark:bg-qd-ink">
                 <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
