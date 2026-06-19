@@ -143,9 +143,13 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
     });
     const relatedItems = related.filter((item) => item.id !== project.id);
     const client = project.partners.find((partner) => partner.roleKey === 'client');
+    const executorPartner = project.partners.find(
+        (partner) => partner.roleKey === 'collaborator',
+    );
     const mainPartner = client ?? project.partners[0] ?? null;
     const partnerLabel =
         project.partnerName ?? project.clientName ?? mainPartner?.name ?? t('projectsPage.card.internalProject');
+    const pendingLong = t('projectDetail.validation.pendingSection');
     const statusBadges = [
         project.isHistorical ? t('projectsPage.badge.historical') : null,
         !project.isApproved ? t('projectsPage.badge.pendingValidation') : null,
@@ -202,23 +206,22 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
             key: 'capabilities',
             icon: Users,
             label: t('projectDetail.meta.capabilities'),
-            value: technologies.slice(0, 2).join(' · ') || t('projectDetail.validation.pendingShort'),
+            value: technologies.slice(0, 2).join(' · ') || pendingLong,
         },
         {
             key: 'role',
             icon: Users,
             label: t('projectDetail.meta.role'),
-            value: project.executorName ?? t('projectDetail.validation.pendingShort'),
+            value: project.executorName ?? executorPartner?.name ?? pendingLong,
         },
         {
             key: 'technologies',
             icon: Cpu,
             label: t('projectDetail.meta.technologies'),
-            value: technologies.slice(0, 3).join(' · ') || t('projectDetail.validation.pendingShort'),
+            value: technologies.slice(0, 3).join(' · ') || pendingLong,
         },
     ] as const;
-    const metaTitle = `${meta[0].label}: ${meta[0].value} · ${meta[1].label}: ${meta[1].value}`;
-    const metaSubtitle = `${meta[2].label}: ${meta[2].value} · ${meta[3].label}: ${meta[3].value}`;
+    const keyFactsTitle = locale === 'en' ? 'Key details' : 'Datos clave';
 
     return (
         <PublicLayout>
@@ -231,20 +234,11 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                 currentLabel={title}
                 parentLabel={t('navigation.items.proyectos')}
                 parentHref="/proyectos"
-                taglineTitle={metaTitle}
-                taglineSubtitle={metaSubtitle}
-                taglineIcon={Cpu}
+                taglineTitle={t('projectDetail.heroTagline.title')}
+                taglineSubtitle={t('projectDetail.heroTagline.subtitle')}
+                taglineIcon={Boxes}
                 actions={
                     <>
-                        {statusBadges.map((badge) => (
-                            <span
-                                key={badge}
-                                className="inline-flex items-center gap-2 rounded-xl border border-qd-teal-2/25 bg-qd-teal-2/10 px-4 py-3 text-sm font-bold text-qd-teal-2 dark:border-qd-lime/30 dark:bg-qd-lime/10 dark:text-qd-lime"
-                            >
-                                <span className="size-1.5 rounded-full bg-qd-teal-2 dark:bg-qd-lime" />
-                                {badge}
-                            </span>
-                        ))}
                         <a
                             href={contactUrl}
                             className="inline-flex items-center gap-2 rounded-xl bg-qd-lime px-5 py-3 text-sm font-bold text-qd-ink transition hover:brightness-95"
@@ -264,8 +258,56 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
             />
 
             <section className="bg-qd-white dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
-                    <div className="-mt-10 grid overflow-hidden rounded-2xl border border-qd-ink/10 bg-qd-white shadow-[0_28px_80px_-54px_rgba(7,17,26,0.55)] md:grid-cols-2 lg:grid-cols-4 dark:border-qd-white/10 dark:bg-qd-surface">
+                <div className="mx-auto max-w-[1240px] px-5 py-12 sm:px-8 sm:py-14">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                        <h2 className="text-2xl font-bold text-qd-ink dark:text-qd-white">
+                            {keyFactsTitle}
+                        </h2>
+                        {statusBadges.length > 0 && (
+                            <div className="flex flex-wrap gap-2">
+                                {statusBadges.map((badge) => (
+                                    <span
+                                        key={badge}
+                                        className="inline-flex items-center gap-2 rounded-full border border-qd-teal-2/25 bg-qd-teal-2/10 px-3 py-1 text-xs font-bold text-qd-teal-2 dark:border-qd-lime/30 dark:bg-qd-lime/10 dark:text-qd-lime"
+                                    >
+                                        <span className="size-1.5 rounded-full bg-qd-teal-2 dark:bg-qd-lime" />
+                                        {badge}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                    <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                        {meta.map((item) => {
+                            const Icon = item.icon;
+
+                            return (
+                                <article
+                                    key={item.key}
+                                    className="rounded-2xl border border-qd-ink/10 bg-qd-white p-6 shadow-[0_18px_58px_-48px_rgba(7,17,26,0.45)] dark:border-qd-white/10 dark:bg-qd-white/5"
+                                >
+                                    <Icon
+                                        aria-hidden="true"
+                                        size={24}
+                                        strokeWidth={1.7}
+                                        className="text-qd-teal-2 dark:text-qd-teal"
+                                    />
+                                    <h3 className="mt-4 text-sm font-bold text-qd-ink dark:text-qd-white">
+                                        {item.label}
+                                    </h3>
+                                    <p className="mt-3 text-sm leading-relaxed text-qd-text-high">
+                                        {item.value}
+                                    </p>
+                                </article>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+
+            <section className="bg-qd-white dark:bg-qd-ink">
+                <div className="mx-auto max-w-[1240px] px-5 pb-14 sm:px-8 sm:pb-16">
+                    <div className="grid overflow-hidden rounded-2xl border border-qd-ink/10 bg-qd-white shadow-[0_28px_80px_-54px_rgba(7,17,26,0.55)] md:grid-cols-2 lg:grid-cols-4 dark:border-qd-white/10 dark:bg-qd-surface">
                         {infoBlocks.map((block) => {
                             const Icon = block.icon;
 
