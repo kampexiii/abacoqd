@@ -28,7 +28,10 @@ type PublicProject = {
     readonly year: number | null;
     readonly clientName: string | null;
     readonly partnerName: string | null;
+    readonly executorName: string | null;
     readonly isFeatured: boolean;
+    readonly isHistorical: boolean;
+    readonly isApproved: boolean;
 };
 
 type PublicPartner = {
@@ -39,6 +42,8 @@ type PublicPartner = {
     readonly logoAlt: string | null;
     readonly website: string | null;
     readonly description: LocalizedText | null;
+    readonly isHistorical: boolean;
+    readonly isApproved: boolean;
 };
 
 type ProjectsProps = {
@@ -152,7 +157,11 @@ export default function Projects({ projects, partners }: ProjectsProps) {
                                 </ul>
                             </div>
                             <p className="mt-6 text-center text-xs text-qd-text-medium">
-                                {t('projectsPage.partners.note')}
+                                {partners.some(
+                                    (partner) => partner.isHistorical && !partner.isApproved,
+                                )
+                                    ? t('projectsPage.partners.pendingNote')
+                                    : t('projectsPage.partners.note')}
                             </p>
                         </div>
                     )}
@@ -218,33 +227,43 @@ export default function Projects({ projects, partners }: ProjectsProps) {
         );
         const partnerLabel = project.partnerName ?? project.clientName ?? t('projectsPage.card.internalProject');
         const consultUrl = contactShow.url({ query: { proyecto: slug } });
+        const pendingHistorical = project.isHistorical && !project.isApproved;
 
         return (
             <article className="group flex flex-col overflow-hidden rounded-2xl border border-qd-mist bg-qd-white shadow-[0_18px_60px_-42px_rgba(7,17,26,0.35)] transition duration-300 hover:-translate-y-1 hover:border-qd-teal-2/70 dark:border-qd-white/10 dark:bg-qd-white/5 dark:hover:border-qd-teal/70">
-                {cover ? (
-                    <img
-                        src={cover}
-                        alt={title}
-                        loading="lazy"
-                        className="aspect-[16/10] w-full object-cover"
-                    />
-                ) : (
-                    <div
-                        aria-hidden="true"
-                        className="flex aspect-[16/10] w-full items-center justify-center bg-qd-ink"
-                        style={{
-                            backgroundImage:
-                                'radial-gradient(circle at 30% 25%, rgba(24,183,176,0.22), transparent 45%), linear-gradient(rgba(24,183,176,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(24,183,176,0.16) 1px, transparent 1px)',
-                            backgroundSize: 'auto, 26px 26px, 26px 26px',
-                        }}
-                    >
+                <div className="relative">
+                    {pendingHistorical && (
+                        <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-qd-ink/85 px-3 py-1 text-[11px] font-bold text-qd-white backdrop-blur-sm">
+                            <span className="size-1.5 rounded-full bg-qd-lime" />
+                            {t('projectsPage.badge.historical')} ·{' '}
+                            {t('projectsPage.badge.pendingValidation')}
+                        </span>
+                    )}
+                    {cover ? (
                         <img
-                            src="/assets/branding/marca/logos/abacoqd-isotipo-inverse.svg"
-                            alt=""
-                            className="h-12 w-12 opacity-80"
+                            src={cover}
+                            alt={title}
+                            loading="lazy"
+                            className="aspect-[16/10] w-full object-cover"
                         />
-                    </div>
-                )}
+                    ) : (
+                        <div
+                            aria-hidden="true"
+                            className="flex aspect-[16/10] w-full items-center justify-center bg-qd-ink"
+                            style={{
+                                backgroundImage:
+                                    'radial-gradient(circle at 30% 25%, rgba(24,183,176,0.22), transparent 45%), linear-gradient(rgba(24,183,176,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(24,183,176,0.16) 1px, transparent 1px)',
+                                backgroundSize: 'auto, 26px 26px, 26px 26px',
+                            }}
+                        >
+                            <img
+                                src="/assets/branding/marca/logos/abacoqd-isotipo-inverse.svg"
+                                alt=""
+                                className="h-12 w-12 opacity-80"
+                            />
+                        </div>
+                    )}
+                </div>
 
                 <div className="flex flex-1 flex-col p-6">
                     {technologies.length > 0 && (
@@ -266,6 +285,16 @@ export default function Projects({ projects, partners }: ProjectsProps) {
                     <p className="mt-2 text-sm leading-relaxed text-qd-text-high">
                         {summary}
                     </p>
+
+                    {project.executorName &&
+                        project.executorName !== project.partnerName && (
+                            <p className="mt-3 text-xs text-qd-text-medium">
+                                {t('projectsPage.card.executorBy')}:{' '}
+                                <span className="font-semibold text-qd-text-high">
+                                    {project.executorName}
+                                </span>
+                            </p>
+                        )}
 
                     <div className="mt-6 flex items-center justify-between gap-3 border-t border-qd-mist pt-4 dark:border-qd-white/10">
                         <span className="flex items-center gap-2 text-xs text-qd-text-medium">

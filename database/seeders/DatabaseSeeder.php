@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             BookingSettingsSeeder::class,
             FaqSeeder::class,
             SeoMetadataSeeder::class,
+            AbacoHistoricalProjectsSeeder::class,
         ]);
 
         User::factory()->create([

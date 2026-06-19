@@ -812,11 +812,17 @@
         "card": {
             "internalProject": "Internal project",
             "viewProject": "View project",
-            "consultSimilar": "Ask about a similar project"
+            "consultSimilar": "Ask about a similar project",
+            "executorBy": "Delivered by"
+        },
+        "badge": {
+            "historical": "Historical",
+            "pendingValidation": "Pending validation"
         },
         "partners": {
             "title": "Partners we collaborate with",
-            "note": "We show these brands with their permission."
+            "note": "We show these brands with their permission.",
+            "pendingNote": "Historical brands under validation — pending publication permission."
         },
         "empty": {
             "title": "First cases in preparation.",

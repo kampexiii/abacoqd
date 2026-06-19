@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Enums\PermissionStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\Project;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -14,10 +17,14 @@ class ProjectController extends Controller
      * Show the public Proyectos listing.
      * docs/07_VISTAS/PUBLIC_04_PROYECTOS.md.
      *
-     * Solo se listan proyectos publicables (activos, publicados, visibles en
-     * Proyectos y con permiso aprobado). Si no hay contenido publicable, la
-     * vista muestra un estado vacío honesto — sin inventar casos ni logos.
-     * El contenido real lo alimenta el CRUD de Proyectos del admin (Fase 4/5).
+     * Gating de publicación:
+     * - En producción solo se listan proyectos/partners con permiso aprobado.
+     * - Fuera de producción (local/preview) también se listan los marcados con
+     *   `settings.show_in_local_preview = true` (datos históricos aportados por
+     *   Ábaco, aún pendientes de validación de permiso). Así se valida la
+     *   maquetación con datos reales sin falsear permisos en producción.
+     *
+     * Si no hay contenido publicable, la vista muestra un estado vacío honesto.
      */
     public function index(): Response
     {
@@ -25,17 +32,15 @@ class ProjectController extends Controller
             ->active()
             ->published()
             ->projects()
-            ->permitted()
-            ->with(['clientPartner' => fn ($query) => $query->permitted()->projects()])
+            ->where(fn (Builder $query) => $this->scopeListable($query))
+            ->with(['clientPartner', 'partners'])
             ->ordered()
             ->get();
 
-        // Bloque de partners: solo marcas con permiso aprobado y visibles en
-        // Proyectos. Si no hay ninguna, el bloque se oculta en la vista.
         $partners = Partner::query()
             ->active()
             ->projects()
-            ->permitted()
+            ->where(fn (Builder $query) => $this->scopeListable($query))
             ->ordered()
             ->get();
 
@@ -50,11 +55,29 @@ class ProjectController extends Controller
     }
 
     /**
+     * Aprobado siempre; en preview local también `show_in_local_preview`.
+     *
+     * @template TModel of Model
+     *
+     * @param  Builder<TModel>  $query
+     */
+    private function scopeListable(Builder $query): void
+    {
+        $query->where('permission_status', PermissionStatus::Approved->value);
+
+        if (! app()->isProduction()) {
+            $query->orWhere('settings->show_in_local_preview', true);
+        }
+    }
+
+    /**
      * @return array<string, mixed>
      */
     private function projectSummary(Project $project): array
     {
-        $partner = $project->clientPartner;
+        $client = $project->clientPartner;
+        $executor = $project->partners->firstWhere('pivot.role', 'collaborator');
+        $settings = is_array($project->settings) ? $project->settings : [];
 
         return [
             'id' => $project->id,
@@ -66,8 +89,11 @@ class ProjectController extends Controller
             'technologies' => is_array($project->technologies) ? array_values($project->technologies) : [],
             'year' => $project->year,
             'clientName' => $project->client_name,
-            'partnerName' => $partner?->name,
+            'partnerName' => $client?->name,
+            'executorName' => $executor?->name,
             'isFeatured' => $project->is_featured,
+            'isHistorical' => (bool) ($settings['is_historical'] ?? false),
+            'isApproved' => $project->permission_status === PermissionStatus::Approved,
         ];
     }
 
@@ -76,6 +102,8 @@ class ProjectController extends Controller
      */
     private function partnerSummary(Partner $partner): array
     {
+        $settings = is_array($partner->settings) ? $partner->settings : [];
+
         return [
             'id' => $partner->id,
             'name' => $partner->name,
@@ -84,6 +112,8 @@ class ProjectController extends Controller
             'logoAlt' => $partner->logo_alt,
             'website' => $partner->website,
             'description' => $partner->description,
+            'isHistorical' => (bool) ($settings['is_historical'] ?? false),
+            'isApproved' => $partner->permission_status === PermissionStatus::Approved,
         ];
     }
 }

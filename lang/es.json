@@ -812,11 +812,17 @@
         "card": {
             "internalProject": "Proyecto interno",
             "viewProject": "Ver proyecto",
-            "consultSimilar": "Consultar proyecto similar"
+            "consultSimilar": "Consultar proyecto similar",
+            "executorBy": "Ejecutado por"
+        },
+        "badge": {
+            "historical": "Histórico",
+            "pendingValidation": "Pendiente de validación"
         },
         "partners": {
             "title": "Partners con los que colaboramos",
-            "note": "Mostramos estas marcas con su permiso."
+            "note": "Mostramos estas marcas con su permiso.",
+            "pendingNote": "Marcas históricas en validación — pendientes de permiso de publicación."
         },
         "empty": {
             "title": "Primeros casos en preparación.",
