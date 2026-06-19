@@ -819,6 +819,12 @@
             "historical": "Historical",
             "pendingValidation": "Pending validation"
         },
+        "pagination": {
+            "label": "Projects pagination",
+            "previous": "Previous",
+            "next": "Next",
+            "page": "Page"
+        },
         "partners": {
             "title": "Partners we collaborate with",
             "note": "We show these brands with their permission.",

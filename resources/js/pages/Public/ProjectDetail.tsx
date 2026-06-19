@@ -422,7 +422,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                 </div>
             </section>
 
-            <section className="bg-[linear-gradient(90deg,#effaff_0%,#f8fdff_46%,#edf9fb_100%)] dark:bg-qd-surface">
+            <section className="bg-[linear-gradient(90deg,#effaff_0%,#f8fdff_46%,#edf9fb_100%)] dark:bg-none dark:bg-qd-surface">
                 <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[0.75fr_1.25fr]">
                     <aside className="border-qd-ink/10 lg:border-r lg:pr-12 dark:border-qd-white/10">
                         <h2 className="text-base font-bold text-qd-ink dark:text-qd-white">

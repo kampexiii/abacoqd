@@ -12,6 +12,8 @@ use Inertia\Response;
 
 class ProjectController extends Controller
 {
+    private const PER_PAGE = 9;
+
     /**
      * Show the public Proyectos listing.
      * docs/07_VISTAS/PUBLIC_04_PROYECTOS.md.
@@ -24,6 +26,7 @@ class ProjectController extends Controller
      *   sin falsear permisos en producción.
      *
      * Si no hay contenido publicable, la vista muestra un estado vacío honesto.
+     * Paginado a `self::PER_PAGE` proyectos por página.
      */
     public function index(): Response
     {
@@ -34,22 +37,13 @@ class ProjectController extends Controller
             ->publiclyListable()
             ->with(['clientPartner', 'partners'])
             ->ordered()
-            ->get();
-
-        $partners = Partner::query()
-            ->active()
-            ->projects()
-            ->publiclyListable()
-            ->ordered()
-            ->get();
+            ->paginate(self::PER_PAGE)
+            ->withQueryString();
 
         return Inertia::render('Public/Projects', [
-            'projects' => $projects
-                ->map(fn (Project $project): array => $this->projectSummary($project))
-                ->values(),
-            'partners' => $partners
-                ->map(fn (Partner $partner): array => $this->partnerSummary($partner))
-                ->values(),
+            'projects' => $projects->through(
+                fn (Project $project): array => $this->projectSummary($project),
+            ),
         ]);
     }
 
@@ -164,26 +158,6 @@ class ProjectController extends Controller
             'permissionNotes' => $project->permission_notes,
             'settings' => is_array($project->settings) ? $project->settings : [],
             'partners' => $partners,
-        ];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function partnerSummary(Partner $partner): array
-    {
-        $settings = is_array($partner->settings) ? $partner->settings : [];
-
-        return [
-            'id' => $partner->id,
-            'name' => $partner->name,
-            'logo' => $partner->logo,
-            'logoDark' => $partner->logo_dark,
-            'logoAlt' => $partner->logo_alt,
-            'website' => $partner->website,
-            'description' => $partner->description,
-            'isHistorical' => (bool) ($settings['is_historical'] ?? false),
-            'isApproved' => $partner->permission_status === PermissionStatus::Approved,
         ];
     }
 }

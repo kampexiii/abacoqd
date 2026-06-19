@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
 import {
+    ArrowLeft,
     ArrowRight,
     ArrowUpRight,
     Boxes,
@@ -39,27 +40,27 @@ type PublicProject = {
     readonly isApproved: boolean;
 };
 
-type PublicPartner = {
-    readonly id: number;
-    readonly name: string;
-    readonly logo: string | null;
-    readonly logoDark: string | null;
-    readonly logoAlt: string | null;
-    readonly website: string | null;
-    readonly description: LocalizedText | null;
-    readonly isHistorical: boolean;
-    readonly isApproved: boolean;
+type PaginationLink = {
+    readonly url: string | null;
+    readonly label: string;
+    readonly active: boolean;
+};
+
+type Paginated<T> = {
+    readonly data: readonly T[];
+    readonly current_page: number;
+    readonly last_page: number;
+    readonly links: readonly PaginationLink[];
 };
 
 type ProjectsProps = {
-    readonly projects: readonly PublicProject[];
-    readonly partners: readonly PublicPartner[];
+    readonly projects: Paginated<PublicProject>;
 };
 
-export default function Projects({ projects, partners }: ProjectsProps) {
+export default function Projects({ projects }: ProjectsProps) {
     const { t, locale } = useLanguage();
-    const hasProjects = projects.length > 0;
-    const hasPartners = partners.length > 0;
+    const items = projects.data;
+    const hasProjects = items.length > 0;
 
     return (
         <PublicLayout>
@@ -94,11 +95,69 @@ export default function Projects({ projects, partners }: ProjectsProps) {
                     </div>
 
                     {hasProjects ? (
-                        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                            {projects.map((project) => (
-                                <ProjectCard key={project.id} project={project} />
-                            ))}
-                        </div>
+                        <>
+                            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                                {items.map((project) => (
+                                    <ProjectCard key={project.id} project={project} />
+                                ))}
+                            </div>
+
+                            {projects.last_page > 1 && (
+                                <nav
+                                    aria-label={t('projectsPage.pagination.label')}
+                                    className="mt-12 flex flex-wrap items-center justify-center gap-2"
+                                >
+                                    {projects.links.map((link, index) => {
+                                        const isPrev = index === 0;
+                                        const isNext =
+                                            index === projects.links.length - 1;
+                                        const content = isPrev ? (
+                                            <ArrowLeft aria-hidden="true" size={16} />
+                                        ) : isNext ? (
+                                            <ArrowRight aria-hidden="true" size={16} />
+                                        ) : (
+                                            link.label
+                                        );
+                                        const label = isPrev
+                                            ? t('projectsPage.pagination.previous')
+                                            : isNext
+                                              ? t('projectsPage.pagination.next')
+                                              : `${t('projectsPage.pagination.page')} ${link.label}`;
+
+                                        if (!link.url) {
+                                            return (
+                                                <span
+                                                    key={index}
+                                                    aria-hidden="true"
+                                                    className="inline-flex h-10 min-w-10 items-center justify-center rounded-xl border border-qd-mist px-3 text-sm font-semibold text-qd-text-medium/50 dark:border-qd-white/10"
+                                                >
+                                                    {content}
+                                                </span>
+                                            );
+                                        }
+
+                                        return (
+                                            <a
+                                                key={index}
+                                                href={link.url}
+                                                aria-label={label}
+                                                aria-current={
+                                                    link.active ? 'page' : undefined
+                                                }
+                                                className={cn(
+                                                    'inline-flex h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-semibold transition',
+                                                    link.active
+                                                        ? 'border-qd-teal-2 bg-qd-teal-2 text-qd-white dark:border-qd-teal dark:bg-qd-teal dark:text-qd-ink'
+                                                        : 'border-qd-mist text-qd-text-high hover:border-qd-teal-2 hover:text-qd-teal-2 dark:border-qd-white/10 dark:text-qd-white dark:hover:border-qd-teal dark:hover:text-qd-teal',
+                                                )}
+                                            >
+                                                {content}
+                                            </a>
+                                        );
+                                    })}
+                                </nav>
+                            )}
+                        </>
                     ) : (
                         <div className="mx-auto mt-12 max-w-xl rounded-3xl border border-qd-mist bg-qd-white p-8 text-center sm:p-10 dark:border-qd-white/10 dark:bg-qd-white/5">
                             <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-qd-teal-2/25 bg-qd-teal-2/10 text-qd-teal-2 dark:border-qd-teal/30 dark:bg-qd-teal/10 dark:text-qd-teal">
@@ -126,48 +185,6 @@ export default function Projects({ projects, partners }: ProjectsProps) {
                                     <Send aria-hidden="true" size={16} />
                                 </a>
                             </div>
-                        </div>
-                    )}
-
-                    {/* Bloque de partners: solo si hay marcas con permiso */}
-                    {hasPartners && (
-                        <div className="mt-10 rounded-3xl border border-qd-mist bg-qd-white p-7 sm:p-8 dark:border-qd-white/10 dark:bg-qd-white/5">
-                            <div className="flex flex-col gap-7 lg:flex-row lg:items-center lg:gap-10">
-                                <h2 className="max-w-[220px] text-lg font-bold text-qd-ink dark:text-qd-white">
-                                    {t('projectsPage.partners.title')}
-                                </h2>
-                                <ul className="flex flex-1 flex-wrap items-center gap-x-10 gap-y-6">
-                                    {partners.map((partner) => (
-                                        <li
-                                            key={partner.id}
-                                            className="flex items-center gap-3"
-                                        >
-                                            {partner.logo ? (
-                                                <img
-                                                    src={partner.logo}
-                                                    alt={partner.logoAlt ?? partner.name}
-                                                    className="h-9 w-auto object-contain"
-                                                    loading="lazy"
-                                                />
-                                            ) : (
-                                                <span className="flex size-9 items-center justify-center rounded-lg border border-qd-teal-2/25 bg-qd-teal-2/10 text-qd-teal-2 dark:border-qd-teal/30 dark:bg-qd-teal/10 dark:text-qd-teal">
-                                                    <Layers aria-hidden="true" size={18} />
-                                                </span>
-                                            )}
-                                            <span className="text-sm font-semibold text-qd-ink dark:text-qd-white">
-                                                {partner.name}
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <p className="mt-6 text-center text-xs text-qd-text-medium">
-                                {partners.some(
-                                    (partner) => partner.isHistorical && !partner.isApproved,
-                                )
-                                    ? t('projectsPage.partners.pendingNote')
-                                    : t('projectsPage.partners.note')}
-                            </p>
                         </div>
                     )}
                 </div>
