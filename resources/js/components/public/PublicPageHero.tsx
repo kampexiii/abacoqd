@@ -34,15 +34,13 @@ export default function PublicPageHero({
     const { t } = useLanguage();
 
     return (
-        <section className="relative overflow-hidden bg-qd-mist dark:bg-qd-surface">
+        // Hero interno transparente: deja ver el WaveBackground global (las
+        // mismas "olas" del home) que PublicLayout monta detrás. Un velo suave
+        // mist/surface mantiene el contraste del texto sin tapar las olas.
+        <section className="relative overflow-hidden">
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-y-0 right-0 w-2/3 opacity-60 sm:w-1/2"
-                style={{
-                    backgroundImage:
-                        'repeating-linear-gradient(115deg, rgba(24,183,176,0.18) 0px, rgba(24,183,176,0.18) 1.5px, transparent 1.5px, transparent 28px)',
-                    maskImage: 'linear-gradient(to left, black, transparent)',
-                }}
+                className="pointer-events-none absolute inset-0 bg-qd-mist/55 dark:bg-qd-surface/55"
             />
             <div className="relative mx-auto max-w-[1240px] px-5 pt-28 pb-16 sm:px-8 sm:pt-32 sm:pb-20">
                 <div className="flex items-center justify-between gap-10">
