@@ -10,13 +10,13 @@ import {
     Cpu,
     ExternalLink,
     Home,
-    LineChart,
     Mountain,
     Target,
     Users,
     Zap,
 } from 'lucide-react';
 
+import MethodologyCube from '@/components/public/MethodologyCube';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
@@ -141,85 +141,20 @@ function BrandPattern({
     );
 }
 
-function DashboardHeroVisual() {
+function ProjectHeroCubeVisual() {
     return (
-        <div className="relative hidden min-h-[360px] flex-1 lg:block">
-            <div className="absolute -right-16 top-2 h-[330px] w-[610px] rotate-[-6deg] rounded-2xl border border-qd-teal/25 bg-[#07111a]/95 p-5 shadow-[0_40px_110px_rgba(0,0,0,0.55)]">
-                <div className="mb-5 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <img
-                            src="/assets/branding/marca/logos/abacoqd-isotipo-inverse.svg"
-                            alt=""
-                            className="h-5 w-5"
-                        />
-                        <span className="text-[11px] font-semibold text-qd-white/78">
-                            AbacoQD Data & CRM
-                        </span>
-                    </div>
-                    <div className="flex gap-1.5">
-                        {[0, 1, 2].map((item) => (
-                            <span
-                                key={item}
-                                className="block size-1.5 rounded-full bg-qd-teal/55"
-                            />
-                        ))}
-                    </div>
-                </div>
-                <div className="grid grid-cols-[0.82fr_1.18fr] gap-4">
-                    <div className="rounded-xl border border-white/8 bg-white/[0.035] p-4">
-                        <p className="text-[11px] font-semibold text-qd-white/62">
-                            Vision unica de cliente
-                        </p>
-                        <p className="mt-4 text-3xl font-bold text-qd-teal">
-                            CRM
-                        </p>
-                        <div className="mt-4 grid grid-cols-2 gap-2">
-                            {[64, 82, 48, 70].map((value) => (
-                                <span
-                                    key={value}
-                                    className="h-2 rounded-full bg-qd-teal/20"
-                                    style={{ width: `${value}%` }}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                    <div className="rounded-xl border border-white/8 bg-white/[0.035] p-4">
-                        <LineChart className="text-qd-teal" size={17} />
-                        <svg
-                            className="mt-4 h-28 w-full text-qd-teal"
-                            viewBox="0 0 320 120"
-                            aria-hidden="true"
-                        >
-                            <path
-                                d="M0 88 L35 74 L70 82 L105 51 L140 62 L175 34 L210 42 L245 24 L280 32 L320 17"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="3"
-                            />
-                            <path
-                                d="M0 92 L35 78 L70 86 L105 55 L140 66 L175 38 L210 46 L245 28 L280 36 L320 21 L320 120 L0 120 Z"
-                                fill="currentColor"
-                                opacity="0.08"
-                            />
-                        </svg>
-                    </div>
-                </div>
-                <div className="mt-4 grid grid-cols-3 gap-4">
-                    {['Perfil del cliente', 'Actividad reciente', 'Preferencias'].map((label) => (
-                        <div
-                            key={label}
-                            className="h-20 rounded-xl border border-white/8 bg-white/[0.035] p-3"
-                        >
-                            <p className="text-[10px] font-semibold text-qd-white/55">
-                                {label}
-                            </p>
-                            <span className="mt-4 block h-2 w-4/5 rounded-full bg-qd-teal/20" />
-                            <span className="mt-2 block h-2 w-3/5 rounded-full bg-qd-teal/14" />
-                        </div>
-                    ))}
-                </div>
+        <div className="relative hidden min-h-[360px] flex-1 items-center justify-center lg:flex">
+            <div
+                aria-hidden="true"
+                className="absolute inset-0 rounded-full opacity-80 blur-3xl"
+                style={{
+                    background:
+                        'radial-gradient(circle at center, color-mix(in srgb, var(--qd-teal) 28%, transparent), transparent 62%)',
+                }}
+            />
+            <div className="relative flex size-80 items-center justify-center rounded-full border border-qd-teal/15 bg-qd-white/5 shadow-[0_36px_120px_rgba(0,0,0,0.28)] backdrop-blur-md dark:border-qd-white/10 dark:bg-qd-white/[0.04]">
+                <MethodologyCube />
             </div>
-            <div className="absolute inset-y-0 left-0 w-2/3 bg-[radial-gradient(circle_at_68%_58%,rgba(24,183,176,0.28),transparent_28%),radial-gradient(circle_at_58%_66%,rgba(57,198,230,0.12),transparent_36%)]" />
         </div>
     );
 }
@@ -319,7 +254,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
         <PublicLayout>
             <Head title={`${title} | Abaco Developments`} />
 
-            <section className="relative overflow-hidden bg-[#03111b] pt-28 text-qd-white sm:pt-32">
+            <section className="relative overflow-hidden bg-qd-ink pt-28 text-qd-white sm:pt-32">
                 <div
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-0 opacity-75"
@@ -434,7 +369,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                         </div>
                     </div>
 
-                    <DashboardHeroVisual />
+                    <ProjectHeroCubeVisual />
                 </div>
             </section>
 
