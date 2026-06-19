@@ -1,5 +1,5 @@
 import { ArrowRight } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import type { CSSProperties } from 'react';
 import type { CompanyLogo } from '@/data/company-logos';
@@ -8,17 +8,59 @@ import { useInView } from '@/hooks/use-in-view';
 import { useLanguage } from '@/hooks/use-language';
 import { cn } from '@/lib/utils';
 
-type ReadyLogo = CompanyLogo & {
+export type CollaborationItem = {
+    readonly slug: string;
+    readonly name: string;
+    readonly logoLight: string | null;
+    readonly logoDark?: string | null;
+    readonly logoAlt?: string | null;
+    readonly href?: string | null;
+    readonly isHistorical?: boolean;
+    readonly isApproved?: boolean;
+};
+
+type CollaborationsSectionProps = {
+    readonly items?: readonly CollaborationItem[];
+};
+
+type ReadyCompanyLogo = CompanyLogo & {
     readonly logoLight: string;
 };
 
-const isReadyLogo = (logo: CompanyLogo): logo is ReadyLogo =>
+type OrbitLogo = {
+    readonly slug: string;
+    readonly name: string;
+    readonly logoLight: string;
+    readonly logoDark?: string | null;
+    readonly alt: string;
+    readonly href: string;
+    readonly isHistorical: boolean;
+    readonly isApproved: boolean;
+};
+
+const isReadyLogo = (logo: CompanyLogo): logo is ReadyCompanyLogo =>
     logo.logoReady && typeof logo.logoLight === 'string';
 
-const isActiveReadyLogo = (logo: CompanyLogo): logo is ReadyLogo =>
+const isActiveReadyLogo = (logo: CompanyLogo): logo is ReadyCompanyLogo =>
     logo.active && isReadyLogo(logo);
 
-const ORBIT_LOGOS = COMPANY_LOGOS.filter(isActiveReadyLogo);
+/**
+ * Fallback temporal: la fuente principal de Colaboraciones es BD vía props
+ * (`partners`, `projects`, `partner_project`). Este estático solo evita dejar
+ * la landing vacía si no hay registros renderizables en preview local.
+ */
+const FALLBACK_ORBIT_LOGOS: readonly OrbitLogo[] = COMPANY_LOGOS.filter(
+    isActiveReadyLogo,
+).map((logo) => ({
+    slug: logo.slug,
+    name: logo.name,
+    logoLight: logo.logoLight,
+    logoDark: logo.logoDark,
+    alt: logo.alt,
+    href: logo.url ?? `/proyectos#${logo.slug}`,
+    isHistorical: false,
+    isApproved: true,
+}));
 
 const FULL_ROTATION_MS = 56_000;
 const ORBIT_RADIUS_PERCENT = 35.5;
@@ -98,15 +140,22 @@ const getOrbitState = (angle: number, radius: number): OrbitState => {
     };
 };
 
-const getLogoAngle = (index: number, baseAngle: number): number => {
-    const step = 360 / Math.max(ORBIT_LOGOS.length, 1);
+const getLogoAngle = (
+    index: number,
+    baseAngle: number,
+    logoCount: number,
+): number => {
+    const step = 360 / Math.max(logoCount, 1);
 
     return normalizeAngle(INITIAL_ACTIVE_ANGLE + baseAngle + index * step);
 };
 
-const getInitialBubbleStyle = (index: number): CSSProperties => {
+const getInitialBubbleStyle = (
+    index: number,
+    logoCount: number,
+): CSSProperties => {
     const radius = DEFAULT_ORBIT_SIZE * (ORBIT_RADIUS_PERCENT / 100);
-    const state = getOrbitState(getLogoAngle(index, 0), radius);
+    const state = getOrbitState(getLogoAngle(index, 0, logoCount), radius);
 
     return {
         '--qd-collab-opacity': state.opacity.toFixed(3),
@@ -149,8 +198,42 @@ const isMotionPaused = (mediaQuery: MediaQueryList): boolean => {
     );
 };
 
-export default function CollaborationsSection() {
+const isReadyCollaborationItem = (
+    item: CollaborationItem,
+): item is CollaborationItem & { readonly logoLight: string } =>
+    item.slug.length > 0 &&
+    item.name.length > 0 &&
+    typeof item.logoLight === 'string' &&
+    item.logoLight.length > 0;
+
+const toOrbitLogo = (
+    item: CollaborationItem & { readonly logoLight: string },
+): OrbitLogo => ({
+    slug: item.slug,
+    name: item.name,
+    logoLight: item.logoLight,
+    logoDark: item.logoDark,
+    alt: item.logoAlt ?? `Logotipo de ${item.name}`,
+    href: item.href ?? `/proyectos#${item.slug}`,
+    isHistorical: item.isHistorical ?? false,
+    isApproved: item.isApproved ?? false,
+});
+
+const resolveOrbitLogos = (
+    items: readonly CollaborationItem[] | undefined,
+): readonly OrbitLogo[] => {
+    const databaseLogos = (items ?? [])
+        .filter(isReadyCollaborationItem)
+        .map(toOrbitLogo);
+
+    return databaseLogos.length > 0 ? databaseLogos : FALLBACK_ORBIT_LOGOS;
+};
+
+export default function CollaborationsSection({
+    items,
+}: CollaborationsSectionProps) {
     const { t } = useLanguage();
+    const orbitLogos = useMemo(() => resolveOrbitLogos(items), [items]);
     const { ref, inView } = useInView<HTMLDivElement>({ threshold: 0.12 });
     const orbitRef = useRef<HTMLDivElement>(null);
     const bubbleRefs = useRef<Array<HTMLAnchorElement | null>>([]);
@@ -181,7 +264,10 @@ export default function CollaborationsSection() {
             bubbles.forEach((bubble, index) => {
                 applyBubbleState(
                     bubble,
-                    getOrbitState(getLogoAngle(index, baseAngle), radius),
+                    getOrbitState(
+                        getLogoAngle(index, baseAngle, orbitLogos.length),
+                        radius,
+                    ),
                 );
             });
         };
@@ -261,7 +347,7 @@ export default function CollaborationsSection() {
             htmlObserver.disconnect();
             mediaQuery.removeEventListener('change', start);
         };
-    }, []);
+    }, [orbitLogos.length]);
 
     return (
         <section id="colaboraciones" className="abaco-section">
@@ -331,16 +417,24 @@ export default function CollaborationsSection() {
                                 decoding="async"
                             />
                         </a>
-                        {ORBIT_LOGOS.map((logo, index) => {
+                        {orbitLogos.map((logo, index) => {
                             const initialState = getOrbitState(
-                                getLogoAngle(index, 0),
+                                getLogoAngle(index, 0, orbitLogos.length),
                                 DEFAULT_ORBIT_SIZE * (ORBIT_RADIUS_PERCENT / 100),
                             );
+                            const statusBadges = [
+                                logo.isHistorical
+                                    ? t('projectsPage.badge.historical')
+                                    : null,
+                                !logo.isApproved
+                                    ? t('projectsPage.badge.pendingValidation')
+                                    : null,
+                            ].filter((badge): badge is string => badge !== null);
 
                             return (
                                 <a
                                     key={logo.slug}
-                                    href={logo.url ?? `/proyectos#${logo.slug}`}
+                                    href={logo.href}
                                     ref={(node) => {
                                         bubbleRefs.current[index] = node;
                                     }}
@@ -349,9 +443,16 @@ export default function CollaborationsSection() {
                                         initialState.active && 'is-active',
                                         initialState.visible && 'is-visible',
                                     )}
-                                    aria-label={`${t('home.collaborations.cta')}: ${logo.name}`}
+                                    aria-label={`${t('home.collaborations.cta')}: ${logo.name}${
+                                        statusBadges.length > 0
+                                            ? ` (${statusBadges.join(' · ')})`
+                                            : ''
+                                    }`}
                                     aria-hidden={!initialState.visible}
-                                    style={getInitialBubbleStyle(index)}
+                                    style={getInitialBubbleStyle(
+                                        index,
+                                        orbitLogos.length,
+                                    )}
                                     tabIndex={initialState.visible ? 0 : -1}
                                 >
                                     <img
@@ -374,6 +475,11 @@ export default function CollaborationsSection() {
                                             decoding="async"
                                             className="qd-collab-logo-img hidden dark:block"
                                         />
+                                    )}
+                                    {statusBadges.length > 0 && (
+                                        <span className="qd-collab-logo-status">
+                                            {statusBadges.join(' · ')}
+                                        </span>
                                     )}
                                 </a>
                             );

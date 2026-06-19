@@ -1,5 +1,8 @@
 export type CompanyLogoType = 'colaboracion' | 'cliente_directo';
 
+// Fallback temporal para Colaboraciones. La fuente principal es BD
+// (`partners`, `projects`, `partner_project`) y este catálogo solo se usa
+// cuando Home no recibe elementos renderizables desde Inertia.
 export type CompanyLogo = {
     readonly name: string;
     readonly slug: string;

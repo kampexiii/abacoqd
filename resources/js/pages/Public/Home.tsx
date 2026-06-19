@@ -3,6 +3,7 @@ import { Head } from '@inertiajs/react';
 import AbacoHero from '@/components/AbacoHero';
 import BlogSection from '@/components/sections/BlogSection';
 import CollaborationsSection from '@/components/sections/CollaborationsSection';
+import type { CollaborationItem } from '@/components/sections/CollaborationsSection';
 import FinalCtaSection from '@/components/sections/FinalCtaSection';
 import MethodologySection from '@/components/sections/MethodologySection';
 import ServicesSection from '@/components/sections/ServicesSection';
@@ -19,14 +20,18 @@ import PublicLayout from '@/layouts/public-layout';
  * Sistema, Testimonios, Casos, Partners) quedan fuera por no existir en la
  * documentación final.
  */
-export default function Home() {
+type HomeProps = {
+    readonly collaborations?: readonly CollaborationItem[];
+};
+
+export default function Home({ collaborations = [] }: HomeProps) {
     return (
         <PublicLayout waveHiddenUntilElementId="hero">
             <Head title="Abaco Developments — Consultoría tecnológica, CRM e IA aplicada" />
             <AbacoHero />
             <MethodologySection />
             <ServicesSection />
-            <CollaborationsSection />
+            <CollaborationsSection items={collaborations} />
             <BlogSection />
             <FinalCtaSection />
         </PublicLayout>

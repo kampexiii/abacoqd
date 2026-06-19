@@ -11,6 +11,7 @@ import {
 import PublicPageHero from '@/components/public/PublicPageHero';
 import { useLanguage } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
+import { cn } from '@/lib/utils';
 import { show as bookingShow } from '@/routes/booking';
 import { show as contactShow } from '@/routes/contact';
 
@@ -21,6 +22,7 @@ type PublicProject = {
     readonly id: number;
     readonly title: LocalizedText;
     readonly slug: LocalizedText;
+    readonly detailUrl: string | null;
     readonly summary: LocalizedText;
     readonly coverImage: string | null;
     readonly thumbnailImage: string | null;
@@ -28,6 +30,9 @@ type PublicProject = {
     readonly year: number | null;
     readonly clientName: string | null;
     readonly partnerName: string | null;
+    readonly partnerLogo: string | null;
+    readonly partnerLogoDark: string | null;
+    readonly partnerLogoAlt: string | null;
     readonly executorName: string | null;
     readonly isFeatured: boolean;
     readonly isHistorical: boolean;
@@ -227,47 +232,90 @@ export default function Projects({ projects, partners }: ProjectsProps) {
         );
         const partnerLabel = project.partnerName ?? project.clientName ?? t('projectsPage.card.internalProject');
         const consultUrl = contactShow.url({ query: { proyecto: slug } });
-        const pendingHistorical = project.isHistorical && !project.isApproved;
+        const detailUrl = project.detailUrl ?? (slug ? `/proyectos/${slug}` : null);
+        const cardUrl = detailUrl ?? consultUrl;
+        const statusBadges = [
+            project.isHistorical ? t('projectsPage.badge.historical') : null,
+            !project.isApproved
+                ? t('projectsPage.badge.pendingValidation')
+                : null,
+        ].filter((badge): badge is string => badge !== null);
 
         return (
             <article className="group flex flex-col overflow-hidden rounded-2xl border border-qd-mist bg-qd-white shadow-[0_18px_60px_-42px_rgba(7,17,26,0.35)] transition duration-300 hover:-translate-y-1 hover:border-qd-teal-2/70 dark:border-qd-white/10 dark:bg-qd-white/5 dark:hover:border-qd-teal/70">
                 <div className="relative">
-                    {pendingHistorical && (
+                    {statusBadges.length > 0 && (
                         <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-qd-ink/85 px-3 py-1 text-[11px] font-bold text-qd-white backdrop-blur-sm">
                             <span className="size-1.5 rounded-full bg-qd-lime" />
-                            {t('projectsPage.badge.historical')} ·{' '}
-                            {t('projectsPage.badge.pendingValidation')}
+                            {statusBadges.join(' · ')}
                         </span>
                     )}
-                    {cover ? (
-                        <img
-                            src={cover}
-                            alt={title}
-                            loading="lazy"
-                            className="aspect-[16/10] w-full object-cover"
-                        />
-                    ) : (
-                        <div
-                            aria-hidden="true"
-                            className="flex aspect-[16/10] w-full items-center justify-center bg-qd-ink"
-                            style={{
-                                backgroundImage:
-                                    'radial-gradient(circle at 30% 25%, rgba(24,183,176,0.22), transparent 45%), linear-gradient(rgba(24,183,176,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(24,183,176,0.16) 1px, transparent 1px)',
-                                backgroundSize: 'auto, 26px 26px, 26px 26px',
-                            }}
-                        >
+                    <a href={cardUrl} aria-label={`${t('projectsPage.card.viewProject')}: ${title}`}>
+                        {cover ? (
                             <img
-                                src="/assets/branding/marca/logos/abacoqd-isotipo-inverse.svg"
-                                alt=""
-                                className="h-12 w-12 opacity-80"
+                                src={cover}
+                                alt={title}
+                                loading="lazy"
+                                className="aspect-[16/10] w-full object-cover"
                             />
-                        </div>
-                    )}
+                        ) : (
+                            <div
+                                aria-hidden="true"
+                                className="flex aspect-[16/10] w-full items-center justify-center bg-qd-ink"
+                                style={{
+                                    backgroundImage:
+                                        'radial-gradient(circle at 30% 25%, rgba(24,183,176,0.22), transparent 45%), linear-gradient(rgba(24,183,176,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(24,183,176,0.16) 1px, transparent 1px)',
+                                    backgroundSize: 'auto, 26px 26px, 26px 26px',
+                                }}
+                            >
+                                <img
+                                    src="/assets/branding/marca/logos/abacoqd-isotipo-inverse.svg"
+                                    alt=""
+                                    className="h-12 w-12 opacity-80"
+                                />
+                            </div>
+                        )}
+                    </a>
                 </div>
 
                 <div className="flex flex-1 flex-col p-6">
+                    <div className="flex min-h-9 items-center gap-3">
+                        {project.partnerLogo ? (
+                            <span className="flex h-9 max-w-28 items-center">
+                                <img
+                                    src={project.partnerLogo}
+                                    alt={project.partnerLogoAlt ?? partnerLabel}
+                                    className={cn(
+                                        'max-h-8 w-auto max-w-28 object-contain',
+                                        project.partnerLogoDark && 'dark:hidden',
+                                        !project.partnerLogoDark &&
+                                            'dark:brightness-0 dark:invert',
+                                    )}
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                                {project.partnerLogoDark && (
+                                    <img
+                                        src={project.partnerLogoDark}
+                                        alt={project.partnerLogoAlt ?? partnerLabel}
+                                        className="hidden max-h-8 w-auto max-w-28 object-contain dark:block"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                )}
+                            </span>
+                        ) : (
+                            <span className="flex size-9 items-center justify-center rounded-lg border border-qd-teal-2/25 bg-qd-teal-2/10 text-qd-teal-2 dark:border-qd-teal/30 dark:bg-qd-teal/10 dark:text-qd-teal">
+                                <Layers aria-hidden="true" size={17} />
+                            </span>
+                        )}
+                        <span className="text-xs font-semibold text-qd-text-medium">
+                            {partnerLabel}
+                        </span>
+                    </div>
+
                     {technologies.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
+                        <div className="mt-4 flex flex-wrap gap-2">
                             {technologies.slice(0, 3).map((tech) => (
                                 <span
                                     key={tech}
@@ -280,7 +328,12 @@ export default function Projects({ projects, partners }: ProjectsProps) {
                     )}
 
                     <h3 className="mt-4 text-lg font-bold text-qd-ink dark:text-qd-white">
-                        {title}
+                        <a
+                            href={cardUrl}
+                            className="transition hover:text-qd-teal-2 dark:hover:text-qd-teal"
+                        >
+                            {title}
+                        </a>
                     </h3>
                     <p className="mt-2 text-sm leading-relaxed text-qd-text-high">
                         {summary}
@@ -308,10 +361,12 @@ export default function Projects({ projects, partners }: ProjectsProps) {
                             <span>{partnerLabel}</span>
                         </span>
                         <a
-                            href={consultUrl}
+                            href={cardUrl}
                             className="inline-flex items-center gap-1.5 text-sm font-bold text-qd-teal-2 transition hover:text-qd-teal dark:text-qd-teal"
                         >
-                            {t('projectsPage.card.consultSimilar')}
+                            {detailUrl
+                                ? t('projectsPage.card.viewProject')
+                                : t('projectsPage.card.consultSimilar')}
                             <ArrowUpRight
                                 aria-hidden="true"
                                 size={15}

@@ -837,6 +837,86 @@
             "secondary": "Book a time"
         }
     },
+    "projectDetail": {
+        "hero": {
+            "eyebrow": "PROJECT",
+            "primary": "Tell us about your project",
+            "secondary": "View projects",
+            "related": "View related projects"
+        },
+        "heroTagline": {
+            "title": "Historical case study.",
+            "subtitle": "Visible in local preview until permissions are closed."
+        },
+        "meta": {
+            "year": "Year",
+            "capabilities": "Service / capabilities",
+            "role": "Role",
+            "technologies": "Technologies"
+        },
+        "blocks": {
+            "context": {
+                "title": "The context"
+            },
+            "challenge": {
+                "title": "The challenge"
+            },
+            "solution": {
+                "title": "Our solution"
+            },
+            "result": {
+                "title": "The result"
+            }
+        },
+        "process": {
+            "eyebrow": "HOW WE DID IT",
+            "title": "Documented work pending final validation.",
+            "validation": "The information shown comes from Abaco's historical records and must be validated before being published as an approved case.",
+            "capabilities": "Recorded capabilities"
+        },
+        "technologies": {
+            "title": "Technologies used"
+        },
+        "media": {
+            "fallback": "Project image pending validation",
+            "approved": "Approved",
+            "validation": "validation status",
+            "permission": "permission"
+        },
+        "partners": {
+            "eyebrow": "PARTNERS AND ROLES",
+            "title": "Who participates in the project",
+            "partner": "Partner",
+            "rolesTitle": "Project roles",
+            "note": "Roles come from the partner_project relation to avoid false attribution.",
+            "website": "Visit website"
+        },
+        "roles": {
+            "client": "Client / recipient",
+            "collaborator": "Delivery collaborator",
+            "technologyPartner": "Technology partner",
+            "brand": "Related brand",
+            "other": "Other role"
+        },
+        "related": {
+            "title": "Related projects",
+            "view": "View project",
+            "back": "Back to projects"
+        },
+        "cta": {
+            "eyebrow": "NEXT STEP",
+            "title": "Do you have a similar challenge?",
+            "subtitle": "Tell us your context and we will review which solution fits best.",
+            "primary": "Tell us about your project",
+            "secondary": "Book a time"
+        },
+        "validation": {
+            "pendingNote": "Historical case pending final validation.",
+            "pendingSection": "Pending completion after validation.",
+            "pendingResult": "Result pending completion after validation. No unconfirmed metrics or conclusions are shown.",
+            "pendingShort": "Pending"
+        }
+    },
     "errors": {
         "brand": "AbacoQD",
         "404": {

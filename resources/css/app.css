@@ -2292,6 +2292,38 @@ html.a11y-reduce-motion *::after {
     filter: saturate(1.04) contrast(1.02);
 }
 
+.qd-collab-logo-status {
+    position: absolute;
+    left: 50%;
+    bottom: -0.55rem;
+    max-width: 9rem;
+    transform: translateX(-50%) translateY(0.2rem);
+    padding: 0.18rem 0.42rem;
+    border-radius: 999px;
+    background: rgba(7, 17, 26, 0.86);
+    color: var(--qd-white);
+    font-size: 0.56rem;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        opacity 180ms ease,
+        transform 180ms ease;
+}
+
+.dark .qd-collab-logo-status {
+    background: rgba(183, 243, 74, 0.92);
+    color: var(--qd-ink);
+}
+
+.qd-collab-logo-bubble.is-active .qd-collab-logo-status,
+.qd-collab-logo-bubble:focus-visible .qd-collab-logo-status {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
 .dark .qd-collab-logo-img--invert {
     filter: grayscale(1) brightness(0) invert(1);
     opacity: 0.9;

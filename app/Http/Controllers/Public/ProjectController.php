@@ -6,8 +6,7 @@ use App\Enums\PermissionStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\Project;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -17,12 +16,12 @@ class ProjectController extends Controller
      * Show the public Proyectos listing.
      * docs/07_VISTAS/PUBLIC_04_PROYECTOS.md.
      *
-     * Gating de publicación:
+     * Gating de publicación (Project/Partner::scopePubliclyListable):
      * - En producción solo se listan proyectos/partners con permiso aprobado.
-     * - Fuera de producción (local/preview) también se listan los marcados con
-     *   `settings.show_in_local_preview = true` (datos históricos aportados por
-     *   Ábaco, aún pendientes de validación de permiso). Así se valida la
-     *   maquetación con datos reales sin falsear permisos en producción.
+     * - Fuera de producción (local/preview) también los marcados con
+     *   `settings.show_in_local_preview = true` (históricos aportados por Ábaco,
+     *   pendientes de validación). Así se valida la maquetación con datos reales
+     *   sin falsear permisos en producción.
      *
      * Si no hay contenido publicable, la vista muestra un estado vacío honesto.
      */
@@ -32,7 +31,7 @@ class ProjectController extends Controller
             ->active()
             ->published()
             ->projects()
-            ->where(fn (Builder $query) => $this->scopeListable($query))
+            ->publiclyListable()
             ->with(['clientPartner', 'partners'])
             ->ordered()
             ->get();
@@ -40,7 +39,7 @@ class ProjectController extends Controller
         $partners = Partner::query()
             ->active()
             ->projects()
-            ->where(fn (Builder $query) => $this->scopeListable($query))
+            ->publiclyListable()
             ->ordered()
             ->get();
 
@@ -55,19 +54,38 @@ class ProjectController extends Controller
     }
 
     /**
-     * Aprobado siempre; en preview local también `show_in_local_preview`.
-     *
-     * @template TModel of Model
-     *
-     * @param  Builder<TModel>  $query
+     * Show a public project detail by ES or EN slug.
      */
-    private function scopeListable(Builder $query): void
+    public function show(string $slug): Response
     {
-        $query->where('permission_status', PermissionStatus::Approved->value);
+        $project = Project::query()
+            ->active()
+            ->published()
+            ->projects()
+            ->publiclyListable()
+            ->with(['clientPartner', 'partners'])
+            ->where(function ($query) use ($slug): void {
+                $query->where('slug_es', $slug)->orWhere('slug_en', $slug);
+            })
+            ->firstOrFail();
 
-        if (! app()->isProduction()) {
-            $query->orWhere('settings->show_in_local_preview', true);
-        }
+        $related = Project::query()
+            ->active()
+            ->published()
+            ->projects()
+            ->publiclyListable()
+            ->whereKeyNot($project->id)
+            ->with(['clientPartner', 'partners'])
+            ->ordered()
+            ->take(3)
+            ->get();
+
+        return Inertia::render('Public/ProjectDetail', [
+            'project' => $this->projectDetail($project),
+            'related' => $related
+                ->map(fn (Project $item): array => $this->projectSummary($item))
+                ->values(),
+        ]);
     }
 
     /**
@@ -78,11 +96,13 @@ class ProjectController extends Controller
         $client = $project->clientPartner;
         $executor = $project->partners->firstWhere('pivot.role', 'collaborator');
         $settings = is_array($project->settings) ? $project->settings : [];
+        $slug = is_array($project->slug) ? ($project->slug['es'] ?? null) : null;
 
         return [
             'id' => $project->id,
             'title' => $project->title,
             'slug' => $project->slug,
+            'detailUrl' => $slug ? "/proyectos/{$slug}" : null,
             'summary' => $project->summary,
             'coverImage' => $project->cover_image,
             'thumbnailImage' => $project->thumbnail_image,
@@ -90,10 +110,60 @@ class ProjectController extends Controller
             'year' => $project->year,
             'clientName' => $project->client_name,
             'partnerName' => $client?->name,
+            'partnerLogo' => $client?->logo,
+            'partnerLogoDark' => $client?->logo_dark,
+            'partnerLogoAlt' => $client?->logo_alt,
             'executorName' => $executor?->name,
             'isFeatured' => $project->is_featured,
             'isHistorical' => (bool) ($settings['is_historical'] ?? false),
             'isApproved' => $project->permission_status === PermissionStatus::Approved,
+            'permissionStatus' => $project->permission_status->value,
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function projectDetail(Project $project): array
+    {
+        $roleLabels = [
+            'client' => 'client',
+            'collaborator' => 'collaborator',
+            'technology_partner' => 'technologyPartner',
+            'brand' => 'brand',
+            'other' => 'other',
+        ];
+
+        $partners = $project->partners
+            ->map(function (Partner $partner) use ($roleLabels): array {
+                $pivot = $partner->getRelationValue('pivot');
+                $pivotRole = $pivot instanceof Pivot ? $pivot->getAttribute('role') : null;
+                $role = is_string($pivotRole) ? $pivotRole : 'other';
+
+                return [
+                    'id' => $partner->id,
+                    'name' => $partner->name,
+                    'logo' => $partner->logo,
+                    'logoDark' => $partner->logo_dark,
+                    'logoAlt' => $partner->logo_alt,
+                    'website' => $partner->website,
+                    'roleKey' => $roleLabels[$role] ?? 'other',
+                ];
+            })
+            ->values()
+            ->all();
+
+        return [
+            ...$this->projectSummary($project),
+            'description' => $project->description,
+            'challenge' => $project->challenge,
+            'solution' => $project->solution,
+            'result' => $project->result,
+            'gallery' => is_array($project->gallery) ? array_values($project->gallery) : [],
+            'externalUrl' => $project->external_url,
+            'permissionNotes' => $project->permission_notes,
+            'settings' => is_array($project->settings) ? $project->settings : [],
+            'partners' => $partners,
         ];
     }
 

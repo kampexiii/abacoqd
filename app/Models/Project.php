@@ -162,6 +162,24 @@ class Project extends Model
     }
 
     /**
+     * Publicable de cara al sitio: aprobado siempre; fuera de producción
+     * también los marcados con `settings.show_in_local_preview` (históricos
+     * en validación). Centraliza el gating de previsualización.
+     *
+     * @param  Builder<self>  $query
+     */
+    public function scopePubliclyListable(Builder $query): void
+    {
+        $query->where(function (Builder $inner): void {
+            $inner->where('permission_status', PermissionStatus::Approved->value);
+
+            if (! app()->isProduction()) {
+                $inner->orWhere('settings->show_in_local_preview', true);
+            }
+        });
+    }
+
+    /**
      * @param  Builder<self>  $query
      */
     public function scopeProjects(Builder $query): void

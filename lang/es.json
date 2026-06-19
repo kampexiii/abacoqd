@@ -837,6 +837,86 @@
             "secondary": "Reserva hora"
         }
     },
+    "projectDetail": {
+        "hero": {
+            "eyebrow": "PROYECTO",
+            "primary": "Cuéntanos tu proyecto",
+            "secondary": "Ver proyectos",
+            "related": "Ver proyectos relacionados"
+        },
+        "heroTagline": {
+            "title": "Case study histórico.",
+            "subtitle": "Contenido visible en preview local hasta cerrar permisos."
+        },
+        "meta": {
+            "year": "Año",
+            "capabilities": "Servicio / capacidades",
+            "role": "Rol",
+            "technologies": "Tecnologías"
+        },
+        "blocks": {
+            "context": {
+                "title": "El contexto"
+            },
+            "challenge": {
+                "title": "El reto"
+            },
+            "solution": {
+                "title": "Nuestra solución"
+            },
+            "result": {
+                "title": "El resultado"
+            }
+        },
+        "process": {
+            "eyebrow": "CÓMO LO HICIMOS",
+            "title": "Trabajo documentado pendiente de validación final.",
+            "validation": "La información mostrada procede del histórico aportado por Ábaco y debe validarse antes de publicarse como caso aprobado.",
+            "capabilities": "Capacidades registradas"
+        },
+        "technologies": {
+            "title": "Tecnologías utilizadas"
+        },
+        "media": {
+            "fallback": "Imagen del proyecto pendiente de validación",
+            "approved": "Aprobado",
+            "validation": "estado de validación",
+            "permission": "permiso"
+        },
+        "partners": {
+            "eyebrow": "PARTNERS Y ROLES",
+            "title": "Quién participa en el proyecto",
+            "partner": "Partner",
+            "rolesTitle": "Roles del proyecto",
+            "note": "Los roles salen de la relación partner_project para no atribuir autorías falsas.",
+            "website": "Visitar web"
+        },
+        "roles": {
+            "client": "Cliente / destinatario",
+            "collaborator": "Ejecutor / colaborador",
+            "technologyPartner": "Partner tecnológico",
+            "brand": "Marca relacionada",
+            "other": "Otro rol"
+        },
+        "related": {
+            "title": "Proyectos relacionados",
+            "view": "Ver proyecto",
+            "back": "Volver a proyectos"
+        },
+        "cta": {
+            "eyebrow": "SIGUIENTE PASO",
+            "title": "¿Tienes un reto similar?",
+            "subtitle": "Cuéntanos tu contexto y revisamos qué solución encaja mejor.",
+            "primary": "Cuéntanos tu proyecto",
+            "secondary": "Reserva hora"
+        },
+        "validation": {
+            "pendingNote": "Caso histórico pendiente de validación final.",
+            "pendingSection": "Pendiente de completar tras validación.",
+            "pendingResult": "Resultado pendiente de completar tras validación. No se muestran métricas ni conclusiones no confirmadas.",
+            "pendingShort": "Pendiente"
+        }
+    },
     "errors": {
         "brand": "AbacoQD",
         "404": {

@@ -97,6 +97,7 @@ class AbacoHistoricalProjectsSeeder extends Seeder
 
         // Proyectos históricos. exec = ejecutor (rol collaborator),
         // client = destinatario (rol client + client_partner_id).
+        /** @var array<int, array{exec: string, client: string, slug: array{es: string, en: string}, title: array{es: string, en: string}, summary: array{es: string, en: string}, description: array{es: string, en: string}, technologies: array<int, string>, featured: bool, cover_image?: string|null, thumbnail_image?: string|null, gallery?: array<int, string>|null}> $projects */
         $projects = [
             [
                 'exec' => 'abaco-developments', 'client' => 'melia-hotels-international',
@@ -215,6 +216,9 @@ class AbacoHistoricalProjectsSeeder extends Seeder
                 'challenge' => null,
                 'solution' => null,
                 'result' => null,
+                'cover_image' => $data['cover_image'] ?? null,
+                'thumbnail_image' => $data['thumbnail_image'] ?? null,
+                'gallery' => $data['gallery'] ?? null,
                 'technologies' => $data['technologies'],
                 'status' => ProjectStatus::Published->value,
                 'year' => null,
