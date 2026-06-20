@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Public\AboutController;
 use App\Http\Controllers\Public\BookingController;
 use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\HomeController;
@@ -13,6 +14,7 @@ Route::get('/servicios', [ServiceController::class, 'index'])->name('services.sh
 Route::get('/servicios/{slug}', [ServiceController::class, 'show'])->name('services.detail');
 Route::get('/proyectos', [ProjectController::class, 'index'])->name('projects.show');
 Route::get('/proyectos/{slug}', [ProjectController::class, 'show'])->name('projects.detail');
+Route::get('/quienes-somos', [AboutController::class, 'index'])->name('about.show');
 
 Route::get('/contacto', [ContactController::class, 'create'])->name('contact.show');
 Route::post('/contacto', [ContactController::class, 'store'])

@@ -923,6 +923,98 @@
             "pendingShort": "Pendiente"
         }
     },
+    "aboutPage": {
+        "metaTitle": "Quiénes somos | Abaco Developments",
+        "hero": {
+            "eyebrow": "QUIÉNES SOMOS",
+            "title": "Abaco Developments",
+            "subtitle": "Desarrollamos software a medida con criterio técnico, IA supervisada y soluciones digitales rápidas que se adaptan a tu negocio."
+        },
+        "heroTagline": {
+            "title": "Construido con criterio técnico.",
+            "subtitle": "Diseñamos, revisamos y entregamos con método, no a base de prueba y error."
+        },
+        "intro": {
+            "title": "Una forma más rápida de construir software real",
+            "lead": "No buscamos hacer más ruido, sino construir soluciones útiles con criterio, velocidad y control técnico.",
+            "text": "Ábaco Quick Developments es una nueva iniciativa de Ábaco Developments destinada a la especialización en desarrollos rápidos y a medida, potenciados por las nuevas herramientas de codificación con IA. Esto genera unos proyectos más económicos y adaptados a las necesidades específicas de cada cliente."
+        },
+        "history": {
+            "title": "Historia",
+            "titleHighlight": "evolución",
+            "items": {
+                "origin": {
+                    "title": "Origen",
+                    "description": "Ábaco nace desde la experiencia en sistemas, datos y soluciones digitales pensadas para resolver procesos reales."
+                },
+                "specialization": {
+                    "title": "Especialización",
+                    "description": "La evolución natural ha sido construir herramientas más concretas, integradas y adaptadas al funcionamiento de cada cliente."
+                },
+                "evolution": {
+                    "title": "Evolución",
+                    "description": "AbacoQD concentra esa experiencia en desarrollos rápidos a medida, apoyados por IA supervisada y revisión técnica."
+                }
+            }
+        },
+        "teamwork": {
+            "title": "Construimos con método, no con improvisación.",
+            "subtitle": "La velocidad solo tiene valor cuando va acompañada de criterio, comunicación y control técnico.",
+            "items": {
+                "criteria": {
+                    "title": "Criterio antes de construir",
+                    "description": "Primero entendemos el proceso, el objetivo y las restricciones. Después decidimos qué construir y qué no."
+                },
+                "ai": {
+                    "title": "IA supervisada",
+                    "description": "La IA acelera partes del trabajo, pero la arquitectura, revisión, seguridad y entrega siguen teniendo criterio humano."
+                },
+                "collaboration": {
+                    "title": "Colaboración continua",
+                    "description": "Trabajamos con ciclos claros, comunicación directa y entregas visibles para que el proyecto avance sin perder contexto."
+                }
+            }
+        },
+        "values": {
+            "title": "Nuestros valores",
+            "items": {
+                "tailored": {
+                    "title": "A medida",
+                    "description": "Cada solución parte del contexto real del cliente, no de una plantilla cerrada."
+                },
+                "speed": {
+                    "title": "Rapidez",
+                    "description": "Aceleramos el desarrollo con herramientas modernas, sin sacrificar orden ni revisión."
+                },
+                "criteria": {
+                    "title": "Criterio",
+                    "description": "Priorizamos decisiones técnicas sostenibles frente a soluciones vistosas pero frágiles."
+                },
+                "accessibility": {
+                    "title": "Accesibilidad",
+                    "description": "Cuidamos la claridad, el uso y la experiencia para que el producto sea entendible y usable."
+                },
+                "technology": {
+                    "title": "Tecnología moderna",
+                    "description": "Trabajamos con stacks actuales y preparados para evolucionar."
+                }
+            }
+        },
+        "team": {
+            "title": "Te presentamos al equipo",
+            "subtitle": "Perfiles publicables del equipo, colaboradores o especialistas vinculados a AbacoQD cuando estén validados.",
+            "emptyTitle": "Equipo en preparación",
+            "emptyText": "Mostraremos aquí los perfiles publicados cuando estén validados. Mientras tanto, esta página se centra en cómo trabajamos y qué tipo de soluciones construimos.",
+            "cvCta": "Descargar CV",
+            "cvAriaLabel": "Descargar CV PDF de"
+        },
+        "cta": {
+            "title": "Hablemos de tu proyecto.",
+            "subtitle": "Cuéntanos qué necesitas construir y te ayudamos a encontrar el enfoque más claro para empezar.",
+            "primary": "Cuéntanos tu proyecto",
+            "secondary": "Reserva hora"
+        }
+    },
     "errors": {
         "brand": "AbacoQD",
         "404": {
