@@ -233,7 +233,10 @@ export default function About({ teamMembers }: AboutProps) {
                         <div
                             ref={teamRef}
                             className={cn(
-                                'abaco-stagger mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3',
+                                'abaco-stagger mt-12',
+                                teamMembers.length === 1
+                                    ? 'flex justify-center'
+                                    : 'grid gap-8 sm:grid-cols-2 lg:grid-cols-3',
                                 teamInView && 'is-visible',
                             )}
                         >
@@ -251,27 +254,33 @@ export default function About({ teamMembers }: AboutProps) {
                                 return (
                                     <article
                                         key={member.id}
-                                        className="abaco-card-hover flex flex-col rounded-2xl border border-qd-mist bg-qd-white p-7 hover:-translate-y-1 hover:border-qd-teal-2/50 dark:border-qd-white/10 dark:bg-qd-surface dark:hover:border-qd-teal/50"
-                                    >
-                                        {member.photo ? (
-                                            <img
-                                                src={member.photo}
-                                                alt={
-                                                    member.photoAlt ??
-                                                    member.name
-                                                }
-                                                className="h-40 w-full rounded-xl object-cover"
-                                            />
-                                        ) : (
-                                            <div
-                                                aria-hidden="true"
-                                                className="flex h-40 w-full items-center justify-center rounded-xl bg-qd-mist text-3xl font-bold text-qd-teal-2 dark:bg-qd-white/5 dark:text-qd-teal"
-                                            >
-                                                {initials(member.name)}
-                                            </div>
+                                        className={cn(
+                                            'abaco-card-hover flex flex-col rounded-2xl border border-qd-mist bg-qd-white p-8 hover:-translate-y-1 hover:border-qd-teal-2/50 dark:border-qd-white/10 dark:bg-qd-surface dark:hover:border-qd-teal/50',
+                                            teamMembers.length === 1 &&
+                                                'w-full max-w-95',
                                         )}
+                                    >
+                                        <div className="overflow-hidden rounded-xl border border-qd-mist bg-qd-mist p-1.5 dark:border-qd-teal/15 dark:bg-qd-white/5">
+                                            {member.photo ? (
+                                                <img
+                                                    src={member.photo}
+                                                    alt={
+                                                        member.photoAlt ??
+                                                        member.name
+                                                    }
+                                                    className="aspect-4/5 w-full rounded-lg object-cover object-[center_18%]"
+                                                />
+                                            ) : (
+                                                <div
+                                                    aria-hidden="true"
+                                                    className="flex aspect-4/5 w-full items-center justify-center rounded-lg bg-qd-mist text-4xl font-bold text-qd-teal-2 dark:bg-qd-white/5 dark:text-qd-teal"
+                                                >
+                                                    {initials(member.name)}
+                                                </div>
+                                            )}
+                                        </div>
 
-                                        <h3 className="mt-5 text-lg font-bold text-qd-ink dark:text-qd-white">
+                                        <h3 className="mt-6 text-lg font-bold text-qd-ink dark:text-qd-white">
                                             {member.name}
                                         </h3>
                                         {role && (
@@ -286,7 +295,7 @@ export default function About({ teamMembers }: AboutProps) {
                                         )}
 
                                         {(hasSocial || member.cvUrl) && (
-                                            <div className="mt-5 flex flex-wrap items-center gap-3 pt-1">
+                                            <div className="mt-6 flex flex-wrap items-center gap-3 pt-1">
                                                 {member.linkedinUrl && (
                                                     <a
                                                         href={
