@@ -47,6 +47,19 @@ return [
             'report' => false,
         ],
 
+        // Disco para media versionable con el repo (no `storage/app/public`,
+        // que está fuera de control de versiones por defecto). Lo usa
+        // `TeamMemberPhotoService` para fotos de equipo seedeadas/aportadas
+        // como assets reales del proyecto.
+        'public_uploads' => [
+            'driver' => 'local',
+            'root' => public_path('uploads'),
+            'url' => rtrim((string) env('APP_URL', 'http://localhost'), '/').'/uploads',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
