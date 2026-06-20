@@ -928,75 +928,44 @@
         "hero": {
             "eyebrow": "ABOUT US",
             "title": "Abaco Developments",
-            "subtitle": "We build custom software with technical judgement, supervised AI and fast digital solutions that adapt to your business."
+            "subtitle": "Tailor-made development, technical judgement and supervised AI to build fast, useful digital solutions."
         },
         "heroTagline": {
             "title": "Built with technical judgement.",
             "subtitle": "We design, review and deliver with method, not trial and error."
         },
-        "intro": {
-            "title": "A faster way to build real software",
-            "lead": "We don't aim to make more noise, but to build useful solutions with judgement, speed and technical control.",
-            "text": "Ábaco Quick Developments is a new initiative from Ábaco Developments focused on fast, tailor-made development, powered by new AI-assisted coding tools. This results in more affordable projects, adapted to each client's specific needs."
+        "abacoDevelopments": {
+            "title": "Who Abaco Developments is",
+            "text": "Abaco Developments builds on a track record in systems, data, CRM, digital tools and tailor-made solutions. Its value lies in understanding real processes and turning them into useful, maintainable products ready to evolve."
         },
-        "history": {
-            "title": "History",
-            "titleHighlight": "evolution",
-            "items": {
-                "origin": {
-                    "title": "Origin",
-                    "description": "Ábaco was born from experience in systems, data and digital solutions designed to solve real processes."
-                },
-                "specialization": {
-                    "title": "Specialization",
-                    "description": "The natural evolution has been to build more concrete, integrated tools adapted to how each client works."
-                },
-                "evolution": {
-                    "title": "Evolution",
-                    "description": "AbacoQD concentrates that experience into fast, tailor-made development, supported by supervised AI and technical review."
-                }
-            }
-        },
-        "teamwork": {
-            "title": "We build with method, not improvisation.",
-            "subtitle": "Speed only has value when it comes with judgement, communication and technical control.",
-            "items": {
-                "criteria": {
-                    "title": "Judgement before building",
-                    "description": "We first understand the process, the goal and the constraints. Then we decide what to build, and what not to."
-                },
-                "ai": {
-                    "title": "Supervised AI",
-                    "description": "AI speeds up parts of the work, but architecture, review, security and delivery keep human judgement."
-                },
-                "collaboration": {
-                    "title": "Continuous collaboration",
-                    "description": "We work with clear cycles, direct communication and visible deliveries so the project moves forward without losing context."
-                }
-            }
+        "abacoQD": {
+            "title": "What AbacoQD is",
+            "text": "Ábaco Quick Developments is a new initiative from Ábaco Developments focused on fast, tailor-made development, powered by new AI-assisted coding tools. This results in more affordable projects, adapted to each client's specific needs.",
+            "support": "The idea isn't to replace technical judgement, but to speed up the path from a real need to a first useful solution."
         },
         "values": {
-            "title": "Our values",
+            "title": "What defines us",
+            "subtitle": "A way of building focused on usefulness, clarity and the product's real evolution.",
             "items": {
                 "tailored": {
                     "title": "Tailor-made",
                     "description": "Every solution starts from the client's real context, not a closed template."
                 },
                 "speed": {
-                    "title": "Speed",
-                    "description": "We speed up development with modern tools, without sacrificing order or review."
+                    "title": "Speed with control",
+                    "description": "We speed up delivery without turning it into improvisation."
                 },
                 "criteria": {
-                    "title": "Judgement",
-                    "description": "We prioritize sustainable technical decisions over flashy but fragile solutions."
+                    "title": "Technical judgement",
+                    "description": "We prioritize sustainable, clear and maintainable decisions."
                 },
-                "accessibility": {
-                    "title": "Accessibility",
-                    "description": "We take care of clarity, usability and experience so the product is understandable and usable."
+                "clarity": {
+                    "title": "Clarity",
+                    "description": "We explain what matters without hiding the project behind jargon."
                 },
                 "technology": {
-                    "title": "Modern technology",
-                    "description": "We work with current stacks, ready to evolve."
+                    "title": "Useful technology",
+                    "description": "We use modern tools when they add real value to the result."
                 }
             }
         },
@@ -1004,7 +973,7 @@
             "title": "Meet the team",
             "subtitle": "Publishable profiles of the team, collaborators or specialists linked to AbacoQD once they are validated.",
             "emptyTitle": "Team in preparation",
-            "emptyText": "We'll show published profiles here once they're validated. Meanwhile, this page focuses on how we work and what kind of solutions we build.",
+            "emptyText": "We'll show published profiles here once they're validated. Meanwhile, this page focuses on who we are, what AbacoQD is and what kind of solutions we build.",
             "cvCta": "Download CV",
             "cvAriaLabel": "Download CV PDF for"
         },

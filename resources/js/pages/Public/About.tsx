@@ -1,8 +1,8 @@
 import { Head } from '@inertiajs/react';
 import {
-    Accessibility,
     ArrowRight,
     Bot,
+    Building2,
     CalendarDays,
     Compass,
     Download,
@@ -10,8 +10,8 @@ import {
     Globe,
     Layers,
     Linkedin,
+    MessageSquare,
     Puzzle,
-    Sparkles,
     Target,
     UsersRound,
     Zap,
@@ -29,6 +29,9 @@ import { show as contactShow } from '@/routes/contact';
 
 /**
  * Vista pública Quiénes somos. docs/07_VISTAS/PUBLIC_10_QUIENES_SOMOS.md.
+ *
+ * No repite metodología/proceso (eso vive en `/metodologia`): se centra en
+ * identidad (Abaco Developments / AbacoQD), en qué nos define y en el equipo.
  *
  * La sección de equipo lee `team_members` real (sin datos inventados): si no
  * hay miembros visibles/activos se muestra un bloque corporativo en vez de un
@@ -73,38 +76,21 @@ type AboutProps = {
     readonly teamMembers: readonly AboutTeamMember[];
 };
 
-const HISTORY_ITEMS: readonly { key: 'origin' | 'specialization' | 'evolution' }[] =
-    [{ key: 'origin' }, { key: 'specialization' }, { key: 'evolution' }] as const;
-
-const TEAMWORK_ITEMS: readonly {
-    key: 'criteria' | 'ai' | 'collaboration';
-    icon: LucideIcon;
-}[] = [
-    { key: 'criteria', icon: Compass },
-    { key: 'ai', icon: Bot },
-    { key: 'collaboration', icon: UsersRound },
-] as const;
-
 const VALUE_ITEMS: readonly {
-    key: 'tailored' | 'speed' | 'criteria' | 'accessibility' | 'technology';
+    key: 'tailored' | 'speed' | 'criteria' | 'clarity' | 'technology';
     icon: LucideIcon;
 }[] = [
     { key: 'tailored', icon: Puzzle },
     { key: 'speed', icon: Zap },
     { key: 'criteria', icon: Target },
-    { key: 'accessibility', icon: Accessibility },
+    { key: 'clarity', icon: MessageSquare },
     { key: 'technology', icon: Layers },
 ] as const;
 
 export default function About({ teamMembers }: AboutProps) {
     const { t, locale } = useLanguage();
 
-    const { ref: introRef, inView: introInView } = useInView<HTMLDivElement>({
-        threshold: 0.2,
-    });
-    const { ref: historyRef, inView: historyInView } =
-        useInView<HTMLOListElement>({ threshold: 0.15 });
-    const { ref: teamworkRef, inView: teamworkInView } =
+    const { ref: identityRef, inView: identityInView } =
         useInView<HTMLDivElement>({ threshold: 0.2 });
     const { ref: valuesRef, inView: valuesInView } = useInView<HTMLDivElement>(
         { threshold: 0.2 },
@@ -127,134 +113,63 @@ export default function About({ teamMembers }: AboutProps) {
                 taglineIcon={Compass}
             />
 
-            {/* 1. Bloque destacado AbacoQD */}
+            {/* 2-3. Quién es Abaco Developments + Qué es AbacoQD */}
             <section className="bg-qd-bg dark:bg-qd-ink">
                 <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
                     <div
-                        ref={introRef}
+                        ref={identityRef}
                         className={cn(
-                            'abaco-reveal grid gap-7 rounded-3xl border border-qd-teal-2/15 bg-qd-white p-7 sm:grid-cols-[auto_1fr] sm:gap-9 sm:p-10 dark:border-qd-teal/20 dark:bg-qd-white/5',
-                            introInView && 'is-visible',
+                            'abaco-stagger grid gap-10 lg:grid-cols-2 lg:gap-14',
+                            identityInView && 'is-visible',
                         )}
                     >
-                        <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl border border-qd-teal-2/30 bg-qd-teal-2/10 text-qd-teal-2 dark:border-qd-teal/35 dark:bg-qd-teal/10 dark:text-qd-teal">
-                            <Sparkles
-                                aria-hidden="true"
-                                size={26}
-                                strokeWidth={1.7}
-                            />
-                        </span>
                         <div>
-                            <h2 className="text-2xl font-bold text-qd-ink sm:text-3xl dark:text-qd-white">
-                                {t('aboutPage.intro.title')}
+                            <span className="inline-flex size-12 items-center justify-center rounded-xl border border-qd-teal-2/30 bg-qd-teal-2/10 text-qd-teal-2 dark:border-qd-teal/35 dark:bg-qd-teal/10 dark:text-qd-teal">
+                                <Building2
+                                    aria-hidden="true"
+                                    size={22}
+                                    strokeWidth={1.7}
+                                />
+                            </span>
+                            <h2 className="mt-5 text-2xl font-bold text-qd-ink sm:text-3xl dark:text-qd-white">
+                                {t('aboutPage.abacoDevelopments.title')}
                             </h2>
-                            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-qd-text-high sm:text-base">
-                                {t('aboutPage.intro.lead')}
+                            <p className="mt-4 max-w-md text-sm leading-relaxed text-qd-text-high sm:text-base">
+                                {t('aboutPage.abacoDevelopments.text')}
                             </p>
-                            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-qd-text-high sm:text-base">
-                                {t('aboutPage.intro.text')}
+                        </div>
+
+                        <div className="rounded-3xl border border-qd-teal-2/20 bg-qd-white p-7 sm:p-9 dark:border-qd-teal/25 dark:bg-qd-white/5">
+                            <span className="inline-flex size-12 items-center justify-center rounded-xl border border-qd-teal-2/30 bg-qd-teal-2/10 text-qd-teal-2 dark:border-qd-teal/35 dark:bg-qd-teal/10 dark:text-qd-teal">
+                                <Bot
+                                    aria-hidden="true"
+                                    size={22}
+                                    strokeWidth={1.7}
+                                />
+                            </span>
+                            <h2 className="mt-5 text-2xl font-bold text-qd-ink sm:text-3xl dark:text-qd-white">
+                                {t('aboutPage.abacoQD.title')}
+                            </h2>
+                            <p className="mt-4 text-sm leading-relaxed text-qd-text-high sm:text-base">
+                                {t('aboutPage.abacoQD.text')}
+                            </p>
+                            <p className="mt-3 text-sm leading-relaxed text-qd-text-high sm:text-base">
+                                {t('aboutPage.abacoQD.support')}
                             </p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* 2. Historia / evolución */}
+            {/* 4. Qué nos define */}
             <section className="bg-qd-white dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
-                    <h2 className="text-2xl font-bold text-qd-ink sm:text-3xl dark:text-qd-white">
-                        {t('aboutPage.history.title')}{' '}
-                        <span className="text-qd-teal-2 dark:text-qd-teal">
-                            / {t('aboutPage.history.titleHighlight')}
-                        </span>
-                    </h2>
-
-                    <div className="relative mt-12">
-                        <div
-                            aria-hidden="true"
-                            className="absolute top-[22px] right-0 left-0 hidden h-px bg-linear-to-r from-qd-teal-2/0 via-qd-teal-2/35 to-qd-teal-2/0 sm:block dark:via-qd-teal/35"
-                        />
-                        <ol
-                            ref={historyRef}
-                            aria-label={t('aboutPage.history.title')}
-                            className={cn(
-                                'abaco-stagger relative grid gap-10 sm:grid-cols-3 sm:gap-8',
-                                historyInView && 'is-visible',
-                            )}
-                        >
-                            {HISTORY_ITEMS.map((item, index) => (
-                                <li key={item.key} className="relative">
-                                    <span className="relative z-10 flex size-11 items-center justify-center rounded-full border-2 border-qd-teal-2 bg-qd-white text-sm font-bold text-qd-teal-2 dark:border-qd-teal dark:bg-qd-ink dark:text-qd-teal">
-                                        {String(index + 1).padStart(2, '0')}
-                                    </span>
-                                    <h3 className="mt-5 text-lg font-bold text-qd-ink dark:text-qd-white">
-                                        {t(
-                                            `aboutPage.history.items.${item.key}.title`,
-                                        )}
-                                    </h3>
-                                    <p className="mt-2 max-w-sm text-sm leading-relaxed text-qd-text-high">
-                                        {t(
-                                            `aboutPage.history.items.${item.key}.description`,
-                                        )}
-                                    </p>
-                                </li>
-                            ))}
-                        </ol>
-                    </div>
-                </div>
-            </section>
-
-            {/* 3. Cómo trabajamos como equipo */}
-            <section className="bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 text-qd-white sm:px-8 sm:py-20">
-                    <h2 className="max-w-xl text-2xl font-bold sm:text-3xl">
-                        {t('aboutPage.teamwork.title')}
-                    </h2>
-                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-qd-text-medium sm:text-base">
-                        {t('aboutPage.teamwork.subtitle')}
-                    </p>
-
-                    <div
-                        ref={teamworkRef}
-                        className={cn(
-                            'abaco-stagger mt-10 grid gap-6 sm:grid-cols-3',
-                            teamworkInView && 'is-visible',
-                        )}
-                    >
-                        {TEAMWORK_ITEMS.map((item) => (
-                            <div
-                                key={item.key}
-                                className="abaco-card-hover rounded-2xl border border-qd-teal/25 bg-qd-white/5 p-7 hover:-translate-y-1 hover:border-qd-teal/50"
-                            >
-                                <span className="inline-flex size-12 items-center justify-center rounded-xl bg-qd-teal/15 text-qd-teal">
-                                    <item.icon
-                                        aria-hidden="true"
-                                        size={22}
-                                        strokeWidth={1.7}
-                                    />
-                                </span>
-                                <h3 className="mt-5 text-lg font-semibold">
-                                    {t(
-                                        `aboutPage.teamwork.items.${item.key}.title`,
-                                    )}
-                                </h3>
-                                <p className="mt-2 text-sm leading-relaxed text-qd-text-medium">
-                                    {t(
-                                        `aboutPage.teamwork.items.${item.key}.description`,
-                                    )}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* 4. Valores */}
-            <section className="bg-qd-bg dark:bg-qd-ink">
                 <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
                     <h2 className="text-2xl font-bold text-qd-ink sm:text-3xl dark:text-qd-white">
                         {t('aboutPage.values.title')}
                     </h2>
+                    <p className="mt-3 max-w-xl text-sm leading-relaxed text-qd-text-high sm:text-base">
+                        {t('aboutPage.values.subtitle')}
+                    </p>
 
                     <div
                         ref={valuesRef}
@@ -290,7 +205,7 @@ export default function About({ teamMembers }: AboutProps) {
             </section>
 
             {/* 5. Equipo / plantilla futura */}
-            <section className="bg-qd-white dark:bg-qd-ink">
+            <section className="bg-qd-bg dark:bg-qd-ink">
                 <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
                     <div className="flex items-center justify-center gap-4">
                         <span
