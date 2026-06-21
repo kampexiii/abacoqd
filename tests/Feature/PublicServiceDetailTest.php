@@ -3,7 +3,7 @@
 use App\Enums\ServiceStatus;
 use App\Models\Service;
 
-test('initial services expose their public detail even when existing records have the old disabled flag', function () {
+test('a published, active service with the detail enabled exposes its public detail', function () {
     $service = Service::factory()->create([
         'title' => ['es' => 'Aplicaciones a medida', 'en' => 'Custom applications'],
         'slug' => ['es' => 'aplicaciones-a-medida', 'en' => 'custom-applications'],
@@ -14,7 +14,7 @@ test('initial services expose their public detail even when existing records hav
         'status' => ServiceStatus::Published->value,
         'sort_order' => 1,
         'is_active' => true,
-        'is_detail_enabled' => false,
+        'is_detail_enabled' => true,
     ]);
 
     $this->get('/servicios')
@@ -34,13 +34,13 @@ test('initial services expose their public detail even when existing records hav
         );
 });
 
-test('non initial services still need the detail flag enabled', function () {
+test('a service with the detail disabled never opens its public detail', function () {
     Service::factory()->create([
-        'slug' => ['es' => 'servicio-interno', 'en' => 'internal-service'],
+        'slug' => ['es' => 'aplicaciones-a-medida', 'en' => 'custom-applications'],
         'status' => ServiceStatus::Published->value,
         'is_active' => true,
         'is_detail_enabled' => false,
     ]);
 
-    $this->get('/servicios/servicio-interno')->assertNotFound();
+    $this->get('/servicios/aplicaciones-a-medida')->assertNotFound();
 });

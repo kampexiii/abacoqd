@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Public\AboutController;
 use App\Http\Controllers\Public\BlogController;
 use App\Http\Controllers\Public\BookingController;
@@ -36,5 +38,26 @@ Route::post('/reserva', [BookingController::class, 'store'])
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'dashboard')->name('dashboard');
 });
+
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::redirect('/', '/admin/dashboard');
+        Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('services', [AdminServiceController::class, 'index'])->name('services.index');
+        Route::get('services/create', [AdminServiceController::class, 'create'])->name('services.create');
+        Route::post('services', [AdminServiceController::class, 'store'])->name('services.store');
+        Route::get('services/{service}/edit', [AdminServiceController::class, 'edit'])->name('services.edit');
+        Route::match(['put', 'patch'], 'services/{service}', [AdminServiceController::class, 'update'])->name('services.update');
+        Route::delete('services/{service}', [AdminServiceController::class, 'destroy'])->name('services.destroy');
+
+        Route::patch('services/{service}/toggle-status', [AdminServiceController::class, 'toggleStatus'])->name('services.toggle-status');
+        Route::patch('services/{service}/toggle-active', [AdminServiceController::class, 'toggleActive'])->name('services.toggle-active');
+        Route::patch('services/{service}/toggle-featured', [AdminServiceController::class, 'toggleFeatured'])->name('services.toggle-featured');
+        Route::patch('services/{service}/toggle-home', [AdminServiceController::class, 'toggleHome'])->name('services.toggle-home');
+        Route::patch('services/{service}/toggle-detail', [AdminServiceController::class, 'toggleDetail'])->name('services.toggle-detail');
+    });
 
 require __DIR__.'/settings.php';

@@ -1,0 +1,442 @@
+import { Head, Link, router } from '@inertiajs/react';
+import {
+    ExternalLink,
+    MoreVertical,
+    Pencil,
+    Plus,
+    Search,
+    Wrench,
+} from 'lucide-react';
+import { useMemo, useState } from 'react';
+
+import AdminEmptyState from '@/components/admin/AdminEmptyState';
+import StatusBadge from '@/components/admin/StatusBadge';
+import type {ServiceStatus} from '@/components/admin/StatusBadge';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useLanguage } from '@/hooks/use-language';
+import AdminLayout from '@/layouts/admin-layout';
+import { cn } from '@/lib/utils';
+
+type LocalizedText = { readonly es: string | null; readonly en: string | null };
+
+type ServiceRow = {
+    readonly id: number;
+    readonly title: LocalizedText | null;
+    readonly slug: LocalizedText | null;
+    readonly status: ServiceStatus;
+    readonly isActive: boolean;
+    readonly showOnHome: boolean;
+    readonly isFeatured: boolean;
+    readonly isDetailEnabled: boolean;
+    readonly sortOrder: number;
+    readonly updatedAt: string | null;
+    readonly publicUrl: string | null;
+};
+
+type IndexProps = {
+    readonly services: readonly ServiceRow[];
+};
+
+type TriState = 'all' | 'yes' | 'no';
+
+function patch(id: number, action: string) {
+    router.patch(`/admin/services/${id}/${action}`, {}, { preserveScroll: true });
+}
+
+export default function ServicesIndex({ services }: IndexProps) {
+    const { t, locale } = useLanguage();
+
+    const [search, setSearch] = useState('');
+    const [statusFilter, setStatusFilter] = useState<'all' | ServiceStatus>('all');
+    const [activeFilter, setActiveFilter] = useState<TriState>('all');
+    const [homeFilter, setHomeFilter] = useState<TriState>('all');
+    const [featuredFilter, setFeaturedFilter] = useState<TriState>('all');
+    const [detailFilter, setDetailFilter] = useState<TriState>('all');
+
+    const title = (service: ServiceRow): string =>
+        service.title?.[locale] ?? service.title?.es ?? service.title?.en ?? '—';
+    const slug = (service: ServiceRow): string =>
+        service.slug?.[locale] ?? service.slug?.es ?? service.slug?.en ?? '';
+
+    const counts = useMemo(
+        () => ({
+            total: services.length,
+            published: services.filter((s) => s.status === 'published').length,
+            draft: services.filter((s) => s.status === 'draft').length,
+            hidden: services.filter((s) => s.status === 'hidden').length,
+        }),
+        [services],
+    );
+
+    const matchTri = (value: boolean, filter: TriState) =>
+        filter === 'all' || (filter === 'yes') === value;
+
+    const filtered = useMemo(() => {
+        const term = search.trim().toLowerCase();
+
+        return services.filter((service) => {
+            if (term) {
+                const haystack = `${title(service)} ${slug(service)}`.toLowerCase();
+
+                if (!haystack.includes(term)) {
+                    return false;
+                }
+            }
+
+            if (statusFilter !== 'all' && service.status !== statusFilter) {
+                return false;
+            }
+
+            return (
+                matchTri(service.isActive, activeFilter) &&
+                matchTri(service.showOnHome, homeFilter) &&
+                matchTri(service.isFeatured, featuredFilter) &&
+                matchTri(service.isDetailEnabled, detailFilter)
+            );
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        services,
+        search,
+        statusFilter,
+        activeFilter,
+        homeFilter,
+        featuredFilter,
+        detailFilter,
+        locale,
+    ]);
+
+    const formatDate = (value: string | null): string =>
+        value
+            ? new Date(value).toLocaleDateString(locale, {
+                  day: '2-digit',
+                  month: 'short',
+                  year: 'numeric',
+              })
+            : '—';
+
+    return (
+        <AdminLayout
+            title={t('admin.services.title')}
+            breadcrumbs={[
+                { title: t('admin.nav.dashboard'), href: '/admin/dashboard' },
+                { title: t('admin.services.title') },
+            ]}
+            actions={
+                <Link
+                    href="/admin/services/create"
+                    className="inline-flex items-center gap-2 rounded-lg bg-qd-teal-2 px-4 py-2.5 text-sm font-bold text-white transition hover:brightness-95 dark:bg-qd-teal dark:text-qd-ink"
+                >
+                    <Plus aria-hidden="true" size={16} />
+                    {t('admin.services.new')}
+                </Link>
+            }
+        >
+            <Head title={t('admin.services.title')} />
+
+            {/* Stat cards */}
+            <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {(['total', 'published', 'draft', 'hidden'] as const).map((key) => (
+                    <div
+                        key={key}
+                        className="rounded-2xl border border-qd-mist bg-qd-white p-5 dark:border-qd-white/10 dark:bg-qd-surface"
+                    >
+                        <p className="text-3xl font-extrabold text-qd-ink dark:text-qd-white">
+                            {counts[key]}
+                        </p>
+                        <p className="mt-1 text-sm text-qd-text-medium dark:text-qd-white/50">
+                            {t(`admin.services.counts.${key}`)}
+                        </p>
+                    </div>
+                ))}
+            </div>
+
+            {/* Filters + table */}
+            <div className="rounded-2xl border border-qd-mist bg-qd-white dark:border-qd-white/10 dark:bg-qd-surface">
+                <div className="flex flex-wrap items-center gap-3 border-b border-qd-mist p-4 dark:border-qd-white/10">
+                    <div className="relative flex-1 sm:min-w-64">
+                        <Search
+                            aria-hidden="true"
+                            size={16}
+                            className="absolute top-1/2 left-3 -translate-y-1/2 text-qd-text-medium"
+                        />
+                        <input
+                            type="search"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder={t('admin.services.searchPlaceholder')}
+                            className="h-9 w-full rounded-lg border border-qd-mist bg-transparent pr-3 pl-9 text-sm outline-none focus-visible:border-qd-teal-2/50 dark:border-qd-white/10"
+                        />
+                    </div>
+
+                    <FilterSelect
+                        label={t('admin.services.filters.status')}
+                        value={statusFilter}
+                        onChange={(v) => setStatusFilter(v as 'all' | ServiceStatus)}
+                        options={[
+                            { value: 'all', label: t('admin.filters.all') },
+                            { value: 'published', label: t('admin.status.published') },
+                            { value: 'draft', label: t('admin.status.draft') },
+                            { value: 'hidden', label: t('admin.status.hidden') },
+                        ]}
+                    />
+                    <FilterSelect
+                        label={t('admin.services.fields.isActive')}
+                        value={activeFilter}
+                        onChange={(v) => setActiveFilter(v as TriState)}
+                        options={triOptions(t)}
+                    />
+                    <FilterSelect
+                        label={t('admin.services.fields.showOnHome')}
+                        value={homeFilter}
+                        onChange={(v) => setHomeFilter(v as TriState)}
+                        options={triOptions(t)}
+                    />
+                    <FilterSelect
+                        label={t('admin.services.fields.isFeatured')}
+                        value={featuredFilter}
+                        onChange={(v) => setFeaturedFilter(v as TriState)}
+                        options={triOptions(t)}
+                    />
+                    <FilterSelect
+                        label={t('admin.services.fields.isDetailEnabled')}
+                        value={detailFilter}
+                        onChange={(v) => setDetailFilter(v as TriState)}
+                        options={triOptions(t)}
+                    />
+                </div>
+
+                {filtered.length === 0 ? (
+                    <div className="p-6">
+                        <AdminEmptyState
+                            icon={Wrench}
+                            title={
+                                services.length === 0
+                                    ? t('admin.services.empty.title')
+                                    : t('admin.services.noResults.title')
+                            }
+                            description={
+                                services.length === 0
+                                    ? t('admin.services.empty.description')
+                                    : t('admin.services.noResults.description')
+                            }
+                            action={
+                                services.length === 0 ? (
+                                    <Link
+                                        href="/admin/services/create"
+                                        className="inline-flex items-center gap-2 rounded-lg bg-qd-teal-2 px-4 py-2.5 text-sm font-bold text-white dark:bg-qd-teal dark:text-qd-ink"
+                                    >
+                                        <Plus aria-hidden="true" size={16} />
+                                        {t('admin.services.new')}
+                                    </Link>
+                                ) : undefined
+                            }
+                        />
+                    </div>
+                ) : (
+                    <div className="overflow-x-auto">
+                        <table className="w-full min-w-235 text-sm">
+                            <thead>
+                                <tr className="border-b border-qd-mist text-left text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:border-qd-white/10 dark:text-qd-white/50">
+                                    <th className="px-4 py-3">{t('admin.services.columns.service')}</th>
+                                    <th className="px-4 py-3">{t('admin.services.columns.status')}</th>
+                                    <th className="px-4 py-3 text-center">{t('admin.services.fields.isActive')}</th>
+                                    <th className="px-4 py-3 text-center">{t('admin.services.fields.showOnHome')}</th>
+                                    <th className="px-4 py-3 text-center">{t('admin.services.fields.isFeatured')}</th>
+                                    <th className="px-4 py-3 text-center">{t('admin.services.fields.isDetailEnabled')}</th>
+                                    <th className="px-4 py-3 text-center">{t('admin.services.columns.order')}</th>
+                                    <th className="px-4 py-3">{t('admin.services.columns.updated')}</th>
+                                    <th className="px-4 py-3 text-right">{t('admin.services.columns.actions')}</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-qd-mist dark:divide-qd-white/10">
+                                {filtered.map((service) => (
+                                    <tr key={service.id} className="align-middle">
+                                        <td className="px-4 py-3">
+                                            <p className="font-semibold text-qd-ink dark:text-qd-white">
+                                                {title(service)}
+                                            </p>
+                                            <p className="text-xs text-qd-text-medium dark:text-qd-white/40">
+                                                /{slug(service)}
+                                            </p>
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <StatusBadge status={service.status} />
+                                        </td>
+                                        <td className="px-4 py-3 text-center">
+                                            <RowToggle
+                                                checked={service.isActive}
+                                                onClick={() => patch(service.id, 'toggle-active')}
+                                            />
+                                        </td>
+                                        <td className="px-4 py-3 text-center">
+                                            <RowToggle
+                                                checked={service.showOnHome}
+                                                onClick={() => patch(service.id, 'toggle-home')}
+                                            />
+                                        </td>
+                                        <td className="px-4 py-3 text-center">
+                                            <RowToggle
+                                                checked={service.isFeatured}
+                                                onClick={() => patch(service.id, 'toggle-featured')}
+                                            />
+                                        </td>
+                                        <td className="px-4 py-3 text-center">
+                                            <RowToggle
+                                                checked={service.isDetailEnabled}
+                                                onClick={() => patch(service.id, 'toggle-detail')}
+                                            />
+                                        </td>
+                                        <td className="px-4 py-3 text-center text-qd-text-high dark:text-qd-white/70">
+                                            {service.sortOrder}
+                                        </td>
+                                        <td className="px-4 py-3 text-qd-text-medium dark:text-qd-white/50">
+                                            {formatDate(service.updatedAt)}
+                                        </td>
+                                        <td className="px-4 py-3">
+                                            <div className="flex items-center justify-end gap-1">
+                                                <Link
+                                                    href={`/admin/services/${service.id}/edit`}
+                                                    className="flex size-8 items-center justify-center rounded-lg border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2/40 hover:text-qd-teal-2 dark:border-qd-white/10 dark:text-qd-white/70"
+                                                    aria-label={t('admin.services.actions.edit')}
+                                                >
+                                                    <Pencil aria-hidden="true" size={15} />
+                                                </Link>
+                                                {service.publicUrl && (
+                                                    <a
+                                                        href={service.publicUrl}
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        className={cn(
+                                                            'flex size-8 items-center justify-center rounded-lg border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2/40 hover:text-qd-teal-2 dark:border-qd-white/10 dark:text-qd-white/70',
+                                                            (service.status !== 'published' ||
+                                                                !service.isActive) &&
+                                                                'pointer-events-none opacity-40',
+                                                        )}
+                                                        aria-label={t('admin.services.actions.viewPublic')}
+                                                    >
+                                                        <ExternalLink aria-hidden="true" size={15} />
+                                                    </a>
+                                                )}
+                                                <RowActions service={service} />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <div className="border-t border-qd-mist px-4 py-3 text-xs text-qd-text-medium dark:border-qd-white/10 dark:text-qd-white/50">
+                            {t('admin.services.showing')
+                                .replace(':count', String(filtered.length))
+                                .replace(':total', String(services.length))}
+                        </div>
+                    </div>
+                )}
+            </div>
+        </AdminLayout>
+    );
+}
+
+function triOptions(t: (key: string) => string) {
+    return [
+        { value: 'all', label: t('admin.filters.all') },
+        { value: 'yes', label: t('admin.filters.yes') },
+        { value: 'no', label: t('admin.filters.no') },
+    ];
+}
+
+function FilterSelect({
+    label,
+    value,
+    onChange,
+    options,
+}: {
+    readonly label: string;
+    readonly value: string;
+    readonly onChange: (value: string) => void;
+    readonly options: readonly { readonly value: string; readonly label: string }[];
+}) {
+    return (
+        <select
+            aria-label={label}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className="h-9 rounded-lg border border-qd-mist bg-transparent px-3 text-sm text-qd-text-high outline-none focus-visible:border-qd-teal-2/50 dark:border-qd-white/10 dark:text-qd-white/70"
+        >
+            {options.map((option) => (
+                <option key={option.value} value={option.value}>
+                    {label}: {option.label}
+                </option>
+            ))}
+        </select>
+    );
+}
+
+function RowToggle({
+    checked,
+    onClick,
+}: {
+    readonly checked: boolean;
+    readonly onClick: () => void;
+}) {
+    return (
+        <button
+            type="button"
+            role="switch"
+            aria-checked={checked}
+            onClick={onClick}
+            className={cn(
+                'relative inline-flex h-5 w-9 shrink-0 items-center rounded-full align-middle transition',
+                checked ? 'bg-qd-teal-2 dark:bg-qd-teal' : 'bg-qd-mist dark:bg-qd-white/15',
+            )}
+        >
+            <span
+                className={cn(
+                    'inline-block size-4 transform rounded-full bg-white shadow transition',
+                    checked ? 'translate-x-4.5' : 'translate-x-0.5',
+                )}
+            />
+        </button>
+    );
+}
+
+function RowActions({ service }: { readonly service: ServiceRow }) {
+    const { t } = useLanguage();
+
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger
+                className="flex size-8 items-center justify-center rounded-lg border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2/40 dark:border-qd-white/10 dark:text-qd-white/70"
+                aria-label={t('admin.services.actions.more')}
+            >
+                <MoreVertical aria-hidden="true" size={15} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuItem onSelect={() => patch(service.id, 'toggle-status')}>
+                    {service.status === 'published'
+                        ? t('admin.services.actions.hide')
+                        : t('admin.services.actions.publish')}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    variant="destructive"
+                    onSelect={() => {
+                        if (window.confirm(t('admin.services.actions.archiveConfirm'))) {
+                            router.delete(`/admin/services/${service.id}`, {
+                                preserveScroll: true,
+                            });
+                        }
+                    }}
+                >
+                    {t('admin.services.actions.archive')}
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+}

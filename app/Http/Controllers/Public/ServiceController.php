@@ -10,25 +10,10 @@ use Inertia\Response;
 class ServiceController extends Controller
 {
     /**
-     * @var list<string>
-     */
-    private const INITIAL_PUBLIC_DETAIL_SLUGS = [
-        'desarrollo-web-rapido',
-        'fast-web-development',
-        'aplicaciones-a-medida',
-        'custom-applications',
-        'automatizacion-con-ia',
-        'ai-automation',
-        'crm-datos-y-procesos',
-        'crm-data-and-processes',
-        'integraciones-digitales',
-        'digital-integrations',
-        'mvps-y-prototipos',
-        'mvps-and-prototypes',
-    ];
-
-    /**
      * Show the public services listing from the canonical services table.
+     *
+     * Solo lista servicios publicados y activos, ordenados por `sort_order`.
+     * Draft y hidden no aparecen.
      */
     public function index(): Response
     {
@@ -54,21 +39,24 @@ class ServiceController extends Controller
     }
 
     /**
-     * Show an enabled service detail by either Spanish or English slug.
+     * Show a service detail by either Spanish or English slug.
+     *
+     * El detalle es la fuente de verdad del CRUD admin: solo accesible si el
+     * servicio está publicado, activo y con el detalle habilitado. En cualquier
+     * otro caso devuelve 404.
      */
     public function show(string $slug): Response
     {
         $service = Service::query()
             ->published()
             ->active()
+            ->detailEnabled()
             ->where(function ($query) use ($slug): void {
                 $query
                     ->where('slug_es', $slug)
                     ->orWhere('slug_en', $slug);
             })
             ->firstOrFail();
-
-        abort_unless($this->hasPublicDetail($service), 404);
 
         return Inertia::render('Public/ServiceDetail', [
             'service' => [
@@ -89,27 +77,8 @@ class ServiceController extends Controller
             'slug' => $service->slug,
             'summary' => $service->summary,
             'icon' => $service->icon,
-            'isDetailEnabled' => $this->hasPublicDetail($service),
+            'isDetailEnabled' => $service->is_detail_enabled,
             'settings' => $service->settings,
         ];
-    }
-
-    private function hasPublicDetail(Service $service): bool
-    {
-        if ($service->is_detail_enabled) {
-            return true;
-        }
-
-        if (! is_array($service->slug)) {
-            return false;
-        }
-
-        foreach ($service->slug as $slug) {
-            if (is_string($slug) && in_array($slug, self::INITIAL_PUBLIC_DETAIL_SLUGS, true)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

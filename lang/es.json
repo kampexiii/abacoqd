@@ -1458,5 +1458,126 @@
             "cookies": "Cookies",
             "notice": "Aviso legal"
         }
+    },
+    "admin": {
+        "nav": {
+            "dashboard": "Dashboard",
+            "services": "Servicios",
+            "blog": "Blog",
+            "projects": "Proyectos",
+            "partners": "Partners",
+            "team": "Equipo",
+            "messages": "Mensajes",
+            "booking": "Reserva",
+            "legal": "Legal",
+            "settings": "Settings",
+            "seo": "SEO",
+            "faqs": "FAQs",
+            "users": "Usuarios",
+            "pending": "Pendiente"
+        },
+        "roles": {
+            "super_admin": "Super Admin",
+            "admin": "Administrador",
+            "editor": "Editor",
+            "viewer": "Lectura"
+        },
+        "layout": {
+            "viewSite": "Ver sitio web",
+            "openMenu": "Abrir menú",
+            "switchLanguage": "Cambiar idioma de la interfaz"
+        },
+        "dashboard": {
+            "title": "Dashboard",
+            "servicesStatus": "Estado de servicios",
+            "quickAccess": "Accesos rápidos",
+            "stats": {
+                "published": "Publicados",
+                "draft": "Borradores",
+                "hidden": "Ocultos"
+            }
+        },
+        "status": {
+            "draft": "Borrador",
+            "published": "Publicado",
+            "hidden": "Oculto"
+        },
+        "filters": {
+            "all": "Todos",
+            "yes": "Sí",
+            "no": "No"
+        },
+        "services": {
+            "title": "Servicios",
+            "new": "Nuevo servicio",
+            "createTitle": "Nuevo servicio",
+            "editTitle": "Editar servicio",
+            "searchPlaceholder": "Buscar por título o slug…",
+            "showing": "Mostrando :count de :total servicios",
+            "counts": {
+                "total": "Total servicios",
+                "published": "Publicados",
+                "draft": "Borradores",
+                "hidden": "Ocultos"
+            },
+            "filters": {
+                "status": "Estado"
+            },
+            "columns": {
+                "service": "Servicio",
+                "status": "Estado",
+                "order": "Orden",
+                "updated": "Actualizado",
+                "actions": "Acciones"
+            },
+            "fields": {
+                "title": "Título",
+                "slug": "Slug",
+                "slugHint": "Solo minúsculas, números y guiones.",
+                "summary": "Resumen",
+                "description": "Descripción larga",
+                "descriptionHint": "Obligatoria si el detalle público está habilitado (mínimo 40 caracteres).",
+                "ctaLabel": "Texto del CTA",
+                "ctaUrl": "URL del CTA",
+                "status": "Estado",
+                "sortOrder": "Orden",
+                "isActive": "Activo",
+                "showOnHome": "En home",
+                "isFeatured": "Destacado",
+                "isDetailEnabled": "Detalle",
+                "isDetailEnabledHint": "Habilita la página /servicios/{slug}."
+            },
+            "form": {
+                "contentTitle": "Contenido",
+                "contentHint": "Edita el contenido en español e inglés con las pestañas ES/EN.",
+                "ctaTitle": "Llamada a la acción (CTA)",
+                "mediaTitle": "Imagen / mockup",
+                "mediaHint": "PNG, JPG o WebP. Se convierte y guarda en WebP automáticamente.",
+                "noImage": "Sin imagen",
+                "uploadImage": "Subir imagen",
+                "removeImage": "Quitar imagen",
+                "publishTitle": "Publicación",
+                "visibilityTitle": "Visibilidad",
+                "save": "Guardar",
+                "cancel": "Cancelar"
+            },
+            "actions": {
+                "edit": "Editar",
+                "viewPublic": "Ver público",
+                "more": "Más acciones",
+                "publish": "Publicar",
+                "hide": "Ocultar",
+                "archive": "Archivar",
+                "archiveConfirm": "Se archivará el servicio (quedará oculto e inactivo). ¿Continuar?"
+            },
+            "empty": {
+                "title": "Aún no hay servicios",
+                "description": "Crea el primer servicio para mostrarlo en la web."
+            },
+            "noResults": {
+                "title": "Sin resultados",
+                "description": "Ningún servicio coincide con los filtros aplicados."
+            }
+        }
     }
 }

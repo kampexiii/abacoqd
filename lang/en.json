@@ -1458,5 +1458,126 @@
             "cookies": "Cookies",
             "notice": "Legal notice"
         }
+    },
+    "admin": {
+        "nav": {
+            "dashboard": "Dashboard",
+            "services": "Services",
+            "blog": "Blog",
+            "projects": "Projects",
+            "partners": "Partners",
+            "team": "Team",
+            "messages": "Messages",
+            "booking": "Booking",
+            "legal": "Legal",
+            "settings": "Settings",
+            "seo": "SEO",
+            "faqs": "FAQs",
+            "users": "Users",
+            "pending": "Pending"
+        },
+        "roles": {
+            "super_admin": "Super Admin",
+            "admin": "Administrator",
+            "editor": "Editor",
+            "viewer": "Viewer"
+        },
+        "layout": {
+            "viewSite": "View website",
+            "openMenu": "Open menu",
+            "switchLanguage": "Switch interface language"
+        },
+        "dashboard": {
+            "title": "Dashboard",
+            "servicesStatus": "Services status",
+            "quickAccess": "Quick access",
+            "stats": {
+                "published": "Published",
+                "draft": "Drafts",
+                "hidden": "Hidden"
+            }
+        },
+        "status": {
+            "draft": "Draft",
+            "published": "Published",
+            "hidden": "Hidden"
+        },
+        "filters": {
+            "all": "All",
+            "yes": "Yes",
+            "no": "No"
+        },
+        "services": {
+            "title": "Services",
+            "new": "New service",
+            "createTitle": "New service",
+            "editTitle": "Edit service",
+            "searchPlaceholder": "Search by title or slug…",
+            "showing": "Showing :count of :total services",
+            "counts": {
+                "total": "Total services",
+                "published": "Published",
+                "draft": "Drafts",
+                "hidden": "Hidden"
+            },
+            "filters": {
+                "status": "Status"
+            },
+            "columns": {
+                "service": "Service",
+                "status": "Status",
+                "order": "Order",
+                "updated": "Updated",
+                "actions": "Actions"
+            },
+            "fields": {
+                "title": "Title",
+                "slug": "Slug",
+                "slugHint": "Lowercase letters, numbers and hyphens only.",
+                "summary": "Summary",
+                "description": "Long description",
+                "descriptionHint": "Required when the public detail is enabled (minimum 40 characters).",
+                "ctaLabel": "CTA label",
+                "ctaUrl": "CTA URL",
+                "status": "Status",
+                "sortOrder": "Order",
+                "isActive": "Active",
+                "showOnHome": "On home",
+                "isFeatured": "Featured",
+                "isDetailEnabled": "Detail",
+                "isDetailEnabledHint": "Enables the /servicios/{slug} page."
+            },
+            "form": {
+                "contentTitle": "Content",
+                "contentHint": "Edit content in Spanish and English using the ES/EN tabs.",
+                "ctaTitle": "Call to action (CTA)",
+                "mediaTitle": "Image / mockup",
+                "mediaHint": "PNG, JPG or WebP. Converted and stored as WebP automatically.",
+                "noImage": "No image",
+                "uploadImage": "Upload image",
+                "removeImage": "Remove image",
+                "publishTitle": "Publishing",
+                "visibilityTitle": "Visibility",
+                "save": "Save",
+                "cancel": "Cancel"
+            },
+            "actions": {
+                "edit": "Edit",
+                "viewPublic": "View public",
+                "more": "More actions",
+                "publish": "Publish",
+                "hide": "Hide",
+                "archive": "Archive",
+                "archiveConfirm": "The service will be archived (hidden and inactive). Continue?"
+            },
+            "empty": {
+                "title": "No services yet",
+                "description": "Create the first service to show it on the website."
+            },
+            "noResults": {
+                "title": "No results",
+                "description": "No service matches the current filters."
+            }
+        }
     }
 }
