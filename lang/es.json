@@ -318,26 +318,7 @@
             "lead": "Compartimos aprendizajes, criterios técnicos y recursos para entender mejor cómo la tecnología puede acelerar procesos reales.",
             "cta": "Leer artículo",
             "ctaAll": "Ver todos los artículos",
-            "items": {
-                "ai": {
-                    "category": "IA",
-                    "title": "Cómo la IA está acelerando el desarrollo a medida",
-                    "summary": "Un marco práctico para usar IA sin perder criterio técnico, control ni calidad en el resultado.",
-                    "meta": "DEMO · 4 min de lectura"
-                },
-                "automation": {
-                    "category": "Automatización",
-                    "title": "Procesos internos que puedes automatizar desde el primer mes",
-                    "summary": "Ideas de flujos sencillos para reducir tareas repetitivas y conectar herramientas desde el inicio.",
-                    "meta": "DEMO · 3 min de lectura"
-                },
-                "planning": {
-                    "category": "Proyecto digital",
-                    "title": "Cómo plantear un proyecto digital a medida",
-                    "summary": "Qué conviene decidir antes de construir: alcance, prioridades, riesgos y primera versión útil.",
-                    "meta": "DEMO · 5 min de lectura"
-                }
-            }
+            "emptyText": "Estamos preparando los primeros artículos del blog."
         },
         "cta": {
             "eyebrow": "EMPECEMOS",
@@ -980,6 +961,63 @@
         "cta": {
             "title": "Hablemos de tu proyecto.",
             "subtitle": "Cuéntanos qué necesitas construir y te ayudamos a encontrar el enfoque más claro para empezar.",
+            "primary": "Cuéntanos tu proyecto",
+            "secondary": "Reserva hora"
+        }
+    },
+    "blogPage": {
+        "metaTitle": "Blog de CRM, datos e IA aplicada | Abaco Developments",
+        "hero": {
+            "eyebrow": "BLOG",
+            "title": "Ideas sobre desarrollo, IA y soluciones digitales.",
+            "subtitle": "Artículos para entender mejor cómo plantear, acelerar y mantener productos digitales a medida."
+        },
+        "heroTagline": {
+            "title": "Criterio técnico antes que ruido.",
+            "subtitle": "Artículos pensados para aplicar, no solo para leer."
+        },
+        "search": {
+            "label": "Buscar artículos",
+            "placeholder": "Buscar artículos…",
+            "submit": "Buscar",
+            "clear": "Limpiar"
+        },
+        "featuredLabel": "Artículo destacado",
+        "resultsLabel": "Resultados de búsqueda",
+        "readMore": "Leer artículo",
+        "minutesShort": "min de lectura",
+        "paginationAria": "Paginación de artículos",
+        "pagination": {
+            "previous": "Página anterior",
+            "next": "Página siguiente"
+        },
+        "empty": {
+            "noPostsTitle": "Estamos preparando los primeros artículos.",
+            "searchTitle": "No hemos encontrado artículos con esa búsqueda.",
+            "categoryTitle": "No hay artículos publicados en esta categoría.",
+            "viewAll": "Ver todos los artículos",
+            "services": "Ver servicios",
+            "methodology": "Ver metodología"
+        },
+        "cta": {
+            "title": "¿Quieres aplicar esto a tu proyecto?",
+            "subtitle": "Cuéntanos tu caso y vemos el enfoque más útil para avanzar.",
+            "primary": "Cuéntanos tu proyecto",
+            "secondary": "Reserva hora"
+        }
+    },
+    "blogDetailPage": {
+        "author": "Abaco Developments",
+        "heroTagline": {
+            "title": "Contenido de Abaco Developments.",
+            "subtitle": "Criterio técnico aplicado, sin relleno."
+        },
+        "noContent": "Este artículo todavía no tiene contenido publicado.",
+        "backToCategory": "Ver más artículos de esta categoría",
+        "relatedTitle": "Artículos relacionados",
+        "cta": {
+            "title": "¿Quieres aplicar esto a tu proyecto?",
+            "subtitle": "Cuéntanos tu caso y vemos el enfoque más útil para avanzar.",
             "primary": "Cuéntanos tu proyecto",
             "secondary": "Reserva hora"
         }

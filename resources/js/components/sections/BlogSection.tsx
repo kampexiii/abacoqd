@@ -1,65 +1,21 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, FileText } from 'lucide-react';
 
 import { useInView } from '@/hooks/use-in-view';
 import { useLanguage } from '@/hooks/use-language';
+import type { BlogPostSummary } from '@/lib/blog';
+import { formatPostDate, localizedText, postHref } from '@/lib/blog';
 import { cn } from '@/lib/utils';
 
-const POSTS = [
-    { key: 'ai', visual: 'code', featured: true },
-    { key: 'automation', visual: 'workflow', featured: false },
-    { key: 'planning', visual: 'planning', featured: false },
-] as const;
-
-type BlogVisual = (typeof POSTS)[number]['visual'];
-
-function CodeVisual() {
-    return (
-        <div className="qd-blog-code-visual" aria-hidden="true">
-            <div className="qd-blog-code-bar">
-                <span className="qd-blog-code-dot" />
-                <span className="qd-blog-code-dot" />
-                <span className="qd-blog-code-dot" />
-                <span className="qd-blog-code-filename">procesar-lead.ts</span>
-            </div>
-            <div className="qd-blog-code-stage">
-                <pre className="qd-blog-code-pre">
-                    <code>
-                        <span className="qd-code-kw">const</span> resultado ={' '}
-                        <span className="qd-code-fn">clasificar</span>(lead);{'\n'}
-                        <span className="qd-code-kw">
-                            if
-                        </span> (resultado.prioridad) {'{'}
-                        {'\n'} crm.<span className="qd-code-fn">actualizar</span>
-                        (lead);
-                        {'\n'} email.<span className="qd-code-fn">enviar</span>
-                        (respuesta);
-                        {'\n'}
-                        {'}'}
-                        {'\n'}
-                        <span className="qd-code-cm">
-                            // IA supervisada, criterio humano.
-                        </span>
-                    </code>
-                </pre>
-                <div className="qd-blog-ai-flow">
-                    {['Lead', 'IA', 'CRM', 'Email'].map((step, index) => (
-                        <span key={step} className="contents">
-                            <span
-                                className={cn(
-                                    'qd-blog-ai-step',
-                                    step === 'IA' && 'is-ai',
-                                )}
-                            >
-                                {step}
-                            </span>
-                            {index < 3 && <span className="qd-blog-ai-sep">→</span>}
-                        </span>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-}
+/**
+ * Sección Blog de la landing. docs/07_VISTAS/PUBLIC_01_HOME_LANDING.md.
+ *
+ * Maquetación aprobada sin cambios (1 card grande + 2 pequeñas vía
+ * `.qd-blog-layout`/`.qd-blog-main`/`.qd-blog-secondary`); solo cambia el
+ * origen de los datos: `featuredPost` viene de `Post::featured()` y
+ * `latestPosts` de los últimos publicados con `show_on_home`, ambos desde
+ * `HomeController`. Sin destacado no se inventan posts: se muestra un
+ * estado controlado.
+ */
 
 function FeaturedInsightVisual() {
     return (
@@ -77,54 +33,51 @@ function FeaturedInsightVisual() {
     );
 }
 
-function WorkflowVisual() {
+function CoverVisual({ src }: { readonly src: string | null }) {
+    if (src) {
+        return (
+            <img src={src} alt="" className="h-full w-full object-cover" />
+        );
+    }
+
     return (
-        <div className="qd-blog-wf-visual" aria-hidden="true">
-            {['Pedido', 'Extraer', 'Validar', 'Actualizar'].map(
-                (step, index) => (
-                    <span key={step} className="contents">
-                        <span className="qd-blog-wf-step">{step}</span>
-                        {index < 3 && <span className="qd-blog-wf-sep">→</span>}
-                    </span>
-                ),
-            )}
+        <div
+            aria-hidden="true"
+            className="qd-blog-code-visual items-center justify-center"
+        >
+            <FileText
+                size={28}
+                strokeWidth={1.5}
+                className="text-white/15"
+            />
         </div>
     );
 }
 
-function PlanningVisual() {
-    return (
-        <div className="qd-blog-comp-visual" aria-hidden="true">
-            <div className="qd-blog-comp-col">
-                <span className="qd-blog-comp-label">brief</span>
-                <span className="qd-blog-comp-bar" />
-                <span className="qd-blog-comp-bar" />
-                <span className="qd-blog-comp-bar" />
-            </div>
-            <div className="qd-blog-comp-col qd-blog-comp-col--custom">
-                <span className="qd-blog-comp-label">alcance</span>
-                <span className="qd-blog-comp-bar" />
-                <span className="qd-blog-comp-bar" />
-                <span className="qd-blog-comp-bar" />
-            </div>
-        </div>
-    );
+function postMeta(
+    post: BlogPostSummary,
+    locale: 'es' | 'en',
+    t: (key: string) => string,
+): string {
+    const date = formatPostDate(post.publishedAt, locale);
+    const reading =
+        post.readingTime !== null
+            ? `${post.readingTime} ${t('blogPage.minutesShort')}`
+            : null;
+
+    return [date, reading].filter(Boolean).join(' · ');
 }
 
-function BlogCardVisual({ visual }: { visual: BlogVisual }) {
-    if (visual === 'code') {
-        return <CodeVisual />;
-    }
+type BlogSectionProps = {
+    readonly featuredPost: BlogPostSummary | null;
+    readonly latestPosts: readonly BlogPostSummary[];
+};
 
-    if (visual === 'workflow') {
-        return <WorkflowVisual />;
-    }
-
-    return <PlanningVisual />;
-}
-
-export default function BlogSection() {
-    const { t } = useLanguage();
+export default function BlogSection({
+    featuredPost,
+    latestPosts,
+}: BlogSectionProps) {
+    const { t, locale } = useLanguage();
     const { ref, inView } = useInView<HTMLDivElement>({ threshold: 0.12 });
 
     return (
@@ -154,71 +107,108 @@ export default function BlogSection() {
                     </a>
                 </div>
 
-                <div
-                    className={cn(
-                        'qd-blog-layout abaco-stagger',
-                        inView && 'is-visible',
-                    )}
-                >
-                    {POSTS.map((post) => (
-                        <article
-                            key={post.key}
-                            className={
-                                post.featured
-                                    ? 'qd-blog-main'
-                                    : 'qd-blog-secondary'
-                            }
-                        >
+                {featuredPost ? (
+                    <div
+                        className={cn(
+                            'qd-blog-layout abaco-stagger',
+                            inView && 'is-visible',
+                        )}
+                    >
+                        <article className="qd-blog-main">
                             <div className="qd-blog-card__visual">
-                                <BlogCardVisual visual={post.visual} />
+                                <CoverVisual src={featuredPost.coverImage} />
                             </div>
-                            {post.featured ? (
-                                <div className="qd-blog-card__body qd-blog-card__body--featured">
-                                    <div className="qd-blog-main__copy">
+                            <div className="qd-blog-card__body qd-blog-card__body--featured">
+                                <div className="qd-blog-main__copy">
+                                    {featuredPost.category && (
                                         <span className="qd-blog-card__cat">
-                                            {t(`home.blog.items.${post.key}.category`)}
+                                            {localizedText(
+                                                featuredPost.category.name,
+                                                locale,
+                                            )}
                                         </span>
-                                        <h3 className="qd-blog-card__title">
-                                            {t(`home.blog.items.${post.key}.title`)}
-                                        </h3>
-                                        <p className="qd-blog-card__summary">
-                                            {t(`home.blog.items.${post.key}.summary`)}
-                                        </p>
-                                    </div>
-                                    <FeaturedInsightVisual />
-                                    <div className="qd-blog-main__footer">
-                                        <span className="qd-blog-card__meta">
-                                            {t(`home.blog.items.${post.key}.meta`)}
-                                        </span>
-                                        <a href="/blog" className="qd-blog-card__read">
-                                            {t('home.blog.cta')}
-                                            <ArrowRight aria-hidden="true" size={14} />
-                                        </a>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="qd-blog-card__body">
-                                    <span className="qd-blog-card__cat">
-                                        {t(`home.blog.items.${post.key}.category`)}
-                                    </span>
+                                    )}
                                     <h3 className="qd-blog-card__title">
-                                        {t(`home.blog.items.${post.key}.title`)}
+                                        {localizedText(
+                                            featuredPost.title,
+                                            locale,
+                                        )}
                                     </h3>
                                     <p className="qd-blog-card__summary">
-                                        {t(`home.blog.items.${post.key}.summary`)}
+                                        {localizedText(
+                                            featuredPost.excerpt,
+                                            locale,
+                                        )}
                                     </p>
+                                </div>
+                                <FeaturedInsightVisual />
+                                <div className="qd-blog-main__footer">
                                     <span className="qd-blog-card__meta">
-                                        {t(`home.blog.items.${post.key}.meta`)}
+                                        {postMeta(featuredPost, locale, t)}
                                     </span>
-                                    <a href="/blog" className="qd-blog-card__read">
+                                    <a
+                                        href={postHref(featuredPost) ?? '/blog'}
+                                        className="qd-blog-card__read"
+                                    >
                                         {t('home.blog.cta')}
-                                        <ArrowRight aria-hidden="true" size={14} />
+                                        <ArrowRight
+                                            aria-hidden="true"
+                                            size={14}
+                                        />
                                     </a>
                                 </div>
-                            )}
+                            </div>
                         </article>
-                    ))}
-                </div>
+
+                        {latestPosts.map((post) => (
+                            <article key={post.id} className="qd-blog-secondary">
+                                <div className="qd-blog-card__visual">
+                                    <CoverVisual src={post.coverImage} />
+                                </div>
+                                <div className="qd-blog-card__body">
+                                    {post.category && (
+                                        <span className="qd-blog-card__cat">
+                                            {localizedText(
+                                                post.category.name,
+                                                locale,
+                                            )}
+                                        </span>
+                                    )}
+                                    <h3 className="qd-blog-card__title">
+                                        {localizedText(post.title, locale)}
+                                    </h3>
+                                    <p className="qd-blog-card__summary">
+                                        {localizedText(post.excerpt, locale)}
+                                    </p>
+                                    <span className="qd-blog-card__meta">
+                                        {postMeta(post, locale, t)}
+                                    </span>
+                                    <a
+                                        href={postHref(post) ?? '/blog'}
+                                        className="qd-blog-card__read"
+                                    >
+                                        {t('home.blog.cta')}
+                                        <ArrowRight
+                                            aria-hidden="true"
+                                            size={14}
+                                        />
+                                    </a>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+                ) : (
+                    <div
+                        className={cn(
+                            'abaco-reveal rounded-2xl border border-qd-mist bg-qd-white/60 p-10 text-center dark:border-white/10 dark:bg-white/5',
+                            inView && 'is-visible',
+                        )}
+                    >
+                        <p className="text-sm text-qd-text-high">
+                            {t('home.blog.emptyText')}
+                        </p>
+                    </div>
+                )}
             </div>
         </section>
     );

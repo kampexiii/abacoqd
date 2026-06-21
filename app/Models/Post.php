@@ -114,4 +114,21 @@ class Post extends Model
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now());
     }
+
+    /**
+     * Búsqueda simple por coincidencia en título, extracto o contenido
+     * (ambos locales a la vez, ya que son columnas JSON `{es, en}`).
+     *
+     * @param  Builder<self>  $query
+     */
+    public function scopeSearch(Builder $query, string $term): void
+    {
+        $like = '%'.$term.'%';
+
+        $query->where(function (Builder $query) use ($like): void {
+            $query->where('title', 'like', $like)
+                ->orWhere('excerpt', 'like', $like)
+                ->orWhere('content', 'like', $like);
+        });
+    }
 }

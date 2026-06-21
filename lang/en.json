@@ -318,26 +318,7 @@
             "lead": "We share lessons, technical judgement and resources to better understand how technology can accelerate real processes.",
             "cta": "Read article",
             "ctaAll": "View all articles",
-            "items": {
-                "ai": {
-                    "category": "AI",
-                    "title": "How AI is accelerating custom development",
-                    "summary": "A practical framework for using AI without losing technical judgement, control or quality.",
-                    "meta": "DEMO · 4 min read"
-                },
-                "automation": {
-                    "category": "Automation",
-                    "title": "Internal processes you can automate from the first month",
-                    "summary": "Simple flow ideas to reduce repetitive work and connect tools from the start.",
-                    "meta": "DEMO · 3 min read"
-                },
-                "planning": {
-                    "category": "Digital project",
-                    "title": "How to frame a custom digital project",
-                    "summary": "What to decide before building: scope, priorities, risks and the first useful version.",
-                    "meta": "DEMO · 5 min read"
-                }
-            }
+            "emptyText": "We're preparing the first articles for the blog."
         },
         "cta": {
             "eyebrow": "LET'S START",
@@ -980,6 +961,63 @@
         "cta": {
             "title": "Let's talk about your project.",
             "subtitle": "Tell us what you need to build and we'll help you find the clearest way to start.",
+            "primary": "Tell us about your project",
+            "secondary": "Book a slot"
+        }
+    },
+    "blogPage": {
+        "metaTitle": "CRM, data and applied AI blog | Abaco Developments",
+        "hero": {
+            "eyebrow": "BLOG",
+            "title": "Ideas on development, AI and digital solutions.",
+            "subtitle": "Articles to better understand how to plan, speed up and maintain custom digital products."
+        },
+        "heroTagline": {
+            "title": "Technical judgement before noise.",
+            "subtitle": "Articles meant to be applied, not just read."
+        },
+        "search": {
+            "label": "Search articles",
+            "placeholder": "Search articles…",
+            "submit": "Search",
+            "clear": "Clear"
+        },
+        "featuredLabel": "Featured article",
+        "resultsLabel": "Search results",
+        "readMore": "Read article",
+        "minutesShort": "min read",
+        "paginationAria": "Article pagination",
+        "pagination": {
+            "previous": "Previous page",
+            "next": "Next page"
+        },
+        "empty": {
+            "noPostsTitle": "We're preparing the first articles.",
+            "searchTitle": "We couldn't find any articles for that search.",
+            "categoryTitle": "There are no articles published in this category yet.",
+            "viewAll": "View all articles",
+            "services": "View services",
+            "methodology": "View methodology"
+        },
+        "cta": {
+            "title": "Want to apply this to your project?",
+            "subtitle": "Tell us about your case and we'll find the most useful approach to move forward.",
+            "primary": "Tell us about your project",
+            "secondary": "Book a slot"
+        }
+    },
+    "blogDetailPage": {
+        "author": "Abaco Developments",
+        "heroTagline": {
+            "title": "Content from Abaco Developments.",
+            "subtitle": "Applied technical judgement, no filler."
+        },
+        "noContent": "This article doesn't have published content yet.",
+        "backToCategory": "See more articles in this category",
+        "relatedTitle": "Related articles",
+        "cta": {
+            "title": "Want to apply this to your project?",
+            "subtitle": "Tell us about your case and we'll find the most useful approach to move forward.",
             "primary": "Tell us about your project",
             "secondary": "Book a slot"
         }

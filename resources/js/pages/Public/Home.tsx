@@ -8,6 +8,7 @@ import FinalCtaSection from '@/components/sections/FinalCtaSection';
 import MethodologySection from '@/components/sections/MethodologySection';
 import ServicesSection from '@/components/sections/ServicesSection';
 import PublicLayout from '@/layouts/public-layout';
+import type { BlogPostSummary } from '@/lib/blog';
 
 /**
  * Home / Landing pública AbacoQD.
@@ -22,9 +23,15 @@ import PublicLayout from '@/layouts/public-layout';
  */
 type HomeProps = {
     readonly collaborations?: readonly CollaborationItem[];
+    readonly featuredPost?: BlogPostSummary | null;
+    readonly latestPosts?: readonly BlogPostSummary[];
 };
 
-export default function Home({ collaborations = [] }: HomeProps) {
+export default function Home({
+    collaborations = [],
+    featuredPost = null,
+    latestPosts = [],
+}: HomeProps) {
     return (
         <PublicLayout waveHiddenUntilElementId="hero">
             <Head title="Abaco Developments — Consultoría tecnológica, CRM e IA aplicada" />
@@ -32,7 +39,10 @@ export default function Home({ collaborations = [] }: HomeProps) {
             <MethodologySection />
             <ServicesSection />
             <CollaborationsSection items={collaborations} />
-            <BlogSection />
+            <BlogSection
+                featuredPost={featuredPost}
+                latestPosts={latestPosts}
+            />
             <FinalCtaSection />
         </PublicLayout>
     );

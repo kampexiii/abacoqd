@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Public\AboutController;
+use App\Http\Controllers\Public\BlogController;
 use App\Http\Controllers\Public\BookingController;
 use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\HomeController;
@@ -15,6 +16,8 @@ Route::get('/servicios/{slug}', [ServiceController::class, 'show'])->name('servi
 Route::get('/proyectos', [ProjectController::class, 'index'])->name('projects.show');
 Route::get('/proyectos/{slug}', [ProjectController::class, 'show'])->name('projects.detail');
 Route::get('/quienes-somos', [AboutController::class, 'index'])->name('about.show');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.show');
+Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.detail');
 
 Route::get('/contacto', [ContactController::class, 'create'])->name('contact.show');
 Route::post('/contacto', [ContactController::class, 'store'])
