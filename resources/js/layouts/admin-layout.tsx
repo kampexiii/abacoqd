@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { ChevronRight, ExternalLink, Menu } from 'lucide-react';
+import { ChevronRight, ChevronDown, ExternalLink, LogOut, Menu } from 'lucide-react';
 import { useEffect  } from 'react';
 import type {ReactNode} from 'react';
 import { toast as sonnerToast } from 'sonner';
@@ -7,6 +7,14 @@ import { toast as sonnerToast } from 'sonner';
 import { ADMIN_NAV  } from '@/components/admin/admin-nav';
 import type {AdminNavItem} from '@/components/admin/admin-nav';
 import ThemeTogglerButton from '@/components/animate-ui/components/buttons/theme-toggler';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
     Sheet,
     SheetContent,
@@ -16,6 +24,7 @@ import {
 } from '@/components/ui/sheet';
 import { useLanguage } from '@/hooks/use-language';
 import { cn } from '@/lib/utils';
+import { logout } from '@/routes';
 import type { FlashToast } from '@/types/ui';
 
 export type AdminBreadcrumb = {
@@ -173,19 +182,43 @@ export default function AdminLayout({
 
                         <ThemeTogglerButton modes={['light', 'dark', 'system']} />
 
-                        <div className="hidden items-center gap-3 border-l border-qd-mist pl-3 sm:flex dark:border-qd-white/10">
-                            <div className="text-right leading-tight">
-                                <p className="text-sm font-semibold text-qd-ink dark:text-qd-white">
-                                    {user.name}
-                                </p>
-                                <p className="text-xs text-qd-text-medium dark:text-qd-white/50">
-                                    {t(`admin.roles.${roleKey}`)}
-                                </p>
-                            </div>
-                            <span className="flex size-9 items-center justify-center rounded-full bg-qd-teal-2/10 text-sm font-bold text-qd-teal-2 dark:bg-qd-teal/10 dark:text-qd-teal">
-                                {user.name.charAt(0).toUpperCase()}
-                            </span>
-                        </div>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className="flex items-center gap-2 border-l border-qd-mist pl-3 sm:gap-3 dark:border-qd-white/10">
+                                <div className="hidden text-right leading-tight sm:block">
+                                    <p className="text-sm font-semibold text-qd-ink dark:text-qd-white">
+                                        {user.name}
+                                    </p>
+                                    <p className="text-xs text-qd-text-medium dark:text-qd-white/50">
+                                        {t(`admin.roles.${roleKey}`)}
+                                    </p>
+                                </div>
+                                <span className="flex size-9 items-center justify-center rounded-full bg-qd-teal-2/10 text-sm font-bold text-qd-teal-2 dark:bg-qd-teal/10 dark:text-qd-teal">
+                                    {user.name.charAt(0).toUpperCase()}
+                                </span>
+                                <ChevronDown
+                                    aria-hidden="true"
+                                    size={15}
+                                    className="hidden text-qd-text-medium sm:block"
+                                />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-56">
+                                <DropdownMenuLabel className="font-normal">
+                                    <p className="text-sm font-semibold text-qd-ink dark:text-qd-white">
+                                        {user.name}
+                                    </p>
+                                    <p className="text-xs text-qd-text-medium dark:text-qd-white/50">
+                                        {t(`admin.roles.${roleKey}`)}
+                                    </p>
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem asChild>
+                                    <Link href={logout()} as="button" className="w-full">
+                                        <LogOut aria-hidden="true" className="mr-2" />
+                                        {t('admin.layout.logout')}
+                                    </Link>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </header>
 

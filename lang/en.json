@@ -1485,7 +1485,8 @@
         "layout": {
             "viewSite": "View website",
             "openMenu": "Open menu",
-            "switchLanguage": "Switch interface language"
+            "switchLanguage": "Switch interface language",
+            "logout": "Log out"
         },
         "dashboard": {
             "title": "Dashboard",
@@ -1579,5 +1580,37 @@
                 "description": "No service matches the current filters."
             }
         }
+    },
+    "adminLogin": {
+        "metaTitle": "Panel access · AbacoQD",
+        "badge": "ADMIN",
+        "panelTitle": "Management panel access",
+        "panelSubtitle": "Manage services, blog, projects, partners and team from a single place.",
+        "features": {
+            "secure": {
+                "title": "Secure",
+                "description": "Protected access restricted to the authorized team."
+            },
+            "centralized": {
+                "title": "Centralized",
+                "description": "Manage all content from a single panel."
+            },
+            "efficient": {
+                "title": "Efficient",
+                "description": "Tools designed to manage content without touching code."
+            }
+        },
+        "title": "Sign in",
+        "subtitle": "Access your administration panel",
+        "email": "Email",
+        "emailPlaceholder": "you@company.com",
+        "password": "Password",
+        "remember": "Remember me",
+        "forgot": "Forgot your password?",
+        "submit": "Enter the panel",
+        "backToSite": "Back to website",
+        "restricted": "Private access for authorized team only.",
+        "switchLanguage": "Switch interface language",
+        "rights": "All rights reserved."
     }
 }

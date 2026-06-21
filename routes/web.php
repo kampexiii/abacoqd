@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Public\AboutController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\ProjectController;
 use App\Http\Controllers\Public\ServiceController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -35,8 +37,23 @@ Route::post('/reserva', [BookingController::class, 'store'])
     ->middleware('throttle:public-forms')
     ->name('booking.store');
 
+// El dashboard real vive en /admin/dashboard. /dashboard (destino por defecto
+// de Fortify tras login/registro/verificación) reenvía a los roles de gestión
+// al panel admin y al resto a la home pública; no renderiza dashboard propio.
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('dashboard', function (Request $request) {
+        $user = $request->user();
+
+        $canAccessAdmin = $user !== null && in_array($user->role, [
+            UserRole::SuperAdmin,
+            UserRole::Admin,
+            UserRole::Editor,
+        ], true);
+
+        return $canAccessAdmin
+            ? redirect()->route('admin.dashboard')
+            : redirect('/');
+    })->name('dashboard');
 });
 
 Route::middleware(['auth', 'admin'])

@@ -20,6 +20,10 @@ createInertiaApp({
                 return null;
             case name.startsWith('Errors/'):
                 return null;
+            // Login admin de AbacoQD: pantalla propia a página completa, sin el
+            // layout de auth genérico del starter.
+            case name === 'auth/login':
+                return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('settings/'):
