@@ -3,11 +3,9 @@ import {
     ArrowRight,
     Calendar,
     Check,
-    ChevronRight,
     Clock,
     FileText,
     Folder,
-    Home,
     Link2,
     Linkedin,
     MessageSquare,
@@ -16,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
+import PublicPageHero from '@/components/public/PublicPageHero';
 import { useLanguage } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
 import type {
@@ -31,12 +30,12 @@ import { show as contactShow } from '@/routes/contact';
 /**
  * Detalle público de un post. docs/07_VISTAS/PUBLIC_05_BLOG.md.
  *
- * Cabecera editorial propia (compatible con el sistema, no `PublicPageHero`):
- * el cover del post ocupa el lateral derecho del hero en vez del cubo. El
- * contenido se lee 100% desde BD; `contentHtml` viene renderizado desde
- * Markdown vía `Str::markdown()` en `BlogController` (CommonMark escapa el
- * HTML crudo del origen por defecto), así que `dangerouslySetInnerHTML` aquí
- * no abre una vía de XSS adicional.
+ * Reutiliza el hero interno común (`PublicPageHero`, mismo que Metodología,
+ * Servicios, Proyectos, etc.); la portada del post no va en el hero sino
+ * integrada al inicio del cuerpo editorial. El contenido se lee 100% desde
+ * BD; `contentHtml` viene renderizado desde Markdown vía `Str::markdown()` en
+ * `BlogController` (CommonMark escapa el HTML crudo del origen por defecto),
+ * así que `dangerouslySetInnerHTML` aquí no abre una vía de XSS adicional.
  */
 
 type LocalizedToc = {
@@ -92,99 +91,54 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
         <PublicLayout>
             <Head title={`${title} | Abaco Developments`} />
 
-            {/* Cabecera editorial: texto a la izquierda, cover a la derecha */}
-            <section className="relative overflow-hidden">
-                <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 bg-qd-mist/55 dark:bg-qd-surface/55"
-                />
-                <div className="relative mx-auto max-w-[1240px] px-5 pt-28 pb-12 sm:px-8 sm:pt-32 sm:pb-16">
-                    <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
-                        <div className="min-w-0">
-                            <nav aria-label="Breadcrumb" className="mb-6">
-                                <ol className="flex flex-wrap items-center gap-1.5 text-xs text-qd-text-medium">
-                                    <li>
-                                        <a
-                                            href="/"
-                                            className="flex items-center gap-1 hover:text-qd-teal-2 dark:hover:text-qd-teal"
-                                        >
-                                            <Home aria-hidden="true" size={12} />
-                                            {t('navigation.breadcrumbHome')}
-                                        </a>
-                                    </li>
-                                    <li aria-hidden="true">
-                                        <ChevronRight size={12} />
-                                    </li>
-                                    <li>
-                                        <a
-                                            href="/blog"
-                                            className="hover:text-qd-teal-2 dark:hover:text-qd-teal"
-                                        >
-                                            {t('navigation.items.blog')}
-                                        </a>
-                                    </li>
-                                    <li aria-hidden="true">
-                                        <ChevronRight size={12} />
-                                    </li>
-                                    <li
-                                        aria-current="page"
-                                        className="line-clamp-1 font-medium text-qd-ink dark:text-qd-white"
-                                    >
-                                        {title}
-                                    </li>
-                                </ol>
-                            </nav>
+            {/* Hero interno común, igual que el resto de vistas internas. */}
+            <PublicPageHero
+                eyebrow={t('blogPage.hero.eyebrow')}
+                title={title}
+                subtitle={excerpt}
+                currentLabel={title}
+                parentLabel={t('navigation.items.blog')}
+                parentHref="/blog"
+                taglineTitle={t('blogPage.heroTagline.title')}
+                taglineSubtitle={t('blogPage.heroTagline.subtitle')}
+                taglineIcon={FileText}
+            />
 
-                            <p className="flex items-center gap-2 text-sm font-semibold tracking-wide text-qd-teal-2 dark:text-qd-teal">
-                                <span
-                                    aria-hidden="true"
-                                    className="inline-block size-1.5 rounded-full bg-qd-teal-2 dark:bg-qd-teal"
-                                />
-                                {t('blogPage.hero.eyebrow')}
-                            </p>
-
-                            <h1 className="mt-3 text-3xl font-bold text-qd-ink sm:text-4xl lg:text-[2.75rem] lg:leading-[1.1] dark:text-qd-white">
-                                {title}
-                            </h1>
-
-                            {excerpt && (
-                                <p className="mt-4 max-w-xl text-base text-qd-text-high">
-                                    {excerpt}
-                                </p>
-                            )}
-
-                            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-qd-text-medium">
-                                {categoryName && (
-                                    <span className="inline-flex items-center gap-1.5">
-                                        <Folder aria-hidden="true" size={14} />
-                                        {categoryName}
-                                    </span>
-                                )}
-                                {date && (
-                                    <span className="inline-flex items-center gap-1.5">
-                                        <Calendar aria-hidden="true" size={14} />
-                                        <time
-                                            dateTime={post.publishedAt ?? undefined}
-                                        >
-                                            {date}
-                                        </time>
-                                    </span>
-                                )}
-                                {post.readingTime !== null && (
-                                    <span className="inline-flex items-center gap-1.5">
-                                        <Clock aria-hidden="true" size={14} />
-                                        {post.readingTime}{' '}
-                                        {t('blogPage.minutesShort')}
-                                    </span>
-                                )}
+            {/* Cuerpo + sidebar */}
+            <section className="bg-qd-bg dark:bg-qd-ink">
+                <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-14">
+                    <article className="min-w-0">
+                        {/* Meta del post */}
+                        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-qd-text-medium">
+                            {categoryName && (
                                 <span className="inline-flex items-center gap-1.5">
-                                    <User aria-hidden="true" size={14} />
-                                    {t('blogDetailPage.author')}
+                                    <Folder aria-hidden="true" size={14} />
+                                    {categoryName}
                                 </span>
-                            </div>
+                            )}
+                            {date && (
+                                <span className="inline-flex items-center gap-1.5">
+                                    <Calendar aria-hidden="true" size={14} />
+                                    <time dateTime={post.publishedAt ?? undefined}>
+                                        {date}
+                                    </time>
+                                </span>
+                            )}
+                            {post.readingTime !== null && (
+                                <span className="inline-flex items-center gap-1.5">
+                                    <Clock aria-hidden="true" size={14} />
+                                    {post.readingTime}{' '}
+                                    {t('blogPage.minutesShort')}
+                                </span>
+                            )}
+                            <span className="inline-flex items-center gap-1.5">
+                                <User aria-hidden="true" size={14} />
+                                {t('blogDetailPage.author')}
+                            </span>
                         </div>
 
-                        <div className="qd-blog-cover aspect-video w-full overflow-hidden rounded-2xl">
+                        {/* Portada integrada en el cuerpo, con borde neón */}
+                        <div className="qd-blog-cover mt-6 aspect-video w-full overflow-hidden rounded-2xl">
                             {post.coverImage ? (
                                 <img
                                     src={post.coverImage}
@@ -200,24 +154,17 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
                                 </div>
                             )}
                         </div>
-                    </div>
-                </div>
-            </section>
 
-            {/* Cuerpo + sidebar */}
-            <section className="bg-qd-bg dark:bg-qd-ink">
-                <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-14">
-                    <article className="min-w-0">
                         {contentHtml ? (
                             <div
-                                className="qd-article-body"
+                                className="qd-article-body mt-8"
                                 // Seguro: ver nota de seguridad en la cabecera
                                 // del archivo (CommonMark escapa el HTML crudo
                                 // del Markdown origen).
                                 dangerouslySetInnerHTML={{ __html: contentHtml }}
                             />
                         ) : (
-                            <p className="text-sm text-qd-text-high">
+                            <p className="mt-8 text-sm text-qd-text-high">
                                 {t('blogDetailPage.noContent')}
                             </p>
                         )}
