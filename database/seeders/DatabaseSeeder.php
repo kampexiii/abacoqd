@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             SeoMetadataSeeder::class,
             AbacoHistoricalProjectsSeeder::class,
             TeamMemberSeeder::class,
+            AdminUserSeeder::class,
         ]);
 
         User::factory()->create([
