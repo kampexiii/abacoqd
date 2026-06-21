@@ -1029,6 +1029,365 @@
             "button": "Reservar una consulta"
         }
     },
+    "legalPages": {
+        "common": {
+            "tocTitle": "En esta página",
+            "updatedLabel": "Última actualización",
+            "updatedValue": "Junio de 2026",
+            "draftNotice": "Texto base preparado a partir de la información corporativa de ABACO DIGITAL DEVELOPMENTS, S.L., pendiente de revisión jurídica final antes de su publicación definitiva. No constituye asesoramiento jurídico.",
+            "taglineTitle": "Transparencia y cumplimiento.",
+            "taglineSubtitle": "Información legal del sitio, clara y accesible.",
+            "contact": {
+                "title": "Datos de contacto",
+                "intro": "Titular y datos de contacto a efectos legales:",
+                "company": "Titular",
+                "cif": "CIF",
+                "address": "Domicilio",
+                "registry": "Datos registrales",
+                "email": "Email",
+                "phone": "Teléfono",
+                "web": "Sitio web"
+            },
+            "crossTitle": "Documentos legales",
+            "links": {
+                "notice": "Aviso legal",
+                "privacy": "Política de privacidad",
+                "cookies": "Política de cookies",
+                "contact": "Contacto"
+            }
+        },
+        "notice": {
+            "metaTitle": "Aviso legal | Abaco Developments",
+            "metaDescription": "Información sobre el titular del sitio, condiciones de uso, propiedad intelectual y responsabilidades de Abaco Developments.",
+            "eyebrow": "LEGAL",
+            "title": "Aviso legal",
+            "subtitle": "Información sobre el titular del sitio, condiciones de uso y responsabilidades.",
+            "breadcrumb": "Aviso legal",
+            "sections": [
+                {
+                    "id": "datos-identificativos",
+                    "heading": "Datos identificativos",
+                    "blocks": [
+                        { "type": "p", "text": "En cumplimiento del deber de información recogido en la normativa vigente sobre servicios de la sociedad de la información y comercio electrónico (LSSI-CE), se facilitan los siguientes datos del titular de este sitio web:" },
+                        { "type": "ul", "items": [
+                            "Titular: ABACO DIGITAL DEVELOPMENTS, S.L. (en adelante, ABACO).",
+                            "CIF: B-88229364.",
+                            "Domicilio: Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid, España.",
+                            "Datos registrales: Registro Mercantil de Madrid, Tomo 38273, Folio 65, Sección GNE, Hoja Nº 681002.",
+                            "Correo electrónico: info@abacodev.com.",
+                            "Teléfono: +34 91 020 00 89.",
+                            "Sitio web: https://abacoqd.com/."
+                        ] },
+                        { "type": "p", "text": "El dominio histórico https://abacodev.com/ pertenece a ABACO; su convivencia o redirección con el dominio actual está pendiente de confirmación." }
+                    ]
+                },
+                {
+                    "id": "objeto",
+                    "heading": "Objeto del sitio web",
+                    "blocks": [
+                        { "type": "p", "text": "El presente aviso legal regula el acceso, la navegación y el uso del sitio web https://abacoqd.com/, sin perjuicio de que ABACO pueda establecer condiciones particulares para servicios concretos." },
+                        { "type": "p", "text": "El sitio tiene por objeto presentar la actividad de ABACO en desarrollo de software a medida, soluciones digitales y servicios relacionados, así como facilitar el contacto con personas interesadas." }
+                    ]
+                },
+                {
+                    "id": "condiciones-uso",
+                    "heading": "Condiciones de acceso y uso",
+                    "blocks": [
+                        { "type": "p", "text": "La condición de persona usuaria se adquiere por el mero acceso y navegación por el sitio. La persona usuaria se compromete a hacer un uso diligente, correcto y lícito de los contenidos y servicios, conforme a la ley, a este aviso legal y a las buenas costumbres." },
+                        { "type": "p", "text": "El acceso al sitio es, con carácter general, gratuito, salvo en lo relativo al coste de la conexión a través de la red de telecomunicaciones contratada por la persona usuaria." }
+                    ]
+                },
+                {
+                    "id": "conductas-no-autorizadas",
+                    "heading": "Conductas no autorizadas",
+                    "blocks": [
+                        { "type": "p", "text": "Queda prohibido utilizar el sitio con fines ilícitos o lesivos para ABACO o terceros, o que de cualquier forma puedan dañar, inutilizar o deteriorar el sitio o sus servicios. En particular, queda prohibido:" },
+                        { "type": "ul", "items": [
+                            "Introducir o difundir contenidos que vulneren derechos de terceros o la legislación vigente.",
+                            "Introducir programas, virus o cualquier elemento susceptible de causar daños en los sistemas.",
+                            "Intentar acceder de forma no autorizada a áreas restringidas, cuentas o sistemas del sitio.",
+                            "Realizar acciones que provoquen una sobrecarga desproporcionada de la infraestructura del sitio."
+                        ] }
+                    ]
+                },
+                {
+                    "id": "propiedad-intelectual",
+                    "heading": "Propiedad intelectual e industrial",
+                    "blocks": [
+                        { "type": "p", "text": "Todos los contenidos del sitio (textos, imágenes, marcas, logotipos, diseño, código y demás elementos) son titularidad de ABACO o de terceros que han autorizado su uso, y están protegidos por la normativa de propiedad intelectual e industrial." },
+                        { "type": "p", "text": "No se permite la reproducción, distribución, comunicación pública, transformación o cualquier otra forma de explotación de los contenidos sin autorización previa y por escrito de ABACO, salvo los usos permitidos legalmente." }
+                    ]
+                },
+                {
+                    "id": "enlaces-terceros",
+                    "heading": "Enlaces a terceros",
+                    "blocks": [
+                        { "type": "p", "text": "El sitio puede contener enlaces a sitios de terceros. ABACO no asume responsabilidad sobre los contenidos, políticas o prácticas de dichos sitios, cuyo acceso es responsabilidad de la persona usuaria." }
+                    ]
+                },
+                {
+                    "id": "enlaces-al-sitio",
+                    "heading": "Enlaces al sitio web",
+                    "blocks": [
+                        { "type": "p", "text": "Quien desee establecer un enlace hacia este sitio deberá enlazar a la página principal y no realizar manifestaciones falsas o que puedan inducir a error o dañar la imagen de ABACO. El establecimiento del enlace no implica relación, patrocinio o aprobación por parte de ABACO." }
+                    ]
+                },
+                {
+                    "id": "responsabilidad",
+                    "heading": "Responsabilidad y disponibilidad del sitio",
+                    "blocks": [
+                        { "type": "p", "text": "ABACO trabaja para mantener el sitio disponible y actualizado, pero no garantiza la disponibilidad y continuidad permanente del sitio ni la ausencia de errores en sus contenidos." },
+                        { "type": "p", "text": "En la medida permitida por la ley, ABACO no será responsable de los daños derivados del uso del sitio, de la falta de disponibilidad técnica ni del uso indebido por parte de terceros." }
+                    ]
+                },
+                {
+                    "id": "legislacion-aplicable",
+                    "heading": "Legislación aplicable",
+                    "blocks": [
+                        { "type": "p", "text": "Este aviso legal se rige por la legislación española. Para la resolución de cualquier controversia, las partes se someterán a los juzgados y tribunales que resulten competentes conforme a la normativa aplicable." }
+                    ]
+                },
+                {
+                    "id": "contacto",
+                    "heading": "Contacto",
+                    "blocks": [
+                        { "type": "p", "text": "Para cualquier consulta relacionada con este aviso legal puede contactar con ABACO en info@abacodev.com o en la dirección postal indicada en los datos identificativos." }
+                    ]
+                }
+            ]
+        },
+        "privacy": {
+            "metaTitle": "Política de privacidad | Abaco Developments",
+            "metaDescription": "Información sobre cómo Abaco Developments trata los datos personales recibidos a través del sitio, conforme al RGPD y la LOPDGDD.",
+            "eyebrow": "PRIVACIDAD",
+            "title": "Política de privacidad",
+            "subtitle": "Información sobre cómo tratamos los datos personales recibidos a través del sitio.",
+            "breadcrumb": "Política de privacidad",
+            "sections": [
+                {
+                    "id": "responsable",
+                    "heading": "Responsable del tratamiento",
+                    "blocks": [
+                        { "type": "p", "text": "El responsable del tratamiento de los datos personales recogidos a través de este sitio es ABACO DIGITAL DEVELOPMENTS, S.L. (ABACO), con CIF B-88229364 y domicilio en Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid. Correo de contacto en materia de privacidad: info@abacodev.com." }
+                    ]
+                },
+                {
+                    "id": "datos-que-tratamos",
+                    "heading": "Datos que podemos tratar",
+                    "blocks": [
+                        { "type": "p", "text": "Según la interacción de la persona usuaria, ABACO puede tratar las siguientes categorías de datos:" },
+                        { "type": "ul", "items": [
+                            "Datos identificativos y de contacto: nombre, correo electrónico, teléfono y empresa, cuando se facilitan.",
+                            "Contenido de las comunicaciones: la información que la persona usuaria incluye en sus mensajes o solicitudes.",
+                            "Datos técnicos de navegación estrictamente necesarios para el funcionamiento del sitio."
+                        ] },
+                        { "type": "p", "text": "Solo se tratan los datos que la persona usuaria facilita voluntariamente o los necesarios para prestar el servicio solicitado." }
+                    ]
+                },
+                {
+                    "id": "finalidades",
+                    "heading": "Finalidades del tratamiento",
+                    "blocks": [
+                        { "type": "p", "text": "Los datos se tratan para las siguientes finalidades:" },
+                        { "type": "ul", "items": [
+                            "Atender consultas y solicitudes enviadas a través del formulario de contacto.",
+                            "Gestionar solicitudes de reserva o cita.",
+                            "Enviar comunicaciones comerciales únicamente cuando la persona usuaria lo haya consentido de forma específica.",
+                            "Mantener la seguridad y el correcto funcionamiento del sitio."
+                        ] }
+                    ]
+                },
+                {
+                    "id": "base-juridica",
+                    "heading": "Base jurídica",
+                    "blocks": [
+                        { "type": "p", "text": "El tratamiento se basa, según el caso, en:" },
+                        { "type": "ul", "items": [
+                            "El consentimiento de la persona interesada (por ejemplo, al enviar formularios o suscribirse a comunicaciones).",
+                            "La ejecución de medidas precontractuales o de la relación solicitada.",
+                            "El interés legítimo de ABACO en responder consultas y garantizar la seguridad del sitio.",
+                            "El cumplimiento de obligaciones legales aplicables."
+                        ] }
+                    ]
+                },
+                {
+                    "id": "formularios-contacto",
+                    "heading": "Formularios de contacto",
+                    "blocks": [
+                        { "type": "p", "text": "El formulario de contacto recoge los datos necesarios para atender la solicitud. La aceptación de la política de privacidad es obligatoria para su envío; las comunicaciones comerciales son siempre opcionales y se recogen mediante una casilla independiente, nunca unida a la aceptación obligatoria." }
+                    ]
+                },
+                {
+                    "id": "reserva-citas",
+                    "heading": "Reserva de citas",
+                    "blocks": [
+                        { "type": "p", "text": "Cuando la persona usuaria solicita una reunión o cita, se tratan los datos necesarios para gestionar y confirmar la reserva. Estos datos se utilizan únicamente con esa finalidad." }
+                    ]
+                },
+                {
+                    "id": "comunicaciones-comerciales",
+                    "heading": "Comunicaciones comerciales opcionales",
+                    "blocks": [
+                        { "type": "p", "text": "Si la persona usuaria lo consiente expresamente, ABACO podrá enviar comunicaciones sobre servicios, novedades o contenidos. El consentimiento puede retirarse en cualquier momento, sin efectos retroactivos, a través de los medios indicados o del enlace de baja incluido en las comunicaciones." }
+                    ]
+                },
+                {
+                    "id": "conservacion",
+                    "heading": "Conservación de los datos",
+                    "blocks": [
+                        { "type": "p", "text": "Los datos se conservarán mientras sean necesarios para la finalidad para la que se recogieron y, posteriormente, durante los plazos legalmente exigibles. Cuando dejen de ser necesarios, se suprimirán aplicando medidas de seguridad adecuadas." }
+                    ]
+                },
+                {
+                    "id": "destinatarios",
+                    "heading": "Destinatarios y proveedores",
+                    "blocks": [
+                        { "type": "p", "text": "Con carácter general, no se ceden datos a terceros salvo obligación legal. Para la prestación del servicio podrán intervenir proveedores tecnológicos necesarios para el alojamiento, mantenimiento o funcionamiento del sitio, que actúan como encargados del tratamiento bajo los correspondientes acuerdos cuando proceda." },
+                        { "type": "p", "text": "No está previsto realizar transferencias internacionales de datos; si en el futuro fueran necesarias, se informará previamente y se adoptarán las garantías adecuadas." }
+                    ]
+                },
+                {
+                    "id": "derechos",
+                    "heading": "Derechos de las personas usuarias",
+                    "blocks": [
+                        { "type": "p", "text": "Las personas usuarias pueden ejercer los siguientes derechos sobre sus datos:" },
+                        { "type": "ul", "items": [
+                            "Acceso a sus datos personales.",
+                            "Rectificación de datos inexactos.",
+                            "Supresión de los datos.",
+                            "Oposición al tratamiento.",
+                            "Limitación del tratamiento.",
+                            "Portabilidad de los datos.",
+                            "Retirada del consentimiento prestado, cuando el tratamiento se base en él."
+                        ] }
+                    ]
+                },
+                {
+                    "id": "ejercicio-derechos",
+                    "heading": "Cómo ejercer los derechos",
+                    "blocks": [
+                        { "type": "p", "text": "Para ejercer estos derechos puede dirigir una solicitud a info@abacodev.com o a la dirección postal Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid, indicando el derecho que desea ejercer. ABACO podrá solicitar la acreditación de la identidad cuando sea necesario." }
+                    ]
+                },
+                {
+                    "id": "reclamacion-aepd",
+                    "heading": "Reclamación ante la AEPD",
+                    "blocks": [
+                        { "type": "p", "text": "Si considera que el tratamiento de sus datos no se ajusta a la normativa, tiene derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD)." }
+                    ]
+                },
+                {
+                    "id": "seguridad",
+                    "heading": "Seguridad y confidencialidad",
+                    "blocks": [
+                        { "type": "p", "text": "ABACO aplica medidas técnicas y organizativas razonables para proteger los datos personales frente a accesos no autorizados, pérdida o alteración, de acuerdo con el estado de la técnica." }
+                    ]
+                },
+                {
+                    "id": "cambios",
+                    "heading": "Cambios en esta política",
+                    "blocks": [
+                        { "type": "p", "text": "Esta política podrá actualizarse para adaptarla a cambios normativos o de funcionamiento del sitio. Se recomienda revisarla periódicamente; la fecha de última actualización figura al inicio." }
+                    ]
+                },
+                {
+                    "id": "contacto",
+                    "heading": "Contacto",
+                    "blocks": [
+                        { "type": "p", "text": "Para cualquier cuestión relativa a la privacidad puede contactar con ABACO en info@abacodev.com." }
+                    ]
+                }
+            ]
+        },
+        "cookies": {
+            "metaTitle": "Política de cookies | Abaco Developments",
+            "metaDescription": "Información sobre el uso de cookies técnicas, preferencias y posibles herramientas de medición en el sitio de Abaco Developments.",
+            "eyebrow": "COOKIES",
+            "title": "Política de cookies",
+            "subtitle": "Información sobre el uso de cookies técnicas, preferencias y posibles herramientas de medición.",
+            "breadcrumb": "Política de cookies",
+            "sections": [
+                {
+                    "id": "que-son",
+                    "heading": "Qué son las cookies",
+                    "blocks": [
+                        { "type": "p", "text": "Las cookies son pequeños archivos que un sitio web almacena en el dispositivo de la persona usuaria. Junto a ellas existen otras tecnologías de almacenamiento local (como localStorage) que cumplen funciones similares para recordar preferencias." }
+                    ]
+                },
+                {
+                    "id": "tipos",
+                    "heading": "Qué tipos de cookies pueden existir",
+                    "blocks": [
+                        { "type": "p", "text": "Según su finalidad, pueden distinguirse, entre otras:" },
+                        { "type": "ul", "items": [
+                            "Cookies técnicas o necesarias: imprescindibles para el funcionamiento del sitio.",
+                            "Cookies de preferencias: recuerdan opciones de la persona usuaria, como el idioma o el tema.",
+                            "Cookies de analítica: permiten medir el uso del sitio (solo con consentimiento).",
+                            "Cookies de terceros: gestionadas por proveedores externos (solo con consentimiento)."
+                        ] }
+                    ]
+                },
+                {
+                    "id": "cookies-utilizadas",
+                    "heading": "Cookies utilizadas en este sitio",
+                    "blocks": [
+                        { "type": "p", "text": "Actualmente este sitio utiliza únicamente almacenamiento técnico y de preferencias propio. La siguiente tabla resume las tecnologías empleadas:" },
+                        { "type": "table",
+                          "headers": ["Tecnología", "Tipo", "Finalidad", "Duración", "Proveedor"],
+                          "rows": [
+                            ["Preferencia de tema", "Preferencia / técnica", "Recordar el modo claro, oscuro o sistema seleccionado.", "Persistente hasta cambio o limpieza del navegador.", "Propia"],
+                            ["Preferencia de idioma", "Preferencia / técnica", "Recordar el idioma seleccionado.", "Persistente hasta cambio o limpieza del navegador.", "Propia"],
+                            ["Preferencias de accesibilidad", "Preferencia / técnica", "Recordar los ajustes de accesibilidad seleccionados.", "Persistente hasta cambio o limpieza del navegador.", "Propia"],
+                            ["Cookies técnicas de sesión/seguridad", "Necesaria", "Seguridad, sesión y protección CSRF o funcionamiento técnico del sitio.", "Sesión o periodo técnico necesario.", "Propia"]
+                          ]
+                        }
+                    ]
+                },
+                {
+                    "id": "cookies-tecnicas",
+                    "heading": "Cookies técnicas o necesarias",
+                    "blocks": [
+                        { "type": "p", "text": "Las cookies y tecnologías técnicas o necesarias permiten la navegación y el uso de las funciones básicas del sitio. Al ser imprescindibles, no requieren consentimiento previo." }
+                    ]
+                },
+                {
+                    "id": "preferencias",
+                    "heading": "Preferencias de idioma, tema y accesibilidad",
+                    "blocks": [
+                        { "type": "p", "text": "Para recordar el tema (claro, oscuro o sistema), el idioma y los ajustes de accesibilidad, el sitio utiliza almacenamiento local del propio navegador. Esta información permanece en el dispositivo hasta que se modifica o se borra." }
+                    ]
+                },
+                {
+                    "id": "analitica-terceros",
+                    "heading": "Analítica y terceros",
+                    "blocks": [
+                        { "type": "p", "text": "Actualmente no activamos cookies analíticas no necesarias sin consentimiento previo. Si se incorporan herramientas de analítica o de terceros, se actualizará esta política y se habilitará un mecanismo de consentimiento cuando proceda." }
+                    ]
+                },
+                {
+                    "id": "configurar",
+                    "heading": "Cómo configurar o eliminar cookies",
+                    "blocks": [
+                        { "type": "p", "text": "La persona usuaria puede configurar o eliminar las cookies y el almacenamiento local desde las opciones de su navegador. La desactivación de algunas tecnologías técnicas puede afectar al funcionamiento del sitio." }
+                    ]
+                },
+                {
+                    "id": "actualizaciones",
+                    "heading": "Actualizaciones de esta política",
+                    "blocks": [
+                        { "type": "p", "text": "Esta política de cookies podrá actualizarse cuando cambien las tecnologías utilizadas o la normativa aplicable. La fecha de última actualización figura al inicio." }
+                    ]
+                },
+                {
+                    "id": "contacto",
+                    "heading": "Contacto",
+                    "blocks": [
+                        { "type": "p", "text": "Para cualquier duda sobre el uso de cookies puede contactar con ABACO en info@abacodev.com." }
+                    ]
+                }
+            ]
+        }
+    },
     "errors": {
         "brand": "AbacoQD",
         "404": {

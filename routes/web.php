@@ -19,6 +19,10 @@ Route::get('/quienes-somos', [AboutController::class, 'index'])->name('about.sho
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.show');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.detail');
 
+Route::inertia('/aviso-legal', 'Public/LegalPage', ['kind' => 'notice'])->name('legal.notice');
+Route::inertia('/privacidad', 'Public/LegalPage', ['kind' => 'privacy'])->name('legal.privacy');
+Route::inertia('/cookies', 'Public/LegalPage', ['kind' => 'cookies'])->name('legal.cookies');
+
 Route::get('/contacto', [ContactController::class, 'create'])->name('contact.show');
 Route::post('/contacto', [ContactController::class, 'store'])
     ->middleware('throttle:public-forms')
