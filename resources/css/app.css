@@ -2855,6 +2855,24 @@ html.a11y-reduce-motion *::after {
     font-size: 0.7rem;
 }
 
+/* Cover del detalle de blog: borde + glow neón en teal/cyan de marca.
+   Se aplica a la imagen principal del post (`/blog/{slug}`). */
+.qd-blog-cover {
+    border: 1px solid rgba(57, 198, 230, 0.45);
+    box-shadow:
+        0 0 0 1px rgba(24, 183, 176, 0.22),
+        0 0 22px -2px rgba(57, 198, 230, 0.45),
+        0 0 54px -14px rgba(24, 183, 176, 0.4);
+}
+
+.dark .qd-blog-cover {
+    border-color: rgba(57, 198, 230, 0.6);
+    box-shadow:
+        0 0 0 1px rgba(24, 183, 176, 0.35),
+        0 0 26px -2px rgba(57, 198, 230, 0.6),
+        0 0 64px -12px rgba(24, 183, 176, 0.5);
+}
+
 /* Cuerpo de artículo — /blog/{slug}. Contenido viene de Markdown (BlogController
    via Str::markdown(), HTML escapado por defecto) sin plugin de tipografía. */
 .qd-article-body {
@@ -2873,6 +2891,8 @@ html.a11y-reduce-motion *::after {
 
 .qd-article-body h2 {
     margin-top: 1.8em;
+    /* Offset para que el ancla del TOC no quede bajo el header flotante. */
+    scroll-margin-top: 7rem;
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 1.3;

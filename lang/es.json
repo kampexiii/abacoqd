@@ -1008,18 +1008,25 @@
     },
     "blogDetailPage": {
         "author": "Abaco Developments",
-        "heroTagline": {
-            "title": "Contenido de Abaco Developments.",
-            "subtitle": "Criterio técnico aplicado, sin relleno."
-        },
         "noContent": "Este artículo todavía no tiene contenido publicado.",
-        "backToCategory": "Ver más artículos de esta categoría",
+        "tagsLabel": "Etiquetas:",
+        "tocTitle": "En esta página",
         "relatedTitle": "Artículos relacionados",
-        "cta": {
-            "title": "¿Quieres aplicar esto a tu proyecto?",
-            "subtitle": "Cuéntanos tu caso y vemos el enfoque más útil para avanzar.",
-            "primary": "Cuéntanos tu proyecto",
-            "secondary": "Reserva hora"
+        "share": {
+            "label": "Compartir:",
+            "linkedin": "Compartir en LinkedIn",
+            "x": "Compartir en X",
+            "copy": "Copiar enlace",
+            "copied": "Enlace copiado"
+        },
+        "inlineCta": {
+            "text": "¿Tienes una idea o un proceso que quieres transformar en una solución digital?",
+            "button": "Hablemos de tu proyecto"
+        },
+        "sidebarCta": {
+            "title": "¿Tienes un proyecto en mente?",
+            "text": "Hablemos de cómo podemos ayudarte a convertir tu idea en una solución real.",
+            "button": "Reservar una consulta"
         }
     },
     "errors": {

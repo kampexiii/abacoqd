@@ -1008,18 +1008,25 @@
     },
     "blogDetailPage": {
         "author": "Abaco Developments",
-        "heroTagline": {
-            "title": "Content from Abaco Developments.",
-            "subtitle": "Applied technical judgement, no filler."
-        },
         "noContent": "This article doesn't have published content yet.",
-        "backToCategory": "See more articles in this category",
+        "tagsLabel": "Tags:",
+        "tocTitle": "On this page",
         "relatedTitle": "Related articles",
-        "cta": {
-            "title": "Want to apply this to your project?",
-            "subtitle": "Tell us about your case and we'll find the most useful approach to move forward.",
-            "primary": "Tell us about your project",
-            "secondary": "Book a slot"
+        "share": {
+            "label": "Share:",
+            "linkedin": "Share on LinkedIn",
+            "x": "Share on X",
+            "copy": "Copy link",
+            "copied": "Link copied"
+        },
+        "inlineCta": {
+            "text": "Do you have an idea or a process you want to turn into a digital solution?",
+            "button": "Let's talk about your project"
+        },
+        "sidebarCta": {
+            "title": "Got a project in mind?",
+            "text": "Let's talk about how we can help turn your idea into a real solution.",
+            "button": "Book a consultation"
         }
     },
     "errors": {

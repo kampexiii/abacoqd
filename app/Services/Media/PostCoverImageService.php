@@ -12,9 +12,22 @@ use RuntimeException;
  *
  * Sigue el mismo patrón ya probado en `TeamMemberPhotoService` (GD nativo,
  * disco `public_uploads` = `public/uploads`, calidad 88): mismo enfoque, no
- * una arquitectura nueva. Lo usa el seeder ahora y debe reutilizarlo el futuro
- * CRUD admin de Blog al crear/editar un post (con la ruta temporal de un
- * `UploadedFile`).
+ * una arquitectura nueva.
+ *
+ * Este servicio no es solo para seeders. Es el punto único de conversión de
+ * portadas y debe reutilizarse en el futuro admin CRUD de Blog cuando se cree
+ * o edite un post y se suba/sustituya su imagen de portada:
+ *
+ *  - al crear: pasar la ruta temporal del `UploadedFile` y el slug del post;
+ *  - al editar/sustituir imagen: volver a llamar con el mismo slug; el WebP se
+ *    sobrescribe (un único cover por post: el modelo usa `featured_image`, no
+ *    hay galería en esta fase);
+ *  - validar que el archivo es imagen (lo hace este servicio) antes de guardar;
+ *  - guardar SIEMPRE solo la ruta pública en `posts.featured_image`
+ *    (`/uploads/blog/posts/{slug}.webp`), nunca el binario ni base64;
+ *  - si en el futuro el slug del post cambia, el admin decide regenerar el
+ *    nombre del archivo y limpiar el WebP anterior (no es responsabilidad de
+ *    este servicio).
  *
  * Se usa `public_uploads` y no `public` (`storage/app/public`) porque este
  * último está fuera de control de versiones por defecto; los covers iniciales

@@ -42,6 +42,12 @@ export type BlogPostSummary = {
     readonly readingTime: number | null;
 };
 
+/** Entrada del índice "En esta página" del detalle (un H2 por entrada). */
+export type BlogTocItem = {
+    readonly id: string;
+    readonly text: string;
+};
+
 export function postHref(post: Pick<BlogPostSummary, 'slug'>): string | null {
     const slug = post.slug.es ?? post.slug.en ?? null;
 

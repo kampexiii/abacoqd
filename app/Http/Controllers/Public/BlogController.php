@@ -86,6 +86,8 @@ class BlogController extends Controller
             })
             ->firstOrFail();
 
+        // Relacionados: primero misma categoría; si no llegan a 3, se rellena
+        // con los más recientes de otras categorías (docs PUBLIC_05_BLOG.md).
         $related = Post::query()
             ->published()
             ->whereKeyNot($post->id)
@@ -97,6 +99,19 @@ class BlogController extends Controller
             ->orderByDesc('published_at')
             ->take(3)
             ->get();
+
+        if ($related->count() < 3) {
+            $fill = Post::query()
+                ->published()
+                ->whereKeyNot($post->id)
+                ->whereNotIn('id', $related->modelKeys())
+                ->with('category')
+                ->orderByDesc('published_at')
+                ->take(3 - $related->count())
+                ->get();
+
+            $related = $related->concat($fill);
+        }
 
         return Inertia::render('Public/BlogPost', [
             'post' => $this->postDetail($post),
@@ -132,16 +147,14 @@ class BlogController extends Controller
     private function postDetail(Post $post): array
     {
         $content = is_array($post->content) ? $post->content : [];
+        $es = $this->renderArticle((string) ($content['es'] ?? ''));
+        $en = $this->renderArticle((string) ($content['en'] ?? ''));
 
         return [
             ...$this->postSummary($post),
-            // `Str::markdown()` (CommonMark) escapa HTML crudo del origen por
-            // defecto, así que el resultado es seguro para
-            // `dangerouslySetInnerHTML` sin sanitizador adicional.
-            'contentHtml' => [
-                'es' => Str::markdown((string) ($content['es'] ?? '')),
-                'en' => Str::markdown((string) ($content['en'] ?? '')),
-            ],
+            'contentHtml' => ['es' => $es['html'], 'en' => $en['html']],
+            // Índice de navegación (H2) para el TOC lateral "En esta página".
+            'toc' => ['es' => $es['toc'], 'en' => $en['toc']],
             'tags' => $post->tags
                 ->map(fn (Tag $tag): array => [
                     'name' => $tag->name,
@@ -149,5 +162,37 @@ class BlogController extends Controller
                 ])
                 ->values(),
         ];
+    }
+
+    /**
+     * Renderiza el Markdown del post a HTML y, de paso, añade un `id` a cada
+     * H2 y construye el índice (TOC) que consume el sidebar del detalle.
+     *
+     * `Str::markdown()` (CommonMark) escapa el HTML crudo del origen por
+     * defecto, así que el resultado es seguro para `dangerouslySetInnerHTML`
+     * sin sanitizador adicional.
+     *
+     * @return array{html: string, toc: list<array{id: string, text: string}>}
+     */
+    private function renderArticle(string $markdown): array
+    {
+        $html = Str::markdown($markdown);
+
+        /** @var list<array{id: string, text: string}> $toc */
+        $toc = [];
+
+        $html = preg_replace_callback(
+            '/<h2>(.*?)<\/h2>/s',
+            function (array $matches) use (&$toc): string {
+                $text = trim(html_entity_decode(strip_tags($matches[1]), ENT_QUOTES | ENT_HTML5));
+                $id = Str::slug($text);
+                $toc[] = ['id' => $id, 'text' => $text];
+
+                return '<h2 id="'.$id.'">'.$matches[1].'</h2>';
+            },
+            $html,
+        ) ?? $html;
+
+        return ['html' => $html, 'toc' => $toc];
     }
 }
