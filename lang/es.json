@@ -1583,33 +1583,24 @@
     },
     "adminLogin": {
         "metaTitle": "Acceso al panel · AbacoQD",
-        "badge": "ADMIN",
+        "eyebrow": "ADMIN ABACOQD",
         "panelTitle": "Acceso al panel de gestión",
         "panelSubtitle": "Gestiona servicios, blog, proyectos, partners y equipo desde un único lugar.",
-        "features": {
-            "secure": {
-                "title": "Seguro",
-                "description": "Acceso protegido y restringido al equipo autorizado."
-            },
-            "centralized": {
-                "title": "Centralizado",
-                "description": "Administra todos los contenidos desde un único panel."
-            },
-            "efficient": {
-                "title": "Eficiente",
-                "description": "Herramientas pensadas para gestionar contenido sin tocar código."
-            }
+        "points": {
+            "secure": "Seguro",
+            "centralized": "Centralizado"
         },
         "title": "Inicia sesión",
-        "subtitle": "Accede a tu panel de administración",
-        "email": "Email",
-        "emailPlaceholder": "tu@empresa.com",
+        "subtitle": "Accede con tus credenciales autorizadas.",
+        "email": "Correo electrónico",
+        "emailPlaceholder": "admin@abacoqd.local",
         "password": "Contraseña",
-        "remember": "Recordarme",
+        "passwordPlaceholder": "Contraseña",
+        "remember": "Recuérdame",
         "forgot": "¿Has olvidado tu contraseña?",
         "submit": "Entrar al panel",
         "backToSite": "Volver al sitio web",
-        "restricted": "Acceso privado para equipo autorizado.",
+        "restricted": "Acceso restringido a usuarios autorizados.",
         "switchLanguage": "Cambiar idioma de la interfaz",
         "rights": "Todos los derechos reservados."
     }
