@@ -26,7 +26,7 @@ export const SITE_CONFIG = {
      * reales; null = no se muestran cifras inventadas.
      */
     googleReviews: {
-        url: null as string | null,
+        url: 'https://share.google/mJnjgVZMRwby9kSgK' as string | null,
         rating: null as number | null,
         count: null as number | null,
     },
