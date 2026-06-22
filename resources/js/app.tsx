@@ -8,10 +8,13 @@ import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'AbacoQD';
 
+// Cada vista define su título de pestaña completo (p. ej. "Servicios · AbacoQD"
+// o "Servicios · Admin AbacoQD") vía <Head title="...">. El público y el admin
+// usan sufijos distintos, así que no se concatena aquí.
 createInertiaApp({
-    title: (title) => (title ? `${title} - ${appName}` : appName),
+    title: (title) => title || appName,
     layout: (name) => {
         switch (true) {
             case name.startsWith('Public/'):

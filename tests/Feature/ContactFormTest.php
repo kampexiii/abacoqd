@@ -2,8 +2,10 @@
 
 use App\Enums\ContactMessageStatus;
 use App\Enums\ServiceStatus;
+use App\Mail\ContactMessageReceived;
 use App\Models\ContactMessage;
 use App\Models\Service;
+use Illuminate\Support\Facades\Mail;
 
 test('guest can view the contact page', function () {
     $service = Service::factory()->create(['status' => ServiceStatus::Published->value]);
@@ -32,6 +34,8 @@ test('the service of interest is preselected from the query string', function ()
 });
 
 test('a valid submission creates a contact message and redirects back', function () {
+    Mail::fake();
+
     $service = Service::factory()->create(['status' => ServiceStatus::Published->value]);
 
     $response = $this->post('/contacto', [
@@ -60,6 +64,11 @@ test('a valid submission creates a contact message and redirects back', function
         ->and($message->privacy_accepted_at)->not->toBeNull()
         ->and($message->commercial_consent)->toBeTrue()
         ->and($message->commercial_consent_at)->not->toBeNull();
+
+    Mail::assertSent(ContactMessageReceived::class, function (ContactMessageReceived $mail) use ($message) {
+        return $mail->contactMessage->is($message)
+            && $mail->hasTo(config('mail.contact_notify_address'));
+    });
 });
 
 test('privacy consent is required to submit the contact form', function () {

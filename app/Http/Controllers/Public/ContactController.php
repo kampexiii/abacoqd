@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Public;
 use App\Enums\ContactMessageStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Public\StoreContactMessageRequest;
+use App\Mail\ContactMessageReceived;
 use App\Models\ContactMessage;
 use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -46,7 +48,7 @@ class ContactController extends Controller
      */
     public function store(StoreContactMessageRequest $request): RedirectResponse
     {
-        ContactMessage::create([
+        $contactMessage = ContactMessage::create([
             'service_id' => $request->validated('service_id'),
             'name' => $request->validated('name'),
             'email' => $request->validated('email'),
@@ -62,6 +64,9 @@ class ContactController extends Controller
             'ip_address' => $request->ip(),
             'user_agent' => (string) $request->userAgent(),
         ]);
+
+        Mail::to(config('mail.contact_notify_address'))
+            ->send(new ContactMessageReceived($contactMessage));
 
         return to_route('contact.show')->with('contactSubmitted', true);
     }

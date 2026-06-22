@@ -22,7 +22,7 @@ export default function ServicesCreate({ statuses, nextSortOrder }: CreateProps)
                 { title: t('admin.services.createTitle') },
             ]}
         >
-            <Head title={t('admin.services.createTitle')} />
+            <Head title={`${t('admin.services.createTitle')} · Admin AbacoQD`} />
             <ServiceForm mode="create" statuses={statuses} defaultSortOrder={nextSortOrder} />
         </AdminLayout>
     );

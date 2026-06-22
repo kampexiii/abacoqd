@@ -108,7 +108,7 @@ export default function Methodology() {
 
     return (
         <PublicLayout>
-            <Head title="Metodología de trabajo | Abaco Developments" />
+            <Head title="Metodología · AbacoQD" />
 
             <PublicPageHero
                 eyebrow={t('methodologyPage.eyebrow')}

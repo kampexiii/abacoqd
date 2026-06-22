@@ -34,7 +34,7 @@ export default function Home({
 }: HomeProps) {
     return (
         <PublicLayout waveHiddenUntilElementId="hero">
-            <Head title="Abaco Developments — Consultoría tecnológica, CRM e IA aplicada" />
+            <Head title="Inicio · AbacoQD" />
             <AbacoHero />
             <MethodologySection />
             <ServicesSection />

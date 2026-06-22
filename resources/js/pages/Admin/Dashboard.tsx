@@ -25,7 +25,7 @@ export default function AdminDashboard({ serviceStats }: DashboardProps) {
 
     return (
         <AdminLayout title={t('admin.dashboard.title')}>
-            <Head title={t('admin.dashboard.title')} />
+            <Head title={`${t('admin.dashboard.title')} · Admin AbacoQD`} />
 
             {/* Estado de servicios (contadores reales, sin analítica) */}
             <section className="mb-8">

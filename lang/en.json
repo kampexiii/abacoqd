@@ -513,7 +513,7 @@
         }
     },
     "servicesPage": {
-        "metaTitle": "Services | Abaco Developments",
+        "metaTitle": "Services · AbacoQD",
         "hero": {
             "eyebrow": "SERVICES",
             "title": "Fast solutions for real needs.",
@@ -775,7 +775,7 @@
         }
     },
     "projectsPage": {
-        "metaTitle": "Projects | Abaco Developments",
+        "metaTitle": "Projects · AbacoQD",
         "hero": {
             "eyebrow": "PROJECTS",
             "title": "Projects built to measure.",
@@ -905,7 +905,7 @@
         }
     },
     "aboutPage": {
-        "metaTitle": "About us | Abaco Developments",
+        "metaTitle": "About us · AbacoQD",
         "hero": {
             "eyebrow": "ABOUT US",
             "title": "Abaco Developments",
@@ -966,7 +966,7 @@
         }
     },
     "blogPage": {
-        "metaTitle": "CRM, data and applied AI blog | Abaco Developments",
+        "metaTitle": "Blog · AbacoQD",
         "hero": {
             "eyebrow": "BLOG",
             "title": "Ideas on development, AI and digital solutions.",
@@ -1057,7 +1057,7 @@
             }
         },
         "notice": {
-            "metaTitle": "Legal notice | Abaco Developments",
+            "metaTitle": "Legal notice · AbacoQD",
             "metaDescription": "Information about the site owner, terms of use, intellectual property and liability of Abaco Developments.",
             "eyebrow": "LEGAL",
             "title": "Legal notice",
@@ -1157,7 +1157,7 @@
             ]
         },
         "privacy": {
-            "metaTitle": "Privacy policy | Abaco Developments",
+            "metaTitle": "Privacy policy · AbacoQD",
             "metaDescription": "Information on how Abaco Developments processes personal data received through the site, in accordance with the GDPR and the LOPDGDD.",
             "eyebrow": "PRIVACY",
             "title": "Privacy policy",
@@ -1300,7 +1300,7 @@
             ]
         },
         "cookies": {
-            "metaTitle": "Cookie policy | Abaco Developments",
+            "metaTitle": "Cookie policy · AbacoQD",
             "metaDescription": "Information about the use of technical cookies, preferences and possible measurement tools on the Abaco Developments site.",
             "eyebrow": "COOKIES",
             "title": "Cookie policy",
@@ -1444,7 +1444,9 @@
         "contact": {
             "title": "Contact",
             "whatsappLabel": "WhatsApp",
-            "linkedin": "Abaco Developments on LinkedIn"
+            "linkedin": "Abaco Developments on LinkedIn",
+            "googleReviews": "Reviews on Google",
+            "googleReviewsPending": "Google reviews (coming soon)"
         },
         "institutional": {
             "title": "Funding",
@@ -1467,7 +1469,7 @@
             "projects": "Projects",
             "partners": "Partners",
             "team": "Team",
-            "messages": "Messages",
+            "contacts": "Contacts",
             "booking": "Booking",
             "legal": "Legal",
             "settings": "Settings",

@@ -10,6 +10,7 @@ import {
 import { useMemo, useState } from 'react';
 
 import AdminEmptyState from '@/components/admin/AdminEmptyState';
+import AdminSelect from '@/components/admin/AdminSelect';
 import StatusBadge from '@/components/admin/StatusBadge';
 import type {ServiceStatus} from '@/components/admin/StatusBadge';
 import {
@@ -55,7 +56,6 @@ export default function ServicesIndex({ services }: IndexProps) {
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState<'all' | ServiceStatus>('all');
     const [activeFilter, setActiveFilter] = useState<TriState>('all');
-    const [homeFilter, setHomeFilter] = useState<TriState>('all');
     const [featuredFilter, setFeaturedFilter] = useState<TriState>('all');
     const [detailFilter, setDetailFilter] = useState<TriState>('all');
 
@@ -95,7 +95,6 @@ export default function ServicesIndex({ services }: IndexProps) {
 
             return (
                 matchTri(service.isActive, activeFilter) &&
-                matchTri(service.showOnHome, homeFilter) &&
                 matchTri(service.isFeatured, featuredFilter) &&
                 matchTri(service.isDetailEnabled, detailFilter)
             );
@@ -106,7 +105,6 @@ export default function ServicesIndex({ services }: IndexProps) {
         search,
         statusFilter,
         activeFilter,
-        homeFilter,
         featuredFilter,
         detailFilter,
         locale,
@@ -138,7 +136,7 @@ export default function ServicesIndex({ services }: IndexProps) {
                 </Link>
             }
         >
-            <Head title={t('admin.services.title')} />
+            <Head title={`${t('admin.services.title')} · Admin AbacoQD`} />
 
             {/* Stat cards */}
             <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -193,12 +191,6 @@ export default function ServicesIndex({ services }: IndexProps) {
                         options={triOptions(t)}
                     />
                     <FilterSelect
-                        label={t('admin.services.fields.showOnHome')}
-                        value={homeFilter}
-                        onChange={(v) => setHomeFilter(v as TriState)}
-                        options={triOptions(t)}
-                    />
-                    <FilterSelect
                         label={t('admin.services.fields.isFeatured')}
                         value={featuredFilter}
                         onChange={(v) => setFeaturedFilter(v as TriState)}
@@ -247,7 +239,6 @@ export default function ServicesIndex({ services }: IndexProps) {
                                     <th className="px-4 py-3">{t('admin.services.columns.service')}</th>
                                     <th className="px-4 py-3">{t('admin.services.columns.status')}</th>
                                     <th className="px-4 py-3 text-center">{t('admin.services.fields.isActive')}</th>
-                                    <th className="px-4 py-3 text-center">{t('admin.services.fields.showOnHome')}</th>
                                     <th className="px-4 py-3 text-center">{t('admin.services.fields.isFeatured')}</th>
                                     <th className="px-4 py-3 text-center">{t('admin.services.fields.isDetailEnabled')}</th>
                                     <th className="px-4 py-3 text-center">{t('admin.services.columns.order')}</th>
@@ -273,12 +264,6 @@ export default function ServicesIndex({ services }: IndexProps) {
                                             <RowToggle
                                                 checked={service.isActive}
                                                 onClick={() => patch(service.id, 'toggle-active')}
-                                            />
-                                        </td>
-                                        <td className="px-4 py-3 text-center">
-                                            <RowToggle
-                                                checked={service.showOnHome}
-                                                onClick={() => patch(service.id, 'toggle-home')}
                                             />
                                         </td>
                                         <td className="px-4 py-3 text-center">
@@ -363,18 +348,13 @@ function FilterSelect({
     readonly options: readonly { readonly value: string; readonly label: string }[];
 }) {
     return (
-        <select
-            aria-label={label}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            className="h-9 rounded-lg border border-qd-mist bg-transparent px-3 text-sm text-qd-text-high outline-none focus-visible:border-qd-teal-2/50 dark:border-qd-white/10 dark:text-qd-white/70"
-        >
+        <AdminSelect aria-label={label} value={value} onChange={(e) => onChange(e.target.value)} className="w-auto">
             {options.map((option) => (
                 <option key={option.value} value={option.value}>
                     {label}: {option.label}
                 </option>
             ))}
-        </select>
+        </AdminSelect>
     );
 }
 

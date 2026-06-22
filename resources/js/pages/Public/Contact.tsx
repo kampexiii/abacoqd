@@ -45,7 +45,7 @@ export default function Contact({
 
     return (
         <PublicLayout>
-            <Head title="Contacto | Abaco Developments" />
+            <Head title="Contacto · AbacoQD" />
 
             <PublicPageHero
                 eyebrow={t('contact.eyebrow')}

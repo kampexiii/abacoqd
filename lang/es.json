@@ -513,7 +513,7 @@
         }
     },
     "servicesPage": {
-        "metaTitle": "Servicios | Abaco Developments",
+        "metaTitle": "Servicios · AbacoQD",
         "hero": {
             "eyebrow": "SERVICIOS",
             "title": "Soluciones rápidas para necesidades reales.",
@@ -775,7 +775,7 @@
         }
     },
     "projectsPage": {
-        "metaTitle": "Proyectos | Abaco Developments",
+        "metaTitle": "Proyectos · AbacoQD",
         "hero": {
             "eyebrow": "PROYECTOS",
             "title": "Proyectos construidos a medida.",
@@ -905,7 +905,7 @@
         }
     },
     "aboutPage": {
-        "metaTitle": "Quiénes somos | Abaco Developments",
+        "metaTitle": "Quiénes somos · AbacoQD",
         "hero": {
             "eyebrow": "QUIÉNES SOMOS",
             "title": "Abaco Developments",
@@ -966,7 +966,7 @@
         }
     },
     "blogPage": {
-        "metaTitle": "Blog de CRM, datos e IA aplicada | Abaco Developments",
+        "metaTitle": "Blog · AbacoQD",
         "hero": {
             "eyebrow": "BLOG",
             "title": "Ideas sobre desarrollo, IA y soluciones digitales.",
@@ -1057,7 +1057,7 @@
             }
         },
         "notice": {
-            "metaTitle": "Aviso legal | Abaco Developments",
+            "metaTitle": "Aviso legal · AbacoQD",
             "metaDescription": "Información sobre el titular del sitio, condiciones de uso, propiedad intelectual y responsabilidades de Abaco Developments.",
             "eyebrow": "LEGAL",
             "title": "Aviso legal",
@@ -1157,7 +1157,7 @@
             ]
         },
         "privacy": {
-            "metaTitle": "Política de privacidad | Abaco Developments",
+            "metaTitle": "Política de privacidad · AbacoQD",
             "metaDescription": "Información sobre cómo Abaco Developments trata los datos personales recibidos a través del sitio, conforme al RGPD y la LOPDGDD.",
             "eyebrow": "PRIVACIDAD",
             "title": "Política de privacidad",
@@ -1300,7 +1300,7 @@
             ]
         },
         "cookies": {
-            "metaTitle": "Política de cookies | Abaco Developments",
+            "metaTitle": "Política de cookies · AbacoQD",
             "metaDescription": "Información sobre el uso de cookies técnicas, preferencias y posibles herramientas de medición en el sitio de Abaco Developments.",
             "eyebrow": "COOKIES",
             "title": "Política de cookies",
@@ -1444,7 +1444,9 @@
         "contact": {
             "title": "Contacto",
             "whatsappLabel": "WhatsApp",
-            "linkedin": "LinkedIn de Abaco Developments"
+            "linkedin": "LinkedIn de Abaco Developments",
+            "googleReviews": "Reseñas en Google",
+            "googleReviewsPending": "Reseñas en Google (próximamente)"
         },
         "institutional": {
             "title": "Financiación",
@@ -1467,7 +1469,7 @@
             "projects": "Proyectos",
             "partners": "Partners",
             "team": "Equipo",
-            "messages": "Mensajes",
+            "contacts": "Contactos",
             "booking": "Reserva",
             "legal": "Legal",
             "settings": "Settings",

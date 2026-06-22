@@ -115,4 +115,36 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Buzón interno de notificaciones de contacto
+    |--------------------------------------------------------------------------
+    |
+    | Destino de los avisos de nuevos mensajes del formulario público de
+    | contacto. Email principal confirmado en docs/01_BRIEF_ALCANCE.md:
+    | info@abacodev.com.
+    |
+    */
+
+    'contact_notify_address' => env('CONTACT_NOTIFY_EMAIL', 'info@abacodev.com'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Markdown Mail Settings
+    |--------------------------------------------------------------------------
+    |
+    | If you are using Markdown based email rendering, you may configure your
+    | theme and component paths here, allowing you to customize the design
+    | of the emails. Or, you may simply stick with the Laravel defaults!
+    |
+    */
+
+    'markdown' => [
+        'theme' => 'default',
+
+        'paths' => [
+            resource_path('views/vendor/mail'),
+        ],
+    ],
+
 ];

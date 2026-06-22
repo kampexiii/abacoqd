@@ -9,29 +9,13 @@ import { cn } from '@/lib/utils';
 /**
  * Sección Blog de la landing. docs/07_VISTAS/PUBLIC_01_HOME_LANDING.md.
  *
- * Maquetación aprobada sin cambios (1 card grande + 2 pequeñas vía
- * `.qd-blog-layout`/`.qd-blog-main`/`.qd-blog-secondary`); solo cambia el
- * origen de los datos: `featuredPost` viene de `Post::featured()` y
- * `latestPosts` de los últimos publicados con `show_on_home`, ambos desde
- * `HomeController`. Sin destacado no se inventan posts: se muestra un
- * estado controlado.
+ * Maquetación: 1 card grande (imagen superior + texto debajo, sin ilustración
+ * lateral) + 2 pequeñas, vía `.qd-blog-layout`/`.qd-blog-main`/
+ * `.qd-blog-secondary`. Los datos vienen de `HomeController`: `featuredPost`
+ * de `Post::featured()` y `latestPosts` de los últimos publicados con
+ * `show_on_home`. Sin destacado no se inventan posts: se muestra un estado
+ * controlado.
  */
-
-function FeaturedInsightVisual() {
-    return (
-        <div className="qd-blog-featured-insight" aria-hidden="true">
-            <div className="qd-blog-featured-cube">
-                <span className="qd-blog-featured-cube__face" />
-                <span className="qd-blog-featured-cube__face qd-blog-featured-cube__face--back" />
-            </div>
-            <div className="qd-blog-featured-tags">
-                <span>IA supervisada</span>
-                <span>Criterio humano</span>
-                <span>Entrega rápida</span>
-            </div>
-        </div>
-    );
-}
 
 function CoverVisual({ src }: { readonly src: string | null }) {
     if (src) {
@@ -141,7 +125,6 @@ export default function BlogSection({
                                         )}
                                     </p>
                                 </div>
-                                <FeaturedInsightVisual />
                                 <div className="qd-blog-main__footer">
                                     <span className="qd-blog-card__meta">
                                         {postMeta(featuredPost, locale, t)}

@@ -25,7 +25,7 @@ export default function ServicesEdit({ service, statuses }: EditProps) {
                 { title: t('admin.services.editTitle') },
             ]}
         >
-            <Head title={`${t('admin.services.editTitle')} · ${name}`} />
+            <Head title={`${t('admin.services.editTitle')} · ${name} · Admin AbacoQD`} />
             <ServiceForm mode="edit" statuses={statuses} service={service} />
         </AdminLayout>
     );

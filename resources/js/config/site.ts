@@ -17,4 +17,17 @@ export const SITE_CONFIG = {
     social: {
         linkedin: 'https://www.linkedin.com/company/abaco-developments',
     },
+    /**
+     * Google Reviews. Integración futura más completa (prueba social en
+     * landing/contacto, sin CRUD manual). De momento solo enlace en el footer.
+     * `url` queda en null hasta confirmar el perfil/enlace real de Google: no
+     * se inventa. Sin URL el enlace se oculta en producción (en local se
+     * muestra como pendiente). `rating`/`count` solo si se confirman datos
+     * reales; null = no se muestran cifras inventadas.
+     */
+    googleReviews: {
+        url: null as string | null,
+        rating: null as number | null,
+        count: null as number | null,
+    },
 } as const;

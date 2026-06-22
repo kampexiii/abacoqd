@@ -100,7 +100,7 @@ export default function Booking({
 
     return (
         <PublicLayout>
-            <Head title="Reserva hora | Abaco Developments" />
+            <Head title="Reserva · AbacoQD" />
 
             <section className="bg-qd-ink text-qd-white">
                 <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8">

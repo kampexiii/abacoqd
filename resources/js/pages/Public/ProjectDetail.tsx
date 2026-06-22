@@ -225,7 +225,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
 
     return (
         <PublicLayout>
-            <Head title={`${title} | Abaco Developments`} />
+            <Head title={`${title} · AbacoQD`} />
 
             <PublicPageHero
                 eyebrow={t('projectDetail.hero.eyebrow')}

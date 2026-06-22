@@ -22,7 +22,7 @@ export type AdminNavKey =
     | 'projects'
     | 'partners'
     | 'team'
-    | 'messages'
+    | 'contacts'
     | 'booking'
     | 'legal'
     | 'settings'
@@ -38,22 +38,23 @@ export type AdminNavItem = {
 };
 
 /**
- * Navegación canónica del panel admin. En este primer bloque (Fase 4) solo
- * `dashboard` y `services` están habilitados; el resto se muestra como
- * "pendiente" para no generar rutas rotas.
+ * Navegación canónica del panel admin (Fase 4). Los módulos sin implementar
+ * se muestran como "pendiente" (enabled: false) para no generar rutas rotas.
+ * Reseñas no tiene entrada propia: pasa a ser integración de Google Reviews
+ * de solo lectura (pendiente), no un CRUD manual.
  */
 export const ADMIN_NAV: readonly AdminNavItem[] = [
     { key: 'dashboard', href: '/admin/dashboard', icon: LayoutDashboard, enabled: true },
     { key: 'services', href: '/admin/services', icon: Wrench, enabled: true },
-    { key: 'blog', href: null, icon: FileText, enabled: false },
-    { key: 'projects', href: null, icon: FolderKanban, enabled: false },
-    { key: 'partners', href: null, icon: Handshake, enabled: false },
-    { key: 'team', href: null, icon: UsersRound, enabled: false },
-    { key: 'messages', href: null, icon: Mail, enabled: false },
-    { key: 'booking', href: null, icon: CalendarClock, enabled: false },
+    { key: 'blog', href: '/admin/posts', icon: FileText, enabled: true },
+    { key: 'projects', href: '/admin/projects', icon: FolderKanban, enabled: true },
+    { key: 'partners', href: '/admin/partners', icon: Handshake, enabled: true },
+    { key: 'team', href: '/admin/team-members', icon: UsersRound, enabled: true },
+    { key: 'contacts', href: '/admin/contacts', icon: Mail, enabled: true },
+    { key: 'booking', href: '/admin/booking/days', icon: CalendarClock, enabled: true },
     { key: 'legal', href: null, icon: Scale, enabled: false },
     { key: 'settings', href: null, icon: Settings, enabled: false },
     { key: 'seo', href: null, icon: Search, enabled: false },
-    { key: 'faqs', href: null, icon: HelpCircle, enabled: false },
-    { key: 'users', href: null, icon: Users, enabled: false },
+    { key: 'faqs', href: '/admin/faqs', icon: HelpCircle, enabled: true },
+    { key: 'users', href: '/admin/users', icon: Users, enabled: true },
 ] as const;

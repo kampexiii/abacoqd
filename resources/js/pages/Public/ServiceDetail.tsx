@@ -141,7 +141,7 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
 
     return (
         <PublicLayout>
-            <Head title={`${title} | Abaco Developments`} />
+            <Head title={`${title} · AbacoQD`} />
 
             <PublicPageHero
                 eyebrow={t('serviceDetail.hero.eyebrow')}

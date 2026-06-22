@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'ip_address',
     'user_agent',
     'metadata',
+    'internal_notes',
 ])]
 class ContactMessage extends Model
 {
@@ -74,17 +75,41 @@ class ContactMessage extends Model
     /**
      * @param  Builder<self>  $query
      */
-    public function scopeRead(Builder $query): void
+    public function scopeInReview(Builder $query): void
     {
-        $query->where('status', ContactMessageStatus::Read->value);
+        $query->where('status', ContactMessageStatus::InReview->value);
     }
 
     /**
      * @param  Builder<self>  $query
      */
-    public function scopeReplied(Builder $query): void
+    public function scopeContacted(Builder $query): void
     {
-        $query->where('status', ContactMessageStatus::Replied->value);
+        $query->where('status', ContactMessageStatus::Contacted->value);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     */
+    public function scopeConverted(Builder $query): void
+    {
+        $query->where('status', ContactMessageStatus::Converted->value);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     */
+    public function scopeDiscarded(Builder $query): void
+    {
+        $query->where('status', ContactMessageStatus::Discarded->value);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     */
+    public function scopeSpam(Builder $query): void
+    {
+        $query->where('status', ContactMessageStatus::Spam->value);
     }
 
     /**

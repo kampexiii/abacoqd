@@ -3,6 +3,7 @@ import { Loader2, Upload, X } from 'lucide-react';
 import { useMemo, useState   } from 'react';
 import type {FormEvent, ReactNode} from 'react';
 
+import { adminSelectClass as selectClass } from '@/components/admin/AdminSelect';
 import FormSection from '@/components/admin/FormSection';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -315,11 +316,6 @@ export default function ServiceForm({
                             onChange={(value) => setData('is_active', value)}
                         />
                         <ToggleRow
-                            label={t('admin.services.fields.showOnHome')}
-                            checked={data.show_on_home}
-                            onChange={(value) => setData('show_on_home', value)}
-                        />
-                        <ToggleRow
                             label={t('admin.services.fields.isFeatured')}
                             checked={data.is_featured}
                             onChange={(value) => setData('is_featured', value)}
@@ -356,9 +352,6 @@ export default function ServiceForm({
 
 const textareaClass =
     'w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50';
-
-const selectClass =
-    'h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50';
 
 function LocaleTabs({
     activeLocale,

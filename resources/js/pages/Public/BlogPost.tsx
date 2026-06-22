@@ -89,7 +89,7 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
 
     return (
         <PublicLayout>
-            <Head title={`${title} | Abaco Developments`} />
+            <Head title={`${title} · AbacoQD`} />
 
             {/* Hero interno común, igual que el resto de vistas internas. */}
             <PublicPageHero
