@@ -21,6 +21,8 @@ use RuntimeException;
  */
 class TeamMemberPhotoService
 {
+    use InteractsWithPublicUploads;
+
     private const DISK = 'public_uploads';
 
     private const DIRECTORY = 'team-members';

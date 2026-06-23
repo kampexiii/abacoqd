@@ -170,16 +170,28 @@ class ProjectController extends Controller
         $slug = $project->slug_es ?? $project->slug_en ?? (string) $project->id;
 
         if ($request->hasFile('cover_image')) {
+            $previous = $project->cover_image;
             $path = $this->images->storeFromPath($request->file('cover_image')->getRealPath(), $slug, 'cover');
             $project->update(['cover_image' => $path]);
+
+            if ($previous !== null && $previous !== $path) {
+                $this->images->delete($previous);
+            }
         } elseif ($request->boolean('remove_cover_image') && $project->cover_image !== null) {
+            $this->images->delete($project->cover_image);
             $project->update(['cover_image' => null]);
         }
 
         if ($request->hasFile('thumbnail_image')) {
+            $previous = $project->thumbnail_image;
             $path = $this->images->storeFromPath($request->file('thumbnail_image')->getRealPath(), $slug, 'thumbnail');
             $project->update(['thumbnail_image' => $path]);
+
+            if ($previous !== null && $previous !== $path) {
+                $this->images->delete($previous);
+            }
         } elseif ($request->boolean('remove_thumbnail_image') && $project->thumbnail_image !== null) {
+            $this->images->delete($project->thumbnail_image);
             $project->update(['thumbnail_image' => null]);
         }
     }

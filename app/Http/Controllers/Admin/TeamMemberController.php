@@ -127,9 +127,15 @@ class TeamMemberController extends Controller
     private function syncPhoto(StoreTeamMemberRequest|UpdateTeamMemberRequest $request, TeamMember $member): void
     {
         if ($request->hasFile('photo')) {
+            $previous = $member->photo;
             $path = $this->photos->storeFromPath($request->file('photo')->getRealPath(), $member->slug);
             $member->update(['photo' => $path]);
+
+            if ($previous !== null && $previous !== $path) {
+                $this->photos->delete($previous);
+            }
         } elseif ($request->boolean('remove_photo') && $member->photo !== null) {
+            $this->photos->delete($member->photo);
             $member->update(['photo' => null]);
         }
     }

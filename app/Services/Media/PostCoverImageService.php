@@ -35,6 +35,8 @@ use RuntimeException;
  */
 class PostCoverImageService
 {
+    use InteractsWithPublicUploads;
+
     private const DISK = 'public_uploads';
 
     private const DIRECTORY = 'blog/posts';

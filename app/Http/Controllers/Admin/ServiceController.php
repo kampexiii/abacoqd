@@ -158,15 +158,21 @@ class ServiceController extends Controller
     private function syncImage(StoreServiceRequest|UpdateServiceRequest $request, Service $service): void
     {
         if ($request->hasFile('image')) {
+            $previous = $service->image;
             $slug = $service->slug_es ?? $service->slug_en ?? (string) $service->id;
             $path = $this->images->storeFromPath($request->file('image')->getRealPath(), $slug);
 
             $service->update(['image' => $path]);
 
+            if ($previous !== null && $previous !== $path) {
+                $this->images->delete($previous);
+            }
+
             return;
         }
 
         if ($request->boolean('remove_image') && $service->image !== null) {
+            $this->images->delete($service->image);
             $service->update(['image' => null]);
         }
     }

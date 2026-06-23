@@ -19,6 +19,8 @@ use RuntimeException;
  */
 class PartnerLogoService
 {
+    use InteractsWithPublicUploads;
+
     private const DISK = 'public_uploads';
 
     private const DIRECTORY = 'partners';

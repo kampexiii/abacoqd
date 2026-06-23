@@ -171,15 +171,21 @@ class PostController extends Controller
     private function syncImage(StorePostRequest|UpdatePostRequest $request, Post $post): void
     {
         if ($request->hasFile('image')) {
+            $previous = $post->featured_image;
             $slug = $post->slug['es'] ?? $post->slug['en'] ?? (string) $post->id;
             $path = $this->covers->storeFromPath($request->file('image')->getRealPath(), $slug);
 
             $post->update(['featured_image' => $path]);
 
+            if ($previous !== null && $previous !== $path) {
+                $this->covers->delete($previous);
+            }
+
             return;
         }
 
         if ($request->boolean('remove_image') && $post->featured_image !== null) {
+            $this->covers->delete($post->featured_image);
             $post->update(['featured_image' => null]);
         }
     }

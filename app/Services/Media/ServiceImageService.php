@@ -18,6 +18,8 @@ use RuntimeException;
  */
 class ServiceImageService
 {
+    use InteractsWithPublicUploads;
+
     private const DISK = 'public_uploads';
 
     private const DIRECTORY = 'services';
