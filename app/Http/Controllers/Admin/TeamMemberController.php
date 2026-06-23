@@ -137,12 +137,44 @@ class TeamMemberController extends Controller
     private function syncCv(StoreTeamMemberRequest|UpdateTeamMemberRequest $request, TeamMember $member): void
     {
         if ($request->hasFile('cv')) {
-            $path = self::CV_DIRECTORY.'/'."{$member->slug}.pdf";
-            Storage::disk(self::CV_DISK)->put($path, $request->file('cv'));
+            $previous = $member->cv_path;
+            $filename = "{$member->slug}.pdf";
+            Storage::disk(self::CV_DISK)->putFileAs(self::CV_DIRECTORY, $request->file('cv'), $filename);
+            $path = self::CV_DIRECTORY.'/'.$filename;
             $member->update(['cv_path' => '/uploads/'.$path]);
+
+            if ($previous !== null && $previous !== '/uploads/'.$path) {
+                $this->deleteCv($previous);
+            }
         } elseif ($request->boolean('remove_cv') && $member->cv_path !== null) {
+            $this->deleteCv($member->cv_path);
             $member->update(['cv_path' => null]);
         }
+    }
+
+    /**
+     * Borra el PDF de CV anterior referenciado por su ruta pública
+     * (`/uploads/team-members-cv/...`). Autocontenido: no depende de servicios
+     * de media externos. No hace nada si la ruta es nula/vacía o no apunta al
+     * directorio de CVs (p. ej. una URL externa).
+     */
+    private function deleteCv(?string $path): void
+    {
+        if ($path === null || $path === '') {
+            return;
+        }
+
+        $relativePath = ltrim($path, '/');
+
+        if (str_starts_with($relativePath, 'uploads/')) {
+            $relativePath = substr($relativePath, strlen('uploads/'));
+        }
+
+        if (! str_starts_with($relativePath, self::CV_DIRECTORY.'/')) {
+            return;
+        }
+
+        Storage::disk(self::CV_DISK)->delete($relativePath);
     }
 
     /**
