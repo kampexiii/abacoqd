@@ -49,6 +49,42 @@ test('a service detail resolves its seo from the model with an absolute es canon
         );
 });
 
+test('public pages serve open graph and twitter card metadata in the initial html', function () {
+    $title = (string) config('site.seo.title');
+    $description = (string) config('site.seo.description');
+
+    $response = $this->get('/');
+
+    $response->assertOk();
+    // OG básicos viajan en el HTML inicial, no solo en el <Head> de React.
+    $response->assertSee('property="og:type" content="website"', false);
+    $response->assertSee('property="og:title" content="'.e($title).'"', false);
+    $response->assertSee('property="og:description" content="'.e($description).'"', false);
+    // og:url coincide con el canonical resuelto.
+    $response->assertSee('property="og:url" content="https://abacoqd.com/"', false);
+    // Twitter Cards reflejan los valores OG con card summary_large_image.
+    $response->assertSee('name="twitter:card" content="summary_large_image"', false);
+    $response->assertSee('name="twitter:title" content="'.e($title).'"', false);
+    $response->assertSee('name="twitter:description" content="'.e($description).'"', false);
+
+    // Decisión actual: sin un raster de marca social versionado, og:image se
+    // omite (no se inventa asset). Este bloque tampoco introduce hreflang ni
+    // JSON-LD (van fuera por decisión cerrada).
+    $response->assertDontSee('property="og:image"', false);
+    $response->assertDontSee('name="twitter:image"', false);
+    $response->assertDontSee('hreflang', false);
+    $response->assertDontSee('application/ld+json', false);
+});
+
+test('a configured og image fallback is served as an absolute canonical url', function () {
+    config()->set('site.seo.og_image', '/assets/branding/og-image.png');
+
+    $this->get('/')
+        ->assertOk()
+        ->assertSee('property="og:image" content="https://abacoqd.com/assets/branding/og-image.png"', false)
+        ->assertSee('name="twitter:image" content="https://abacoqd.com/assets/branding/og-image.png"', false);
+});
+
 test('the seeder emits real ES canonicals and no inexistent /en canonicals', function () {
     (new SeoMetadataSeeder)->run();
 

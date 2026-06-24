@@ -48,6 +48,23 @@
                 <meta name="description" content="{{ $seo['description'] }}" data-inertia="seo-description">
                 <link rel="canonical" href="{{ $seo['canonical'] }}" data-inertia="seo-canonical">
                 <meta name="robots" content="{{ $seo['robots'] }}" data-inertia="seo-robots">
+
+                {{-- Open Graph / Twitter Cards. og:url = canonical; og:image se
+                    omite cuando no hay imagen social segura (ver config/site.php). --}}
+                <meta property="og:title" content="{{ $seo['ogTitle'] }}" data-inertia="seo-og-title">
+                <meta property="og:description" content="{{ $seo['ogDescription'] }}" data-inertia="seo-og-description">
+                <meta property="og:url" content="{{ $seo['canonical'] }}" data-inertia="seo-og-url">
+                <meta property="og:type" content="{{ $seo['ogType'] }}" data-inertia="seo-og-type">
+                @if(!empty($seo['ogImage']))
+                    <meta property="og:image" content="{{ $seo['ogImage'] }}" data-inertia="seo-og-image">
+                @endif
+
+                <meta name="twitter:card" content="summary_large_image" data-inertia="seo-twitter-card">
+                <meta name="twitter:title" content="{{ $seo['ogTitle'] }}" data-inertia="seo-twitter-title">
+                <meta name="twitter:description" content="{{ $seo['ogDescription'] }}" data-inertia="seo-twitter-description">
+                @if(!empty($seo['ogImage']))
+                    <meta name="twitter:image" content="{{ $seo['ogImage'] }}" data-inertia="seo-twitter-image">
+                @endif
             @endif
         </x-inertia::head>
     </head>

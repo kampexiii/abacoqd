@@ -68,11 +68,17 @@ class SeoResolver
      */
     public function forNonPublic(string $path): SeoData
     {
+        $title = (string) config('site.seo.title');
+        $description = (string) config('site.seo.description');
+
         return new SeoData(
-            title: (string) config('site.seo.title'),
-            description: (string) config('site.seo.description'),
+            title: $title,
+            description: $description,
             canonical: $this->absolute($path),
             robots: 'noindex,nofollow',
+            ogTitle: $title,
+            ogDescription: $description,
+            ogImage: $this->resolveOgImage(null),
         );
     }
 
@@ -82,12 +88,41 @@ class SeoResolver
         string $titleFallback,
         string $descriptionFallback,
     ): SeoData {
+        $title = $this->firstFilled($record?->title, $titleFallback);
+        $description = $this->firstFilled($record?->description, $descriptionFallback);
+
         return new SeoData(
-            title: $this->firstFilled($record?->title, $titleFallback),
-            description: $this->firstFilled($record?->description, $descriptionFallback),
+            title: $title,
+            description: $description,
             canonical: $this->resolveCanonical($record?->canonical_url, $path),
             robots: $this->firstFilled($record?->robots, (string) config('site.seo.robots', 'index,follow')),
+            // OG/Twitter: `og_*` del registro si existe; si no, el title/description
+            // ya resueltos. og:url = canonical (lo emite el consumidor).
+            ogTitle: $this->firstFilled($record?->og_title, $title),
+            ogDescription: $this->firstFilled($record?->og_description, $description),
+            ogImage: $this->resolveOgImage($record?->og_image),
         );
+    }
+
+    /**
+     * Imagen OG como URL absoluta o `null`. Prioridad: `og_image` del registro,
+     * luego el fallback global `site.seo.og_image`. Si nada hay (decisión actual:
+     * no se versiona aún un raster de marca para social; los logos son SVG, que
+     * las plataformas no renderizan), devuelve `null` y el tag se omite.
+     */
+    private function resolveOgImage(?string $stored): ?string
+    {
+        $value = is_string($stored) ? trim($stored) : '';
+
+        if ($value === '') {
+            $value = trim((string) config('site.seo.og_image', ''));
+        }
+
+        if ($value === '') {
+            return null;
+        }
+
+        return str_starts_with($value, 'http') ? $value : $this->absolute($value);
     }
 
     /**

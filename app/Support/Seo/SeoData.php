@@ -6,9 +6,17 @@ namespace App\Support\Seo;
  * Payload SEO base que se sirve a las páginas públicas (HTML inicial vía
  * `app.blade.php` y prop Inertia `seo` para el componente cliente `SeoHead`).
  *
- * Solo cubre lo imprescindible de este primer bloque: title, description,
- * canonical (siempre absoluto) y robots. Open Graph, Twitter, JSON-LD y
- * sitemap quedan fuera por decisión cerrada.
+ * Cubre title, description, canonical (siempre absoluto), robots y los metadatos
+ * sociales básicos (Open Graph / Twitter Cards). JSON-LD, hreflang y sitemap
+ * quedan fuera por decisión cerrada.
+ *
+ * Open Graph / Twitter:
+ *   - `ogUrl` es siempre el canonical resuelto.
+ *   - `ogTitle`/`ogDescription` caen a `title`/`description` si el registro no
+ *     trae `og_title`/`og_description`.
+ *   - `ogImage` es una URL absoluta o `null` (cuando no hay imagen segura); el
+ *     consumidor omite el tag si es `null`.
+ *   - `twitter:*` reflejan los valores OG; la card es siempre `summary_large_image`.
  */
 final readonly class SeoData
 {
@@ -17,10 +25,23 @@ final readonly class SeoData
         public string $description,
         public string $canonical,
         public string $robots,
+        public string $ogTitle,
+        public string $ogDescription,
+        public ?string $ogImage,
+        public string $ogType = 'website',
     ) {}
 
     /**
-     * @return array{title: string, description: string, canonical: string, robots: string}
+     * @return array{
+     *     title: string,
+     *     description: string,
+     *     canonical: string,
+     *     robots: string,
+     *     ogTitle: string,
+     *     ogDescription: string,
+     *     ogImage: string|null,
+     *     ogType: string
+     * }
      */
     public function toArray(): array
     {
@@ -29,6 +50,10 @@ final readonly class SeoData
             'description' => $this->description,
             'canonical' => $this->canonical,
             'robots' => $this->robots,
+            'ogTitle' => $this->ogTitle,
+            'ogDescription' => $this->ogDescription,
+            'ogImage' => $this->ogImage,
+            'ogType' => $this->ogType,
         ];
     }
 }

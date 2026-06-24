@@ -72,6 +72,17 @@ return [
         'title' => 'Abaco Developments — Desarrollo digital a medida potenciado por IA',
         'description' => 'Desarrollos web y aplicaciones a medida, rápidos y potenciados por IA, con procesos optimizados y herramientas internas propias.',
         'robots' => 'index,follow',
+
+        /*
+        | Imagen social (Open Graph / Twitter) por defecto cuando un registro
+        | `seo_metadata` no trae `og_image`. Debe ser un raster (PNG/JPG/WebP)
+        | absoluto o una ruta servible bajo el dominio canónico; los logos de
+        | marca actuales son SVG y las plataformas sociales no los renderizan,
+        | así que de momento queda en `null` y `og:image` se omite (no se inventa
+        | ni genera un asset). Rellenar cuando exista un raster de marca social
+        | versionado (p. ej. '/assets/branding/og-image.png').
+        */
+        'og_image' => env('ABACO_SEO_OG_IMAGE') ?: null,
     ],
 
 ];
