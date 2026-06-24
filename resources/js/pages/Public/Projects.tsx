@@ -305,12 +305,12 @@ export default function Projects({ projects }: ProjectsProps) {
                                 src={cover}
                                 alt={title}
                                 loading="lazy"
-                                className="aspect-[16/10] w-full object-cover"
+                                className="aspect-16/10 w-full object-cover"
                             />
                         ) : (
                             <div
                                 aria-hidden="true"
-                                className="flex aspect-[16/10] w-full items-center justify-center bg-qd-ink"
+                                className="flex aspect-16/10 w-full items-center justify-center bg-qd-ink"
                                 style={{
                                     backgroundImage:
                                         'radial-gradient(circle at 30% 25%, rgba(24,183,176,0.22), transparent 45%), linear-gradient(rgba(24,183,176,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(24,183,176,0.16) 1px, transparent 1px)',

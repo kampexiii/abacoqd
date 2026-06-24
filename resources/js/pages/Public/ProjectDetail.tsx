@@ -105,7 +105,7 @@ function BrandPattern({
         <div
             className={cn(
                 'flex w-full items-center justify-center bg-qd-ink',
-                compact ? 'aspect-[5/4] rounded-xl p-4' : 'aspect-[16/9] rounded-2xl p-8',
+                compact ? 'aspect-5/4 rounded-xl p-4' : 'aspect-video rounded-2xl p-8',
             )}
             style={{
                 backgroundImage:
@@ -314,7 +314,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                             return (
                                 <article
                                     key={block.key}
-                                    className="border-b border-qd-ink/10 p-7 md:[&:nth-child(2n)]:border-l lg:border-b-0 lg:border-l lg:first:border-l-0 dark:border-qd-white/10"
+                                    className="border-b border-qd-ink/10 p-7 md:nth-[2n]:border-l lg:border-b-0 lg:border-l lg:first:border-l-0 dark:border-qd-white/10"
                                 >
                                     <Icon
                                         aria-hidden="true"
@@ -391,7 +391,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                                     src={cover}
                                     alt={title}
                                     loading="lazy"
-                                    className="aspect-[16/9] w-full object-cover"
+                                    className="aspect-video w-full object-cover"
                                 />
                             ) : (
                                 <BrandPattern label={t('projectDetail.media.fallback')} />
@@ -522,7 +522,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                                                 src={itemCover}
                                                 alt={itemTitle}
                                                 loading="lazy"
-                                                className="aspect-[5/4] w-full rounded-lg object-cover"
+                                                className="aspect-5/4 w-full rounded-lg object-cover"
                                             />
                                         ) : (
                                             <BrandPattern

@@ -245,16 +245,16 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
 
                     <section
                         aria-label={title}
-                        className="py-8 lg:min-h-[430px] lg:py-0 lg:pl-8"
+                        className="py-8 lg:min-h-107.5 lg:py-0 lg:pl-8"
                     >
                         <figure
-                            className="h-full overflow-hidden rounded-[24px] border border-qd-ink/10 bg-qd-white shadow-[0_26px_90px_-48px_rgba(7,17,26,0.55)] dark:border-white/10 dark:bg-qd-surface"
+                            className="h-full overflow-hidden rounded-3xl border border-qd-ink/10 bg-qd-white shadow-[0_26px_90px_-48px_rgba(7,17,26,0.55)] dark:border-white/10 dark:bg-qd-surface"
                         >
                             <img
                                 src={detailImageSrc}
                                 alt={title}
                                 loading="lazy"
-                                className="aspect-[16/9] h-full min-h-72 w-full object-cover lg:min-h-full"
+                                className="aspect-video h-full min-h-72 w-full object-cover lg:min-h-full"
                             />
                         </figure>
                     </section>

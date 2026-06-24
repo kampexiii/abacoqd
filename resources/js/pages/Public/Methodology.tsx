@@ -219,7 +219,7 @@ export default function Methodology() {
                                         </div>
 
                                         {/* Punto + línea */}
-                                        <div className="flex w-3 shrink-0 flex-col items-center pt-[22px]">
+                                        <div className="flex w-3 shrink-0 flex-col items-center pt-5.5">
                                             <span
                                                 aria-hidden="true"
                                                 className={cn(
