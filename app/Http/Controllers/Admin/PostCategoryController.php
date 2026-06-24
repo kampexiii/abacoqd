@@ -22,8 +22,9 @@ class PostCategoryController extends Controller
         $categories = PostCategory::query()
             ->withCount('posts')
             ->ordered()
-            ->get()
-            ->map(fn (PostCategory $category): array => [
+            ->paginate(15)
+            ->withQueryString()
+            ->through(fn (PostCategory $category): array => [
                 'id' => $category->id,
                 'name' => $category->name,
                 'slug' => $category->slug,

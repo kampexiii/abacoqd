@@ -3,6 +3,8 @@ import { Eye, Mail, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
 import AdminEmptyState from '@/components/admin/AdminEmptyState';
+import AdminPagination from '@/components/admin/AdminPagination';
+import type { PaginatedData } from '@/components/admin/AdminPagination';
 import AdminSelect from '@/components/admin/AdminSelect';
 import AdminLayout from '@/layouts/admin-layout';
 
@@ -18,7 +20,10 @@ type ContactRow = {
     readonly createdAt: string | null;
 };
 
-type ServiceOption = { readonly id: number; readonly title: LocalizedText | null };
+type ServiceOption = {
+    readonly id: number;
+    readonly title: LocalizedText | null;
+};
 
 type Filters = {
     readonly status?: string;
@@ -32,7 +37,7 @@ type Filters = {
 };
 
 type IndexProps = {
-    readonly contacts: readonly ContactRow[];
+    readonly contacts: PaginatedData<ContactRow>;
     readonly services: readonly ServiceOption[];
     readonly statuses: readonly string[];
     readonly filters: Filters;
@@ -48,20 +53,36 @@ const STATUS_LABELS: Record<string, string> = {
     archived: 'Archivado',
 };
 
-export default function ContactsIndex({ contacts, services, statuses, filters }: IndexProps) {
+export default function ContactsIndex({
+    contacts,
+    services,
+    statuses,
+    filters,
+}: IndexProps) {
     const [form, setForm] = useState<Filters>(filters);
     const [selected, setSelected] = useState<number[]>([]);
 
     function applyFilters() {
-        router.get('/admin/contacts', form, { preserveState: true, preserveScroll: true });
+        router.get('/admin/contacts', form, {
+            preserveState: true,
+            preserveScroll: true,
+        });
     }
 
     function toggleSelected(id: number) {
-        setSelected((prev) => (prev.includes(id) ? prev.filter((value) => value !== id) : [...prev, id]));
+        setSelected((prev) =>
+            prev.includes(id)
+                ? prev.filter((value) => value !== id)
+                : [...prev, id],
+        );
     }
 
     function deleteOne(id: number) {
-        if (window.confirm('¿Eliminar este contacto? Esta acción no se puede deshacer.')) {
+        if (
+            window.confirm(
+                '¿Eliminar este contacto? Esta acción no se puede deshacer.',
+            )
+        ) {
             router.delete(`/admin/contacts/${id}`, { preserveScroll: true });
         }
     }
@@ -71,22 +92,40 @@ export default function ContactsIndex({ contacts, services, statuses, filters }:
             return;
         }
 
-        if (window.confirm(`¿Eliminar los ${selected.length} contactos seleccionados? Esta acción no se puede deshacer.`)) {
-            router.delete('/admin/contacts', { data: { ids: selected }, preserveScroll: true });
+        if (
+            window.confirm(
+                `¿Eliminar los ${selected.length} contactos seleccionados? Esta acción no se puede deshacer.`,
+            )
+        ) {
+            router.delete('/admin/contacts', {
+                data: { ids: selected },
+                preserveScroll: true,
+            });
             setSelected([]);
         }
     }
 
     function purgeAll() {
-        const confirmation = window.prompt('Escribe PURGAR para eliminar todos los contactos. Esta acción no se puede deshacer.');
+        const confirmation = window.prompt(
+            'Escribe PURGAR para eliminar todos los contactos. Esta acción no se puede deshacer.',
+        );
 
         if (confirmation === 'PURGAR') {
-            router.delete('/admin/contacts', { data: { confirmation }, preserveScroll: true });
+            router.delete('/admin/contacts', {
+                data: { confirmation },
+                preserveScroll: true,
+            });
         }
     }
 
     return (
-        <AdminLayout title="Contactos" breadcrumbs={[{ title: 'Dashboard', href: '/admin/dashboard' }, { title: 'Contactos' }]}>
+        <AdminLayout
+            title="Contactos"
+            breadcrumbs={[
+                { title: 'Dashboard', href: '/admin/dashboard' },
+                { title: 'Contactos' },
+            ]}
+        >
             <Head title="Contactos · Admin AbacoQD" />
 
             <div className="rounded-2xl border border-qd-mist bg-qd-white dark:border-qd-white/10 dark:bg-qd-surface">
@@ -94,34 +133,56 @@ export default function ContactsIndex({ contacts, services, statuses, filters }:
                     <input
                         type="search"
                         value={form.q ?? ''}
-                        onChange={(e) => setForm((prev) => ({ ...prev, q: e.target.value }))}
+                        onChange={(e) =>
+                            setForm((prev) => ({ ...prev, q: e.target.value }))
+                        }
                         placeholder="Buscar en el mensaje..."
                         className="h-9 rounded-lg border border-qd-mist bg-transparent px-3 text-sm outline-none focus-visible:border-qd-teal-2/50 dark:border-qd-white/10"
                     />
                     <input
                         type="text"
                         value={form.name ?? ''}
-                        onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
+                        onChange={(e) =>
+                            setForm((prev) => ({
+                                ...prev,
+                                name: e.target.value,
+                            }))
+                        }
                         placeholder="Nombre"
                         className="h-9 rounded-lg border border-qd-mist bg-transparent px-3 text-sm outline-none focus-visible:border-qd-teal-2/50 dark:border-qd-white/10"
                     />
                     <input
                         type="text"
                         value={form.email ?? ''}
-                        onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
+                        onChange={(e) =>
+                            setForm((prev) => ({
+                                ...prev,
+                                email: e.target.value,
+                            }))
+                        }
                         placeholder="Email"
                         className="h-9 rounded-lg border border-qd-mist bg-transparent px-3 text-sm outline-none focus-visible:border-qd-teal-2/50 dark:border-qd-white/10"
                     />
                     <input
                         type="text"
                         value={form.company ?? ''}
-                        onChange={(e) => setForm((prev) => ({ ...prev, company: e.target.value }))}
+                        onChange={(e) =>
+                            setForm((prev) => ({
+                                ...prev,
+                                company: e.target.value,
+                            }))
+                        }
                         placeholder="Empresa"
                         className="h-9 rounded-lg border border-qd-mist bg-transparent px-3 text-sm outline-none focus-visible:border-qd-teal-2/50 dark:border-qd-white/10"
                     />
                     <AdminSelect
                         value={form.status ?? ''}
-                        onChange={(e) => setForm((prev) => ({ ...prev, status: e.target.value }))}
+                        onChange={(e) =>
+                            setForm((prev) => ({
+                                ...prev,
+                                status: e.target.value,
+                            }))
+                        }
                     >
                         <option value="">Todos los estados</option>
                         {statuses.map((status) => (
@@ -132,25 +193,42 @@ export default function ContactsIndex({ contacts, services, statuses, filters }:
                     </AdminSelect>
                     <AdminSelect
                         value={form.service_id ?? ''}
-                        onChange={(e) => setForm((prev) => ({ ...prev, service_id: e.target.value }))}
+                        onChange={(e) =>
+                            setForm((prev) => ({
+                                ...prev,
+                                service_id: e.target.value,
+                            }))
+                        }
                     >
                         <option value="">Todos los servicios</option>
                         {services.map((service) => (
                             <option key={service.id} value={service.id}>
-                                {service.title?.es ?? service.title?.en ?? `#${service.id}`}
+                                {service.title?.es ??
+                                    service.title?.en ??
+                                    `#${service.id}`}
                             </option>
                         ))}
                     </AdminSelect>
                     <input
                         type="date"
                         value={form.date_from ?? ''}
-                        onChange={(e) => setForm((prev) => ({ ...prev, date_from: e.target.value }))}
+                        onChange={(e) =>
+                            setForm((prev) => ({
+                                ...prev,
+                                date_from: e.target.value,
+                            }))
+                        }
                         className="h-9 rounded-lg border border-qd-mist bg-transparent px-3 text-sm outline-none focus-visible:border-qd-teal-2/50 dark:border-qd-white/10"
                     />
                     <input
                         type="date"
                         value={form.date_to ?? ''}
-                        onChange={(e) => setForm((prev) => ({ ...prev, date_to: e.target.value }))}
+                        onChange={(e) =>
+                            setForm((prev) => ({
+                                ...prev,
+                                date_to: e.target.value,
+                            }))
+                        }
                         className="h-9 rounded-lg border border-qd-mist bg-transparent px-3 text-sm outline-none focus-visible:border-qd-teal-2/50 dark:border-qd-white/10"
                     />
                     <div className="flex items-center gap-2 lg:col-span-4">
@@ -179,9 +257,13 @@ export default function ContactsIndex({ contacts, services, statuses, filters }:
                     </div>
                 </div>
 
-                {contacts.length === 0 ? (
+                {contacts.data.length === 0 ? (
                     <div className="p-6">
-                        <AdminEmptyState icon={Mail} title="Sin contactos" description="No hay mensajes que coincidan con los filtros." />
+                        <AdminEmptyState
+                            icon={Mail}
+                            title="Sin contactos"
+                            description="No hay mensajes que coincidan con los filtros."
+                        />
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
@@ -189,37 +271,64 @@ export default function ContactsIndex({ contacts, services, statuses, filters }:
                             <thead>
                                 <tr className="border-b border-qd-mist text-left text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:border-qd-white/10 dark:text-qd-white/50">
                                     <th className="px-4 py-3"></th>
-                                    <th className="px-4 py-3">Nombre / Email</th>
+                                    <th className="px-4 py-3">
+                                        Nombre / Email
+                                    </th>
                                     <th className="px-4 py-3">Empresa</th>
                                     <th className="px-4 py-3">Servicio</th>
                                     <th className="px-4 py-3">Estado</th>
                                     <th className="px-4 py-3">Fecha</th>
-                                    <th className="px-4 py-3 text-right">Acciones</th>
+                                    <th className="px-4 py-3 text-right">
+                                        Acciones
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-qd-mist dark:divide-qd-white/10">
-                                {contacts.map((contact) => (
-                                    <tr key={contact.id} className="align-middle">
+                                {contacts.data.map((contact) => (
+                                    <tr
+                                        key={contact.id}
+                                        className="align-middle"
+                                    >
                                         <td className="px-4 py-3">
                                             <input
                                                 type="checkbox"
-                                                checked={selected.includes(contact.id)}
-                                                onChange={() => toggleSelected(contact.id)}
+                                                checked={selected.includes(
+                                                    contact.id,
+                                                )}
+                                                onChange={() =>
+                                                    toggleSelected(contact.id)
+                                                }
                                             />
                                         </td>
                                         <td className="px-4 py-3">
-                                            <div className="font-semibold text-qd-ink dark:text-qd-white">{contact.name}</div>
-                                            <div className="text-xs text-qd-text-medium dark:text-qd-white/40">{contact.email}</div>
+                                            <div className="font-semibold text-qd-ink dark:text-qd-white">
+                                                {contact.name}
+                                            </div>
+                                            <div className="text-xs text-qd-text-medium dark:text-qd-white/40">
+                                                {contact.email}
+                                            </div>
                                         </td>
-                                        <td className="px-4 py-3 text-qd-text-high dark:text-qd-white/70">{contact.company ?? '—'}</td>
                                         <td className="px-4 py-3 text-qd-text-high dark:text-qd-white/70">
-                                            {contact.serviceTitle?.es ?? contact.serviceTitle?.en ?? '—'}
+                                            {contact.company ?? '—'}
                                         </td>
                                         <td className="px-4 py-3 text-qd-text-high dark:text-qd-white/70">
-                                            {STATUS_LABELS[contact.status ?? ''] ?? contact.status ?? '—'}
+                                            {contact.serviceTitle?.es ??
+                                                contact.serviceTitle?.en ??
+                                                '—'}
+                                        </td>
+                                        <td className="px-4 py-3 text-qd-text-high dark:text-qd-white/70">
+                                            {STATUS_LABELS[
+                                                contact.status ?? ''
+                                            ] ??
+                                                contact.status ??
+                                                '—'}
                                         </td>
                                         <td className="px-4 py-3 text-qd-text-medium dark:text-qd-white/40">
-                                            {contact.createdAt ? new Date(contact.createdAt).toLocaleString('es-ES') : '—'}
+                                            {contact.createdAt
+                                                ? new Date(
+                                                      contact.createdAt,
+                                                  ).toLocaleString('es-ES')
+                                                : '—'}
                                         </td>
                                         <td className="px-4 py-3">
                                             <div className="flex items-center justify-end gap-1">
@@ -227,14 +336,22 @@ export default function ContactsIndex({ contacts, services, statuses, filters }:
                                                     href={`/admin/contacts/${contact.id}`}
                                                     className="flex size-8 items-center justify-center rounded-lg border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2/40 hover:text-qd-teal-2 dark:border-qd-white/10 dark:text-qd-white/70"
                                                 >
-                                                    <Eye aria-hidden="true" size={15} />
+                                                    <Eye
+                                                        aria-hidden="true"
+                                                        size={15}
+                                                    />
                                                 </Link>
                                                 <button
                                                     type="button"
-                                                    onClick={() => deleteOne(contact.id)}
+                                                    onClick={() =>
+                                                        deleteOne(contact.id)
+                                                    }
                                                     className="flex size-8 items-center justify-center rounded-lg border border-qd-mist text-qd-text-high transition hover:border-red-400/60 hover:text-red-500 dark:border-qd-white/10 dark:text-qd-white/70"
                                                 >
-                                                    <Trash2 aria-hidden="true" size={15} />
+                                                    <Trash2
+                                                        aria-hidden="true"
+                                                        size={15}
+                                                    />
                                                 </button>
                                             </div>
                                         </td>
@@ -242,6 +359,7 @@ export default function ContactsIndex({ contacts, services, statuses, filters }:
                                 ))}
                             </tbody>
                         </table>
+                        <AdminPagination pagination={contacts} />
                     </div>
                 )}
             </div>

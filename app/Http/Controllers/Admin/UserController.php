@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -19,17 +20,26 @@ use Inertia\Response;
  */
 class UserController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $search = trim($request->string('q')->toString());
+
         $users = User::query()
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
             ->orderBy('name')
-            ->get()
-            ->map(fn (User $user): array => $this->adminSummary($user))
-            ->values();
+            ->paginate(15)
+            ->withQueryString()
+            ->through(fn (User $user): array => $this->adminSummary($user));
 
         return Inertia::render('Admin/Users/Index', [
             'users' => $users,
             'roles' => $this->roleOptions(),
+            'filters' => $request->only(['q']),
         ]);
     }
 

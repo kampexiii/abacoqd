@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\UpdateTeamMemberRequest;
 use App\Models\TeamMember;
 use App\Services\Media\TeamMemberPhotoService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -27,16 +28,26 @@ class TeamMemberController extends Controller
 
     public function __construct(private readonly TeamMemberPhotoService $photos) {}
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $search = trim($request->string('q')->toString());
+
         $members = TeamMember::query()
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('slug', 'like', "%{$search}%")
+                        ->orWhere('role', 'like', "%{$search}%");
+                });
+            })
             ->ordered()
-            ->get()
-            ->map(fn (TeamMember $member): array => $this->adminSummary($member))
-            ->values();
+            ->paginate(15)
+            ->withQueryString()
+            ->through(fn (TeamMember $member): array => $this->adminSummary($member));
 
         return Inertia::render('Admin/TeamMembers/Index', [
             'members' => $members,
+            'filters' => $request->only(['q']),
         ]);
     }
 

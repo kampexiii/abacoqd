@@ -28,9 +28,9 @@ class AppointmentSlotController extends Controller
             ->withCount(['bookings' => fn ($query) => $query->active()])
             ->when($dayId, fn ($query) => $query->where('appointment_day_id', $dayId))
             ->ordered()
-            ->get()
-            ->map(fn (AppointmentSlot $slot): array => $this->adminSummary($slot))
-            ->values();
+            ->paginate(15)
+            ->withQueryString()
+            ->through(fn (AppointmentSlot $slot): array => $this->adminSummary($slot));
 
         return Inertia::render('Admin/Booking/Slots/Index', [
             'slots' => $slots,

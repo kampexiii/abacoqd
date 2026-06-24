@@ -17,8 +17,9 @@ class TagController extends Controller
         $tags = Tag::query()
             ->withCount('posts')
             ->orderBy('id')
-            ->get()
-            ->map(fn (Tag $tag): array => [
+            ->paginate(15)
+            ->withQueryString()
+            ->through(fn (Tag $tag): array => [
                 'id' => $tag->id,
                 'name' => $tag->name,
                 'slug' => $tag->slug,

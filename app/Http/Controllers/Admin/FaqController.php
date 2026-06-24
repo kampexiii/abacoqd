@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\FaqRequest;
 use App\Models\Faq;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -16,16 +17,26 @@ use Inertia\Response;
  */
 class FaqController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $search = trim($request->string('q')->toString());
+
         $faqs = Faq::query()
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('question', 'like', "%{$search}%")
+                        ->orWhere('category', 'like', "%{$search}%")
+                        ->orWhere('intent', 'like', "%{$search}%");
+                });
+            })
             ->ordered()
-            ->get()
-            ->map(fn (Faq $faq): array => $this->adminSummary($faq))
-            ->values();
+            ->paginate(15)
+            ->withQueryString()
+            ->through(fn (Faq $faq): array => $this->adminSummary($faq));
 
         return Inertia::render('Admin/Faqs/Index', [
             'faqs' => $faqs,
+            'filters' => $request->only(['q']),
         ]);
     }
 

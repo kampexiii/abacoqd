@@ -23,9 +23,9 @@ class AppointmentDayController extends Controller
         $days = AppointmentDay::query()
             ->withCount('slots')
             ->ordered()
-            ->get()
-            ->map(fn (AppointmentDay $day): array => $this->adminSummary($day))
-            ->values();
+            ->paginate(15)
+            ->withQueryString()
+            ->through(fn (AppointmentDay $day): array => $this->adminSummary($day));
 
         return Inertia::render('Admin/Booking/Days/Index', [
             'days' => $days,

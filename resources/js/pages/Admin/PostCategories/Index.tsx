@@ -2,19 +2,27 @@ import { Head, router, useForm } from '@inertiajs/react';
 import { Plus, Trash2 } from 'lucide-react';
 import type { FormEvent } from 'react';
 
+import AdminPagination from '@/components/admin/AdminPagination';
+import type { PaginatedData } from '@/components/admin/AdminPagination';
 import { Input } from '@/components/ui/input';
 import AdminLayout from '@/layouts/admin-layout';
 
 type CategoryRow = {
     readonly id: number;
-    readonly name: { readonly es: string | null; readonly en: string | null } | null;
-    readonly slug: { readonly es: string | null; readonly en: string | null } | null;
+    readonly name: {
+        readonly es: string | null;
+        readonly en: string | null;
+    } | null;
+    readonly slug: {
+        readonly es: string | null;
+        readonly en: string | null;
+    } | null;
     readonly sortOrder: number;
     readonly isActive: boolean;
     readonly postsCount: number;
 };
 
-type IndexProps = { readonly categories: readonly CategoryRow[] };
+type IndexProps = { readonly categories: PaginatedData<CategoryRow> };
 
 type FormData = {
     name: { es: string; en: string };
@@ -29,7 +37,7 @@ export default function PostCategoriesIndex({ categories }: IndexProps) {
         name: { es: '', en: '' },
         slug: { es: '', en: '' },
         description: { es: '', en: '' },
-        sort_order: categories.length + 1,
+        sort_order: categories.total + 1,
         is_active: true,
     });
 
@@ -60,27 +68,45 @@ export default function PostCategoriesIndex({ categories }: IndexProps) {
                                 <th className="px-4 py-3">Nombre</th>
                                 <th className="px-4 py-3">Slug</th>
                                 <th className="px-4 py-3 text-center">Posts</th>
-                                <th className="px-4 py-3 text-center">Activa</th>
-                                <th className="px-4 py-3 text-right">Acciones</th>
+                                <th className="px-4 py-3 text-center">
+                                    Activa
+                                </th>
+                                <th className="px-4 py-3 text-right">
+                                    Acciones
+                                </th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-qd-mist dark:divide-qd-white/10">
-                            {categories.map((category) => (
+                            {categories.data.map((category) => (
                                 <tr key={category.id}>
-                                    <td className="px-4 py-3 font-semibold text-qd-ink dark:text-qd-white">{category.name?.es}</td>
-                                    <td className="px-4 py-3 text-qd-text-medium dark:text-qd-white/50">/{category.slug?.es}</td>
-                                    <td className="px-4 py-3 text-center">{category.postsCount}</td>
+                                    <td className="px-4 py-3 font-semibold text-qd-ink dark:text-qd-white">
+                                        {category.name?.es}
+                                    </td>
+                                    <td className="px-4 py-3 text-qd-text-medium dark:text-qd-white/50">
+                                        /{category.slug?.es}
+                                    </td>
+                                    <td className="px-4 py-3 text-center">
+                                        {category.postsCount}
+                                    </td>
                                     <td className="px-4 py-3 text-center">
                                         <button
                                             type="button"
                                             onClick={() =>
-                                                router.patch(`/admin/post-categories/${category.id}`, {
-                                                    name: category.name,
-                                                    slug: category.slug,
-                                                    description: { es: '', en: '' },
-                                                    sort_order: category.sortOrder,
-                                                    is_active: !category.isActive,
-                                                })
+                                                router.patch(
+                                                    `/admin/post-categories/${category.id}`,
+                                                    {
+                                                        name: category.name,
+                                                        slug: category.slug,
+                                                        description: {
+                                                            es: '',
+                                                            en: '',
+                                                        },
+                                                        sort_order:
+                                                            category.sortOrder,
+                                                        is_active:
+                                                            !category.isActive,
+                                                    },
+                                                )
                                             }
                                             className="text-xs font-semibold text-qd-teal-2 dark:text-qd-teal"
                                         >
@@ -91,29 +117,85 @@ export default function PostCategoriesIndex({ categories }: IndexProps) {
                                         <button
                                             type="button"
                                             onClick={() => {
-                                                if (window.confirm('¿Eliminar categoría?')) {
-                                                    router.delete(`/admin/post-categories/${category.id}`, { preserveScroll: true });
+                                                if (
+                                                    window.confirm(
+                                                        '¿Eliminar categoría?',
+                                                    )
+                                                ) {
+                                                    router.delete(
+                                                        `/admin/post-categories/${category.id}`,
+                                                        {
+                                                            preserveScroll: true,
+                                                        },
+                                                    );
                                                 }
                                             }}
                                             className="text-red-600 hover:text-red-700"
                                         >
-                                            <Trash2 aria-hidden="true" size={16} />
+                                            <Trash2
+                                                aria-hidden="true"
+                                                size={16}
+                                            />
                                         </button>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                    <AdminPagination pagination={categories} />
                 </div>
 
-                <form onSubmit={submit} className="flex flex-col gap-3 rounded-2xl border border-qd-mist bg-qd-white p-5 dark:border-qd-white/10 dark:bg-qd-surface">
-                    <h2 className="text-base font-bold text-qd-ink dark:text-qd-white">Nueva categoría</h2>
-                    <Input placeholder="Nombre (ES)" value={form.data.name.es} onChange={(e) => form.setData('name', { ...form.data.name, es: e.target.value })} />
-                    <Input placeholder="Nombre (EN)" value={form.data.name.en} onChange={(e) => form.setData('name', { ...form.data.name, en: e.target.value })} />
-                    <Input placeholder="Slug (ES)" value={form.data.slug.es} onChange={(e) => form.setData('slug', { ...form.data.slug, es: e.target.value })} />
-                    <Input placeholder="Slug (EN)" value={form.data.slug.en} onChange={(e) => form.setData('slug', { ...form.data.slug, en: e.target.value })} />
+                <form
+                    onSubmit={submit}
+                    className="flex flex-col gap-3 rounded-2xl border border-qd-mist bg-qd-white p-5 dark:border-qd-white/10 dark:bg-qd-surface"
+                >
+                    <h2 className="text-base font-bold text-qd-ink dark:text-qd-white">
+                        Nueva categoría
+                    </h2>
+                    <Input
+                        placeholder="Nombre (ES)"
+                        value={form.data.name.es}
+                        onChange={(e) =>
+                            form.setData('name', {
+                                ...form.data.name,
+                                es: e.target.value,
+                            })
+                        }
+                    />
+                    <Input
+                        placeholder="Nombre (EN)"
+                        value={form.data.name.en}
+                        onChange={(e) =>
+                            form.setData('name', {
+                                ...form.data.name,
+                                en: e.target.value,
+                            })
+                        }
+                    />
+                    <Input
+                        placeholder="Slug (ES)"
+                        value={form.data.slug.es}
+                        onChange={(e) =>
+                            form.setData('slug', {
+                                ...form.data.slug,
+                                es: e.target.value,
+                            })
+                        }
+                    />
+                    <Input
+                        placeholder="Slug (EN)"
+                        value={form.data.slug.en}
+                        onChange={(e) =>
+                            form.setData('slug', {
+                                ...form.data.slug,
+                                en: e.target.value,
+                            })
+                        }
+                    />
                     {form.errors['slug.es' as keyof FormData] && (
-                        <p className="text-xs text-red-600">{form.errors['slug.es' as keyof FormData]}</p>
+                        <p className="text-xs text-red-600">
+                            {form.errors['slug.es' as keyof FormData]}
+                        </p>
                     )}
                     <button
                         type="submit"

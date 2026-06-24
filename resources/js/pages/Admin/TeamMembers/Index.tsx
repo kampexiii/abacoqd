@@ -1,8 +1,11 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { MoreVertical, Pencil, Plus, Search, Users } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 
 import AdminEmptyState from '@/components/admin/AdminEmptyState';
+import AdminPagination from '@/components/admin/AdminPagination';
+import type { PaginatedData } from '@/components/admin/AdminPagination';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -26,7 +29,10 @@ type TeamMemberRow = {
     readonly sortOrder: number;
 };
 
-type IndexProps = { readonly members: readonly TeamMemberRow[] };
+type IndexProps = {
+    readonly members: PaginatedData<TeamMemberRow>;
+    readonly filters: { readonly q?: string };
+};
 
 function patch(id: number, action: string) {
     router.patch(
@@ -36,25 +42,20 @@ function patch(id: number, action: string) {
     );
 }
 
-export default function TeamMembersIndex({ members }: IndexProps) {
-    const [search, setSearch] = useState('');
+export default function TeamMembersIndex({ members, filters }: IndexProps) {
+    const [search, setSearch] = useState(filters.q ?? '');
 
     const roleLabel = (member: TeamMemberRow): string =>
         member.role?.es ?? member.role?.en ?? '—';
 
-    const filtered = useMemo(() => {
-        const term = search.trim().toLowerCase();
-
-        if (!term) {
-            return members;
-        }
-
-        return members.filter((member) =>
-            `${member.name} ${member.slug} ${roleLabel(member)}`
-                .toLowerCase()
-                .includes(term),
+    const applyFilters = (event: FormEvent) => {
+        event.preventDefault();
+        router.get(
+            '/admin/team-members',
+            { q: search },
+            { preserveState: true, replace: true },
         );
-    }, [members, search]);
+    };
 
     return (
         <AdminLayout
@@ -76,7 +77,10 @@ export default function TeamMembersIndex({ members }: IndexProps) {
             <Head title="Equipo · Admin AbacoQD" />
 
             <div className="rounded-2xl border border-qd-mist bg-qd-white dark:border-qd-white/10 dark:bg-qd-surface">
-                <div className="flex flex-wrap items-center gap-3 border-b border-qd-mist p-4 dark:border-qd-white/10">
+                <form
+                    onSubmit={applyFilters}
+                    className="flex flex-wrap items-center gap-3 border-b border-qd-mist p-4 dark:border-qd-white/10"
+                >
                     <div className="relative flex-1 sm:min-w-64">
                         <Search
                             aria-hidden="true"
@@ -91,24 +95,30 @@ export default function TeamMembersIndex({ members }: IndexProps) {
                             className="h-9 w-full rounded-lg border border-qd-mist bg-transparent pr-3 pl-9 text-sm outline-none focus-visible:border-qd-teal-2/50 dark:border-qd-white/10"
                         />
                     </div>
-                </div>
+                    <button
+                        type="submit"
+                        className="h-9 rounded-lg bg-qd-teal-2 px-4 text-sm font-bold text-white dark:bg-qd-teal dark:text-qd-ink"
+                    >
+                        Filtrar
+                    </button>
+                </form>
 
-                {filtered.length === 0 ? (
+                {members.data.length === 0 ? (
                     <div className="p-6">
                         <AdminEmptyState
                             icon={Users}
                             title={
-                                members.length === 0
+                                !filters.q
                                     ? 'Aún no hay miembros de equipo'
                                     : 'Sin resultados'
                             }
                             description={
-                                members.length === 0
+                                !filters.q
                                     ? 'Crea el primer miembro.'
                                     : 'Ajusta la búsqueda.'
                             }
                             action={
-                                members.length === 0 ? (
+                                !filters.q ? (
                                     <Link
                                         href="/admin/team-members/create"
                                         className="inline-flex items-center gap-2 rounded-lg bg-qd-teal-2 px-4 py-2.5 text-sm font-bold text-white dark:bg-qd-teal dark:text-qd-ink"
@@ -139,7 +149,7 @@ export default function TeamMembersIndex({ members }: IndexProps) {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-qd-mist dark:divide-qd-white/10">
-                                {filtered.map((member) => (
+                                {members.data.map((member) => (
                                     <tr
                                         key={member.id}
                                         className="align-middle"
@@ -243,6 +253,7 @@ export default function TeamMembersIndex({ members }: IndexProps) {
                                 ))}
                             </tbody>
                         </table>
+                        <AdminPagination pagination={members} />
                     </div>
                 )}
             </div>

@@ -28,8 +28,9 @@ test('an admin can see the admin contacts listing', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('Admin/Contacts/Index')
-            ->has('contacts', 1)
-            ->where('contacts.0.name', 'Jane Doe')
+            ->has('contacts.data', 1)
+            ->where('contacts.data.0.name', 'Jane Doe')
+            ->where('contacts.total', 1)
         );
 });
 
@@ -39,7 +40,10 @@ test('the listing can be filtered by status', function () {
     $this->actingAs(contactAdminUser());
 
     $this->get(route('admin.contacts.index', ['status' => ContactMessageStatus::Converted->value]))
-        ->assertInertia(fn ($page) => $page->has('contacts', 1));
+        ->assertInertia(fn ($page) => $page
+            ->has('contacts.data', 1)
+            ->where('contacts.total', 1)
+        );
 });
 
 test('an admin can view a contact detail', function () {

@@ -56,7 +56,10 @@ class ContactMessageController extends Controller
             $query->whereDate('created_at', '<=', $to);
         }
 
-        $contacts = $query->get()->map(fn (ContactMessage $contact): array => $this->adminSummary($contact))->values();
+        $contacts = $query
+            ->paginate(15)
+            ->withQueryString()
+            ->through(fn (ContactMessage $contact): array => $this->adminSummary($contact));
 
         $services = Service::query()->orderBy('id')->get(['id', 'title']);
 

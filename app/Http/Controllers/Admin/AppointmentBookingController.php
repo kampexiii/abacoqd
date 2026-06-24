@@ -31,9 +31,9 @@ class AppointmentBookingController extends Controller
         $bookings = AppointmentBooking::query()
             ->with(['slot.day', 'service'])
             ->latest()
-            ->get()
-            ->map(fn (AppointmentBooking $booking): array => $this->adminSummary($booking))
-            ->values();
+            ->paginate(15)
+            ->withQueryString()
+            ->through(fn (AppointmentBooking $booking): array => $this->adminSummary($booking));
 
         return Inertia::render('Admin/Booking/Bookings/Index', [
             'bookings' => $bookings,
