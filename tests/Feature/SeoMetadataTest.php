@@ -68,12 +68,11 @@ test('public pages serve open graph and twitter card metadata in the initial htm
     $response->assertSee('name="twitter:description" content="'.e($description).'"', false);
 
     // Decisión actual: sin un raster de marca social versionado, og:image se
-    // omite (no se inventa asset). Este bloque tampoco introduce hreflang ni
-    // JSON-LD (van fuera por decisión cerrada).
+    // omite (no se inventa asset). Este bloque no introduce hreflang (los datos
+    // estructurados JSON-LD se cubren en SeoStructuredDataTest).
     $response->assertDontSee('property="og:image"', false);
     $response->assertDontSee('name="twitter:image"', false);
     $response->assertDontSee('hreflang', false);
-    $response->assertDontSee('application/ld+json', false);
 });
 
 test('a configured og image fallback is served as an absolute canonical url', function () {

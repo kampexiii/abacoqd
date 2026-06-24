@@ -69,6 +69,9 @@ return [
     */
     'seo' => [
         'brand' => 'Abaco Developments',
+        // Razón social (textos legales y `legalName` de los datos estructurados
+        // Organization). Marca pública visible: "Abaco Developments" (ver CLAUDE.md).
+        'legal_name' => 'ABACO DIGITAL DEVELOPMENTS, S.L.',
         'title' => 'Abaco Developments — Desarrollo digital a medida potenciado por IA',
         'description' => 'Desarrollos web y aplicaciones a medida, rápidos y potenciados por IA, con procesos optimizados y herramientas internas propias.',
         'robots' => 'index,follow',

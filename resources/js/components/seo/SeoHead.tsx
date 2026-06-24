@@ -7,10 +7,10 @@ import { Head, usePage } from '@inertiajs/react';
  * declaran con el mismo `head-key` para que Inertia los reconcilie (sin
  * duplicar) y los actualice al navegar entre páginas (SPA).
  *
- * Cubre title/description/canonical/robots y los metadatos sociales básicos
- * (Open Graph / Twitter Cards). og:url usa el canonical resuelto; og:image se
- * omite cuando el backend no resuelve una imagen social segura. JSON-LD y
- * hreflang quedan fuera.
+ * Cubre title/description/canonical/robots, los metadatos sociales básicos
+ * (Open Graph / Twitter Cards) y los datos estructurados JSON-LD (`jsonLd`).
+ * og:url usa el canonical resuelto; og:image se omite cuando el backend no
+ * resuelve una imagen social segura. hreflang queda fuera.
  */
 export type SeoPayload = {
     readonly title: string;
@@ -21,6 +21,8 @@ export type SeoPayload = {
     readonly ogDescription: string;
     readonly ogImage: string | null;
     readonly ogType: string;
+    /** Nodos JSON-LD (schema.org) ya resueltos por el backend. */
+    readonly jsonLd?: ReadonlyArray<Record<string, unknown>>;
 };
 
 type SeoHeadProps = {
@@ -89,6 +91,20 @@ export default function SeoHead({ title }: SeoHeadProps) {
                     {...headKey('seo-twitter-image')}
                 />
             ) : null}
+
+            {/* Datos estructurados JSON-LD: un <script> por nodo, con el mismo
+                head-key que el HTML inicial. Se escapa `<` para que el contenido
+                no pueda cerrar el <script> (equivalente a JSON_HEX_TAG en Blade). */}
+            {(seo.jsonLd ?? []).map((node, index) => (
+                <script
+                    key={`seo-jsonld-${index}`}
+                    type="application/ld+json"
+                    {...headKey(`seo-jsonld-${index}`)}
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(node).replace(/</g, '\\u003c'),
+                    }}
+                />
+            ))}
         </Head>
     );
 }

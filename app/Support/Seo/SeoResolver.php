@@ -35,6 +35,7 @@ class SeoResolver
             $path,
             (string) config('site.seo.title'),
             (string) config('site.seo.description'),
+            pageKey: $pageKey,
         );
     }
 
@@ -56,7 +57,15 @@ class SeoResolver
             ? $descriptionFallback
             : (string) config('site.seo.description');
 
-        return $this->build($record, $path, $title, $description);
+        return $this->build(
+            $record,
+            $path,
+            $title,
+            $description,
+            // Nombre "humano" del recurso (sin sufijo de marca) para headline/
+            // breadcrumb de los datos estructurados del detalle.
+            leafName: $titleFallback !== null && $titleFallback !== '' ? $titleFallback : null,
+        );
     }
 
     /**
@@ -87,21 +96,112 @@ class SeoResolver
         string $path,
         string $titleFallback,
         string $descriptionFallback,
+        ?string $pageKey = null,
+        ?string $leafName = null,
     ): SeoData {
         $title = $this->firstFilled($record?->title, $titleFallback);
         $description = $this->firstFilled($record?->description, $descriptionFallback);
+        $canonical = $this->resolveCanonical($record?->canonical_url, $path);
 
         return new SeoData(
             title: $title,
             description: $description,
-            canonical: $this->resolveCanonical($record?->canonical_url, $path),
+            canonical: $canonical,
             robots: $this->firstFilled($record?->robots, (string) config('site.seo.robots', 'index,follow')),
             // OG/Twitter: `og_*` del registro si existe; si no, el title/description
             // ya resueltos. og:url = canonical (lo emite el consumidor).
             ogTitle: $this->firstFilled($record?->og_title, $title),
             ogDescription: $this->firstFilled($record?->og_description, $description),
             ogImage: $this->resolveOgImage($record?->og_image),
+            structuredData: $this->structuredData($pageKey, $path, $canonical, $title, $description, $leafName),
         );
+    }
+
+    /**
+     * Datos estructurados JSON-LD de la página, según `page_key` (estáticas) o el
+     * prefijo del `path` (detalles con modelo). Solo se emiten en páginas públicas
+     * indexables; `forNonPublic` construye su `SeoData` sin pasar por aquí, así que
+     * admin/auth no emiten datos estructurados.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function structuredData(
+        ?string $pageKey,
+        string $path,
+        string $canonical,
+        string $title,
+        string $description,
+        ?string $leafName,
+    ): array {
+        $home = $this->absolute('');
+
+        return match (true) {
+            $pageKey === 'home' => [
+                StructuredData::organization(),
+                StructuredData::webSite(),
+            ],
+            $pageKey === 'contact' => [
+                StructuredData::contactPage($canonical, $title, $description),
+                StructuredData::breadcrumb([['Inicio', $home], ['Contacto', $canonical]]),
+            ],
+            $pageKey === 'legal-notice' => [
+                StructuredData::breadcrumb([['Inicio', $home], ['Aviso legal', $canonical]]),
+            ],
+            $pageKey === 'privacy' => [
+                StructuredData::breadcrumb([['Inicio', $home], ['Privacidad', $canonical]]),
+            ],
+            $pageKey === 'cookies' => [
+                StructuredData::breadcrumb([['Inicio', $home], ['Cookies', $canonical]]),
+            ],
+            // Detalles con modelo (forRecord): el tipo se infiere del prefijo del
+            // path. El resto de páginas estáticas (servicios/proyectos/blog listado,
+            // quiénes somos, metodología, reserva) no emiten datos estructurados.
+            $pageKey === null => $this->structuredForDetail($path, $canonical, $description, $leafName ?? $title, $home),
+            default => [],
+        };
+    }
+
+    /**
+     * Datos estructurados de las páginas de detalle (Article/Service/WebPage) más
+     * su BreadcrumbList. Proyectos quedan como WebPage (no CreativeWork/Product)
+     * para no inventar cliente, resultados, oferta ni precio.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function structuredForDetail(
+        string $path,
+        string $canonical,
+        string $description,
+        string $name,
+        string $home,
+    ): array {
+        return match (true) {
+            str_starts_with($path, '/blog/') => [
+                StructuredData::article($canonical, $name, $description),
+                StructuredData::breadcrumb([
+                    ['Inicio', $home],
+                    ['Blog', $this->absolute('blog')],
+                    [$name, $canonical],
+                ]),
+            ],
+            str_starts_with($path, '/servicios/') => [
+                StructuredData::service($canonical, $name, $description),
+                StructuredData::breadcrumb([
+                    ['Inicio', $home],
+                    ['Servicios', $this->absolute('servicios')],
+                    [$name, $canonical],
+                ]),
+            ],
+            str_starts_with($path, '/proyectos/') => [
+                StructuredData::webPage($canonical, $name, $description),
+                StructuredData::breadcrumb([
+                    ['Inicio', $home],
+                    ['Proyectos', $this->absolute('proyectos')],
+                    [$name, $canonical],
+                ]),
+            ],
+            default => [],
+        };
     }
 
     /**

@@ -6,9 +6,10 @@ namespace App\Support\Seo;
  * Payload SEO base que se sirve a las páginas públicas (HTML inicial vía
  * `app.blade.php` y prop Inertia `seo` para el componente cliente `SeoHead`).
  *
- * Cubre title, description, canonical (siempre absoluto), robots y los metadatos
- * sociales básicos (Open Graph / Twitter Cards). JSON-LD, hreflang y sitemap
- * quedan fuera por decisión cerrada.
+ * Cubre title, description, canonical (siempre absoluto), robots, los metadatos
+ * sociales básicos (Open Graph / Twitter Cards) y los datos estructurados JSON-LD
+ * (`structuredData`, lista de nodos schema.org). hreflang y sitemap quedan fuera
+ * por decisión cerrada.
  *
  * Open Graph / Twitter:
  *   - `ogUrl` es siempre el canonical resuelto.
@@ -29,6 +30,13 @@ final readonly class SeoData
         public string $ogDescription,
         public ?string $ogImage,
         public string $ogType = 'website',
+        /**
+         * Lista de nodos JSON-LD (schema.org), cada uno un array asociativo con
+         * su `@context`. Vacía cuando la página no emite datos estructurados.
+         *
+         * @var list<array<string, mixed>>
+         */
+        public array $structuredData = [],
     ) {}
 
     /**
@@ -40,7 +48,8 @@ final readonly class SeoData
      *     ogTitle: string,
      *     ogDescription: string,
      *     ogImage: string|null,
-     *     ogType: string
+     *     ogType: string,
+     *     jsonLd: list<array<string, mixed>>
      * }
      */
     public function toArray(): array
@@ -54,6 +63,7 @@ final readonly class SeoData
             'ogDescription' => $this->ogDescription,
             'ogImage' => $this->ogImage,
             'ogType' => $this->ogType,
+            'jsonLd' => $this->structuredData,
         ];
     }
 }

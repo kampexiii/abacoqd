@@ -65,6 +65,15 @@
                 @if(!empty($seo['ogImage']))
                     <meta name="twitter:image" content="{{ $seo['ogImage'] }}" data-inertia="seo-twitter-image">
                 @endif
+
+                {{-- Datos estructurados JSON-LD (schema.org). Un <script> por nodo,
+                    con data-inertia para que el head-manager cliente reconcilie con
+                    los que emite <SeoHead> al navegar. JSON_HEX_TAG escapa < y >
+                    (</>), de modo que el contenido no puede cerrar el
+                    <script> aunque un dato contuviera "</script>". --}}
+                @foreach(($seo['jsonLd'] ?? []) as $index => $node)
+                    <script type="application/ld+json" data-inertia="seo-jsonld-{{ $index }}">{!! json_encode($node, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+                @endforeach
             @endif
         </x-inertia::head>
     </head>
