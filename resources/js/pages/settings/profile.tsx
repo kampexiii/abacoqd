@@ -26,9 +26,9 @@ export default function Profile({
 
     return (
         <>
-            <Head title="Profile settings" />
+            <Head title="Perfil · AbacoQD" />
 
-            <h1 className="sr-only">Profile settings</h1>
+            <h1 className="sr-only">Perfil</h1>
 
             <div className="space-y-6">
                 <Heading

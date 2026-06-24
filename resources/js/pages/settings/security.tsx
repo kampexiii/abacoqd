@@ -23,9 +23,9 @@ export default function Security(props: Props) {
 
     return (
         <>
-            <Head title="Security settings" />
+            <Head title="Seguridad · AbacoQD" />
 
-            <h1 className="sr-only">Security settings</h1>
+            <h1 className="sr-only">Seguridad</h1>
 
             <div className="space-y-6">
                 <Heading

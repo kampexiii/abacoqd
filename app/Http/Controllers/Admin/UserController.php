@@ -15,8 +15,10 @@ use Inertia\Response;
 
 /**
  * CRUD admin de usuarios/roles (Fase 4). Acceso restringido a super_admin
- * (ver UserRequest::authorize()). No hay borrado de la última cuenta
- * super_admin ni autopromoción a super_admin desde el propio formulario.
+ * en todas las acciones (ver middleware `role:super_admin` en
+ * routes/web.php y UserRequest::authorize()). No hay borrado de la última
+ * cuenta super_admin ni autopromoción a super_admin desde el propio
+ * formulario.
  */
 class UserController extends Controller
 {

@@ -6,9 +6,9 @@ import { edit as editAppearance } from '@/routes/appearance';
 export default function Appearance() {
     return (
         <>
-            <Head title="Appearance settings" />
+            <Head title="Apariencia · AbacoQD" />
 
-            <h1 className="sr-only">Appearance settings</h1>
+            <h1 className="sr-only">Apariencia</h1>
 
             <div className="space-y-6">
                 <Heading
