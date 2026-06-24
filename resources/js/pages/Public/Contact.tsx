@@ -62,7 +62,7 @@ export default function Contact({
             <section className="bg-qd-white dark:bg-qd-ink">
                 <div
                     ref={ref}
-                    className="mx-auto grid max-w-[1240px] gap-10 px-5 py-14 sm:px-8 lg:grid-cols-[2fr_3fr]"
+                    className="mx-auto grid max-w-310 gap-10 px-5 py-14 sm:px-8 lg:grid-cols-[2fr_3fr]"
                 >
                     <div className="flex flex-col gap-8">
                         <div>

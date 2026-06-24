@@ -76,7 +76,7 @@ export default function Projects({ projects }: ProjectsProps) {
             />
 
             <section className="bg-qd-bg dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
+                <div className="mx-auto max-w-310 px-5 py-16 sm:px-8 sm:py-20">
                     {/* Bloque introductorio */}
                     <div className="mx-auto max-w-3xl text-center">
                         <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-qd-teal-2/25 bg-qd-teal-2/10 text-qd-teal-2 dark:border-qd-teal/30 dark:bg-qd-teal/10 dark:text-qd-teal">
@@ -216,7 +216,7 @@ export default function Projects({ projects }: ProjectsProps) {
 
             {/* CTA final */}
             <section className="bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
+                <div className="mx-auto max-w-310 px-5 py-16 sm:px-8 sm:py-20">
                     <div className="relative flex flex-col gap-8 overflow-hidden rounded-3xl border border-qd-white/10 bg-qd-white/5 p-8 sm:flex-row sm:items-center sm:justify-between sm:p-12">
                         <div
                             aria-hidden="true"

@@ -116,7 +116,7 @@ export default function Booking({
 
             {!confirmedBooking && (
                 <section className="bg-qd-white dark:bg-qd-ink">
-                    <div className="mx-auto max-w-[1240px] px-5 py-14 sm:px-8">
+                    <div className="mx-auto max-w-310 px-5 py-14 sm:px-8">
                         <h2 className="sr-only">{t('booking.stepsTitle')}</h2>
                         <ol className="grid gap-6 sm:grid-cols-3">
                             {STEP_KEYS.map((key, index) => (
@@ -141,7 +141,7 @@ export default function Booking({
             )}
 
             <section className="bg-qd-mist dark:bg-qd-surface">
-                <div className="mx-auto max-w-[1240px] px-5 py-14 sm:px-8">
+                <div className="mx-auto max-w-310 px-5 py-14 sm:px-8">
                     {confirmedBooking ? (
                         <div
                             role="status"
@@ -514,7 +514,7 @@ export default function Booking({
 
             {!confirmedBooking && days.length > 0 && (
                 <section className="bg-qd-white dark:bg-qd-ink">
-                    <div className="mx-auto max-w-[1240px] px-5 py-10 text-center sm:px-8">
+                    <div className="mx-auto max-w-310 px-5 py-10 text-center sm:px-8">
                         <p className="text-sm font-semibold text-qd-ink dark:text-qd-white">
                             {t('booking.alternative.title')}
                         </p>

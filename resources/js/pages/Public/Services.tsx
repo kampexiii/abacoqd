@@ -304,7 +304,7 @@ export default function Services({ services }: ServicesProps) {
             />
 
             <section id="servicios" className="bg-qd-white dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
+                <div className="mx-auto max-w-310 px-5 py-16 sm:px-8 sm:py-20">
                     <div className="grid gap-6 lg:grid-cols-3">
                         {services.map((service) => {
                             const serviceKey =
@@ -325,7 +325,7 @@ export default function Services({ services }: ServicesProps) {
                             return (
                                 <article
                                     key={service.id}
-                                    className="group flex min-h-[460px] flex-col rounded-2xl border border-qd-mist bg-qd-white p-6 shadow-[0_18px_60px_-42px_rgba(7,17,26,0.35)] transition duration-300 hover:-translate-y-1 hover:border-qd-teal-2/70 hover:shadow-[0_24px_70px_-42px_rgba(15,143,149,0.45)] dark:border-qd-white/10 dark:bg-qd-white/5 dark:hover:border-qd-teal/70"
+                                    className="group flex min-h-115 flex-col rounded-2xl border border-qd-mist bg-qd-white p-6 shadow-[0_18px_60px_-42px_rgba(7,17,26,0.35)] transition duration-300 hover:-translate-y-1 hover:border-qd-teal-2/70 hover:shadow-[0_24px_70px_-42px_rgba(15,143,149,0.45)] dark:border-qd-white/10 dark:bg-qd-white/5 dark:hover:border-qd-teal/70"
                                 >
                                     <div className="flex items-start justify-between gap-5">
                                         <span className="text-lg font-bold text-qd-teal-2 dark:text-qd-teal">
@@ -394,7 +394,7 @@ export default function Services({ services }: ServicesProps) {
             </section>
 
             <section className="bg-qd-bg dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 pb-16 sm:px-8 sm:pb-20">
+                <div className="mx-auto max-w-310 px-5 pb-16 sm:px-8 sm:pb-20">
                     <div className="rounded-2xl border border-qd-teal-2/10 bg-qd-mist/75 p-7 dark:border-qd-teal/15 dark:bg-qd-white/5">
                         <h2 className="text-2xl font-bold text-qd-ink dark:text-qd-white">
                             {t('servicesPage.choose.title')}
@@ -436,7 +436,7 @@ export default function Services({ services }: ServicesProps) {
             </section>
 
             <section className="bg-qd-bg pb-16 dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+                <div className="mx-auto max-w-310 px-5 sm:px-8">
                     <div className="relative overflow-hidden rounded-2xl bg-qd-ink p-7 text-qd-white sm:p-9">
                         <div
                             aria-hidden="true"

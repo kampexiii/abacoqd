@@ -258,7 +258,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
             />
 
             <section className="bg-qd-white dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-12 sm:px-8 sm:py-14">
+                <div className="mx-auto max-w-310 px-5 py-12 sm:px-8 sm:py-14">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                         <h2 className="text-2xl font-bold text-qd-ink dark:text-qd-white">
                             {keyFactsTitle}
@@ -306,7 +306,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
             </section>
 
             <section className="bg-qd-white dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 pb-14 sm:px-8 sm:pb-16">
+                <div className="mx-auto max-w-310 px-5 pb-14 sm:px-8 sm:pb-16">
                     <div className="grid overflow-hidden rounded-2xl border border-qd-ink/10 bg-qd-white shadow-[0_28px_80px_-54px_rgba(7,17,26,0.55)] md:grid-cols-2 lg:grid-cols-4 dark:border-qd-white/10 dark:bg-qd-surface">
                         {infoBlocks.map((block) => {
                             const Icon = block.icon;
@@ -336,7 +336,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
             </section>
 
             <section className="bg-qd-white dark:bg-qd-ink">
-                <div className="mx-auto grid max-w-[1240px] gap-14 px-5 py-14 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:py-16">
+                <div className="mx-auto grid max-w-310 gap-14 px-5 py-14 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:py-16">
                     <section aria-labelledby="project-how-title">
                         <h2
                             id="project-how-title"
@@ -423,7 +423,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
             </section>
 
             <section className="bg-[linear-gradient(90deg,#effaff_0%,#f8fdff_46%,#edf9fb_100%)] dark:bg-none dark:bg-qd-surface">
-                <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[0.75fr_1.25fr]">
+                <div className="mx-auto grid max-w-310 gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[0.75fr_1.25fr]">
                     <aside className="border-qd-ink/10 lg:border-r lg:pr-12 dark:border-qd-white/10">
                         <h2 className="text-base font-bold text-qd-ink dark:text-qd-white">
                             {mainPartner ? t('projectDetail.partners.partner') : t('projectDetail.partners.title')}
@@ -501,7 +501,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
             </section>
 
             <section id="relacionados" className="bg-qd-white dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-12 sm:px-8">
+                <div className="mx-auto max-w-310 px-5 py-12 sm:px-8">
                     <h2 className="text-2xl font-bold text-qd-ink dark:text-qd-white">
                         {t('projectDetail.related.title')}
                     </h2>
@@ -559,7 +559,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
             </section>
 
             <section className="bg-qd-white pb-14 dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 sm:px-8">
+                <div className="mx-auto max-w-310 px-5 sm:px-8">
                     <div className="flex flex-col gap-8 rounded-2xl border border-qd-white/10 bg-qd-ink p-8 text-qd-white shadow-[0_22px_80px_-46px_rgba(7,17,26,0.65)] sm:flex-row sm:items-center sm:justify-between sm:p-10">
                         <div className="flex items-start gap-5">
                             <span className="hidden size-12 shrink-0 items-center justify-center text-qd-teal sm:flex">

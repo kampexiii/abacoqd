@@ -174,7 +174,7 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
             />
 
             <section className="bg-qd-white dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1536px] px-5 py-12 sm:px-8 sm:py-16 xl:px-10">
+                <div className="mx-auto max-w-384 px-5 py-12 sm:px-8 sm:py-16 xl:px-10">
                     {/* Fila 1: Qué resolvemos (25%) · Cómo lo abordamos (25%) · Imagen (50%) */}
                     <div className="grid gap-8 lg:grid-cols-[1fr_1fr_2fr] lg:gap-0">
                     <section
@@ -309,7 +309,7 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
                             'radial-gradient(circle at 18% 18%, rgba(24,183,176,0.22), transparent 30%), radial-gradient(circle at 84% 10%, rgba(183,243,74,0.12), transparent 22%), repeating-linear-gradient(115deg, rgba(24,183,176,0.11) 0px, rgba(24,183,176,0.11) 1px, transparent 1px, transparent 42px)',
                     }}
                 />
-                <div className="relative mx-auto max-w-[1536px] px-5 py-14 sm:px-8 sm:py-16 xl:px-10">
+                <div className="relative mx-auto max-w-384 px-5 py-14 sm:px-8 sm:py-16 xl:px-10">
                     <div className="text-center">
                         <h2 className="text-2xl font-bold sm:text-3xl">
                             {t('serviceDetail.cta.title')}

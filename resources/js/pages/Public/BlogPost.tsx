@@ -106,7 +106,7 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
 
             {/* Cuerpo + sidebar */}
             <section className="bg-qd-bg dark:bg-qd-ink">
-                <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-14">
+                <div className="mx-auto grid max-w-310 gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-14">
                     <article className="min-w-0">
                         {/* Meta del post */}
                         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-qd-text-medium">

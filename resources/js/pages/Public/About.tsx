@@ -115,7 +115,7 @@ export default function About({ teamMembers }: AboutProps) {
 
             {/* 2-3. Quién es Abaco Developments + Qué es AbacoQD */}
             <section className="bg-qd-bg dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
+                <div className="mx-auto max-w-310 px-5 py-16 sm:px-8 sm:py-20">
                     <div
                         ref={identityRef}
                         className={cn(
@@ -163,7 +163,7 @@ export default function About({ teamMembers }: AboutProps) {
 
             {/* 4. Qué nos define */}
             <section className="bg-qd-white dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
+                <div className="mx-auto max-w-310 px-5 py-16 sm:px-8 sm:py-20">
                     <h2 className="text-2xl font-bold text-qd-ink sm:text-3xl dark:text-qd-white">
                         {t('aboutPage.values.title')}
                     </h2>
@@ -206,11 +206,11 @@ export default function About({ teamMembers }: AboutProps) {
 
             {/* 5. Equipo / plantilla futura */}
             <section className="bg-qd-bg dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
+                <div className="mx-auto max-w-310 px-5 py-16 sm:px-8 sm:py-20">
                     <div className="flex items-center justify-center gap-4">
                         <span
                             aria-hidden="true"
-                            className="h-px max-w-[160px] flex-1 bg-qd-mist dark:bg-white/10"
+                            className="h-px max-w-40 flex-1 bg-qd-mist dark:bg-white/10"
                         />
                         <span className="flex items-center gap-2 text-center text-xl font-bold text-qd-ink sm:text-2xl dark:text-qd-white">
                             <UsersRound
@@ -222,7 +222,7 @@ export default function About({ teamMembers }: AboutProps) {
                         </span>
                         <span
                             aria-hidden="true"
-                            className="h-px max-w-[160px] flex-1 bg-qd-mist dark:bg-white/10"
+                            className="h-px max-w-40 flex-1 bg-qd-mist dark:bg-white/10"
                         />
                     </div>
                     <p className="mx-auto mt-4 max-w-xl text-center text-sm leading-relaxed text-qd-text-high">
@@ -386,7 +386,7 @@ export default function About({ teamMembers }: AboutProps) {
 
             {/* 6. CTA final */}
             <section className="bg-qd-ink">
-                <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-5 py-16 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-20">
+                <div className="mx-auto flex max-w-310 flex-col gap-6 px-5 py-16 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-20">
                     <div>
                         <h2 className="text-2xl font-bold text-qd-white sm:text-3xl">
                             {t('aboutPage.cta.title')}

@@ -354,7 +354,7 @@ export default function Blog({
 
             {/* Buscador + filtros */}
             <section className="bg-qd-bg dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 pt-4 pb-8 sm:px-8">
+                <div className="mx-auto max-w-310 px-5 pt-4 pb-8 sm:px-8">
                     <form
                         method="GET"
                         action="/blog"
@@ -443,7 +443,7 @@ export default function Blog({
             {/* Post destacado fijo */}
             {featuredPost && (
                 <section className="bg-qd-bg dark:bg-qd-ink">
-                    <div className="mx-auto max-w-[1240px] px-5 pb-4 sm:px-8">
+                    <div className="mx-auto max-w-310 px-5 pb-4 sm:px-8">
                         {hasFilters && (
                             <p className="mb-3 text-xs font-bold tracking-[0.14em] text-qd-text-medium uppercase">
                                 {t('blogPage.featuredLabel')}
@@ -460,7 +460,7 @@ export default function Blog({
 
             {/* Grid paginado */}
             <section className="bg-qd-bg dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-10 sm:px-8 sm:py-12">
+                <div className="mx-auto max-w-310 px-5 py-10 sm:px-8 sm:py-12">
                     {hasFilters && featuredPost && (
                         <p className="mb-6 text-xs font-bold tracking-[0.14em] text-qd-text-medium uppercase">
                             {t('blogPage.resultsLabel')}
@@ -578,7 +578,7 @@ export default function Blog({
 
             {/* CTA final */}
             <section className="bg-qd-ink">
-                <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-5 py-16 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-20">
+                <div className="mx-auto flex max-w-310 flex-col gap-6 px-5 py-16 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-20">
                     <div>
                         <h2 className="text-2xl font-bold text-qd-white sm:text-3xl">
                             {t('blogPage.cta.title')}

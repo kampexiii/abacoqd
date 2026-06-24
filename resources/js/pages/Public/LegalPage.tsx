@@ -98,7 +98,7 @@ function LegalBlockView({ block }: { readonly block: LegalBlock }) {
 
     return (
         <div className="mt-4 overflow-x-auto">
-            <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+            <table className="w-full min-w-160 border-collapse text-left text-sm">
                 <thead>
                     <tr className="border-b border-qd-mist dark:border-white/10">
                         {block.headers.map((header) => (
@@ -161,7 +161,7 @@ export default function LegalPage({ kind }: { readonly kind: LegalPageKind }) {
             <section className="bg-qd-bg dark:bg-qd-ink">
                 <div
                     className={cn(
-                        'mx-auto grid max-w-[1240px] gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:gap-14',
+                        'mx-auto grid max-w-310 gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:gap-14',
                         showToc && 'lg:grid-cols-[minmax(0,1fr)_280px]',
                     )}
                 >

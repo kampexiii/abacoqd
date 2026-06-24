@@ -122,7 +122,7 @@ export default function Methodology() {
 
             {/* 2. Bloque principal de proceso — columna fija + cards grandes */}
             <section className="bg-qd-bg dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8 sm:py-20">
+                <div className="mx-auto max-w-310 px-5 py-16 sm:px-8 sm:py-20">
                     <div className="grid gap-12 lg:grid-cols-[2fr_3fr] lg:gap-10">
                         {/* Columna izquierda: statement, semi-sticky */}
                         <div className="lg:sticky lg:top-28 lg:self-start">
@@ -272,7 +272,7 @@ export default function Methodology() {
                                                     </div>
                                                 </div>
 
-                                                <div className="shrink-0 sm:max-w-[140px] sm:text-right">
+                                                <div className="shrink-0 sm:max-w-35 sm:text-right">
                                                     <p className="text-[10px] font-semibold tracking-[0.12em] text-qd-text-medium uppercase">
                                                         {t(
                                                             'home.methodology.deliverableLabel',
@@ -296,7 +296,7 @@ export default function Methodology() {
 
             {/* 3. Herramientas propias aplicadas a tu proyecto */}
             <section className="bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 text-qd-white sm:px-8 sm:py-20">
+                <div className="mx-auto max-w-310 px-5 py-16 text-qd-white sm:px-8 sm:py-20">
                     <p className="text-sm font-semibold tracking-wide text-qd-lime">
                         {t('methodologyPage.tools.eyebrow')}
                     </p>
@@ -331,7 +331,7 @@ export default function Methodology() {
 
             {/* 4. En qué se traduce para ti — fila plana, sin tarjeta */}
             <section className="bg-qd-bg dark:bg-qd-ink">
-                <div className="mx-auto max-w-[1240px] px-5 py-14 sm:px-8">
+                <div className="mx-auto max-w-310 px-5 py-14 sm:px-8">
                     <div className="grid gap-8 lg:grid-cols-[1fr_2fr] lg:items-center lg:gap-10">
                         <h2 className="text-2xl font-bold text-qd-ink sm:text-3xl dark:text-qd-white">
                             {t('methodologyPage.benefits.title')}
@@ -370,7 +370,7 @@ export default function Methodology() {
 
             {/* 5. CTA final — cierre de página, directamente sobre la banda oscura */}
             <section className="bg-qd-ink">
-                <div className="mx-auto flex max-w-[1240px] flex-col gap-6 px-5 py-16 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-20">
+                <div className="mx-auto flex max-w-310 flex-col gap-6 px-5 py-16 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-20">
                     <div>
                         <h2 className="text-2xl font-bold text-qd-white sm:text-3xl">
                             {t('methodologyPage.cta.title')}
