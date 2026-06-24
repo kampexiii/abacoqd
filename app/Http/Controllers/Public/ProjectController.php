@@ -108,7 +108,6 @@ class ProjectController extends Controller
             'partnerLogoDark' => $client?->logo_dark,
             'partnerLogoAlt' => $client?->logo_alt,
             'executorName' => $executor?->name,
-            'isFeatured' => $project->is_featured,
             'isHistorical' => (bool) ($settings['is_historical'] ?? false),
             'isApproved' => $project->permission_status === PermissionStatus::Approved,
             'permissionStatus' => $project->permission_status->value,

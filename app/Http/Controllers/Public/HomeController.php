@@ -6,7 +6,6 @@ use App\Enums\PermissionStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\Post;
-use App\Models\Project;
 use Illuminate\Database\Eloquent\Builder;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -16,26 +15,25 @@ class HomeController extends Controller
     /**
      * Render the public landing.
      *
-     * La sección Colaboraciones (noria) se alimenta desde BD: proyectos
-     * visibles en colaboraciones + en home, con su partner principal para el
-     * logo. El gating de publicación (aprobado / preview local) lo aplica
-     * `Project::scopePubliclyListable`. Si no hay datos, la noria cae a su
-     * fallback estático sin romperse.
+     * La sección Colaboraciones (noria) se alimenta de `partners` marcados como
+     * activos y "Mostrar en noria" (`show_in_collaborations`), con permiso
+     * publicable (aprobado o preview local vía `Partner::scopePubliclyListable`)
+     * y con logo disponible. La pertenencia de un partner a un proyecto se
+     * modela con `partner_project`; no decide la noria ni se usan flags de
+     * Project. Si no hay datos, la noria cae a su fallback estático sin romperse.
      *
      * La sección Blog usa el post destacado (`Post::featured()`) como card
      * grande y los 2 últimos publicados como cards pequeñas, excluyendo el
-     * destacado si coincide. Sin datos, `BlogSection` muestra un estado
-     * controlado (no inventa posts).
+     * destacado si coincide (sin flag `show_on_home`). Sin datos, `BlogSection`
+     * muestra un estado controlado (no inventa posts).
      */
     public function index(): Response
     {
-        $projects = Project::query()
+        $collaborationPartners = Partner::query()
             ->active()
-            ->published()
             ->collaborations()
-            ->home()
             ->publiclyListable()
-            ->with(['clientPartner', 'partners'])
+            ->whereNotNull('logo')
             ->ordered()
             ->get();
 
@@ -61,39 +59,21 @@ class HomeController extends Controller
             'latestPosts' => $latestPosts
                 ->map(fn (Post $post): array => $this->postSummary($post))
                 ->values(),
-            'collaborations' => $projects
-                ->map(function (Project $project): array {
-                    $partner = $project->clientPartner
-                        ?? $project->partners->firstWhere('pivot.role', 'client')
-                        ?? $project->partners->first(fn ($item): bool => $item->logo !== null)
-                        ?? $project->partners->first();
-                    $settings = is_array($project->settings) ? $project->settings : [];
-                    $slug = is_array($project->slug) ? ($project->slug['es'] ?? null) : null;
-                    $fallbackName = $project->title['es'] ?? 'Proyecto';
-                    $name = $project->client_name ?? $fallbackName;
-                    $logoLight = null;
-                    $logoDark = null;
-                    $logoAlt = null;
-
-                    if ($partner instanceof Partner) {
-                        $name = $partner->name;
-                        $logoLight = $partner->logo;
-                        $logoDark = $partner->logo_dark;
-                        $logoAlt = $partner->logo_alt;
-                    }
+            'collaborations' => $collaborationPartners
+                ->map(function (Partner $partner): array {
+                    $settings = is_array($partner->settings) ? $partner->settings : [];
 
                     return [
-                        'slug' => $slug,
-                        'name' => $name,
-                        'logoLight' => $logoLight,
-                        'logoDark' => $logoDark,
-                        'logoAlt' => $logoAlt,
-                        'href' => $slug ? "/proyectos/{$slug}" : '/proyectos',
+                        'slug' => $partner->slug,
+                        'name' => $partner->name,
+                        'logoLight' => $partner->logo,
+                        'logoDark' => $partner->logo_dark,
+                        'logoAlt' => $partner->logo_alt,
+                        'href' => '/proyectos',
                         'isHistorical' => (bool) ($settings['is_historical'] ?? false),
-                        'isApproved' => $project->permission_status === PermissionStatus::Approved,
+                        'isApproved' => $partner->permission_status === PermissionStatus::Approved,
                     ];
                 })
-                ->filter(fn (array $item): bool => $item['slug'] !== null)
                 ->values(),
         ]);
     }

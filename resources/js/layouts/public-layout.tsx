@@ -28,7 +28,7 @@ export default function PublicLayout({
     const { t } = useLanguage();
 
     return (
-        <div className="qd-public-shell relative isolate min-h-svh overflow-x-clip bg-qd-bg font-sans text-qd-ink dark:bg-qd-ink dark:text-qd-white">
+        <div className="qd-public-shell relative isolate flex min-h-svh flex-col overflow-x-clip bg-qd-bg font-sans text-qd-ink dark:bg-qd-ink dark:text-qd-white">
             <a href="#contenido" className="qd-skip-link">
                 {t('layout.skipToContent')}
             </a>
@@ -37,7 +37,9 @@ export default function PublicLayout({
 
             <FloatingHeader />
 
-            <main id="contenido">{children}</main>
+            <main id="contenido" className="flex-1">
+                {children}
+            </main>
 
             <SiteFooter />
 

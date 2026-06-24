@@ -35,7 +35,6 @@ type PublicProject = {
     readonly partnerLogoDark: string | null;
     readonly partnerLogoAlt: string | null;
     readonly executorName: string | null;
-    readonly isFeatured: boolean;
     readonly isHistorical: boolean;
     readonly isApproved: boolean;
 };
@@ -81,7 +80,11 @@ export default function Projects({ projects }: ProjectsProps) {
                     {/* Bloque introductorio */}
                     <div className="mx-auto max-w-3xl text-center">
                         <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-qd-teal-2/25 bg-qd-teal-2/10 text-qd-teal-2 dark:border-qd-teal/30 dark:bg-qd-teal/10 dark:text-qd-teal">
-                            <Boxes aria-hidden="true" size={24} strokeWidth={1.7} />
+                            <Boxes
+                                aria-hidden="true"
+                                size={24}
+                                strokeWidth={1.7}
+                            />
                         </span>
                         <h2 className="mt-6 text-xl font-bold text-qd-ink sm:text-2xl dark:text-qd-white">
                             {t('projectsPage.intro.title')}
@@ -98,13 +101,18 @@ export default function Projects({ projects }: ProjectsProps) {
                         <>
                             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                                 {items.map((project) => (
-                                    <ProjectCard key={project.id} project={project} />
+                                    <ProjectCard
+                                        key={project.id}
+                                        project={project}
+                                    />
                                 ))}
                             </div>
 
                             {projects.last_page > 1 && (
                                 <nav
-                                    aria-label={t('projectsPage.pagination.label')}
+                                    aria-label={t(
+                                        'projectsPage.pagination.label',
+                                    )}
                                     className="mt-12 flex flex-wrap items-center justify-center gap-2"
                                 >
                                     {projects.links.map((link, index) => {
@@ -112,16 +120,26 @@ export default function Projects({ projects }: ProjectsProps) {
                                         const isNext =
                                             index === projects.links.length - 1;
                                         const content = isPrev ? (
-                                            <ArrowLeft aria-hidden="true" size={16} />
+                                            <ArrowLeft
+                                                aria-hidden="true"
+                                                size={16}
+                                            />
                                         ) : isNext ? (
-                                            <ArrowRight aria-hidden="true" size={16} />
+                                            <ArrowRight
+                                                aria-hidden="true"
+                                                size={16}
+                                            />
                                         ) : (
                                             link.label
                                         );
                                         const label = isPrev
-                                            ? t('projectsPage.pagination.previous')
+                                            ? t(
+                                                  'projectsPage.pagination.previous',
+                                              )
                                             : isNext
-                                              ? t('projectsPage.pagination.next')
+                                              ? t(
+                                                    'projectsPage.pagination.next',
+                                                )
                                               : `${t('projectsPage.pagination.page')} ${link.label}`;
 
                                         if (!link.url) {
@@ -142,7 +160,9 @@ export default function Projects({ projects }: ProjectsProps) {
                                                 href={link.url}
                                                 aria-label={label}
                                                 aria-current={
-                                                    link.active ? 'page' : undefined
+                                                    link.active
+                                                        ? 'page'
+                                                        : undefined
                                                 }
                                                 className={cn(
                                                     'inline-flex h-10 min-w-10 items-center justify-center rounded-xl border px-3 text-sm font-semibold transition',
@@ -161,7 +181,11 @@ export default function Projects({ projects }: ProjectsProps) {
                     ) : (
                         <div className="mx-auto mt-12 max-w-xl rounded-3xl border border-qd-mist bg-qd-white p-8 text-center sm:p-10 dark:border-qd-white/10 dark:bg-qd-white/5">
                             <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-qd-teal-2/25 bg-qd-teal-2/10 text-qd-teal-2 dark:border-qd-teal/30 dark:bg-qd-teal/10 dark:text-qd-teal">
-                                <Boxes aria-hidden="true" size={24} strokeWidth={1.7} />
+                                <Boxes
+                                    aria-hidden="true"
+                                    size={24}
+                                    strokeWidth={1.7}
+                                />
                             </span>
                             <h3 className="mt-5 text-xl font-bold text-qd-ink dark:text-qd-white">
                                 {t('projectsPage.empty.title')}
@@ -245,11 +269,16 @@ export default function Projects({ projects }: ProjectsProps) {
         const slug = localizedText(project.slug, locale);
         const cover = project.coverImage ?? project.thumbnailImage;
         const technologies = project.technologies.filter(
-            (tech): tech is string => typeof tech === 'string' && tech.length > 0,
+            (tech): tech is string =>
+                typeof tech === 'string' && tech.length > 0,
         );
-        const partnerLabel = project.partnerName ?? project.clientName ?? t('projectsPage.card.internalProject');
+        const partnerLabel =
+            project.partnerName ??
+            project.clientName ??
+            t('projectsPage.card.internalProject');
         const consultUrl = contactShow.url({ query: { proyecto: slug } });
-        const detailUrl = project.detailUrl ?? (slug ? `/proyectos/${slug}` : null);
+        const detailUrl =
+            project.detailUrl ?? (slug ? `/proyectos/${slug}` : null);
         const cardUrl = detailUrl ?? consultUrl;
         const statusBadges = [
             project.isHistorical ? t('projectsPage.badge.historical') : null,
@@ -267,7 +296,10 @@ export default function Projects({ projects }: ProjectsProps) {
                             {statusBadges.join(' · ')}
                         </span>
                     )}
-                    <a href={cardUrl} aria-label={`${t('projectsPage.card.viewProject')}: ${title}`}>
+                    <a
+                        href={cardUrl}
+                        aria-label={`${t('projectsPage.card.viewProject')}: ${title}`}
+                    >
                         {cover ? (
                             <img
                                 src={cover}
@@ -282,7 +314,8 @@ export default function Projects({ projects }: ProjectsProps) {
                                 style={{
                                     backgroundImage:
                                         'radial-gradient(circle at 30% 25%, rgba(24,183,176,0.22), transparent 45%), linear-gradient(rgba(24,183,176,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(24,183,176,0.16) 1px, transparent 1px)',
-                                    backgroundSize: 'auto, 26px 26px, 26px 26px',
+                                    backgroundSize:
+                                        'auto, 26px 26px, 26px 26px',
                                 }}
                             >
                                 <img
@@ -304,7 +337,8 @@ export default function Projects({ projects }: ProjectsProps) {
                                     alt={project.partnerLogoAlt ?? partnerLabel}
                                     className={cn(
                                         'max-h-8 w-auto max-w-28 object-contain',
-                                        project.partnerLogoDark && 'dark:hidden',
+                                        project.partnerLogoDark &&
+                                            'dark:hidden',
                                         !project.partnerLogoDark &&
                                             'dark:brightness-0 dark:invert',
                                     )}
@@ -314,7 +348,10 @@ export default function Projects({ projects }: ProjectsProps) {
                                 {project.partnerLogoDark && (
                                     <img
                                         src={project.partnerLogoDark}
-                                        alt={project.partnerLogoAlt ?? partnerLabel}
+                                        alt={
+                                            project.partnerLogoAlt ??
+                                            partnerLabel
+                                        }
                                         className="hidden max-h-8 w-auto max-w-28 object-contain dark:block"
                                         loading="lazy"
                                         decoding="async"
@@ -370,7 +407,10 @@ export default function Projects({ projects }: ProjectsProps) {
                         <span className="flex items-center gap-2 text-xs text-qd-text-medium">
                             {project.year && (
                                 <span className="inline-flex items-center gap-1">
-                                    <CalendarDays aria-hidden="true" size={13} />
+                                    <CalendarDays
+                                        aria-hidden="true"
+                                        size={13}
+                                    />
                                     {project.year}
                                 </span>
                             )}
