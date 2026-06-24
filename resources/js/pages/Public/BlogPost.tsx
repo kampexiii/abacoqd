@@ -1,4 +1,3 @@
-import { Head } from '@inertiajs/react';
 import {
     ArrowRight,
     Calendar,
@@ -15,6 +14,7 @@ import {
 import { useState } from 'react';
 
 import PublicPageHero from '@/components/public/PublicPageHero';
+import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
 import type {
@@ -89,7 +89,7 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
 
     return (
         <PublicLayout>
-            <Head title={`${title} · AbacoQD`} />
+            <SeoHead />
 
             {/* Hero interno común, igual que el resto de vistas internas. */}
             <PublicPageHero

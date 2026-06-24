@@ -38,8 +38,17 @@
 
         @viteReactRefresh
         @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
+        @php($seo = $page['props']['seo'] ?? null)
+        {{-- SEO base servido en el HTML inicial (no depende solo del <Head> de
+            React). El atributo data-inertia permite que el head-manager cliente
+            reconcilie estos tags con los que emite <SeoHead> sin duplicarlos. --}}
         <x-inertia::head>
-            <title>{{ config('app.name', 'AbacoQD') }}</title>
+            <title data-inertia="">{{ $seo['title'] ?? config('app.name', 'AbacoQD') }}</title>
+            @if($seo)
+                <meta name="description" content="{{ $seo['description'] }}" data-inertia="seo-description">
+                <link rel="canonical" href="{{ $seo['canonical'] }}" data-inertia="seo-canonical">
+                <meta name="robots" content="{{ $seo['robots'] }}" data-inertia="seo-robots">
+            @endif
         </x-inertia::head>
     </head>
     <body class="font-sans antialiased">

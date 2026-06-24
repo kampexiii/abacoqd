@@ -1,7 +1,7 @@
-import { Head } from '@inertiajs/react';
 import { ArrowRight, ShieldCheck } from 'lucide-react';
 
 import PublicPageHero from '@/components/public/PublicPageHero';
+import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
@@ -146,12 +146,7 @@ export default function LegalPage({ kind }: { readonly kind: LegalPageKind }) {
 
     return (
         <PublicLayout>
-            <Head title={t(`${base}.metaTitle`)}>
-                <meta
-                    name="description"
-                    content={t(`${base}.metaDescription`)}
-                />
-            </Head>
+            <SeoHead />
 
             <PublicPageHero
                 eyebrow={t(`${base}.eyebrow`)}

@@ -1,4 +1,4 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form } from '@inertiajs/react';
 import {
     Mail,
     MapPin,
@@ -14,6 +14,7 @@ import FormField, {
 } from '@/components/public/FormField';
 import HoneypotField from '@/components/public/HoneypotField';
 import PublicPageHero from '@/components/public/PublicPageHero';
+import SeoHead from '@/components/seo/SeoHead';
 import { useInView } from '@/hooks/use-in-view';
 import { useLanguage } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
@@ -46,7 +47,7 @@ export default function Contact({
 
     return (
         <PublicLayout>
-            <Head title="Contacto · AbacoQD" />
+            <SeoHead />
 
             <PublicPageHero
                 eyebrow={t('contact.eyebrow')}

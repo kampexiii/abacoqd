@@ -1,4 +1,3 @@
-import { Head } from '@inertiajs/react';
 import {
     ArrowRight,
     Bot,
@@ -19,6 +18,7 @@ import {
 import type { LucideIcon } from 'lucide-react';
 
 import PublicPageHero from '@/components/public/PublicPageHero';
+import SeoHead from '@/components/seo/SeoHead';
 import { useInView } from '@/hooks/use-in-view';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
@@ -101,7 +101,7 @@ export default function About({ teamMembers }: AboutProps) {
 
     return (
         <PublicLayout>
-            <Head title={t('aboutPage.metaTitle')} />
+            <SeoHead />
 
             <PublicPageHero
                 eyebrow={t('aboutPage.hero.eyebrow')}

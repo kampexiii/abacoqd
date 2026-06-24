@@ -9,6 +9,12 @@ class SeoMetadataSeeder extends Seeder
 {
     /**
      * Seed basic static-page SEO metadata for ES/EN.
+     *
+     * Decisión cerrada del primer bloque de SEO: por ahora solo ES es indexable
+     * y no existen rutas `/en` reales. Se conservan los registros EN (datos
+     * traducibles: title/description) pero NO se genera canonical EN: emitir
+     * `https://abacoqd.com/en/...` apuntaría a URLs inexistentes. El canonical EN
+     * se rellenará cuando se publiquen las rutas EN.
      */
     public function run(): void
     {
@@ -61,12 +67,18 @@ class SeoMetadataSeeder extends Seeder
 
         foreach ($pages as $pageKey => $locales) {
             foreach ($locales as $locale => [$path, $title, $description]) {
+                // Solo ES emite canonical real. EN queda sin canonical hasta que
+                // existan rutas /en (no se sirve una URL inexistente).
+                $canonical = $locale === 'es'
+                    ? 'https://abacoqd.com/'.$path
+                    : null;
+
                 SeoMetadata::updateOrCreate(
                     ['page_key' => $pageKey, 'locale' => $locale],
                     [
                         'title' => $title,
                         'description' => $description,
-                        'canonical_url' => 'https://abacoqd.com/'.($path === '' ? '' : $path),
+                        'canonical_url' => $canonical,
                         'robots' => 'index,follow',
                         'og_title' => $title,
                         'og_description' => $description,

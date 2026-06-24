@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Support\Seo\SeoResolver;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -51,6 +52,7 @@ class ServiceController extends Controller
             ->published()
             ->active()
             ->detailEnabled()
+            ->with('seoMetadata')
             ->where(function ($query) use ($slug): void {
                 $query
                     ->where('slug_es', $slug)
@@ -63,6 +65,12 @@ class ServiceController extends Controller
                 ...$this->serviceSummary($service),
                 'description' => $service->description,
             ],
+            'seo' => app(SeoResolver::class)->forRecord(
+                $service->seoMetadataFor('es'),
+                '/servicios/'.($service->slug_es ?? $slug),
+                data_get($service->title, 'es'),
+                data_get($service->summary, 'es'),
+            )->toArray(),
         ]);
     }
 

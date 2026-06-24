@@ -55,4 +55,23 @@ return [
         'previous' => 'https://abacodev.com/',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | SEO base (fallback)
+    |--------------------------------------------------------------------------
+    |
+    | Valores por defecto del SEO servido en páginas públicas cuando no hay un
+    | registro `seo_metadata` para la página/modelo. La fuente técnica es
+    | `seo_metadata` (por `page_key` o relación `seoable`); estos solo cubren el
+    | hueco. Marca pública visible: "Abaco Developments" (ver CLAUDE.md). Por
+    | ahora solo ES es indexable y `robots` queda en index,follow.
+    |
+    */
+    'seo' => [
+        'brand' => 'Abaco Developments',
+        'title' => 'Abaco Developments — Desarrollo digital a medida potenciado por IA',
+        'description' => 'Desarrollos web y aplicaciones a medida, rápidos y potenciados por IA, con procesos optimizados y herramientas internas propias.',
+        'robots' => 'index,follow',
+    ],
+
 ];

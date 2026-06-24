@@ -6,6 +6,7 @@ use App\Enums\PermissionStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\Project;
+use App\Support\Seo\SeoResolver;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -57,7 +58,7 @@ class ProjectController extends Controller
             ->published()
             ->projects()
             ->publiclyListable()
-            ->with(['clientPartner', 'partners'])
+            ->with(['clientPartner', 'partners', 'seoMetadata'])
             ->where(function ($query) use ($slug): void {
                 $query->where('slug_es', $slug)->orWhere('slug_en', $slug);
             })
@@ -79,6 +80,12 @@ class ProjectController extends Controller
             'related' => $related
                 ->map(fn (Project $item): array => $this->projectSummary($item))
                 ->values(),
+            'seo' => app(SeoResolver::class)->forRecord(
+                $project->seoMetadataFor('es'),
+                '/proyectos/'.($project->slug_es ?? $slug),
+                data_get($project->title, 'es'),
+                data_get($project->summary, 'es'),
+            )->toArray(),
         ]);
     }
 

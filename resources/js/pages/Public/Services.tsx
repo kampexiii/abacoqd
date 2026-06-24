@@ -1,4 +1,3 @@
-import { Head } from '@inertiajs/react';
 import {
     ArrowRight,
     BarChart2,
@@ -14,6 +13,7 @@ import {
 import type { LucideIcon } from 'lucide-react';
 
 import PublicPageHero from '@/components/public/PublicPageHero';
+import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
@@ -291,7 +291,7 @@ export default function Services({ services }: ServicesProps) {
 
     return (
         <PublicLayout>
-            <Head title={t('servicesPage.metaTitle')} />
+            <SeoHead />
 
             <PublicPageHero
                 eyebrow={t('servicesPage.hero.eyebrow')}

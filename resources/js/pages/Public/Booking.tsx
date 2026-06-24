@@ -1,4 +1,4 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form } from '@inertiajs/react';
 import {
     ArrowRight,
     CalendarDays,
@@ -15,6 +15,7 @@ import FormField, {
 } from '@/components/public/FormField';
 import HoneypotField from '@/components/public/HoneypotField';
 import PublicPageHero from '@/components/public/PublicPageHero';
+import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
@@ -101,7 +102,7 @@ export default function Booking({
 
     return (
         <PublicLayout>
-            <Head title="Reserva · AbacoQD" />
+            <SeoHead />
 
             <PublicPageHero
                 eyebrow={t('booking.eyebrow')}

@@ -1,4 +1,3 @@
-import { Head } from '@inertiajs/react';
 import {
     ArrowRight,
     CalendarDays,
@@ -15,6 +14,7 @@ import {
 import type { LucideIcon } from 'lucide-react';
 
 import PublicPageHero from '@/components/public/PublicPageHero';
+import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
@@ -141,7 +141,7 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
 
     return (
         <PublicLayout>
-            <Head title={`${title} · AbacoQD`} />
+            <SeoHead />
 
             <PublicPageHero
                 eyebrow={t('serviceDetail.hero.eyebrow')}

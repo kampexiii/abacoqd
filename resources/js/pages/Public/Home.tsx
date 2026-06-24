@@ -1,5 +1,3 @@
-import { Head } from '@inertiajs/react';
-
 import AbacoHero from '@/components/AbacoHero';
 import BlogSection from '@/components/sections/BlogSection';
 import CollaborationsSection from '@/components/sections/CollaborationsSection';
@@ -7,6 +5,7 @@ import type { CollaborationItem } from '@/components/sections/CollaborationsSect
 import FinalCtaSection from '@/components/sections/FinalCtaSection';
 import MethodologySection from '@/components/sections/MethodologySection';
 import ServicesSection from '@/components/sections/ServicesSection';
+import SeoHead from '@/components/seo/SeoHead';
 import PublicLayout from '@/layouts/public-layout';
 import type { BlogPostSummary } from '@/lib/blog';
 
@@ -34,7 +33,7 @@ export default function Home({
 }: HomeProps) {
     return (
         <PublicLayout waveHiddenUntilElementId="hero">
-            <Head title="Inicio · AbacoQD" />
+            <SeoHead />
             <AbacoHero />
             <MethodologySection />
             <ServicesSection />

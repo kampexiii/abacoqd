@@ -1,4 +1,3 @@
-import { Head } from '@inertiajs/react';
 import {
     ArrowLeft,
     ArrowRight,
@@ -15,6 +14,7 @@ import {
 } from 'lucide-react';
 
 import PublicPageHero from '@/components/public/PublicPageHero';
+import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
@@ -225,7 +225,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
 
     return (
         <PublicLayout>
-            <Head title={`${title} · AbacoQD`} />
+            <SeoHead />
 
             <PublicPageHero
                 eyebrow={t('projectDetail.hero.eyebrow')}

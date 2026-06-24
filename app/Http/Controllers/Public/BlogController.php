@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\Tag;
+use App\Support\Seo\SeoResolver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -80,7 +81,7 @@ class BlogController extends Controller
     {
         $post = Post::query()
             ->published()
-            ->with(['category', 'tags'])
+            ->with(['category', 'tags', 'seoMetadata'])
             ->where(function (Builder $query) use ($slug): void {
                 $query->where('slug_es', $slug)->orWhere('slug_en', $slug);
             })
@@ -118,6 +119,12 @@ class BlogController extends Controller
             'related' => $related
                 ->map(fn (Post $item): array => $this->postSummary($item))
                 ->values(),
+            'seo' => app(SeoResolver::class)->forRecord(
+                $post->seoMetadataFor('es'),
+                '/blog/'.($post->slug_es ?? $slug),
+                data_get($post->title, 'es'),
+                data_get($post->excerpt, 'es'),
+            )->toArray(),
         ]);
     }
 

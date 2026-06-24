@@ -1,4 +1,3 @@
-import { Head } from '@inertiajs/react';
 import {
     ArrowLeft,
     ArrowRight,
@@ -10,6 +9,7 @@ import {
 } from 'lucide-react';
 
 import PublicPageHero from '@/components/public/PublicPageHero';
+import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
 import { cn } from '@/lib/utils';
@@ -63,7 +63,7 @@ export default function Projects({ projects }: ProjectsProps) {
 
     return (
         <PublicLayout>
-            <Head title={t('projectsPage.metaTitle')} />
+            <SeoHead />
 
             <PublicPageHero
                 eyebrow={t('projectsPage.hero.eyebrow')}
