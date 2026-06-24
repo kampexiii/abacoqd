@@ -145,33 +145,37 @@ Route::middleware(['auth', 'admin'])
 
         Route::redirect('booking', '/admin/booking/calendar');
 
-        Route::get('booking/calendar', [AdminAppointmentCalendarController::class, 'index'])->name('booking.calendar.index');
-        Route::post('booking/calendar/generate', [AdminAppointmentCalendarController::class, 'generate'])->name('booking.calendar.generate');
-        Route::post('booking/calendar/block', [AdminAppointmentCalendarController::class, 'block'])->name('booking.calendar.block');
+        // Reservas/agenda contienen PII y disponibilidad operativa: solo
+        // super_admin/admin, igual que contacts/users/settings más abajo.
+        Route::middleware('role:super_admin,admin')->group(function () {
+            Route::get('booking/calendar', [AdminAppointmentCalendarController::class, 'index'])->name('booking.calendar.index');
+            Route::post('booking/calendar/generate', [AdminAppointmentCalendarController::class, 'generate'])->name('booking.calendar.generate');
+            Route::post('booking/calendar/block', [AdminAppointmentCalendarController::class, 'block'])->name('booking.calendar.block');
 
-        Route::get('booking/days', [AdminAppointmentDayController::class, 'index'])->name('booking.days.index');
-        Route::get('booking/days/create', [AdminAppointmentDayController::class, 'create'])->name('booking.days.create');
-        Route::post('booking/days', [AdminAppointmentDayController::class, 'store'])->name('booking.days.store');
-        Route::get('booking/days/{day}/edit', [AdminAppointmentDayController::class, 'edit'])->name('booking.days.edit');
-        Route::match(['put', 'patch'], 'booking/days/{day}', [AdminAppointmentDayController::class, 'update'])->name('booking.days.update');
-        Route::delete('booking/days/{day}', [AdminAppointmentDayController::class, 'destroy'])->name('booking.days.destroy');
-        Route::patch('booking/days/{day}/toggle-available', [AdminAppointmentDayController::class, 'toggleAvailable'])->name('booking.days.toggle-available');
-        Route::patch('booking/days/{day}/toggle-blocked', [AdminAppointmentDayController::class, 'toggleBlocked'])->name('booking.days.toggle-blocked');
+            Route::get('booking/days', [AdminAppointmentDayController::class, 'index'])->name('booking.days.index');
+            Route::get('booking/days/create', [AdminAppointmentDayController::class, 'create'])->name('booking.days.create');
+            Route::post('booking/days', [AdminAppointmentDayController::class, 'store'])->name('booking.days.store');
+            Route::get('booking/days/{day}/edit', [AdminAppointmentDayController::class, 'edit'])->name('booking.days.edit');
+            Route::match(['put', 'patch'], 'booking/days/{day}', [AdminAppointmentDayController::class, 'update'])->name('booking.days.update');
+            Route::delete('booking/days/{day}', [AdminAppointmentDayController::class, 'destroy'])->name('booking.days.destroy');
+            Route::patch('booking/days/{day}/toggle-available', [AdminAppointmentDayController::class, 'toggleAvailable'])->name('booking.days.toggle-available');
+            Route::patch('booking/days/{day}/toggle-blocked', [AdminAppointmentDayController::class, 'toggleBlocked'])->name('booking.days.toggle-blocked');
 
-        Route::get('booking/slots', [AdminAppointmentSlotController::class, 'index'])->name('booking.slots.index');
-        Route::get('booking/slots/create', [AdminAppointmentSlotController::class, 'create'])->name('booking.slots.create');
-        Route::post('booking/slots', [AdminAppointmentSlotController::class, 'store'])->name('booking.slots.store');
-        Route::get('booking/slots/{slot}/edit', [AdminAppointmentSlotController::class, 'edit'])->name('booking.slots.edit');
-        Route::match(['put', 'patch'], 'booking/slots/{slot}', [AdminAppointmentSlotController::class, 'update'])->name('booking.slots.update');
-        Route::delete('booking/slots/{slot}', [AdminAppointmentSlotController::class, 'destroy'])->name('booking.slots.destroy');
-        Route::patch('booking/slots/{slot}/toggle-blocked', [AdminAppointmentSlotController::class, 'toggleBlocked'])->name('booking.slots.toggle-blocked');
+            Route::get('booking/slots', [AdminAppointmentSlotController::class, 'index'])->name('booking.slots.index');
+            Route::get('booking/slots/create', [AdminAppointmentSlotController::class, 'create'])->name('booking.slots.create');
+            Route::post('booking/slots', [AdminAppointmentSlotController::class, 'store'])->name('booking.slots.store');
+            Route::get('booking/slots/{slot}/edit', [AdminAppointmentSlotController::class, 'edit'])->name('booking.slots.edit');
+            Route::match(['put', 'patch'], 'booking/slots/{slot}', [AdminAppointmentSlotController::class, 'update'])->name('booking.slots.update');
+            Route::delete('booking/slots/{slot}', [AdminAppointmentSlotController::class, 'destroy'])->name('booking.slots.destroy');
+            Route::patch('booking/slots/{slot}/toggle-blocked', [AdminAppointmentSlotController::class, 'toggleBlocked'])->name('booking.slots.toggle-blocked');
 
-        Route::get('booking/bookings', [AdminAppointmentBookingController::class, 'index'])->name('booking.bookings.index');
-        Route::get('booking/bookings/{booking}', [AdminAppointmentBookingController::class, 'show'])->name('booking.bookings.show');
-        Route::match(['put', 'patch'], 'booking/bookings/{booking}', [AdminAppointmentBookingController::class, 'update'])->name('booking.bookings.update');
+            Route::get('booking/bookings', [AdminAppointmentBookingController::class, 'index'])->name('booking.bookings.index');
+            Route::get('booking/bookings/{booking}', [AdminAppointmentBookingController::class, 'show'])->name('booking.bookings.show');
+            Route::match(['put', 'patch'], 'booking/bookings/{booking}', [AdminAppointmentBookingController::class, 'update'])->name('booking.bookings.update');
 
-        Route::get('booking/settings', [AdminBookingSettingController::class, 'edit'])->name('booking.settings.edit');
-        Route::match(['put', 'patch'], 'booking/settings', [AdminBookingSettingController::class, 'update'])->name('booking.settings.update');
+            Route::get('booking/settings', [AdminBookingSettingController::class, 'edit'])->name('booking.settings.edit');
+            Route::match(['put', 'patch'], 'booking/settings', [AdminBookingSettingController::class, 'update'])->name('booking.settings.update');
+        });
 
         Route::get('faqs', [AdminFaqController::class, 'index'])->name('faqs.index');
         Route::get('faqs/create', [AdminFaqController::class, 'create'])->name('faqs.create');
@@ -183,22 +187,30 @@ Route::middleware(['auth', 'admin'])
         Route::patch('faqs/{faq}/toggle-chatbot', [AdminFaqController::class, 'toggleChatbot'])->name('faqs.toggle-chatbot');
         Route::patch('faqs/{faq}/toggle-page', [AdminFaqController::class, 'togglePage'])->name('faqs.toggle-page');
 
-        Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
-        Route::get('users/create', [AdminUserController::class, 'create'])->name('users.create');
-        Route::post('users', [AdminUserController::class, 'store'])->name('users.store');
-        Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
-        Route::match(['put', 'patch'], 'users/{user}', [AdminUserController::class, 'update'])->name('users.update');
-        Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
-        Route::patch('users/{user}/reset-password', [AdminUserController::class, 'resetPassword'])->name('users.reset-password');
+        // Gestión de usuarios: exclusiva de super_admin.
+        Route::middleware('role:super_admin')->group(function () {
+            Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
+            Route::get('users/create', [AdminUserController::class, 'create'])->name('users.create');
+            Route::post('users', [AdminUserController::class, 'store'])->name('users.store');
+            Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+            Route::match(['put', 'patch'], 'users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+            Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+            Route::patch('users/{user}/reset-password', [AdminUserController::class, 'resetPassword'])->name('users.reset-password');
+        });
 
-        Route::get('contacts', [AdminContactMessageController::class, 'index'])->name('contacts.index');
-        Route::get('contacts/{contactMessage}', [AdminContactMessageController::class, 'show'])->name('contacts.show');
-        Route::match(['put', 'patch'], 'contacts/{contactMessage}', [AdminContactMessageController::class, 'update'])->name('contacts.update');
-        Route::delete('contacts/{contactMessage}', [AdminContactMessageController::class, 'destroy'])->name('contacts.destroy');
-        Route::delete('contacts', [AdminContactMessageController::class, 'purge'])->name('contacts.purge');
+        // Contactos/leads contienen PII: editor sin acceso, solo super_admin/admin.
+        Route::middleware('role:super_admin,admin')->group(function () {
+            Route::get('contacts', [AdminContactMessageController::class, 'index'])->name('contacts.index');
+            Route::get('contacts/{contactMessage}', [AdminContactMessageController::class, 'show'])->name('contacts.show');
+            Route::match(['put', 'patch'], 'contacts/{contactMessage}', [AdminContactMessageController::class, 'update'])->name('contacts.update');
+            Route::delete('contacts/{contactMessage}', [AdminContactMessageController::class, 'destroy'])->name('contacts.destroy');
+            Route::delete('contacts', [AdminContactMessageController::class, 'purge'])->name('contacts.purge');
+        });
 
-        Route::get('settings', [AdminSettingController::class, 'edit'])->name('settings.edit');
-        Route::match(['put', 'patch'], 'settings', [AdminSettingController::class, 'update'])->name('settings.update');
+        Route::middleware('role:super_admin,admin')->group(function () {
+            Route::get('settings', [AdminSettingController::class, 'edit'])->name('settings.edit');
+            Route::match(['put', 'patch'], 'settings', [AdminSettingController::class, 'update'])->name('settings.update');
+        });
     });
 
 require __DIR__.'/settings.php';

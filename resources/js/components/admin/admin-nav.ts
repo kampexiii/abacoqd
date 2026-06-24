@@ -6,8 +6,6 @@ import {
     Handshake,
     LayoutDashboard,
     Mail,
-    Scale,
-    Search,
     Settings,
     Users,
     UsersRound,
@@ -24,11 +22,9 @@ export type AdminNavKey =
     | 'team'
     | 'contacts'
     | 'booking'
-    | 'legal'
-    | 'settings'
-    | 'seo'
     | 'faqs'
-    | 'users';
+    | 'users'
+    | 'settings';
 
 export type AdminNavItem = {
     readonly key: AdminNavKey;
@@ -38,10 +34,10 @@ export type AdminNavItem = {
 };
 
 /**
- * Navegación canónica del panel admin (Fase 4). Los módulos sin implementar
- * se muestran como "pendiente" (enabled: false) para no generar rutas rotas.
- * Reseñas no tiene entrada propia: pasa a ser integración de Google Reviews
- * de solo lectura (pendiente), no un CRUD manual.
+ * Navegación canónica del panel admin. Alcance real del proyecto: Legal, SEO y
+ * Reseñas NO son módulos admin (Legal/SEO son código/documentación; Reseñas es
+ * integración externa de Google, no un CRUD manual). Todas las entradas están
+ * implementadas; no hay módulos "pendiente".
  */
 export const ADMIN_NAV: readonly AdminNavItem[] = [
     { key: 'dashboard', href: '/admin/dashboard', icon: LayoutDashboard, enabled: true },
@@ -51,10 +47,27 @@ export const ADMIN_NAV: readonly AdminNavItem[] = [
     { key: 'partners', href: '/admin/partners', icon: Handshake, enabled: true },
     { key: 'team', href: '/admin/team-members', icon: UsersRound, enabled: true },
     { key: 'contacts', href: '/admin/contacts', icon: Mail, enabled: true },
-    { key: 'booking', href: '/admin/booking/days', icon: CalendarClock, enabled: true },
-    { key: 'legal', href: null, icon: Scale, enabled: false },
-    { key: 'settings', href: null, icon: Settings, enabled: false },
-    { key: 'seo', href: null, icon: Search, enabled: false },
+    { key: 'booking', href: '/admin/booking/calendar', icon: CalendarClock, enabled: true },
     { key: 'faqs', href: '/admin/faqs', icon: HelpCircle, enabled: true },
     { key: 'users', href: '/admin/users', icon: Users, enabled: true },
+    { key: 'settings', href: '/admin/settings', icon: Settings, enabled: true },
 ] as const;
+
+/**
+ * Claves visibles por rol. Es solo UX (oculta enlaces); la autorización real
+ * vive en el backend (middleware `role` + FormRequests). super_admin ve todo;
+ * admin no ve "users"; editor/viewer no ven "users", "contacts", "booking" ni
+ * "settings" (PII, reservas y ajustes son gestión exclusiva de super_admin/admin).
+ */
+const ROLE_NAV_KEYS: Record<string, readonly AdminNavKey[]> = {
+    super_admin: ['dashboard', 'services', 'blog', 'projects', 'partners', 'team', 'contacts', 'booking', 'faqs', 'users', 'settings'],
+    admin: ['dashboard', 'services', 'blog', 'projects', 'partners', 'team', 'contacts', 'booking', 'faqs', 'settings'],
+    editor: ['dashboard', 'services', 'blog', 'projects', 'partners', 'team', 'faqs'],
+    viewer: ['dashboard', 'services', 'blog', 'projects', 'partners', 'team', 'faqs'],
+};
+
+export function adminNavForRole(role: string | undefined): readonly AdminNavItem[] {
+    const allowedKeys = ROLE_NAV_KEYS[role ?? ''] ?? ROLE_NAV_KEYS.editor;
+
+    return ADMIN_NAV.filter((item) => allowedKeys.includes(item.key));
+}

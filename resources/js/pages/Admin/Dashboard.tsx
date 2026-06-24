@@ -1,7 +1,7 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { ArrowRight } from 'lucide-react';
 
-import { ADMIN_NAV } from '@/components/admin/admin-nav';
+import { adminNavForRole } from '@/components/admin/admin-nav';
 import { useLanguage } from '@/hooks/use-language';
 import AdminLayout from '@/layouts/admin-layout';
 import { cn } from '@/lib/utils';
@@ -14,8 +14,14 @@ type DashboardProps = {
     };
 };
 
+type DashboardPageProps = {
+    readonly auth: { readonly user: { readonly role?: string } };
+};
+
 export default function AdminDashboard({ serviceStats }: DashboardProps) {
     const { t } = useLanguage();
+    const { props } = usePage<DashboardPageProps>();
+    const role = props.auth.user.role;
 
     const stats = [
         { key: 'published', value: serviceStats.published },
@@ -55,7 +61,7 @@ export default function AdminDashboard({ serviceStats }: DashboardProps) {
                     {t('admin.dashboard.quickAccess')}
                 </h2>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {ADMIN_NAV.filter((item) => item.key !== 'dashboard').map((item) => {
+                    {adminNavForRole(role).filter((item) => item.key !== 'dashboard').map((item) => {
                         const Icon = item.icon;
                         const label = t(`admin.nav.${item.key}`);
 

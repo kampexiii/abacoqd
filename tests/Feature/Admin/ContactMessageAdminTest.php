@@ -20,9 +20,9 @@ test('a viewer without management role cannot access the admin contacts listing'
     $this->get(route('admin.contacts.index'))->assertForbidden();
 });
 
-test('a management user can see the admin contacts listing', function () {
+test('an admin can see the admin contacts listing', function () {
     ContactMessage::factory()->create(['name' => 'Jane Doe']);
-    $this->actingAs(contactAdminUser(UserRole::Editor));
+    $this->actingAs(contactAdminUser());
 
     $this->get(route('admin.contacts.index'))
         ->assertOk()
@@ -42,9 +42,9 @@ test('the listing can be filtered by status', function () {
         ->assertInertia(fn ($page) => $page->has('contacts', 1));
 });
 
-test('a management user can view a contact detail', function () {
+test('an admin can view a contact detail', function () {
     $contact = ContactMessage::factory()->create();
-    $this->actingAs(contactAdminUser(UserRole::Editor));
+    $this->actingAs(contactAdminUser());
 
     $this->get(route('admin.contacts.show', $contact))
         ->assertOk()
@@ -54,9 +54,9 @@ test('a management user can view a contact detail', function () {
         );
 });
 
-test('a management user can update the status and internal notes of a contact', function () {
+test('an admin can update the status and internal notes of a contact', function () {
     $contact = ContactMessage::factory()->create(['status' => ContactMessageStatus::New->value]);
-    $this->actingAs(contactAdminUser(UserRole::Editor));
+    $this->actingAs(contactAdminUser());
 
     $this->put(route('admin.contacts.update', $contact), [
         'status' => ContactMessageStatus::Contacted->value,

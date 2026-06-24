@@ -4,7 +4,7 @@ import { useEffect  } from 'react';
 import type {ReactNode} from 'react';
 import { toast as sonnerToast } from 'sonner';
 
-import { ADMIN_NAV  } from '@/components/admin/admin-nav';
+import { adminNavForRole  } from '@/components/admin/admin-nav';
 import type {AdminNavItem} from '@/components/admin/admin-nav';
 import ThemeTogglerButton from '@/components/animate-ui/components/buttons/theme-toggler';
 import {
@@ -59,7 +59,15 @@ function Brand() {
     );
 }
 
-function NavList({ currentUrl, onNavigate }: { currentUrl: string; onNavigate?: () => void }) {
+function NavList({
+    currentUrl,
+    role,
+    onNavigate,
+}: {
+    currentUrl: string;
+    role: string | undefined;
+    onNavigate?: () => void;
+}) {
     const { t } = useLanguage();
 
     const renderItem = (item: AdminNavItem) => {
@@ -104,7 +112,7 @@ function NavList({ currentUrl, onNavigate }: { currentUrl: string; onNavigate?: 
         );
     };
 
-    return <nav className="flex flex-col gap-1">{ADMIN_NAV.map(renderItem)}</nav>;
+    return <nav className="flex flex-col gap-1">{adminNavForRole(role).map(renderItem)}</nav>;
 }
 
 export default function AdminLayout({
@@ -135,7 +143,7 @@ export default function AdminLayout({
                     <Brand />
                 </div>
                 <div className="mt-8 flex-1 overflow-y-auto">
-                    <NavList currentUrl={page.url} />
+                    <NavList currentUrl={page.url} role={roleKey} />
                 </div>
                 <a
                     href="/"
@@ -165,7 +173,7 @@ export default function AdminLayout({
                                 </SheetTitle>
                             </SheetHeader>
                             <div className="mt-6">
-                                <NavList currentUrl={page.url} />
+                                <NavList currentUrl={page.url} role={roleKey} />
                             </div>
                         </SheetContent>
                     </Sheet>

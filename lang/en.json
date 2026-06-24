@@ -1478,11 +1478,9 @@
             "team": "Team",
             "contacts": "Contacts",
             "booking": "Booking",
-            "legal": "Legal",
-            "settings": "Settings",
-            "seo": "SEO",
-            "faqs": "FAQs",
+            "faqs": "FAQs / Chatbot",
             "users": "Users",
+            "settings": "Settings",
             "pending": "Pending"
         },
         "roles": {

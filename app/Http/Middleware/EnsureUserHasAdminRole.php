@@ -11,9 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
  * Restringe el panel admin a roles de gestión de contenido.
  *
  * El acceso de lectura para `viewer` queda fuera de este primer bloque:
- * por ahora solo `super_admin`, `admin` y `editor` entran al admin. Las
- * policies finas por módulo (settings/usuarios/legal) llegan en fases
- * posteriores; aquí solo se controla la puerta de entrada a `/admin`.
+ * por ahora solo `super_admin`, `admin` y `editor` entran al admin. Esta
+ * es solo la puerta de entrada a `/admin`; las restricciones finas por
+ * módulo (usuarios, contactos/PII, reservas, settings) las aplica
+ * `EnsureUserHasRole` (alias `role`) en routes/web.php.
  */
 class EnsureUserHasAdminRole
 {

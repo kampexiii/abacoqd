@@ -39,6 +39,12 @@ test('an admin can view the booking calendar', function () {
         ->assertInertia(fn ($page) => $page->component('Admin/Booking/Calendar/Index')->has('days'));
 });
 
+test('an editor cannot access the booking calendar', function () {
+    $this->actingAs(bookingAdmin(UserRole::Editor));
+
+    $this->get(route('admin.booking.calendar.index'))->assertForbidden();
+});
+
 test('an admin can generate availability slots in bulk', function () {
     $this->actingAs(bookingAdmin());
     $monday = nextMonday();
