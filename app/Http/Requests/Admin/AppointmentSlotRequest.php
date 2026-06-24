@@ -4,11 +4,13 @@ namespace App\Http\Requests\Admin;
 
 use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 /**
- * Solo expone los estados editables a mano (disponible/cancelada). "Reservada"
- * y "expirada" las gestiona el sistema según las reservas reales.
+ * Creación/edición manual de una franja concreta. Flujo secundario: lo normal
+ * es generar disponibilidad en masa desde el calendario. Solo pide fecha,
+ * horas, capacidad, bloqueo y nota; el día se resuelve/crea automáticamente y
+ * la duración se deriva de las horas. "Reservada"/"expirada" las gestiona el
+ * sistema según las reservas reales.
  */
 class AppointmentSlotRequest extends FormRequest
 {
@@ -19,7 +21,6 @@ class AppointmentSlotRequest extends FormRequest
         return $user !== null && in_array($user->role, [
             UserRole::SuperAdmin,
             UserRole::Admin,
-            UserRole::Editor,
         ], true);
     }
 
@@ -36,12 +37,10 @@ class AppointmentSlotRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'appointment_day_id' => ['required', 'integer', 'exists:appointment_days,id'],
-            'starts_at' => ['required', 'date'],
-            'ends_at' => ['required', 'date', 'after:starts_at'],
-            'duration_minutes' => ['required', 'integer', 'min:15', 'max:1440'],
+            'date' => ['required', 'date'],
+            'start_time' => ['required', 'date_format:H:i'],
+            'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
             'capacity' => ['required', 'integer', 'min:1', 'max:100'],
-            'status' => ['required', Rule::in(['available', 'cancelled'])],
             'admin_blocked' => ['boolean'],
             'block_reason' => ['nullable', 'required_if:admin_blocked,1', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:2000'],

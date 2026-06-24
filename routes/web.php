@@ -2,6 +2,7 @@
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Admin\AppointmentBookingController as AdminAppointmentBookingController;
+use App\Http\Controllers\Admin\AppointmentCalendarController as AdminAppointmentCalendarController;
 use App\Http\Controllers\Admin\AppointmentDayController as AdminAppointmentDayController;
 use App\Http\Controllers\Admin\AppointmentSlotController as AdminAppointmentSlotController;
 use App\Http\Controllers\Admin\BookingSettingController as AdminBookingSettingController;
@@ -142,7 +143,11 @@ Route::middleware(['auth', 'admin'])
         Route::patch('team-members/{teamMember}/toggle-active', [AdminTeamMemberController::class, 'toggleActive'])->name('team-members.toggle-active');
         Route::patch('team-members/{teamMember}/toggle-visible', [AdminTeamMemberController::class, 'toggleVisible'])->name('team-members.toggle-visible');
 
-        Route::redirect('booking', '/admin/booking/bookings');
+        Route::redirect('booking', '/admin/booking/calendar');
+
+        Route::get('booking/calendar', [AdminAppointmentCalendarController::class, 'index'])->name('booking.calendar.index');
+        Route::post('booking/calendar/generate', [AdminAppointmentCalendarController::class, 'generate'])->name('booking.calendar.generate');
+        Route::post('booking/calendar/block', [AdminAppointmentCalendarController::class, 'block'])->name('booking.calendar.block');
 
         Route::get('booking/days', [AdminAppointmentDayController::class, 'index'])->name('booking.days.index');
         Route::get('booking/days/create', [AdminAppointmentDayController::class, 'create'])->name('booking.days.create');

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\AppointmentSlotStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AppointmentSlotRequest;
 use App\Models\AppointmentDay;
 use App\Models\AppointmentSlot;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -37,16 +39,20 @@ class AppointmentSlotController extends Controller
         ]);
     }
 
-    public function create(): Response
+    public function create(Request $request): Response
     {
         return Inertia::render('Admin/Booking/Slots/Create', [
-            'days' => $this->dayOptions(),
+            'defaultDate' => $request->string('date')->toString() ?: null,
         ]);
     }
 
     public function store(AppointmentSlotRequest $request): RedirectResponse
     {
-        AppointmentSlot::create($this->contentAttributes($request));
+        $attributes = $this->contentAttributes($request);
+        $attributes['status'] = AppointmentSlotStatus::Available->value;
+        $attributes['reserved_count'] = 0;
+
+        AppointmentSlot::create($attributes);
 
         return to_route('admin.booking.slots.index')
             ->with('toast', ['type' => 'success', 'message' => 'Franja creada.']);
@@ -56,12 +62,13 @@ class AppointmentSlotController extends Controller
     {
         return Inertia::render('Admin/Booking/Slots/Edit', [
             'slot' => $this->adminRecord($slot),
-            'days' => $this->dayOptions(),
         ]);
     }
 
     public function update(AppointmentSlotRequest $request, AppointmentSlot $slot): RedirectResponse
     {
+        // Conserva el estado del sistema (reservada/expirada): aquí solo se
+        // editan fecha/horas/capacidad/bloqueo, nunca el contador de reservas.
         $slot->update($this->contentAttributes($request));
 
         return to_route('admin.booking.slots.index')
@@ -98,13 +105,19 @@ class AppointmentSlotController extends Controller
      */
     private function contentAttributes(AppointmentSlotRequest $request): array
     {
+        $date = CarbonImmutable::parse($request->validated('date'));
+        $startsAt = $date->setTimeFromTimeString($request->validated('start_time'));
+        $endsAt = $date->setTimeFromTimeString($request->validated('end_time'));
+
+        $day = AppointmentDay::query()->whereDate('date', $date->toDateString())->first()
+            ?? AppointmentDay::create(['date' => $date->toDateString()]);
+
         return [
-            'appointment_day_id' => $request->validated('appointment_day_id'),
-            'starts_at' => $request->validated('starts_at'),
-            'ends_at' => $request->validated('ends_at'),
-            'duration_minutes' => (int) $request->validated('duration_minutes'),
+            'appointment_day_id' => $day->id,
+            'starts_at' => $startsAt->toDateTimeString(),
+            'ends_at' => $endsAt->toDateTimeString(),
+            'duration_minutes' => $startsAt->diffInMinutes($endsAt),
             'capacity' => (int) $request->validated('capacity'),
-            'status' => $request->validated('status'),
             'admin_blocked' => $request->boolean('admin_blocked'),
             'block_reason' => $request->boolean('admin_blocked') ? $request->validated('block_reason') : null,
             'notes' => $request->validated('notes'),
@@ -139,6 +152,9 @@ class AppointmentSlotController extends Controller
     {
         return [
             ...$this->adminSummary($slot),
+            'date' => $slot->starts_at->toDateString(),
+            'startTime' => $slot->starts_at->format('H:i'),
+            'endTime' => $slot->ends_at->format('H:i'),
             'notes' => $slot->notes,
         ];
     }

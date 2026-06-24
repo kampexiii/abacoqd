@@ -38,7 +38,7 @@ class AppointmentDay extends Model
     protected function casts(): array
     {
         return [
-            'date' => 'date',
+            'date' => 'date:Y-m-d',
             'is_available' => 'boolean',
             'admin_blocked' => 'boolean',
         ];

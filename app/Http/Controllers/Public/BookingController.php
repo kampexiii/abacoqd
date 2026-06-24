@@ -9,6 +9,7 @@ use App\Http\Requests\Public\StoreAppointmentBookingRequest;
 use App\Models\AppointmentBooking;
 use App\Models\AppointmentDay;
 use App\Models\AppointmentSlot;
+use App\Models\BookingSetting;
 use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,10 +26,25 @@ class BookingController extends Controller
      */
     public function create(Request $request): Response
     {
+        $setting = BookingSetting::query()->first();
+        $settings = $setting !== null && is_array($setting->settings) ? $setting->settings : [];
+        $minAdvanceHours = (int) ($settings['min_advance_hours'] ?? 0);
+        $maxAdvanceDays = isset($settings['max_advance_days']) ? (int) $settings['max_advance_days'] : null;
+
         $days = AppointmentDay::query()
             ->available()
             ->ordered()
-            ->with(['slots' => fn ($query) => $query->available()->ordered()])
+            ->with(['slots' => function ($query) use ($minAdvanceHours, $maxAdvanceDays): void {
+                $query->available()->ordered();
+
+                if ($minAdvanceHours > 0) {
+                    $query->where('starts_at', '>=', now()->addHours($minAdvanceHours));
+                }
+
+                if ($maxAdvanceDays !== null) {
+                    $query->where('starts_at', '<=', now()->addDays($maxAdvanceDays)->endOfDay());
+                }
+            }])
             ->get()
             ->filter(fn (AppointmentDay $day): bool => $day->slots->isNotEmpty())
             ->map(fn (AppointmentDay $day): array => [
@@ -39,6 +55,10 @@ class BookingController extends Controller
                     'id' => $slot->id,
                     'startsAt' => $slot->starts_at->toIso8601String(),
                     'endsAt' => $slot->ends_at->toIso8601String(),
+                    // Hora de pared del negocio (no se convierte a la zona del
+                    // visitante): el admin define 10:00 y se muestra 10:00.
+                    'time' => $slot->starts_at->format('H:i'),
+                    'endTime' => $slot->ends_at->format('H:i'),
                     'durationMinutes' => $slot->duration_minutes,
                 ])->values(),
             ])
@@ -120,6 +140,8 @@ class BookingController extends Controller
             'date' => $booking->slot->day->date->toDateString(),
             'startsAt' => $booking->slot->starts_at->toIso8601String(),
             'endsAt' => $booking->slot->ends_at->toIso8601String(),
+            'time' => $booking->slot->starts_at->format('H:i'),
+            'endTime' => $booking->slot->ends_at->format('H:i'),
             'durationMinutes' => $booking->slot->duration_minutes,
         ];
     }

@@ -60,12 +60,20 @@ return [
     |--------------------------------------------------------------------------
     |
     | Here you may specify the default timezone for your application, which
-    | will be used by the PHP date and date-time functions. The timezone
-    | is set to "UTC" by default as it is suitable for most use cases.
+    | will be used by the PHP date and date-time functions.
+    |
+    | Se usa `Europe/Madrid` (no UTC): el negocio opera en una sola zona y todo
+    | el dominio razona en "hora de pared" local (el admin define una franja a
+    | las 10:00 y el público ve 10:00; un post publicado "ahora" debe verse ya).
+    | Con UTC, `now()` quedaba 1-2 h por detrás de las fechas que el equipo
+    | introduce en local, ocultando posts recién publicados y desajustando las
+    | compuertas de reservas (min/max advance, pasado/futuro). La BD (SQLite,
+    | columnas `dateTime`/`date`) guarda el literal sin convertir, así que esta
+    | zona aplica de forma coherente a almacenamiento, `now()` y visualización.
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'Europe/Madrid'),
 
     /*
     |--------------------------------------------------------------------------

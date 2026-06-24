@@ -8,11 +8,13 @@ import {
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
+import BookingCalendarPicker from '@/components/public/BookingCalendarPicker';
 import FormField, {
     formFieldInputClass,
     formFieldSelectClass,
 } from '@/components/public/FormField';
 import HoneypotField from '@/components/public/HoneypotField';
+import PublicPageHero from '@/components/public/PublicPageHero';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
@@ -24,6 +26,8 @@ type Slot = {
     readonly id: number;
     readonly startsAt: string;
     readonly endsAt: string;
+    readonly time: string;
+    readonly endTime: string;
     readonly durationMinutes: number;
 };
 
@@ -45,6 +49,8 @@ type ConfirmedBooking = {
     readonly date: string;
     readonly startsAt: string;
     readonly endsAt: string;
+    readonly time: string;
+    readonly endTime: string;
     readonly durationMinutes: number;
 };
 
@@ -57,18 +63,13 @@ type BookingProps = {
 const STEP_KEYS = ['process', 'needs', 'approach'] as const;
 
 function formatDate(value: string, locale: Locale): string {
+    // value es 'YYYY-MM-DD'; se ancla a medianoche local para evitar que la
+    // conversión de zona horaria desplace el día.
     return new Intl.DateTimeFormat(locale === 'es' ? 'es-ES' : 'en-GB', {
         weekday: 'long',
         day: 'numeric',
         month: 'long',
-    }).format(new Date(value));
-}
-
-function formatTime(value: string, locale: Locale): string {
-    return new Intl.DateTimeFormat(locale === 'es' ? 'es-ES' : 'en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-    }).format(new Date(value));
+    }).format(new Date(`${value}T00:00:00`));
 }
 
 /**
@@ -102,19 +103,15 @@ export default function Booking({
         <PublicLayout>
             <Head title="Reserva · AbacoQD" />
 
-            <section className="bg-qd-ink text-qd-white">
-                <div className="mx-auto max-w-[1240px] px-5 py-16 sm:px-8">
-                    <p className="text-sm font-semibold tracking-wide text-qd-lime">
-                        {t('booking.eyebrow')}
-                    </p>
-                    <h1 className="mt-2 text-3xl font-bold sm:text-4xl">
-                        {t('booking.title')}
-                    </h1>
-                    <p className="mt-3 max-w-xl text-qd-text-medium">
-                        {t('booking.subtitle')}
-                    </p>
-                </div>
-            </section>
+            <PublicPageHero
+                eyebrow={t('booking.eyebrow')}
+                title={t('booking.title')}
+                subtitle={t('booking.subtitle')}
+                currentLabel={t('booking.eyebrow')}
+                taglineTitle={t('booking.afterTitle')}
+                taglineSubtitle={t('booking.afterDescription')}
+                taglineIcon={CalendarDays}
+            />
 
             {!confirmedBooking && (
                 <section className="bg-qd-white dark:bg-qd-ink">
@@ -171,10 +168,8 @@ export default function Booking({
                                     {t('booking.summary.hour')}
                                 </dt>
                                 <dd className="text-qd-ink dark:text-qd-white">
-                                    {formatTime(
-                                        confirmedBooking.startsAt,
-                                        locale,
-                                    )}
+                                    {confirmedBooking.time} –{' '}
+                                    {confirmedBooking.endTime}
                                 </dd>
                                 <dt className="text-qd-text-medium">
                                     {t('booking.summary.duration')}
@@ -221,85 +216,59 @@ export default function Booking({
                             </a>
                         </div>
                     ) : (
-                        <div className="grid gap-8 lg:grid-cols-[1fr_1fr_1.3fr]">
+                        <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
                             <div>
                                 <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-qd-ink dark:text-qd-white">
-                                    <CalendarDays
-                                        aria-hidden="true"
-                                        size={16}
-                                    />
+                                    <CalendarDays aria-hidden="true" size={16} />
                                     {t('booking.dayLabel')}
                                 </h2>
-                                <ul className="flex flex-col gap-2">
-                                    {days.map((day) => (
-                                        <li key={day.id}>
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setSelectedDayId(day.id);
-                                                    setSelectedSlotId(null);
-                                                }}
-                                                aria-pressed={
-                                                    day.id === selectedDayId
-                                                }
-                                                className={cn(
-                                                    'w-full rounded-xl border px-4 py-2.5 text-left text-sm font-medium capitalize transition',
-                                                    day.id === selectedDayId
-                                                        ? 'border-qd-teal-2 bg-qd-teal-2/10 text-qd-ink dark:border-qd-teal dark:text-qd-white'
-                                                        : 'border-qd-mist text-qd-text-high hover:border-qd-teal-2 dark:border-white/10',
-                                                )}
-                                            >
-                                                {formatDate(day.date, locale)}
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
+                                <BookingCalendarPicker
+                                    days={days}
+                                    selectedDate={selectedDay?.date ?? null}
+                                    onSelect={(_, dayId) => {
+                                        setSelectedDayId(dayId);
+                                        setSelectedSlotId(null);
+                                    }}
+                                    locale={locale}
+                                />
                             </div>
 
-                            <div>
-                                <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-qd-ink dark:text-qd-white">
-                                    <Clock aria-hidden="true" size={16} />
-                                    {t('booking.slotLabel')}
-                                </h2>
-                                {selectedDay ? (
-                                    <ul className="flex flex-col gap-2">
-                                        {selectedDay.slots.map((slot) => (
-                                            <li key={slot.id}>
+                            {selectedDay && (
+                                <div>
+                                    <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-qd-ink capitalize dark:text-qd-white">
+                                        <Clock aria-hidden="true" size={16} />
+                                        {formatDate(selectedDay.date, locale)}
+                                    </h2>
+                                    {selectedDay.slots.length > 0 ? (
+                                        <div className="flex flex-wrap gap-2">
+                                            {selectedDay.slots.map((slot) => (
                                                 <button
+                                                    key={slot.id}
                                                     type="button"
                                                     onClick={() =>
-                                                        setSelectedSlotId(
-                                                            slot.id,
-                                                        )
+                                                        setSelectedSlotId(slot.id)
                                                     }
                                                     aria-pressed={
-                                                        slot.id ===
-                                                        selectedSlotId
+                                                        slot.id === selectedSlotId
                                                     }
                                                     className={cn(
-                                                        'w-full rounded-xl border px-4 py-2.5 text-left text-sm font-medium transition',
-                                                        slot.id ===
-                                                            selectedSlotId
+                                                        'rounded-xl border px-4 py-2.5 text-sm font-semibold transition',
+                                                        slot.id === selectedSlotId
                                                             ? 'border-qd-teal-2 bg-qd-teal-2/10 text-qd-ink dark:border-qd-teal dark:text-qd-white'
                                                             : 'border-qd-mist text-qd-text-high hover:border-qd-teal-2 dark:border-white/10',
                                                     )}
                                                 >
-                                                    {formatTime(
-                                                        slot.startsAt,
-                                                        locale,
-                                                    )}{' '}
-                                                    · {slot.durationMinutes}{' '}
-                                                    {t('booking.minutes')}
+                                                    {slot.time} – {slot.endTime}
                                                 </button>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p className="text-sm text-qd-text-medium">
-                                        —
-                                    </p>
-                                )}
-                            </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <p className="text-sm text-qd-text-medium">
+                                            —
+                                        </p>
+                                    )}
+                                </div>
+                            )}
 
                             <div>
                                 {selectedSlot ? (

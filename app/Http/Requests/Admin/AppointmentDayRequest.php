@@ -15,7 +15,6 @@ abstract class AppointmentDayRequest extends FormRequest
         return $user !== null && in_array($user->role, [
             UserRole::SuperAdmin,
             UserRole::Admin,
-            UserRole::Editor,
         ], true);
     }
 

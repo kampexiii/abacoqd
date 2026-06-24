@@ -1,7 +1,8 @@
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { Loader2 } from 'lucide-react';
-import type { FormEvent } from 'react';
+import type { FormEvent, ReactNode } from 'react';
 
+import AdminSelect from '@/components/admin/AdminSelect';
 import BookingSubNav from '@/components/admin/BookingSubNav';
 import FormSection from '@/components/admin/FormSection';
 import { Input } from '@/components/ui/input';
@@ -14,6 +15,11 @@ type BookingSettingRecord = {
     readonly url: string | null;
     readonly isEnabled: boolean;
     readonly fallbackToContact: boolean;
+    readonly defaultDurationMinutes: number;
+    readonly defaultCapacity: number;
+    readonly minAdvanceHours: number;
+    readonly maxAdvanceDays: number | null;
+    readonly notifyEmail: string | null;
 };
 
 type EditProps = { readonly setting: BookingSettingRecord | null };
@@ -25,6 +31,11 @@ export default function BookingSettingsEdit({ setting }: EditProps) {
         url: setting?.url ?? '',
         is_enabled: setting?.isEnabled ?? false,
         fallback_to_contact: setting?.fallbackToContact ?? true,
+        default_duration_minutes: setting?.defaultDurationMinutes ?? 60,
+        default_capacity: setting?.defaultCapacity ?? 1,
+        min_advance_hours: setting?.minAdvanceHours ?? 0,
+        max_advance_days: setting?.maxAdvanceDays ?? '',
+        notify_email: setting?.notifyEmail ?? '',
     });
 
     const errors = form.errors as Record<string, string>;
@@ -42,31 +53,78 @@ export default function BookingSettingsEdit({ setting }: EditProps) {
             <Head title="Reserva · Configuración · Admin AbacoQD" />
             <BookingSubNav currentUrl={page.url} />
 
-            <div className="mb-6 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300">
-                Esta sección controla un proveedor externo (cal.com / Calendly) que actualmente está deshabilitado. El flujo público en{' '}
-                <strong>/reserva</strong> usa el sistema interno de días y franjas, gestionado en las pestañas «Días» y «Franjas».
-            </div>
-
             <form onSubmit={submit} className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-                <FormSection title="Proveedor externo">
-                    <div className="flex flex-col gap-4">
-                        <div className="flex flex-col gap-1.5">
-                            <Label>Proveedor</Label>
-                            <Input value={form.data.provider} onChange={(e) => form.setData('provider', e.target.value)} placeholder="cal.com" />
-                            {errors.provider && <p className="text-sm text-red-600">{errors.provider}</p>}
+                <div className="flex flex-col gap-6">
+                    <FormSection title="Agenda interna" description="Valores por defecto al generar disponibilidad y ventana de reserva pública.">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <Field label="Duración por defecto" error={errors.default_duration_minutes}>
+                                <AdminSelect
+                                    value={form.data.default_duration_minutes}
+                                    onChange={(e) => form.setData('default_duration_minutes', Number(e.target.value))}
+                                >
+                                    {[30, 45, 60, 90, 120].map((m) => (
+                                        <option key={m} value={m}>
+                                            {m} min
+                                        </option>
+                                    ))}
+                                </AdminSelect>
+                            </Field>
+                            <Field label="Capacidad por defecto" error={errors.default_capacity}>
+                                <Input
+                                    type="number"
+                                    min={1}
+                                    max={100}
+                                    value={form.data.default_capacity}
+                                    onChange={(e) => form.setData('default_capacity', Number(e.target.value))}
+                                />
+                            </Field>
+                            <Field label="Antelación mínima (horas)" error={errors.min_advance_hours}>
+                                <Input
+                                    type="number"
+                                    min={0}
+                                    max={720}
+                                    value={form.data.min_advance_hours}
+                                    onChange={(e) => form.setData('min_advance_hours', Number(e.target.value))}
+                                />
+                            </Field>
+                            <Field label="Antelación máxima (días, opcional)" error={errors.max_advance_days}>
+                                <Input
+                                    type="number"
+                                    min={1}
+                                    max={365}
+                                    value={form.data.max_advance_days}
+                                    onChange={(e) => form.setData('max_advance_days', e.target.value === '' ? '' : Number(e.target.value))}
+                                />
+                            </Field>
                         </div>
-                        <div className="flex flex-col gap-1.5">
-                            <Label>URL</Label>
-                            <Input value={form.data.url} onChange={(e) => form.setData('url', e.target.value)} placeholder="https://cal.com/abacoqd" />
-                            {errors.url && <p className="text-sm text-red-600">{errors.url}</p>}
+                        <div className="mt-4">
+                            <Field label="Email de notificación (opcional)" error={errors.notify_email}>
+                                <Input
+                                    type="email"
+                                    value={form.data.notify_email}
+                                    onChange={(e) => form.setData('notify_email', e.target.value)}
+                                    placeholder="reservas@abacodev.com"
+                                />
+                            </Field>
                         </div>
-                    </div>
-                </FormSection>
+                    </FormSection>
+
+                    <FormSection title="Proveedor externo (opcional)" description="Alternativa a la agenda interna (cal.com / Calendly). Deshabilitado por defecto.">
+                        <div className="flex flex-col gap-4">
+                            <Field label="Proveedor" error={errors.provider}>
+                                <Input value={form.data.provider} onChange={(e) => form.setData('provider', e.target.value)} placeholder="cal.com" />
+                            </Field>
+                            <Field label="URL" error={errors.url}>
+                                <Input value={form.data.url} onChange={(e) => form.setData('url', e.target.value)} placeholder="https://cal.com/abacoqd" />
+                            </Field>
+                        </div>
+                    </FormSection>
+                </div>
 
                 <div className="flex flex-col gap-6">
                     <FormSection title="Activación">
                         <div className="flex flex-col divide-y divide-qd-mist dark:divide-qd-white/10">
-                            <ToggleRow label="Habilitado" checked={form.data.is_enabled} onChange={(v) => form.setData('is_enabled', v)} />
+                            <ToggleRow label="Reservas habilitadas" checked={form.data.is_enabled} onChange={(v) => form.setData('is_enabled', v)} />
                             <ToggleRow
                                 label="Volver a contacto si falla"
                                 checked={form.data.fallback_to_contact}
@@ -86,6 +144,16 @@ export default function BookingSettingsEdit({ setting }: EditProps) {
                 </div>
             </form>
         </AdminLayout>
+    );
+}
+
+function Field({ label, error, children }: { readonly label: string; readonly error?: string; readonly children: ReactNode }) {
+    return (
+        <div className="flex flex-col gap-1.5">
+            <Label>{label}</Label>
+            {children}
+            {error && <p className="text-sm text-red-600">{error}</p>}
+        </div>
     );
 }
 

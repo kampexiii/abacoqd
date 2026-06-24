@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react';
 import { cn } from '@/lib/utils';
 
 const ITEMS = [
-    { href: '/admin/booking/days', label: 'Días' },
+    { href: '/admin/booking/calendar', label: 'Agenda' },
     { href: '/admin/booking/slots', label: 'Franjas' },
     { href: '/admin/booking/bookings', label: 'Reservas' },
     { href: '/admin/booking/settings', label: 'Configuración' },
