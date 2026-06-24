@@ -1,7 +1,16 @@
-import { Linkedin, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
+import { usePage } from '@inertiajs/react';
+import {
+    Linkedin,
+    Mail,
+    MapPin,
+    MessageCircle,
+    Phone,
+    Star,
+} from 'lucide-react';
 
 import { SITE_CONFIG } from '@/config/site';
 import { useLanguage } from '@/hooks/use-language';
+import { telHref, useSiteSettings, whatsappHref } from '@/lib/site';
 
 /**
  * Footer canónico AbacoQD — 4 columnas con aire (Marca / Explorar / Servicios /
@@ -15,6 +24,22 @@ import { useLanguage } from '@/hooks/use-language';
 
 type FooterLink = { key: string; href: string };
 
+type LocalizedText = {
+    readonly es?: string | null;
+    readonly en?: string | null;
+};
+
+type FooterService = {
+    readonly id: number;
+    readonly title: LocalizedText;
+    readonly slug: LocalizedText;
+    readonly isDetailEnabled: boolean;
+};
+
+type FooterPageProps = {
+    readonly footerServices?: readonly FooterService[];
+};
+
 const EXPLORE_LINKS: readonly FooterLink[] = [
     { key: 'inicio', href: '/' },
     { key: 'metodologia', href: '/metodologia' },
@@ -24,8 +49,6 @@ const EXPLORE_LINKS: readonly FooterLink[] = [
     { key: 'blog', href: '/blog' },
     { key: 'contacto', href: '/contacto' },
 ] as const;
-
-const SERVICE_LINKS = ['web', 'apps', 'automation', 'uxui', 'consulting'] as const;
 
 const LEGAL_LINKS: readonly FooterLink[] = [
     { key: 'privacy', href: '/privacidad' },
@@ -84,11 +107,22 @@ function GoogleGlyph() {
     );
 }
 
+function FacebookGlyph() {
+    return (
+        <svg aria-hidden="true" viewBox="0 0 24 24" className="size-[18px]">
+            <path
+                fill="currentColor"
+                d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.03 1.79-4.7 4.53-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07Z"
+            />
+        </svg>
+    );
+}
+
 export default function SiteFooter() {
-    const { t } = useLanguage();
-    const googleReviews = SITE_CONFIG.googleReviews;
-    const showGoogleReviews =
-        googleReviews.url !== null || import.meta.env.DEV;
+    const { t, locale } = useLanguage();
+    const { footerServices = [] } = usePage<FooterPageProps>().props;
+    const { contact, social, googleReviews } = useSiteSettings();
+    const showGoogleReviews = googleReviews.url !== null || import.meta.env.DEV;
 
     return (
         <footer
@@ -186,16 +220,32 @@ export default function SiteFooter() {
                         {t('footer.services.title')}
                     </h2>
                     <ul className="flex flex-col gap-2.5">
-                        {SERVICE_LINKS.map((key) => (
-                            <li key={key}>
-                                <a
-                                    href="/servicios"
-                                    className="text-sm text-qd-text-medium transition-colors hover:text-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-lime"
-                                >
-                                    {t(`footer.services.${key}`)}
-                                </a>
-                            </li>
-                        ))}
+                        {footerServices.map((service) => {
+                            const title =
+                                service.title[locale] ??
+                                service.title.es ??
+                                service.title.en ??
+                                '';
+                            const slug =
+                                service.slug[locale] ??
+                                service.slug.es ??
+                                service.slug.en ??
+                                '';
+                            const href = service.isDetailEnabled
+                                ? `/servicios/${slug}`
+                                : `/contacto?servicio=${encodeURIComponent(slug)}`;
+
+                            return (
+                                <li key={service.id}>
+                                    <a
+                                        href={href}
+                                        className="text-sm text-qd-text-medium transition-colors hover:text-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-lime"
+                                    >
+                                        {title}
+                                    </a>
+                                </li>
+                            );
+                        })}
                     </ul>
                 </nav>
 
@@ -206,75 +256,141 @@ export default function SiteFooter() {
                     </h2>
                     <ul className="flex flex-col gap-3 text-sm text-qd-text-medium">
                         <li className="flex items-start gap-2.5">
-                            <MapPin aria-hidden="true" size={16} className="mt-0.5 shrink-0 text-qd-teal" />
-                            <span>{SITE_CONFIG.contact.address}</span>
+                            <MapPin
+                                aria-hidden="true"
+                                size={16}
+                                className="mt-0.5 shrink-0 text-qd-teal"
+                            />
+                            <span>{contact.address}</span>
                         </li>
                         <li className="flex items-center gap-2.5">
-                            <Mail aria-hidden="true" size={16} className="shrink-0 text-qd-teal" />
+                            <Mail
+                                aria-hidden="true"
+                                size={16}
+                                className="shrink-0 text-qd-teal"
+                            />
                             <a
-                                href={`mailto:${SITE_CONFIG.contact.email}`}
+                                href={`mailto:${contact.email ?? ''}`}
                                 className="transition-colors hover:text-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-lime"
                             >
-                                {SITE_CONFIG.contact.email}
+                                {contact.email}
                             </a>
                         </li>
                         <li className="flex items-center gap-2.5">
-                            <Phone aria-hidden="true" size={16} className="shrink-0 text-qd-teal" />
+                            <Phone
+                                aria-hidden="true"
+                                size={16}
+                                className="shrink-0 text-qd-teal"
+                            />
                             <a
-                                href={SITE_CONFIG.contact.phoneHref}
+                                href={telHref(contact.phone) ?? undefined}
                                 className="transition-colors hover:text-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-lime"
                             >
-                                {SITE_CONFIG.contact.phone}
+                                {contact.phone}
                             </a>
                         </li>
                         <li className="flex items-center gap-2.5">
-                            <MessageCircle aria-hidden="true" size={16} className="shrink-0 text-qd-teal" />
+                            <MessageCircle
+                                aria-hidden="true"
+                                size={16}
+                                className="shrink-0 text-qd-teal"
+                            />
                             <a
-                                href={SITE_CONFIG.contact.whatsappHref}
+                                href={whatsappHref(contact.whatsapp) ?? undefined}
                                 target="_blank"
-                                rel="noreferrer"
+                                rel="noopener noreferrer"
                                 className="transition-colors hover:text-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-lime"
                             >
-                                {t('footer.contact.whatsappLabel')} {SITE_CONFIG.contact.whatsapp}
+                                {t('footer.contact.whatsappLabel')}{' '}
+                                {contact.whatsapp}
                             </a>
                         </li>
                         {showGoogleReviews && (
-                            <li className="flex items-center gap-2.5">
-                                <GoogleGlyph />
+                            <li>
                                 {googleReviews.url !== null ? (
                                     <a
                                         href={googleReviews.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="transition-colors hover:text-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-lime"
+                                        aria-label={t(
+                                            'footer.contact.googleProfileLabel',
+                                        )}
+                                        className="group flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 transition-colors hover:border-white/20 hover:bg-white/[0.07] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-lime"
                                     >
-                                        {googleReviews.rating !== null && googleReviews.count !== null
-                                            ? `${googleReviews.rating} ★ · ${googleReviews.count} ${t('footer.contact.googleReviews')}`
-                                            : t('footer.contact.googleReviews')}
+                                        <span className="flex min-w-0 items-center gap-2.5">
+                                            <GoogleGlyph />
+                                            <span className="min-w-0">
+                                                <span className="block truncate text-[12px] leading-4 font-semibold text-qd-white">
+                                                    {SITE_CONFIG.name}
+                                                </span>
+                                                <span className="block truncate text-[10px] leading-4 text-qd-text-medium">
+                                                    {googleReviews.location}
+                                                    {googleReviews.count !==
+                                                    null
+                                                        ? ` · ${googleReviews.count} ${t(
+                                                              googleReviews.count ===
+                                                                  1
+                                                                  ? 'footer.contact.googleReviewVerified'
+                                                                  : 'footer.contact.googleReviewsVerified',
+                                                          )}`
+                                                        : ''}
+                                                </span>
+                                            </span>
+                                        </span>
+
+                                        {googleReviews.rating !== null ? (
+                                            <span className="flex shrink-0 items-center gap-1 text-[13px] font-bold text-qd-white">
+                                                {googleReviews.rating.toFixed(
+                                                    1,
+                                                )}
+                                                <Star
+                                                    aria-hidden="true"
+                                                    size={13}
+                                                    strokeWidth={2}
+                                                    className="fill-[#fbbc04] text-[#fbbc04]"
+                                                />
+                                            </span>
+                                        ) : null}
                                     </a>
                                 ) : (
-                                    <span className="text-qd-text-medium/60 italic">
-                                        {t('footer.contact.googleReviewsPending')}
+                                    <span className="flex items-center gap-2.5 text-qd-text-medium/60 italic">
+                                        <GoogleGlyph />
+                                        {t(
+                                            'footer.contact.googleReviewsPending',
+                                        )}
                                     </span>
                                 )}
                             </li>
                         )}
                     </ul>
-                    <a
-                        href={SITE_CONFIG.social.linkedin}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={t('footer.contact.linkedin')}
-                        className="mt-4 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 text-qd-text-medium transition-colors hover:border-qd-teal hover:text-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-lime"
-                    >
-                        <Linkedin aria-hidden="true" size={18} />
-                    </a>
+                    <div className="mt-4 flex items-center gap-2">
+                        <a
+                            href={social.linkedin ?? '#'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={t('footer.contact.linkedin')}
+                            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 text-qd-text-medium transition-colors hover:border-qd-teal hover:text-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-lime"
+                        >
+                            <Linkedin aria-hidden="true" size={18} />
+                        </a>
+                        <a
+                            href={social.facebook ?? '#'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={t('footer.contact.facebook')}
+                            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/15 text-qd-text-medium transition-colors hover:border-qd-teal hover:text-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-lime"
+                        >
+                            <FacebookGlyph />
+                        </a>
+                    </div>
                 </div>
             </div>
 
             {/* Barra legal */}
             <div className="relative mx-auto flex w-full max-w-[1240px] flex-col gap-3 border-t border-white/10 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-                <p className="text-xs text-qd-text-medium">{t('footer.legal.copyright')}</p>
+                <p className="text-xs text-qd-text-medium">
+                    {t('footer.legal.copyright')}
+                </p>
                 <ul className="flex flex-wrap gap-x-5 gap-y-2 text-xs">
                     {LEGAL_LINKS.map((item) => (
                         <li key={item.key}>

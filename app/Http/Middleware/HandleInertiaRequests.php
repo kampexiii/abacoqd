@@ -2,6 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Faq;
+use App\Models\Service;
+use App\Support\SiteSettings;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -44,6 +47,38 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'toast' => $request->session()->get('toast'),
             ],
+            // Datos del sitio (contacto, redes, Google Reviews, footer). Fuente
+            // editable: grupo `site` de `settings` con fallback config/site.php.
+            // Los componentes solo consumen estos datos, no los definen inline.
+            'siteSettings' => SiteSettings::shared(),
+            'footerServices' => fn (): array => Service::query()
+                ->published()
+                ->active()
+                ->ordered()
+                ->get(['id', 'title', 'slug', 'is_detail_enabled'])
+                ->map(fn (Service $service): array => [
+                    'id' => $service->id,
+                    'title' => $service->title,
+                    'slug' => $service->slug,
+                    'isDetailEnabled' => $service->is_detail_enabled,
+                ])
+                ->values()
+                ->all(),
+            'chatbotFaqs' => fn (): array => Faq::query()
+                ->active()
+                ->chatbot()
+                ->ordered()
+                ->get(['id', 'question', 'answer', 'category', 'redirect_url', 'redirect_section'])
+                ->map(fn (Faq $faq): array => [
+                    'id' => $faq->id,
+                    'question' => $faq->question,
+                    'answer' => $faq->answer,
+                    'category' => $faq->category,
+                    'redirectUrl' => $faq->redirect_url,
+                    'redirectSection' => $faq->redirect_section,
+                ])
+                ->values()
+                ->all(),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

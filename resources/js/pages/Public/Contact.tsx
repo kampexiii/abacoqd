@@ -14,10 +14,10 @@ import FormField, {
 } from '@/components/public/FormField';
 import HoneypotField from '@/components/public/HoneypotField';
 import PublicPageHero from '@/components/public/PublicPageHero';
-import { SITE_CONFIG } from '@/config/site';
 import { useInView } from '@/hooks/use-in-view';
 import { useLanguage } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
+import { telHref, useSiteSettings, whatsappHref } from '@/lib/site';
 import { show as bookingShow } from '@/routes/booking';
 import { store } from '@/routes/contact';
 
@@ -42,6 +42,7 @@ export default function Contact({
 }: ContactProps) {
     const { t, locale } = useLanguage();
     const { ref, inView } = useInView<HTMLDivElement>({ threshold: 0.15 });
+    const { contact } = useSiteSettings();
 
     return (
         <PublicLayout>
@@ -94,10 +95,10 @@ export default function Contact({
                                     className="shrink-0 text-qd-teal-2 dark:text-qd-teal"
                                 />
                                 <a
-                                    href={`mailto:${SITE_CONFIG.contact.email}`}
+                                    href={`mailto:${contact.email ?? ''}`}
                                     className="hover:text-qd-teal-2 dark:hover:text-qd-teal"
                                 >
-                                    {SITE_CONFIG.contact.email}
+                                    {contact.email}
                                 </a>
                             </li>
                             <li className="flex items-center gap-2.5">
@@ -107,10 +108,10 @@ export default function Contact({
                                     className="shrink-0 text-qd-teal-2 dark:text-qd-teal"
                                 />
                                 <a
-                                    href={SITE_CONFIG.contact.phoneHref}
+                                    href={telHref(contact.phone) ?? undefined}
                                     className="hover:text-qd-teal-2 dark:hover:text-qd-teal"
                                 >
-                                    {SITE_CONFIG.contact.phone}
+                                    {contact.phone}
                                 </a>
                             </li>
                             <li className="flex items-center gap-2.5">
@@ -120,13 +121,13 @@ export default function Contact({
                                     className="shrink-0 text-qd-teal-2 dark:text-qd-teal"
                                 />
                                 <a
-                                    href={SITE_CONFIG.contact.whatsappHref}
+                                    href={whatsappHref(contact.whatsapp) ?? undefined}
                                     target="_blank"
-                                    rel="noreferrer"
+                                    rel="noopener noreferrer"
                                     className="hover:text-qd-teal-2 dark:hover:text-qd-teal"
                                 >
                                     {t('contact.details.whatsapp')}:{' '}
-                                    {SITE_CONFIG.contact.whatsapp}
+                                    {contact.whatsapp}
                                 </a>
                             </li>
                             <li className="flex items-start gap-2.5">
@@ -135,7 +136,7 @@ export default function Contact({
                                     size={16}
                                     className="mt-0.5 shrink-0 text-qd-teal-2 dark:text-qd-teal"
                                 />
-                                <span>{SITE_CONFIG.contact.address}</span>
+                                <span>{contact.address}</span>
                             </li>
                         </ul>
 

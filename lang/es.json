@@ -51,6 +51,9 @@
             "time": "¿Cuánto tarda un proyecto?",
             "budget": "¿Cómo se presupuesta?"
         },
+        "moreInfo": "Más información",
+        "restart": "Empezar de nuevo",
+        "emptyState": "Pronto añadiremos preguntas frecuentes aquí. Mientras tanto, escríbenos por cualquiera de estos canales.",
         "fallbackTitle": "¿Prefieres hablar con el equipo?",
         "goToContact": "Ir a Contacto",
         "whatsapp": "WhatsApp"
@@ -1445,8 +1448,12 @@
             "title": "Contacto",
             "whatsappLabel": "WhatsApp",
             "linkedin": "LinkedIn de Abaco Developments",
+            "facebook": "Facebook de Abaco Developments",
             "googleReviews": "Reseñas en Google",
-            "googleReviewsPending": "Reseñas en Google (próximamente)"
+            "googleReviewsPending": "Reseñas en Google (próximamente)",
+            "googleProfileLabel": "Ver el perfil de Abaco Developments en Google",
+            "googleReviewVerified": "reseña verificada",
+            "googleReviewsVerified": "reseñas verificadas"
         },
         "institutional": {
             "title": "Financiación",

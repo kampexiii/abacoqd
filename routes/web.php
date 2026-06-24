@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\PostCategoryController as AdminPostCategoryContro
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\Admin\TeamMemberController as AdminTeamMemberController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -190,6 +191,9 @@ Route::middleware(['auth', 'admin'])
         Route::match(['put', 'patch'], 'contacts/{contactMessage}', [AdminContactMessageController::class, 'update'])->name('contacts.update');
         Route::delete('contacts/{contactMessage}', [AdminContactMessageController::class, 'destroy'])->name('contacts.destroy');
         Route::delete('contacts', [AdminContactMessageController::class, 'purge'])->name('contacts.purge');
+
+        Route::get('settings', [AdminSettingController::class, 'edit'])->name('settings.edit');
+        Route::match(['put', 'patch'], 'settings', [AdminSettingController::class, 'update'])->name('settings.update');
     });
 
 require __DIR__.'/settings.php';
