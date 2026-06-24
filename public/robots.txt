@@ -1,2 +1,24 @@
+# robots.txt — AbacoQD
+# Decisión cerrada: por ahora solo el contenido ES es indexable. Se permite
+# rastrear toda la parte pública; se bloquean zonas privadas, de autenticación
+# y de utilidad. No se bloquean assets de build ni la home. Otros bloques SEO
+# se añadirán más adelante.
+
 User-agent: *
-Disallow:
+Allow: /
+
+# Panel y dashboard (tras login)
+Disallow: /admin
+Disallow: /dashboard
+
+# Ajustes de usuario (tras login)
+Disallow: /settings
+
+# Autenticación (Fortify)
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /email/verify
+Disallow: /two-factor-challenge
+Disallow: /user/confirm-password

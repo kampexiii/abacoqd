@@ -42,6 +42,19 @@ class HandleInertiaRequests extends Middleware
     ];
 
     /**
+     * Rutas públicas indexables que resuelven su SEO en el controlador a partir
+     * del modelo (no tienen `page_key`). Son indexables igual que las estáticas;
+     * su robots/canonical real lo sobrescribe el propio controlador.
+     *
+     * @var list<string>
+     */
+    private const PUBLIC_DETAIL_ROUTES = [
+        'services.detail',
+        'projects.detail',
+        'blog.detail',
+    ];
+
+    /**
      * Determines the current asset version.
      *
      * @see https://inertiajs.com/asset-versioning
@@ -111,18 +124,31 @@ class HandleInertiaRequests extends Middleware
     }
 
     /**
-     * SEO base de la página actual según el nombre de ruta. Las rutas sin mapa
-     * (detalles con modelo, admin, auth) caen al fallback global; los detalles
-     * lo sobrescriben luego con datos del modelo.
+     * SEO base de la página actual según el nombre de ruta.
+     *
+     * Solo las páginas públicas indexables (estáticas con `page_key` y detalles
+     * con modelo) emiten `index,follow`. El resto —admin, auth, dashboard,
+     * ajustes de usuario y rutas no mapeadas— emite `noindex,nofollow` ya en el
+     * HTML inicial. Los detalles con modelo sobrescriben luego su SEO en el
+     * propio controlador.
      *
      * @return array{title: string, description: string, canonical: string, robots: string}
      */
     private function resolvePageSeo(Request $request): array
     {
         $name = $request->route()?->getName();
-        $pageKey = $name !== null ? (self::PAGE_SEO_KEYS[$name] ?? null) : null;
         $path = '/'.ltrim($request->getPathInfo(), '/');
+        $resolver = app(SeoResolver::class);
 
-        return app(SeoResolver::class)->forPage($pageKey, $path)->toArray();
+        $isPublicIndexable = $name !== null && (
+            array_key_exists($name, self::PAGE_SEO_KEYS)
+            || in_array($name, self::PUBLIC_DETAIL_ROUTES, true)
+        );
+
+        if (! $isPublicIndexable) {
+            return $resolver->forNonPublic($path)->toArray();
+        }
+
+        return $resolver->forPage(self::PAGE_SEO_KEYS[$name] ?? null, $path)->toArray();
     }
 }

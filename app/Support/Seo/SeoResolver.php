@@ -59,6 +59,23 @@ class SeoResolver
         return $this->build($record, $path, $title, $description);
     }
 
+    /**
+     * SEO de una ruta NO pública (admin, auth, dashboard, ajustes de usuario,
+     * utilidades): nunca indexable. Conserva title/description del fallback
+     * global por uniformidad, pero fuerza `noindex,nofollow`. No depende de
+     * `seo_metadata` (estas rutas no se gestionan desde el admin SEO, que no
+     * existe por decisión cerrada).
+     */
+    public function forNonPublic(string $path): SeoData
+    {
+        return new SeoData(
+            title: (string) config('site.seo.title'),
+            description: (string) config('site.seo.description'),
+            canonical: $this->absolute($path),
+            robots: 'noindex,nofollow',
+        );
+    }
+
     private function build(
         ?SeoMetadata $record,
         string $path,
