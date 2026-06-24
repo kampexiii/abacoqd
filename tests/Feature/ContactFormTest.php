@@ -5,6 +5,8 @@ use App\Enums\ServiceStatus;
 use App\Mail\ContactMessageReceived;
 use App\Models\ContactMessage;
 use App\Models\Service;
+use App\Models\Setting;
+use App\Support\SiteSettings;
 use Illuminate\Support\Facades\Mail;
 
 test('guest can view the contact page', function () {
@@ -67,8 +69,67 @@ test('a valid submission creates a contact message and redirects back', function
 
     Mail::assertSent(ContactMessageReceived::class, function (ContactMessageReceived $mail) use ($message) {
         return $mail->contactMessage->is($message)
-            && $mail->hasTo(config('mail.contact_notify_address'));
+            && $mail->hasTo(SiteSettings::formRecipient());
     });
+});
+
+test('the contact notification is sent to the recipient configured in settings', function () {
+    Mail::fake();
+
+    Setting::query()->create([
+        'group' => 'site',
+        'key' => 'form_recipient_email',
+        'value' => 'leads@abacoqd.com',
+        'type' => 'string',
+        'is_public' => true,
+    ]);
+
+    $this->post('/contacto', [
+        'name' => 'Jane Doe',
+        'email' => 'jane@example.com',
+        'message' => 'Quiero un presupuesto.',
+        'privacy_consent' => '1',
+    ])->assertRedirect('/contacto');
+
+    expect(SiteSettings::formRecipient())->toBe('leads@abacoqd.com');
+
+    Mail::assertSent(
+        ContactMessageReceived::class,
+        fn (ContactMessageReceived $mail) => $mail->hasTo('leads@abacoqd.com'),
+    );
+});
+
+test('the contact notification falls back to config when settings has no recipient', function () {
+    Mail::fake();
+
+    expect(Setting::query()->where('group', 'site')->where('key', 'form_recipient_email')->exists())->toBeFalse();
+
+    $this->post('/contacto', [
+        'name' => 'Jane Doe',
+        'email' => 'jane@example.com',
+        'message' => 'Quiero un presupuesto.',
+        'privacy_consent' => '1',
+    ])->assertRedirect('/contacto');
+
+    Mail::assertSent(
+        ContactMessageReceived::class,
+        fn (ContactMessageReceived $mail) => $mail->hasTo(config('site.contact.form_recipient')),
+    );
+});
+
+test('a failing mailer does not lose the lead nor break the response', function () {
+    Mail::shouldReceive('to')->andThrow(new RuntimeException('SMTP down'));
+
+    $response = $this->post('/contacto', [
+        'name' => 'Jane Doe',
+        'email' => 'jane@example.com',
+        'message' => 'Quiero un presupuesto.',
+        'privacy_consent' => '1',
+    ]);
+
+    $response->assertRedirect('/contacto');
+    $response->assertSessionHas('contactSubmitted', true);
+    expect(ContactMessage::count())->toBe(1);
 });
 
 test('privacy consent is required to submit the contact form', function () {

@@ -8,8 +8,10 @@ use App\Http\Requests\Public\StoreContactMessageRequest;
 use App\Mail\ContactMessageReceived;
 use App\Models\ContactMessage;
 use App\Models\Service;
+use App\Support\SiteSettings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -65,8 +67,18 @@ class ContactController extends Controller
             'user_agent' => (string) $request->userAgent(),
         ]);
 
-        Mail::to(config('mail.contact_notify_address'))
-            ->send(new ContactMessageReceived($contactMessage));
+        // El lead ya está persistido: si la notificación por email falla (SMTP
+        // caído o mal configurado) se registra y se sigue, en vez de devolver un
+        // 500 al visitante por algo que no afecta a la captura del contacto.
+        try {
+            Mail::to(SiteSettings::formRecipient())
+                ->send(new ContactMessageReceived($contactMessage));
+        } catch (\Throwable $e) {
+            Log::error('No se pudo enviar la notificación de contacto.', [
+                'contact_message_id' => $contactMessage->id,
+                'exception' => $e->getMessage(),
+            ]);
+        }
 
         return to_route('contact.show')->with('contactSubmitted', true);
     }
