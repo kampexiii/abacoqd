@@ -154,8 +154,8 @@ class BlogController extends Controller
     private function postDetail(Post $post): array
     {
         $content = is_array($post->content) ? $post->content : [];
-        $es = $this->renderArticle((string) ($content['es'] ?? ''));
-        $en = $this->renderArticle((string) ($content['en'] ?? ''));
+        $es = $this->renderArticle($this->normalizeContent($content['es'] ?? null));
+        $en = $this->renderArticle($this->normalizeContent($content['en'] ?? null));
 
         return [
             ...$this->postSummary($post),
@@ -169,6 +169,58 @@ class BlogController extends Controller
                 ])
                 ->values(),
         ];
+    }
+
+    /**
+     * Normaliza el contenido de un post (por idioma) a Markdown antes de
+     * renderizarlo. El formato real (seeder/admin) es una cadena Markdown, pero
+     * `content[locale]` puede llegar como array de bloques (`{type, text}`) en
+     * datos de prueba o un futuro editor por bloques. En ese caso se extrae el
+     * texto de forma defensiva en vez de castear el array a string, que lanzaba
+     * `Array to string conversion`. `null` o formato no reconocible => cadena
+     * vacía controlada (no se inventa contenido).
+     *
+     * @param  mixed  $value
+     */
+    private function normalizeContent($value): string
+    {
+        if (is_string($value)) {
+            return $value;
+        }
+
+        if (! is_array($value)) {
+            return '';
+        }
+
+        // Array de bloques: se concatena el texto conocido. Un `heading` se
+        // promueve a H2 Markdown (alimenta el TOC); el resto aporta su texto
+        // como párrafo. Bloques sin texto reconocible se ignoran.
+        $lines = [];
+
+        foreach ($value as $block) {
+            if (is_string($block)) {
+                $block = trim($block);
+
+                if ($block !== '') {
+                    $lines[] = $block;
+                }
+
+                continue;
+            }
+
+            $text = is_array($block) && is_string($block['text'] ?? null)
+                ? trim($block['text'])
+                : '';
+
+            if ($text === '') {
+                continue;
+            }
+
+            $isHeading = is_array($block) && ($block['type'] ?? null) === 'heading';
+            $lines[] = $isHeading ? '## '.$text : $text;
+        }
+
+        return implode("\n\n", $lines);
     }
 
     /**
