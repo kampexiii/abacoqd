@@ -1682,6 +1682,21 @@ html.a11y-reduce-motion *::after {
 .qd-process-cube__slide {
     overflow: hidden;
     border-radius: 1.5rem;
+    /*
+     * Cada cara del cubo (Swiper effect="cube") debe ser OPACA. Las 6 caras se
+     * renderizan a la vez en 3D; con la cara frontal translúcida (glass) se
+     * transparentaba el texto de la cara opuesta (ghosting tipo "inicial"
+     * detrás de "06 Entrega"). `backface-visibility` solo oculta el reverso de
+     * cada cara, no impide ver una cara que está físicamente detrás. Con un
+     * fondo sólido de marca en la cara, la tarjeta-glass se compone sobre algo
+     * opaco: se mantiene la estética y solo se lee la cara visible.
+     */
+    background: var(--qd-white);
+    backface-visibility: hidden;
+}
+
+.dark .qd-process-cube__slide {
+    background: var(--qd-surface);
 }
 
 .qd-process-cube__card {
