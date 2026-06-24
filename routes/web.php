@@ -87,7 +87,6 @@ Route::middleware(['auth', 'admin'])
 
         Route::patch('services/{service}/toggle-status', [AdminServiceController::class, 'toggleStatus'])->name('services.toggle-status');
         Route::patch('services/{service}/toggle-active', [AdminServiceController::class, 'toggleActive'])->name('services.toggle-active');
-        Route::patch('services/{service}/toggle-featured', [AdminServiceController::class, 'toggleFeatured'])->name('services.toggle-featured');
         Route::patch('services/{service}/toggle-home', [AdminServiceController::class, 'toggleHome'])->name('services.toggle-home');
         Route::patch('services/{service}/toggle-detail', [AdminServiceController::class, 'toggleDetail'])->name('services.toggle-detail');
 
@@ -98,7 +97,6 @@ Route::middleware(['auth', 'admin'])
         Route::match(['put', 'patch'], 'posts/{post}', [AdminPostController::class, 'update'])->name('posts.update');
         Route::delete('posts/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
         Route::patch('posts/{post}/toggle-featured', [AdminPostController::class, 'toggleFeatured'])->name('posts.toggle-featured');
-        Route::patch('posts/{post}/toggle-home', [AdminPostController::class, 'toggleHome'])->name('posts.toggle-home');
 
         Route::get('post-categories', [AdminPostCategoryController::class, 'index'])->name('post-categories.index');
         Route::post('post-categories', [AdminPostCategoryController::class, 'store'])->name('post-categories.store');
@@ -117,10 +115,7 @@ Route::middleware(['auth', 'admin'])
         Route::match(['put', 'patch'], 'partners/{partner}', [AdminPartnerController::class, 'update'])->name('partners.update');
         Route::delete('partners/{partner}', [AdminPartnerController::class, 'destroy'])->name('partners.destroy');
         Route::patch('partners/{partner}/toggle-active', [AdminPartnerController::class, 'toggleActive'])->name('partners.toggle-active');
-        Route::patch('partners/{partner}/toggle-featured', [AdminPartnerController::class, 'toggleFeatured'])->name('partners.toggle-featured');
-        Route::patch('partners/{partner}/toggle-home', [AdminPartnerController::class, 'toggleHome'])->name('partners.toggle-home');
         Route::patch('partners/{partner}/toggle-collaborations', [AdminPartnerController::class, 'toggleCollaborations'])->name('partners.toggle-collaborations');
-        Route::patch('partners/{partner}/toggle-projects', [AdminPartnerController::class, 'toggleProjects'])->name('partners.toggle-projects');
 
         Route::get('projects', [AdminProjectController::class, 'index'])->name('projects.index');
         Route::get('projects/create', [AdminProjectController::class, 'create'])->name('projects.create');
@@ -129,7 +124,6 @@ Route::middleware(['auth', 'admin'])
         Route::match(['put', 'patch'], 'projects/{project}', [AdminProjectController::class, 'update'])->name('projects.update');
         Route::delete('projects/{project}', [AdminProjectController::class, 'destroy'])->name('projects.destroy');
         Route::patch('projects/{project}/toggle-active', [AdminProjectController::class, 'toggleActive'])->name('projects.toggle-active');
-        Route::patch('projects/{project}/toggle-featured', [AdminProjectController::class, 'toggleFeatured'])->name('projects.toggle-featured');
         Route::patch('projects/{project}/toggle-home', [AdminProjectController::class, 'toggleHome'])->name('projects.toggle-home');
         Route::patch('projects/{project}/toggle-projects', [AdminProjectController::class, 'toggleProjects'])->name('projects.toggle-projects');
         Route::patch('projects/{project}/toggle-collaborations', [AdminProjectController::class, 'toggleCollaborations'])->name('projects.toggle-collaborations');

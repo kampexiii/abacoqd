@@ -94,22 +94,6 @@ class Partner extends Model
     /**
      * @param  Builder<self>  $query
      */
-    public function scopeFeatured(Builder $query): void
-    {
-        $query->where('is_featured', true);
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     */
-    public function scopeHome(Builder $query): void
-    {
-        $query->where('show_on_home', true);
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     */
     public function scopeOrdered(Builder $query): void
     {
         $query->orderBy('sort_order')->orderBy('name');
@@ -139,13 +123,5 @@ class Partner extends Model
                 $inner->orWhere('settings->show_in_local_preview', true);
             }
         });
-    }
-
-    /**
-     * @param  Builder<self>  $query
-     */
-    public function scopeProjects(Builder $query): void
-    {
-        $query->where('show_in_projects', true);
     }
 }

@@ -29,10 +29,7 @@ export type AdminPartnerRecord = {
     readonly description: Partial<LocalizedInput> | null;
     readonly permissionStatus: string;
     readonly permissionNotes: string | null;
-    readonly showOnHome: boolean;
     readonly showInCollaborations: boolean;
-    readonly showInProjects: boolean;
-    readonly isFeatured: boolean;
     readonly isActive: boolean;
     readonly sortOrder: number;
 };
@@ -51,10 +48,7 @@ type PartnerFormData = {
     description: LocalizedInput;
     permission_status: string;
     permission_notes: string;
-    show_on_home: boolean;
     show_in_collaborations: boolean;
-    show_in_projects: boolean;
-    is_featured: boolean;
     is_active: boolean;
     sort_order: number;
 };
@@ -99,10 +93,7 @@ export default function PartnerForm({
         description: localized(partner?.description),
         permission_status: partner?.permissionStatus ?? 'pending',
         permission_notes: partner?.permissionNotes ?? '',
-        show_on_home: partner?.showOnHome ?? false,
         show_in_collaborations: partner?.showInCollaborations ?? true,
-        show_in_projects: partner?.showInProjects ?? true,
-        is_featured: partner?.isFeatured ?? false,
         is_active: partner?.isActive ?? true,
         sort_order: partner?.sortOrder ?? defaultSortOrder,
     });

@@ -83,7 +83,6 @@ test('posts tags authors and contact message scopes are wired', function () {
         'status' => PostStatus::Published->value,
         'published_at' => now()->subMinute(),
         'is_featured' => true,
-        'show_on_home' => true,
     ]);
 
     $post->tags()->attach($tag->id);
@@ -98,7 +97,7 @@ test('posts tags authors and contact message scopes are wired', function () {
         ->and($post->user->is($user))->toBeTrue()
         ->and($post->tags()->first()->is($tag))->toBeTrue()
         ->and($user->posts()->first()->is($post))->toBeTrue()
-        ->and(Post::published()->featured()->home()->count())->toBe(1)
+        ->and(Post::published()->featured()->count())->toBe(1)
         ->and(ContactMessage::newMessages()->count())->toBe(1)
         ->and($service->contactMessages()->count())->toBe(1);
 });

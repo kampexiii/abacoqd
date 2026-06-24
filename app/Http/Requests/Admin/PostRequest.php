@@ -32,7 +32,6 @@ abstract class PostRequest extends FormRequest
     {
         $this->merge([
             'is_featured' => $this->boolean('is_featured'),
-            'show_on_home' => $this->boolean('show_on_home'),
             'remove_image' => $this->boolean('remove_image'),
         ]);
     }
@@ -80,7 +79,6 @@ abstract class PostRequest extends FormRequest
             'published_at' => ['nullable', 'date'],
 
             'is_featured' => ['boolean'],
-            'show_on_home' => ['boolean'],
 
             'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:4096'],
             'remove_image' => ['boolean'],

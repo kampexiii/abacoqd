@@ -1552,8 +1552,8 @@
                 "isActive": "Activo",
                 "showOnHome": "En home",
                 "isFeatured": "Destacado",
-                "isDetailEnabled": "Detalle",
-                "isDetailEnabledHint": "Habilita la página /servicios/{slug}."
+                "isDetailEnabled": "Página individual",
+                "isDetailEnabledHint": "Permite abrir una página propia para este servicio en /servicios/{slug}."
             },
             "form": {
                 "contentTitle": "Contenido",

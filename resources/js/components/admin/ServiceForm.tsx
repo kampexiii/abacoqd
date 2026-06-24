@@ -30,7 +30,6 @@ export type AdminServiceRecord = {
     readonly status: string;
     readonly isActive: boolean;
     readonly showOnHome: boolean;
-    readonly isFeatured: boolean;
     readonly isDetailEnabled: boolean;
     readonly sortOrder: number;
 };
@@ -45,7 +44,6 @@ type ServiceFormData = {
     status: string;
     sort_order: number;
     is_active: boolean;
-    is_featured: boolean;
     show_on_home: boolean;
     is_detail_enabled: boolean;
     image: File | null;
@@ -85,7 +83,6 @@ export default function ServiceForm({
         status: service?.status ?? 'draft',
         sort_order: service?.sortOrder ?? defaultSortOrder,
         is_active: service?.isActive ?? true,
-        is_featured: service?.isFeatured ?? false,
         show_on_home: service?.showOnHome ?? true,
         is_detail_enabled: service?.isDetailEnabled ?? false,
         image: null,
@@ -314,11 +311,6 @@ export default function ServiceForm({
                             label={t('admin.services.fields.isActive')}
                             checked={data.is_active}
                             onChange={(value) => setData('is_active', value)}
-                        />
-                        <ToggleRow
-                            label={t('admin.services.fields.isFeatured')}
-                            checked={data.is_featured}
-                            onChange={(value) => setData('is_featured', value)}
                         />
                         <ToggleRow
                             label={t('admin.services.fields.isDetailEnabled')}

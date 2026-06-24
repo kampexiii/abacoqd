@@ -21,11 +21,22 @@ export type AdminPostRecord = {
     readonly content: Partial<LocalizedInput> | null;
     readonly featuredImage: string | null;
     readonly status: string;
+    readonly publishedAt: string | null;
     readonly categoryId: number | null;
     readonly tagIds: readonly number[];
     readonly isFeatured: boolean;
-    readonly showOnHome: boolean;
 };
+
+/**
+ * Convierte el `published_at` ISO 8601 (UTC) que envía el backend al formato
+ * `YYYY-MM-DDTHH:mm` que exige el input `datetime-local`. La app trabaja en UTC
+ * (config/app.php), así que se corta la cadena sin conversión de zona horaria:
+ * lo que se ve en el campo es exactamente lo que se persiste (round-trip exacto)
+ * y editar un post deja de borrar su fecha de publicación.
+ */
+function toDateTimeLocal(iso: string | null | undefined): string {
+    return iso ? iso.slice(0, 16) : '';
+}
 
 type PostFormData = {
     post_category_id: number | '';
@@ -37,7 +48,6 @@ type PostFormData = {
     status: string;
     published_at: string;
     is_featured: boolean;
-    show_on_home: boolean;
     image: File | null;
     remove_image: boolean;
 };
@@ -65,9 +75,8 @@ export default function PostForm({ mode, statuses, categories, tags, post }: Pos
         excerpt: localized(post?.excerpt),
         content: localized(post?.content),
         status: post?.status ?? 'draft',
-        published_at: '',
+        published_at: toDateTimeLocal(post?.publishedAt),
         is_featured: post?.isFeatured ?? false,
-        show_on_home: post?.showOnHome ?? true,
         image: null,
         remove_image: false,
     });
@@ -252,7 +261,6 @@ export default function PostForm({ mode, statuses, categories, tags, post }: Pos
 
                 <FormSection title="Destacados" description="Solo puede haber un post destacado: marcarlo desmarca automáticamente cualquier otro.">
                     <div className="flex flex-col divide-y divide-qd-mist dark:divide-qd-white/10">
-                        <ToggleRow label="Mostrar en home" checked={data.show_on_home} onChange={(v) => setData('show_on_home', v)} />
                         <ToggleRow label="Destacado en landing (único)" checked={data.is_featured} onChange={(v) => setData('is_featured', v)} />
                     </div>
                 </FormSection>

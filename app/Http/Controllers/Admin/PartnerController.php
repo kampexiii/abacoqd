@@ -10,6 +10,7 @@ use App\Http\Requests\Admin\UpdatePartnerRequest;
 use App\Models\Partner;
 use App\Services\Media\PartnerLogoService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -25,16 +26,27 @@ class PartnerController extends Controller
 {
     public function __construct(private readonly PartnerLogoService $logos) {}
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $search = trim($request->string('q')->toString());
+        $type = $request->string('type')->toString();
+
         $partners = Partner::query()
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('slug', 'like', "%{$search}%");
+                });
+            })
+            ->when($type !== '', fn ($query) => $query->where('type', $type))
             ->ordered()
-            ->get()
-            ->map(fn (Partner $partner): array => $this->adminSummary($partner))
-            ->values();
+            ->paginate(15)
+            ->withQueryString()
+            ->through(fn (Partner $partner): array => $this->adminSummary($partner));
 
         return Inertia::render('Admin/Partners/Index', [
             'partners' => $partners,
+            'filters' => $request->only(['q', 'type']),
         ]);
     }
 
@@ -85,10 +97,8 @@ class PartnerController extends Controller
     public function destroy(Partner $partner): RedirectResponse
     {
         $partner->update([
-            'show_on_home' => false,
-            'show_in_collaborations' => false,
-            'show_in_projects' => false,
             'is_active' => false,
+            'show_in_collaborations' => false,
         ]);
 
         return to_route('admin.partners.index')
@@ -102,30 +112,9 @@ class PartnerController extends Controller
         return back();
     }
 
-    public function toggleFeatured(Partner $partner): RedirectResponse
-    {
-        $partner->update(['is_featured' => ! $partner->is_featured]);
-
-        return back();
-    }
-
-    public function toggleHome(Partner $partner): RedirectResponse
-    {
-        $partner->update(['show_on_home' => ! $partner->show_on_home]);
-
-        return back();
-    }
-
     public function toggleCollaborations(Partner $partner): RedirectResponse
     {
         $partner->update(['show_in_collaborations' => ! $partner->show_in_collaborations]);
-
-        return back();
-    }
-
-    public function toggleProjects(Partner $partner): RedirectResponse
-    {
-        $partner->update(['show_in_projects' => ! $partner->show_in_projects]);
 
         return back();
     }
@@ -145,10 +134,7 @@ class PartnerController extends Controller
             'description' => $this->localized($request->validated('description')),
             'permission_status' => $request->validated('permission_status'),
             'permission_notes' => $request->validated('permission_notes'),
-            'show_on_home' => $request->boolean('show_on_home'),
             'show_in_collaborations' => $request->boolean('show_in_collaborations'),
-            'show_in_projects' => $request->boolean('show_in_projects'),
-            'is_featured' => $request->boolean('is_featured'),
             'is_active' => $request->boolean('is_active'),
             'sort_order' => (int) $request->validated('sort_order'),
         ];
@@ -232,10 +218,7 @@ class PartnerController extends Controller
             'logo' => $partner->logo,
             'permissionStatus' => $partner->permission_status->value,
             'isActive' => $partner->is_active,
-            'showOnHome' => $partner->show_on_home,
             'showInCollaborations' => $partner->show_in_collaborations,
-            'showInProjects' => $partner->show_in_projects,
-            'isFeatured' => $partner->is_featured,
             'sortOrder' => $partner->sort_order,
             'updatedAt' => $partner->updated_at?->toIso8601String(),
         ];

@@ -11,6 +11,7 @@ use App\Models\Partner;
 use App\Models\Project;
 use App\Services\Media\ProjectImageService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -27,17 +28,28 @@ class ProjectController extends Controller
 {
     public function __construct(private readonly ProjectImageService $images) {}
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $search = trim($request->string('q')->toString());
+        $status = $request->string('status')->toString();
+
         $projects = Project::query()
             ->with('clientPartner')
-            ->ordered()
-            ->get()
-            ->map(fn (Project $project): array => $this->adminSummary($project))
-            ->values();
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('slug', 'like', "%{$search}%");
+                });
+            })
+            ->when($status !== '', fn ($query) => $query->where('status', $status))
+            ->latest()
+            ->paginate(15)
+            ->withQueryString()
+            ->through(fn (Project $project): array => $this->adminSummary($project));
 
         return Inertia::render('Admin/Projects/Index', [
             'projects' => $projects,
+            'filters' => $request->only(['q', 'status']),
         ]);
     }
 
@@ -106,13 +118,6 @@ class ProjectController extends Controller
         return back();
     }
 
-    public function toggleFeatured(Project $project): RedirectResponse
-    {
-        $project->update(['is_featured' => ! $project->is_featured]);
-
-        return back();
-    }
-
     public function toggleHome(Project $project): RedirectResponse
     {
         $project->update(['show_on_home' => ! $project->show_on_home]);
@@ -159,7 +164,6 @@ class ProjectController extends Controller
             'show_on_home' => $request->boolean('show_on_home'),
             'show_in_projects' => $request->boolean('show_in_projects'),
             'show_in_collaborations' => $request->boolean('show_in_collaborations'),
-            'is_featured' => $request->boolean('is_featured'),
             'is_active' => $request->boolean('is_active'),
             'sort_order' => (int) $request->validated('sort_order'),
         ];
@@ -253,7 +257,6 @@ class ProjectController extends Controller
             'showOnHome' => $project->show_on_home,
             'showInProjects' => $project->show_in_projects,
             'showInCollaborations' => $project->show_in_collaborations,
-            'isFeatured' => $project->is_featured,
             'sortOrder' => $project->sort_order,
             'updatedAt' => $project->updated_at?->toIso8601String(),
             'publicUrl' => $this->publicUrl($project),

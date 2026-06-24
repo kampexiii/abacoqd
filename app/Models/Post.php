@@ -90,29 +90,34 @@ class Post extends Model
     }
 
     /**
+     * Único post destacado. No se ordena por `featured_order` (no se usa: solo
+     * puede haber un destacado, así que no hay orden que mantener).
+     *
      * @param  Builder<self>  $query
      */
     public function scopeFeatured(Builder $query): void
     {
-        $query->where('is_featured', true)->orderBy('featured_order');
+        $query->where('is_featured', true);
     }
 
     /**
-     * @param  Builder<self>  $query
-     */
-    public function scopeHome(Builder $query): void
-    {
-        $query->where('show_on_home', true);
-    }
-
-    /**
+     * Posts visibles en público: estado `Published` y con fecha asignada.
+     *
+     * No se aplica la compuerta `published_at <= now()`. Hacerlo ocultaba un
+     * post recién publicado durante horas: el editor elige la fecha en su hora
+     * local (p. ej. España, UTC+2) y el `datetime-local` se guardaba como si
+     * fuera UTC, quedando `published_at` por delante de `now()` (UTC) hasta que
+     * pasaba el desfase. La programación real se modela con el estado
+     * `Scheduled` (oculto hasta que un editor lo pasa a `Published`), no con una
+     * fecha futura sobre un post ya marcado como publicado. `published_at` se
+     * conserva para ordenar y para la fecha pública.
+     *
      * @param  Builder<self>  $query
      */
     public function scopePublished(Builder $query): void
     {
         $query->where('status', PostStatus::Published->value)
-            ->whereNotNull('published_at')
-            ->where('published_at', '<=', now());
+            ->whereNotNull('published_at');
     }
 
     /**

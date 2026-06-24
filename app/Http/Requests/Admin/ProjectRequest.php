@@ -38,7 +38,6 @@ abstract class ProjectRequest extends FormRequest
     {
         $this->merge([
             'is_active' => $this->boolean('is_active'),
-            'is_featured' => $this->boolean('is_featured'),
             'show_on_home' => $this->boolean('show_on_home'),
             'show_in_projects' => $this->boolean('show_in_projects'),
             'show_in_collaborations' => $this->boolean('show_in_collaborations'),
@@ -107,7 +106,6 @@ abstract class ProjectRequest extends FormRequest
             'show_on_home' => ['boolean'],
             'show_in_projects' => ['boolean'],
             'show_in_collaborations' => ['boolean'],
-            'is_featured' => ['boolean'],
             'is_active' => ['boolean'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:65535'],
 

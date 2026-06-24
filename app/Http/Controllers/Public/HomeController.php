@@ -23,9 +23,9 @@ class HomeController extends Controller
      * fallback estático sin romperse.
      *
      * La sección Blog usa el post destacado (`Post::featured()`) como card
-     * grande y los 2 últimos publicados con `show_on_home` como cards
-     * pequeñas, excluyendo el destacado si coincide. Sin datos, `BlogSection`
-     * muestra un estado controlado (no inventa posts).
+     * grande y los 2 últimos publicados como cards pequeñas, excluyendo el
+     * destacado si coincide. Sin datos, `BlogSection` muestra un estado
+     * controlado (no inventa posts).
      */
     public function index(): Response
     {
@@ -41,14 +41,12 @@ class HomeController extends Controller
 
         $featuredPost = Post::query()
             ->published()
-            ->home()
             ->featured()
             ->with('category')
             ->first();
 
         $latestPosts = Post::query()
             ->published()
-            ->home()
             ->when(
                 $featuredPost,
                 fn (Builder $query): Builder => $query->whereKeyNot($featuredPost->id),

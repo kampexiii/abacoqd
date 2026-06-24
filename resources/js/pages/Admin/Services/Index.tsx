@@ -7,12 +7,15 @@ import {
     Search,
     Wrench,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 
 import AdminEmptyState from '@/components/admin/AdminEmptyState';
+import AdminPagination from '@/components/admin/AdminPagination';
+import type { PaginatedData } from '@/components/admin/AdminPagination';
 import AdminSelect from '@/components/admin/AdminSelect';
 import StatusBadge from '@/components/admin/StatusBadge';
-import type {ServiceStatus} from '@/components/admin/StatusBadge';
+import type { ServiceStatus } from '@/components/admin/StatusBadge';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -33,7 +36,6 @@ type ServiceRow = {
     readonly status: ServiceStatus;
     readonly isActive: boolean;
     readonly showOnHome: boolean;
-    readonly isFeatured: boolean;
     readonly isDetailEnabled: boolean;
     readonly sortOrder: number;
     readonly updatedAt: string | null;
@@ -41,74 +43,67 @@ type ServiceRow = {
 };
 
 type IndexProps = {
-    readonly services: readonly ServiceRow[];
+    readonly services: PaginatedData<ServiceRow>;
+    readonly filters: {
+        readonly q?: string;
+        readonly status?: string;
+        readonly active?: string;
+    };
+    readonly counts: {
+        readonly total: number;
+        readonly published: number;
+        readonly draft: number;
+        readonly hidden: number;
+    };
 };
 
-type TriState = 'all' | 'yes' | 'no';
+type TriState = '' | 'yes' | 'no';
 
 function patch(id: number, action: string) {
-    router.patch(`/admin/services/${id}/${action}`, {}, { preserveScroll: true });
+    router.patch(
+        `/admin/services/${id}/${action}`,
+        {},
+        { preserveScroll: true },
+    );
 }
 
-export default function ServicesIndex({ services }: IndexProps) {
+export default function ServicesIndex({
+    services,
+    filters,
+    counts,
+}: IndexProps) {
     const { t, locale } = useLanguage();
 
-    const [search, setSearch] = useState('');
-    const [statusFilter, setStatusFilter] = useState<'all' | ServiceStatus>('all');
-    const [activeFilter, setActiveFilter] = useState<TriState>('all');
-    const [featuredFilter, setFeaturedFilter] = useState<TriState>('all');
-    const [detailFilter, setDetailFilter] = useState<TriState>('all');
+    const [search, setSearch] = useState(filters.q ?? '');
+    const [statusFilter, setStatusFilter] = useState<'' | ServiceStatus>(
+        (filters.status as ServiceStatus | undefined) ?? '',
+    );
+    const [activeFilter, setActiveFilter] = useState<TriState>(
+        (filters.active as TriState | undefined) ?? '',
+    );
 
     const title = (service: ServiceRow): string =>
-        service.title?.[locale] ?? service.title?.es ?? service.title?.en ?? '—';
+        service.title?.[locale] ??
+        service.title?.es ??
+        service.title?.en ??
+        '—';
     const slug = (service: ServiceRow): string =>
         service.slug?.[locale] ?? service.slug?.es ?? service.slug?.en ?? '';
 
-    const counts = useMemo(
-        () => ({
-            total: services.length,
-            published: services.filter((s) => s.status === 'published').length,
-            draft: services.filter((s) => s.status === 'draft').length,
-            hidden: services.filter((s) => s.status === 'hidden').length,
-        }),
-        [services],
-    );
+    const applyFilters = (event: FormEvent) => {
+        event.preventDefault();
+        router.get(
+            '/admin/services',
+            {
+                q: search,
+                status: statusFilter,
+                active: activeFilter,
+            },
+            { preserveState: true, replace: true },
+        );
+    };
 
-    const matchTri = (value: boolean, filter: TriState) =>
-        filter === 'all' || (filter === 'yes') === value;
-
-    const filtered = useMemo(() => {
-        const term = search.trim().toLowerCase();
-
-        return services.filter((service) => {
-            if (term) {
-                const haystack = `${title(service)} ${slug(service)}`.toLowerCase();
-
-                if (!haystack.includes(term)) {
-                    return false;
-                }
-            }
-
-            if (statusFilter !== 'all' && service.status !== statusFilter) {
-                return false;
-            }
-
-            return (
-                matchTri(service.isActive, activeFilter) &&
-                matchTri(service.isFeatured, featuredFilter) &&
-                matchTri(service.isDetailEnabled, detailFilter)
-            );
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        services,
-        search,
-        statusFilter,
-        activeFilter,
-        featuredFilter,
-        detailFilter,
-        locale,
-    ]);
+    const hasFilters = Boolean(filters.q || filters.status || filters.active);
 
     const formatDate = (value: string | null): string =>
         value
@@ -140,24 +135,29 @@ export default function ServicesIndex({ services }: IndexProps) {
 
             {/* Stat cards */}
             <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {(['total', 'published', 'draft', 'hidden'] as const).map((key) => (
-                    <div
-                        key={key}
-                        className="rounded-2xl border border-qd-mist bg-qd-white p-5 dark:border-qd-white/10 dark:bg-qd-surface"
-                    >
-                        <p className="text-3xl font-extrabold text-qd-ink dark:text-qd-white">
-                            {counts[key]}
-                        </p>
-                        <p className="mt-1 text-sm text-qd-text-medium dark:text-qd-white/50">
-                            {t(`admin.services.counts.${key}`)}
-                        </p>
-                    </div>
-                ))}
+                {(['total', 'published', 'draft', 'hidden'] as const).map(
+                    (key) => (
+                        <div
+                            key={key}
+                            className="rounded-2xl border border-qd-mist bg-qd-white p-5 dark:border-qd-white/10 dark:bg-qd-surface"
+                        >
+                            <p className="text-3xl font-extrabold text-qd-ink dark:text-qd-white">
+                                {counts[key]}
+                            </p>
+                            <p className="mt-1 text-sm text-qd-text-medium dark:text-qd-white/50">
+                                {t(`admin.services.counts.${key}`)}
+                            </p>
+                        </div>
+                    ),
+                )}
             </div>
 
             {/* Filters + table */}
             <div className="rounded-2xl border border-qd-mist bg-qd-white dark:border-qd-white/10 dark:bg-qd-surface">
-                <div className="flex flex-wrap items-center gap-3 border-b border-qd-mist p-4 dark:border-qd-white/10">
+                <form
+                    onSubmit={applyFilters}
+                    className="flex flex-wrap items-center gap-3 border-b border-qd-mist p-4 dark:border-qd-white/10"
+                >
                     <div className="relative flex-1 sm:min-w-64">
                         <Search
                             aria-hidden="true"
@@ -176,12 +176,20 @@ export default function ServicesIndex({ services }: IndexProps) {
                     <FilterSelect
                         label={t('admin.services.filters.status')}
                         value={statusFilter}
-                        onChange={(v) => setStatusFilter(v as 'all' | ServiceStatus)}
+                        onChange={(v) =>
+                            setStatusFilter(v as '' | ServiceStatus)
+                        }
                         options={[
-                            { value: 'all', label: t('admin.filters.all') },
-                            { value: 'published', label: t('admin.status.published') },
+                            { value: '', label: t('admin.filters.all') },
+                            {
+                                value: 'published',
+                                label: t('admin.status.published'),
+                            },
                             { value: 'draft', label: t('admin.status.draft') },
-                            { value: 'hidden', label: t('admin.status.hidden') },
+                            {
+                                value: 'hidden',
+                                label: t('admin.status.hidden'),
+                            },
                         ]}
                     />
                     <FilterSelect
@@ -190,36 +198,30 @@ export default function ServicesIndex({ services }: IndexProps) {
                         onChange={(v) => setActiveFilter(v as TriState)}
                         options={triOptions(t)}
                     />
-                    <FilterSelect
-                        label={t('admin.services.fields.isFeatured')}
-                        value={featuredFilter}
-                        onChange={(v) => setFeaturedFilter(v as TriState)}
-                        options={triOptions(t)}
-                    />
-                    <FilterSelect
-                        label={t('admin.services.fields.isDetailEnabled')}
-                        value={detailFilter}
-                        onChange={(v) => setDetailFilter(v as TriState)}
-                        options={triOptions(t)}
-                    />
-                </div>
+                    <button
+                        type="submit"
+                        className="h-9 rounded-lg bg-qd-teal-2 px-4 text-sm font-bold text-white dark:bg-qd-teal dark:text-qd-ink"
+                    >
+                        Filtrar
+                    </button>
+                </form>
 
-                {filtered.length === 0 ? (
+                {services.data.length === 0 ? (
                     <div className="p-6">
                         <AdminEmptyState
                             icon={Wrench}
                             title={
-                                services.length === 0
+                                !hasFilters && counts.total === 0
                                     ? t('admin.services.empty.title')
                                     : t('admin.services.noResults.title')
                             }
                             description={
-                                services.length === 0
+                                !hasFilters && counts.total === 0
                                     ? t('admin.services.empty.description')
                                     : t('admin.services.noResults.description')
                             }
                             action={
-                                services.length === 0 ? (
+                                !hasFilters && counts.total === 0 ? (
                                     <Link
                                         href="/admin/services/create"
                                         className="inline-flex items-center gap-2 rounded-lg bg-qd-teal-2 px-4 py-2.5 text-sm font-bold text-white dark:bg-qd-teal dark:text-qd-ink"
@@ -236,19 +238,37 @@ export default function ServicesIndex({ services }: IndexProps) {
                         <table className="w-full min-w-235 text-sm">
                             <thead>
                                 <tr className="border-b border-qd-mist text-left text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:border-qd-white/10 dark:text-qd-white/50">
-                                    <th className="px-4 py-3">{t('admin.services.columns.service')}</th>
-                                    <th className="px-4 py-3">{t('admin.services.columns.status')}</th>
-                                    <th className="px-4 py-3 text-center">{t('admin.services.fields.isActive')}</th>
-                                    <th className="px-4 py-3 text-center">{t('admin.services.fields.isFeatured')}</th>
-                                    <th className="px-4 py-3 text-center">{t('admin.services.fields.isDetailEnabled')}</th>
-                                    <th className="px-4 py-3 text-center">{t('admin.services.columns.order')}</th>
-                                    <th className="px-4 py-3">{t('admin.services.columns.updated')}</th>
-                                    <th className="px-4 py-3 text-right">{t('admin.services.columns.actions')}</th>
+                                    <th className="px-4 py-3">
+                                        {t('admin.services.columns.service')}
+                                    </th>
+                                    <th className="px-4 py-3">
+                                        {t('admin.services.columns.status')}
+                                    </th>
+                                    <th className="px-4 py-3 text-center">
+                                        {t('admin.services.fields.isActive')}
+                                    </th>
+                                    <th className="px-4 py-3 text-center">
+                                        {t(
+                                            'admin.services.fields.isDetailEnabled',
+                                        )}
+                                    </th>
+                                    <th className="px-4 py-3 text-center">
+                                        {t('admin.services.columns.order')}
+                                    </th>
+                                    <th className="px-4 py-3">
+                                        {t('admin.services.columns.updated')}
+                                    </th>
+                                    <th className="px-4 py-3 text-right">
+                                        {t('admin.services.columns.actions')}
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-qd-mist dark:divide-qd-white/10">
-                                {filtered.map((service) => (
-                                    <tr key={service.id} className="align-middle">
+                                {services.data.map((service) => (
+                                    <tr
+                                        key={service.id}
+                                        className="align-middle"
+                                    >
                                         <td className="px-4 py-3">
                                             <p className="font-semibold text-qd-ink dark:text-qd-white">
                                                 {title(service)}
@@ -258,24 +278,32 @@ export default function ServicesIndex({ services }: IndexProps) {
                                             </p>
                                         </td>
                                         <td className="px-4 py-3">
-                                            <StatusBadge status={service.status} />
+                                            <StatusBadge
+                                                status={service.status}
+                                            />
                                         </td>
                                         <td className="px-4 py-3 text-center">
                                             <RowToggle
                                                 checked={service.isActive}
-                                                onClick={() => patch(service.id, 'toggle-active')}
+                                                onClick={() =>
+                                                    patch(
+                                                        service.id,
+                                                        'toggle-active',
+                                                    )
+                                                }
                                             />
                                         </td>
                                         <td className="px-4 py-3 text-center">
                                             <RowToggle
-                                                checked={service.isFeatured}
-                                                onClick={() => patch(service.id, 'toggle-featured')}
-                                            />
-                                        </td>
-                                        <td className="px-4 py-3 text-center">
-                                            <RowToggle
-                                                checked={service.isDetailEnabled}
-                                                onClick={() => patch(service.id, 'toggle-detail')}
+                                                checked={
+                                                    service.isDetailEnabled
+                                                }
+                                                onClick={() =>
+                                                    patch(
+                                                        service.id,
+                                                        'toggle-detail',
+                                                    )
+                                                }
                                             />
                                         </td>
                                         <td className="px-4 py-3 text-center text-qd-text-high dark:text-qd-white/70">
@@ -289,9 +317,14 @@ export default function ServicesIndex({ services }: IndexProps) {
                                                 <Link
                                                     href={`/admin/services/${service.id}/edit`}
                                                     className="flex size-8 items-center justify-center rounded-lg border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2/40 hover:text-qd-teal-2 dark:border-qd-white/10 dark:text-qd-white/70"
-                                                    aria-label={t('admin.services.actions.edit')}
+                                                    aria-label={t(
+                                                        'admin.services.actions.edit',
+                                                    )}
                                                 >
-                                                    <Pencil aria-hidden="true" size={15} />
+                                                    <Pencil
+                                                        aria-hidden="true"
+                                                        size={15}
+                                                    />
                                                 </Link>
                                                 {service.publicUrl && (
                                                     <a
@@ -300,13 +333,19 @@ export default function ServicesIndex({ services }: IndexProps) {
                                                         rel="noreferrer"
                                                         className={cn(
                                                             'flex size-8 items-center justify-center rounded-lg border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2/40 hover:text-qd-teal-2 dark:border-qd-white/10 dark:text-qd-white/70',
-                                                            (service.status !== 'published' ||
+                                                            (service.status !==
+                                                                'published' ||
                                                                 !service.isActive) &&
                                                                 'pointer-events-none opacity-40',
                                                         )}
-                                                        aria-label={t('admin.services.actions.viewPublic')}
+                                                        aria-label={t(
+                                                            'admin.services.actions.viewPublic',
+                                                        )}
                                                     >
-                                                        <ExternalLink aria-hidden="true" size={15} />
+                                                        <ExternalLink
+                                                            aria-hidden="true"
+                                                            size={15}
+                                                        />
                                                     </a>
                                                 )}
                                                 <RowActions service={service} />
@@ -316,11 +355,7 @@ export default function ServicesIndex({ services }: IndexProps) {
                                 ))}
                             </tbody>
                         </table>
-                        <div className="border-t border-qd-mist px-4 py-3 text-xs text-qd-text-medium dark:border-qd-white/10 dark:text-qd-white/50">
-                            {t('admin.services.showing')
-                                .replace(':count', String(filtered.length))
-                                .replace(':total', String(services.length))}
-                        </div>
+                        <AdminPagination pagination={services} />
                     </div>
                 )}
             </div>
@@ -330,7 +365,7 @@ export default function ServicesIndex({ services }: IndexProps) {
 
 function triOptions(t: (key: string) => string) {
     return [
-        { value: 'all', label: t('admin.filters.all') },
+        { value: '', label: t('admin.filters.all') },
         { value: 'yes', label: t('admin.filters.yes') },
         { value: 'no', label: t('admin.filters.no') },
     ];
@@ -345,10 +380,18 @@ function FilterSelect({
     readonly label: string;
     readonly value: string;
     readonly onChange: (value: string) => void;
-    readonly options: readonly { readonly value: string; readonly label: string }[];
+    readonly options: readonly {
+        readonly value: string;
+        readonly label: string;
+    }[];
 }) {
     return (
-        <AdminSelect aria-label={label} value={value} onChange={(e) => onChange(e.target.value)} className="w-auto">
+        <AdminSelect
+            aria-label={label}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-auto"
+        >
             {options.map((option) => (
                 <option key={option.value} value={option.value}>
                     {label}: {option.label}
@@ -373,7 +416,9 @@ function RowToggle({
             onClick={onClick}
             className={cn(
                 'relative inline-flex h-5 w-9 shrink-0 items-center rounded-full align-middle transition',
-                checked ? 'bg-qd-teal-2 dark:bg-qd-teal' : 'bg-qd-mist dark:bg-qd-white/15',
+                checked
+                    ? 'bg-qd-teal-2 dark:bg-qd-teal'
+                    : 'bg-qd-mist dark:bg-qd-white/15',
             )}
         >
             <span
@@ -398,7 +443,9 @@ function RowActions({ service }: { readonly service: ServiceRow }) {
                 <MoreVertical aria-hidden="true" size={15} />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onSelect={() => patch(service.id, 'toggle-status')}>
+                <DropdownMenuItem
+                    onSelect={() => patch(service.id, 'toggle-status')}
+                >
                     {service.status === 'published'
                         ? t('admin.services.actions.hide')
                         : t('admin.services.actions.publish')}
@@ -407,7 +454,11 @@ function RowActions({ service }: { readonly service: ServiceRow }) {
                 <DropdownMenuItem
                     variant="destructive"
                     onSelect={() => {
-                        if (window.confirm(t('admin.services.actions.archiveConfirm'))) {
+                        if (
+                            window.confirm(
+                                t('admin.services.actions.archiveConfirm'),
+                            )
+                        ) {
                             router.delete(`/admin/services/${service.id}`, {
                                 preserveScroll: true,
                             });

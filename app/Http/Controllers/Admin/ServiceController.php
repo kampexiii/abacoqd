@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\UpdateServiceRequest;
 use App\Models\Service;
 use App\Services\Media\ServiceImageService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,16 +25,36 @@ class ServiceController extends Controller
 {
     public function __construct(private readonly ServiceImageService $images) {}
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $search = trim($request->string('q')->toString());
+        $status = $request->string('status')->toString();
+        $active = $request->string('active')->toString();
+
         $services = Service::query()
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('slug', 'like', "%{$search}%");
+                });
+            })
+            ->when($status !== '', fn ($query) => $query->where('status', $status))
+            ->when($active === 'yes', fn ($query) => $query->where('is_active', true))
+            ->when($active === 'no', fn ($query) => $query->where('is_active', false))
             ->ordered()
-            ->get()
-            ->map(fn (Service $service): array => $this->adminSummary($service))
-            ->values();
+            ->paginate(15)
+            ->withQueryString()
+            ->through(fn (Service $service): array => $this->adminSummary($service));
 
         return Inertia::render('Admin/Services/Index', [
             'services' => $services,
+            'filters' => $request->only(['q', 'status', 'active']),
+            'counts' => [
+                'total' => Service::query()->count(),
+                'published' => Service::query()->where('status', ServiceStatus::Published->value)->count(),
+                'draft' => Service::query()->where('status', ServiceStatus::Draft->value)->count(),
+                'hidden' => Service::query()->where('status', ServiceStatus::Hidden->value)->count(),
+            ],
         ]);
     }
 
@@ -108,13 +129,6 @@ class ServiceController extends Controller
         return back();
     }
 
-    public function toggleFeatured(Service $service): RedirectResponse
-    {
-        $service->update(['is_featured' => ! $service->is_featured]);
-
-        return back();
-    }
-
     public function toggleHome(Service $service): RedirectResponse
     {
         $service->update(['show_on_home' => ! $service->show_on_home]);
@@ -146,7 +160,6 @@ class ServiceController extends Controller
             'status' => $request->validated('status'),
             'sort_order' => (int) $request->validated('sort_order'),
             'is_active' => $request->boolean('is_active'),
-            'is_featured' => $request->boolean('is_featured'),
             'show_on_home' => $request->boolean('show_on_home'),
             'is_detail_enabled' => $request->boolean('is_detail_enabled'),
         ];
@@ -229,7 +242,6 @@ class ServiceController extends Controller
             'status' => $service->status->value,
             'isActive' => $service->is_active,
             'showOnHome' => $service->show_on_home,
-            'isFeatured' => $service->is_featured,
             'isDetailEnabled' => $service->is_detail_enabled,
             'sortOrder' => $service->sort_order,
             'updatedAt' => $service->updated_at?->toIso8601String(),

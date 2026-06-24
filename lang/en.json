@@ -1552,8 +1552,8 @@
                 "isActive": "Active",
                 "showOnHome": "On home",
                 "isFeatured": "Featured",
-                "isDetailEnabled": "Detail",
-                "isDetailEnabledHint": "Enables the /servicios/{slug} page."
+                "isDetailEnabled": "Individual page",
+                "isDetailEnabledHint": "Opens a dedicated page for this service at /servicios/{slug}."
             },
             "form": {
                 "contentTitle": "Content",

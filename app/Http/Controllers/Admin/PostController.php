@@ -11,6 +11,7 @@ use App\Models\PostCategory;
 use App\Models\Tag;
 use App\Services\Media\PostCoverImageService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -23,19 +24,32 @@ class PostController extends Controller
 {
     public function __construct(private readonly PostCoverImageService $covers) {}
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $search = trim($request->string('q')->toString());
+        $status = $request->string('status')->toString();
+        $categoryId = $request->integer('category') ?: null;
+
         $posts = Post::query()
             ->with(['category', 'tags'])
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($query) use ($search): void {
+                    $query->where('title', 'like', "%{$search}%")
+                        ->orWhere('slug', 'like', "%{$search}%");
+                });
+            })
+            ->when($status !== '', fn ($query) => $query->where('status', $status))
+            ->when($categoryId !== null, fn ($query) => $query->where('post_category_id', $categoryId))
             ->orderByDesc('published_at')
             ->orderByDesc('id')
-            ->get()
-            ->map(fn (Post $post): array => $this->adminSummary($post))
-            ->values();
+            ->paginate(15)
+            ->withQueryString()
+            ->through(fn (Post $post): array => $this->adminSummary($post));
 
         return Inertia::render('Admin/Posts/Index', [
             'posts' => $posts,
             'categories' => $this->categoryOptions(),
+            'filters' => $request->only(['q', 'status', 'category']),
         ]);
     }
 
@@ -104,32 +118,21 @@ class PostController extends Controller
     }
 
     /**
-     * Solo puede existir un post destacado. Si `$post` quedó destacado,
-     * desmarca cualquier otro; si quedó sin destacar, puede no quedar
-     * ninguno destacado (no se elige un sustituto automático).
+     * Solo puede existir un post destacado. Si `$post` quedó destacado, desmarca
+     * cualquier otro; si quedó sin destacar, puede no quedar ninguno (no se elige
+     * sustituto automático). No se usa `featured_order`: al haber un único
+     * destacado no hay orden que mantener.
      */
     private function enforceSingleFeatured(Post $post): void
     {
-        if ($post->is_featured) {
-            Post::query()->whereKeyNot($post->id)->where('is_featured', true)->update([
-                'is_featured' => false,
-                'featured_order' => null,
-            ]);
-            $post->update(['featured_order' => 1]);
-
+        if (! $post->is_featured) {
             return;
         }
 
-        if ($post->featured_order !== null) {
-            $post->update(['featured_order' => null]);
-        }
-    }
-
-    public function toggleHome(Post $post): RedirectResponse
-    {
-        $post->update(['show_on_home' => ! $post->show_on_home]);
-
-        return back();
+        Post::query()
+            ->whereKeyNot($post->id)
+            ->where('is_featured', true)
+            ->update(['is_featured' => false]);
     }
 
     /**
@@ -139,6 +142,8 @@ class PostController extends Controller
     {
         $content = $this->localized($request->validated('content'));
         $readingTime = $this->estimateReadingTime($content);
+        $status = $request->validated('status');
+        $publishedAt = $request->validated('published_at');
 
         return [
             'post_category_id' => (int) $request->validated('post_category_id'),
@@ -146,10 +151,14 @@ class PostController extends Controller
             'slug' => $this->localized($request->validated('slug')),
             'excerpt' => $this->localized($request->validated('excerpt')),
             'content' => $content,
-            'status' => $request->validated('status'),
-            'published_at' => $request->validated('published_at'),
+            'status' => $status,
+            // Un post publicado sin fecha quedaría invisible (el scope público
+            // exige `published_at` no nulo): si se publica sin fecha, se usa
+            // ahora. Borrador/programado conservan lo enviado.
+            'published_at' => $status === PostStatus::Published->value && $publishedAt === null
+                ? now()
+                : $publishedAt,
             'is_featured' => $request->boolean('is_featured'),
-            'show_on_home' => $request->boolean('show_on_home'),
             'reading_time' => $readingTime,
         ];
     }
@@ -223,7 +232,6 @@ class PostController extends Controller
             'categoryName' => $post->category?->name,
             'tagIds' => $post->tags->pluck('id')->values(),
             'isFeatured' => $post->is_featured,
-            'showOnHome' => $post->show_on_home,
             'publishedAt' => $post->published_at?->toIso8601String(),
             'readingTime' => $post->reading_time,
             'updatedAt' => $post->updated_at?->toIso8601String(),

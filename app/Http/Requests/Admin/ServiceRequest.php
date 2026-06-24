@@ -39,7 +39,6 @@ abstract class ServiceRequest extends FormRequest
         // imagen) para que la regla `boolean` sea estable.
         $this->merge([
             'is_active' => $this->boolean('is_active'),
-            'is_featured' => $this->boolean('is_featured'),
             'show_on_home' => $this->boolean('show_on_home'),
             'is_detail_enabled' => $this->boolean('is_detail_enabled'),
             'remove_image' => $this->boolean('remove_image'),
@@ -95,7 +94,6 @@ abstract class ServiceRequest extends FormRequest
             'sort_order' => ['required', 'integer', 'min:0', 'max:65535'],
 
             'is_active' => ['boolean'],
-            'is_featured' => ['boolean'],
             'show_on_home' => ['boolean'],
             'is_detail_enabled' => ['boolean'],
 

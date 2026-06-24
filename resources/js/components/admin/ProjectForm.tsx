@@ -3,7 +3,9 @@ import { Loader2, Upload, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
 
-import AdminSelect, { adminSelectClass as selectClass } from '@/components/admin/AdminSelect';
+import AdminSelect, {
+    adminSelectClass as selectClass,
+} from '@/components/admin/AdminSelect';
 import FormSection from '@/components/admin/FormSection';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -43,7 +45,6 @@ export type AdminProjectRecord = {
     readonly showOnHome: boolean;
     readonly showInProjects: boolean;
     readonly showInCollaborations: boolean;
-    readonly isFeatured: boolean;
     readonly isActive: boolean;
     readonly sortOrder: number;
     readonly partners: readonly ProjectPartner[];
@@ -77,7 +78,6 @@ type ProjectFormData = {
     show_on_home: boolean;
     show_in_projects: boolean;
     show_in_collaborations: boolean;
-    is_featured: boolean;
     is_active: boolean;
     sort_order: number;
     cover_image: File | null;
@@ -132,7 +132,6 @@ export default function ProjectForm({
         show_on_home: project?.showOnHome ?? false,
         show_in_projects: project?.showInProjects ?? true,
         show_in_collaborations: project?.showInCollaborations ?? false,
-        is_featured: project?.isFeatured ?? false,
         is_active: project?.isActive ?? true,
         sort_order: project?.sortOrder ?? defaultSortOrder,
         cover_image: null,
@@ -654,11 +653,6 @@ export default function ProjectForm({
                             onChange={(v) =>
                                 setData('show_in_collaborations', v)
                             }
-                        />
-                        <ToggleRow
-                            label="Destacado"
-                            checked={data.is_featured}
-                            onChange={(v) => setData('is_featured', v)}
                         />
                     </div>
                 </FormSection>
