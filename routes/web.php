@@ -25,6 +25,7 @@ use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Public\ProjectController;
 use App\Http\Controllers\Public\ServiceController;
+use App\Http\Controllers\Public\SitemapController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,8 @@ Route::get('/proyectos/{slug}', [ProjectController::class, 'show'])->name('proje
 Route::get('/quienes-somos', [AboutController::class, 'index'])->name('about.show');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.show');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.detail');
+
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 
 Route::inertia('/aviso-legal', 'Public/LegalPage', ['kind' => 'notice'])->name('legal.notice');
 Route::inertia('/privacidad', 'Public/LegalPage', ['kind' => 'privacy'])->name('legal.privacy');
