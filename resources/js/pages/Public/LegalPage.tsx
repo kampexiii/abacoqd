@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Cookie, ShieldCheck } from 'lucide-react';
 
 import PublicPageHero from '@/components/public/PublicPageHero';
 import SeoHead from '@/components/seo/SeoHead';
@@ -174,6 +174,36 @@ export default function LegalPage({ kind }: { readonly kind: LegalPageKind }) {
                         <p className="mt-2 max-w-2xl text-xs leading-relaxed text-qd-text-medium/80">
                             {t('legalPages.common.draftNotice')}
                         </p>
+
+                        {/* Gestión de preferencias: solo en /cookies. Reabre el
+                            panel del CMP vía evento `window` (sin chip flotante
+                            permanente en la landing). */}
+                        {kind === 'cookies' && (
+                            <div className="mt-6 rounded-2xl border border-qd-mist bg-qd-white p-5 sm:p-6 dark:border-white/10 dark:bg-qd-surface">
+                                <h2 className="flex items-center gap-2 text-base font-bold text-qd-ink dark:text-qd-white">
+                                    <Cookie
+                                        aria-hidden="true"
+                                        size={18}
+                                        className="text-qd-teal-2 dark:text-qd-teal"
+                                    />
+                                    {t('consent.manage.title')}
+                                </h2>
+                                <p className="mt-1.5 text-sm leading-relaxed text-qd-text-high">
+                                    {t('consent.manage.description')}
+                                </p>
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        window.dispatchEvent(
+                                            new Event('abacoqd:open-consent'),
+                                        )
+                                    }
+                                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-qd-teal px-4 py-2.5 text-sm font-bold text-qd-ink transition-colors hover:bg-qd-teal-2 hover:text-qd-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:focus-visible:outline-qd-lime"
+                                >
+                                    {t('consent.manage.action')}
+                                </button>
+                            </div>
+                        )}
 
                         {/* Cuerpo legal */}
                         <div className="mt-8 max-w-[70ch] space-y-10">

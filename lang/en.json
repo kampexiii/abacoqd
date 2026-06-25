@@ -69,8 +69,10 @@
             "acceptAll": "Accept all",
             "reject": "Reject"
         },
-        "reopen": {
-            "label": "Cookie preferences"
+        "manage": {
+            "title": "Your cookie preferences",
+            "description": "You can change which categories you allow at any time. Necessary technical cookies are always on.",
+            "action": "Change cookie preferences"
         }
     },
     "chatbot": {

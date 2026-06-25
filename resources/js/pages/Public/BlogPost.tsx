@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { trackEvent } from '@/components/analytics/events';
+import { emitInternalEvent } from '@/components/privacy/internal-events';
 import PublicPageHero from '@/components/public/PublicPageHero';
 import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
@@ -66,7 +66,7 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
 
     // Evento interno no invasivo (sin PII): vista de post.
     useEffect(() => {
-        trackEvent('blog_post_view', { slug: postSlug, type: 'blog_post' });
+        emitInternalEvent('blog_post_view', { slug: postSlug, type: 'blog_post' });
     }, [postSlug]);
 
     const title = localizedText(post.title, locale);

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import AbacoHero from '@/components/AbacoHero';
-import { trackEvent } from '@/components/analytics/events';
+import { emitInternalEvent } from '@/components/privacy/internal-events';
 import BlogSection from '@/components/sections/BlogSection';
 import CollaborationsSection from '@/components/sections/CollaborationsSection';
 import type { CollaborationItem } from '@/components/sections/CollaborationsSection';
@@ -55,7 +55,7 @@ export default function Home({
             const path = new URL(anchor.href, window.location.origin).pathname;
 
             if (conversionPaths.some((cta) => path.startsWith(cta))) {
-                trackEvent('cta_click', { location: 'home', label: path });
+                emitInternalEvent('cta_click', { location: 'home', label: path });
             }
         };
 

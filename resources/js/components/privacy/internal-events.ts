@@ -3,10 +3,14 @@
  *
  * NO envía nada a red externa, NO usa servidor, NO usa base de datos y NO
  * captura datos personales (nombre, email, teléfono, mensaje, empresa). Solo
- * emite un CustomEvent del navegador (`abacoqd:event`) y lo acumula en un
- * dataLayer propio en memoria (`window.abacoqdDataLayer`) — NUNCA el
- * `window.dataLayer` de Google. Es la base para una futura medición anónima y
- * para, más adelante, conectar proveedores externos solo tras consentimiento.
+ * emite un CustomEvent del navegador (`abacoqd:event`) y lo acumula en una cola
+ * propia en memoria (`window.abacoqdEvents`) — nunca un objeto global de
+ * terceros. Es la base para una futura medición anónima propia y para, más
+ * adelante, conectar proveedores externos solo tras consentimiento.
+ *
+ * El módulo vive bajo `components/privacy/` (sin la palabra «analytics» en la
+ * ruta) para que los navegadores con protección anti-tracking no bloqueen su
+ * carga como si fuera un script de terceros.
  */
 
 export type AbacoEventName =
@@ -37,19 +41,19 @@ type AbacoEventInput = Omit<AbacoEventDetail, 'event' | 'timestamp'>;
 
 declare global {
     interface Window {
-        /** dataLayer propio en memoria; no es el de Google ni se persiste. */
-        abacoqdDataLayer?: AbacoEventDetail[];
+        /** Cola de eventos propia en memoria; no es de terceros ni se persiste. */
+        abacoqdEvents?: AbacoEventDetail[];
     }
 }
 
-// dataLayer interno acotado: ni crece sin límite ni persiste entre sesiones.
+// Cola interna acotada: ni crece sin límite ni persiste entre sesiones.
 const MAX_EVENTS = 200;
 
 /**
  * Registra un evento interno. Solo dispara una señal local del navegador y lo
- * apila en el dataLayer propio. No sale de la pestaña de la persona usuaria.
+ * apila en la cola propia. No sale de la pestaña de la persona usuaria.
  */
-export function trackEvent(
+export function emitInternalEvent(
     event: AbacoEventName,
     input: AbacoEventInput = {},
 ): void {
@@ -64,11 +68,11 @@ export function trackEvent(
         timestamp: new Date().toISOString(),
     };
 
-    const layer = (window.abacoqdDataLayer ??= []);
-    layer.push(detail);
+    const queue = (window.abacoqdEvents ??= []);
+    queue.push(detail);
 
-    if (layer.length > MAX_EVENTS) {
-        layer.splice(0, layer.length - MAX_EVENTS);
+    if (queue.length > MAX_EVENTS) {
+        queue.splice(0, queue.length - MAX_EVENTS);
     }
 
     window.dispatchEvent(new CustomEvent('abacoqd:event', { detail }));

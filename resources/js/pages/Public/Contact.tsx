@@ -8,7 +8,7 @@ import {
     ShieldCheck,
 } from 'lucide-react';
 
-import { trackEvent } from '@/components/analytics/events';
+import { emitInternalEvent } from '@/components/privacy/internal-events';
 import FormField, {
     formFieldInputClass,
     formFieldSelectClass,
@@ -358,7 +358,7 @@ export default function Contact({
                                             type="submit"
                                             disabled={processing}
                                             onClick={() =>
-                                                trackEvent(
+                                                emitInternalEvent(
                                                     'contact_submit_intent',
                                                     { type: 'contact' },
                                                 )

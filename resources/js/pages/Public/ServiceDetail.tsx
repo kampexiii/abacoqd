@@ -14,7 +14,7 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import { useEffect } from 'react';
 
-import { trackEvent } from '@/components/analytics/events';
+import { emitInternalEvent } from '@/components/privacy/internal-events';
 import PublicPageHero from '@/components/public/PublicPageHero';
 import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
@@ -128,7 +128,7 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
 
     // Evento interno no invasivo (sin PII): vista de servicio.
     useEffect(() => {
-        trackEvent('service_view', { slug, type: 'service' });
+        emitInternalEvent('service_view', { slug, type: 'service' });
     }, [slug]);
 
     const contactUrl = contactShow.url({

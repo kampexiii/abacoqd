@@ -1,28 +1,30 @@
 import { usePage } from '@inertiajs/react';
-import { Cookie } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 
-import { applyConsentMode } from '@/components/analytics/consent-mode';
-import { trackEvent } from '@/components/analytics/events';
-import { runPermittedLoaders } from '@/components/analytics/script-gate';
 import ConsentBanner from '@/components/consent/ConsentBanner';
 import ConsentPreferences from '@/components/consent/ConsentPreferences';
+import { applyConsentSignals } from '@/components/privacy/consent-signals';
+import { runPermittedLoaders } from '@/components/privacy/external-load-gate';
+import { emitInternalEvent } from '@/components/privacy/internal-events';
 import {
     acceptAllConsent,
     rejectAllConsent,
     saveConsentPreferences,
     useConsent,
 } from '@/hooks/use-consent';
-import { useLanguage } from '@/hooks/use-language';
 
 /**
  * Orquestador del CMP propio AbacoQD (montado en el layout público).
  *
  * Une el estado de consentimiento (use-consent) con la UI (banner + panel) y
- * con las capas internas: traduce la decisión a "Consent Mode" propio
- * (sin gtag) y ejecuta la compuerta de loaders (inerte en esta fase). Solo se
+ * con las capas internas: traduce la decisión a señales internas y ejecuta la
+ * compuerta de loaders (inerte en esta fase, no carga nada externo). Solo se
  * renderiza si la prop Inertia `consent.enabled` es true. Reabrir preferencias:
- * botón flotante discreto o evento `window` `abacoqd:open-consent`.
+ * únicamente desde `/cookies`, vía evento `window` `abacoqd:open-consent` (no
+ * hay botón flotante permanente).
+ *
+ * El banner no se pinta hasta que el cliente ha montado y leído localStorage
+ * (`isReady`), para evitar el flash del banner en quien ya decidió.
  */
 
 type ConsentConfig = {
@@ -32,23 +34,34 @@ type ConsentConfig = {
 
 const DISABLED_CONFIG: ConsentConfig = { enabled: false, externalTracking: false };
 
+// Suscripción inerte: solo se usa para detectar que estamos en cliente ya
+// hidratado/montado (snapshot servidor = false, cliente = true), sin setState.
+const emptySubscribe = (): (() => void) => () => {};
+
 export default function ConsentManager() {
-    const { t } = useLanguage();
     const { consent } = usePage<{ consent?: ConsentConfig }>().props;
     const config = consent ?? DISABLED_CONFIG;
 
     const { categories, hasDecision } = useConsent();
+    // Gate de cliente: false en servidor y en la primera pasada de hidratación;
+    // true tras montar en cliente (cuando `useConsent` ya leyó localStorage). Así
+    // el banner no se pinta hasta entonces y se evita el flash en Firefox/Brave
+    // para quien ya aceptó/rechazó. Sin setState en efecto (regla react-compiler).
+    const isReady = useSyncExternalStore(
+        emptySubscribe,
+        () => true,
+        () => false,
+    );
     const [panelOpen, setPanelOpen] = useState(false);
     // Borrador del panel (no se persiste hasta "Guardar"). Se siembra con la
-    // decisión vigente al abrir, en el handler (sin efecto, sin setState en
-    // efecto que dispare renders en cascada).
+    // decisión vigente al abrir, en el handler (sin setState en efecto).
     const [draftAnalytics, setDraftAnalytics] = useState(false);
     const [draftMarketing, setDraftMarketing] = useState(false);
 
-    // Traduce la decisión al Consent Mode interno y abre la compuerta de loaders.
-    // En esta fase no carga nada externo: solo fija el estado (inicial: denied).
+    // Traduce la decisión a señales internas y abre la compuerta de loaders. En
+    // esta fase no carga nada externo: solo fija el estado (inicial: denied).
     useEffect(() => {
-        applyConsentMode(categories);
+        applyConsentSignals(categories);
         runPermittedLoaders({
             categories,
             externalTrackingEnabled: config.externalTracking,
@@ -58,12 +71,12 @@ export default function ConsentManager() {
     const openPreferences = useCallback(() => {
         setDraftAnalytics(categories.analytics);
         setDraftMarketing(categories.marketing);
-        trackEvent('consent_open_preferences');
+        emitInternalEvent('consent_open_preferences');
         setPanelOpen(true);
     }, [categories.analytics, categories.marketing]);
 
-    // Punto de entrada programático para reabrir preferencias desde cualquier
-    // sitio (p. ej. un enlace futuro): `dispatchEvent('abacoqd:open-consent')`.
+    // Único punto de entrada para reabrir preferencias: el enlace de `/cookies`
+    // dispara `window.dispatchEvent(new Event('abacoqd:open-consent'))`.
     useEffect(() => {
         const handler = (): void => openPreferences();
         window.addEventListener('abacoqd:open-consent', handler);
@@ -73,13 +86,13 @@ export default function ConsentManager() {
 
     const handleAcceptAll = useCallback(() => {
         acceptAllConsent();
-        trackEvent('consent_accept_all');
+        emitInternalEvent('consent_accept_all');
         setPanelOpen(false);
     }, []);
 
     const handleReject = useCallback(() => {
         rejectAllConsent();
-        trackEvent('consent_reject_all');
+        emitInternalEvent('consent_reject_all');
         setPanelOpen(false);
     }, []);
 
@@ -88,7 +101,7 @@ export default function ConsentManager() {
             analytics: draftAnalytics,
             marketing: draftMarketing,
         });
-        trackEvent('consent_save_preferences');
+        emitInternalEvent('consent_save_preferences');
         setPanelOpen(false);
     }, [draftAnalytics, draftMarketing]);
 
@@ -96,8 +109,9 @@ export default function ConsentManager() {
         return null;
     }
 
-    const showBanner = !hasDecision && !panelOpen;
-    const showReopen = hasDecision && !panelOpen;
+    // Solo se pinta el banner tras montar (isReady) y si no hay decisión previa.
+    // No hay chip flotante: las preferencias se gestionan desde `/cookies`.
+    const showBanner = isReady && !hasDecision && !panelOpen;
 
     return (
         <>
@@ -107,24 +121,6 @@ export default function ConsentManager() {
                     onReject={handleReject}
                     onConfigure={openPreferences}
                 />
-            )}
-
-            {showReopen && (
-                <button
-                    type="button"
-                    onClick={openPreferences}
-                    aria-label={t('consent.reopen.label')}
-                    title={t('consent.reopen.label')}
-                    className="fixed left-[max(1.25rem,env(safe-area-inset-left))] z-40 inline-flex items-center gap-2 rounded-full border border-qd-ink/10 bg-qd-white/90 px-3 py-2 text-xs font-semibold text-qd-text-medium shadow-[0_10px_28px_-14px_rgba(7,17,26,0.6)] backdrop-blur-sm transition-colors hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:border-white/10 dark:bg-qd-surface/90 dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime"
-                    style={{
-                        bottom: 'calc(max(1.25rem, env(safe-area-inset-bottom)) + 4rem)',
-                    }}
-                >
-                    <Cookie aria-hidden="true" size={16} />
-                    <span className="hidden sm:inline">
-                        {t('consent.reopen.label')}
-                    </span>
-                </button>
             )}
 
             <ConsentPreferences

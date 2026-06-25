@@ -1,19 +1,22 @@
 /**
- * Preparación interna de Google Consent Mode — SIN cargar gtag, GTM ni GA4.
+ * Señales de consentimiento internas AbacoQD — SIN cargar ningún script externo.
  *
- * Traduce las categorías del CMP propio (analytics / marketing) al vocabulario
- * de Consent Mode v2 y mantiene/emite ese estado para una futura integración.
- * En esta fase NO se llama a `gtag('consent', ...)` ni se carga ningún script:
+ * Traduce las categorías del CMP propio (analytics / marketing) a un vocabulario
+ * de señales estable y mantiene/emite ese estado para una futura integración. En
+ * esta fase NO se llama a ninguna librería externa ni se carga script alguno:
  * solo se guarda el estado en memoria y se emite un CustomEvent interno
- * (`abacoqd:consent-mode`). Cuando (si) se integre Google, `applyConsentMode`
- * es el único punto que llamaría a `gtag('consent', 'update', state)`.
+ * (`abacoqd:consent-signals`). Es el único punto donde, si en el futuro se
+ * integrara un proveedor, se traduciría la decisión de la persona usuaria.
+ *
+ * El módulo vive bajo `components/privacy/` (sin «analytics» en la ruta) para no
+ * ser bloqueado por navegadores con protección anti-tracking.
  */
 
 import type { ConsentCategories } from '@/hooks/use-consent';
 
 export type ConsentSignal = 'granted' | 'denied';
 
-export type ConsentModeState = {
+export type ConsentSignalsState = {
     readonly analytics_storage: ConsentSignal;
     readonly ad_storage: ConsentSignal;
     readonly ad_user_data: ConsentSignal;
@@ -23,7 +26,7 @@ export type ConsentModeState = {
 };
 
 /** Estado inicial: todo denegado salvo lo estrictamente funcional/seguridad. */
-export const DEFAULT_CONSENT_MODE_STATE: ConsentModeState = {
+export const DEFAULT_CONSENT_SIGNALS: ConsentSignalsState = {
     analytics_storage: 'denied',
     ad_storage: 'denied',
     ad_user_data: 'denied',
@@ -35,10 +38,10 @@ export const DEFAULT_CONSENT_MODE_STATE: ConsentModeState = {
 const signal = (granted: boolean): ConsentSignal =>
     granted ? 'granted' : 'denied';
 
-/** Mapea las categorías del CMP al estado de Consent Mode. */
-export function toConsentModeState(
+/** Mapea las categorías del CMP al estado de señales. */
+export function toConsentSignals(
     categories: ConsentCategories,
-): ConsentModeState {
+): ConsentSignalsState {
     return {
         analytics_storage: signal(categories.analytics),
         ad_storage: signal(categories.marketing),
@@ -49,24 +52,25 @@ export function toConsentModeState(
     };
 }
 
-let currentState: ConsentModeState = DEFAULT_CONSENT_MODE_STATE;
+let currentState: ConsentSignalsState = DEFAULT_CONSENT_SIGNALS;
 
-export function getConsentModeState(): ConsentModeState {
+export function getConsentSignals(): ConsentSignalsState {
     return currentState;
 }
 
 /**
- * Aplica el estado de consentimiento al "Consent Mode" interno. En esta fase NO
- * existe `gtag`, así que solo guarda el estado y emite una señal interna.
+ * Aplica la decisión de consentimiento a las señales internas. En esta fase no
+ * existe ningún proveedor, así que solo guarda el estado y emite una señal
+ * interna por CustomEvent.
  */
-export function applyConsentMode(
+export function applyConsentSignals(
     categories: ConsentCategories,
-): ConsentModeState {
-    currentState = toConsentModeState(categories);
+): ConsentSignalsState {
+    currentState = toConsentSignals(categories);
 
     if (typeof window !== 'undefined') {
         window.dispatchEvent(
-            new CustomEvent('abacoqd:consent-mode', { detail: currentState }),
+            new CustomEvent('abacoqd:consent-signals', { detail: currentState }),
         );
     }
 

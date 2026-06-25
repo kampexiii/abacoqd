@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { trackEvent } from '@/components/analytics/events';
+import { emitInternalEvent } from '@/components/privacy/internal-events';
 import BookingCalendarPicker from '@/components/public/BookingCalendarPicker';
 import FormField, {
     formFieldInputClass,
@@ -108,7 +108,7 @@ export default function Booking({
     useEffect(() => {
         if (selectedSlotId !== null && !bookingStartTracked.current) {
             bookingStartTracked.current = true;
-            trackEvent('booking_start_intent', { type: 'booking' });
+            emitInternalEvent('booking_start_intent', { type: 'booking' });
         }
     }, [selectedSlotId]);
 
@@ -486,7 +486,7 @@ export default function Booking({
                                                     type="submit"
                                                     disabled={processing}
                                                     onClick={() =>
-                                                        trackEvent(
+                                                        emitInternalEvent(
                                                             'booking_submit_intent',
                                                             { type: 'booking' },
                                                         )
