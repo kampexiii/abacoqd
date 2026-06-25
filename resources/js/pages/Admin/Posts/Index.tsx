@@ -55,6 +55,41 @@ const STATUS_LABEL: Record<string, string> = {
     hidden: 'Oculto',
 };
 
+/**
+ * Estado efectivo de cara al público. El dato real (`status`) NO se muta: un
+ * post `scheduled` cuya fecha ya pasó es visible públicamente por la regla
+ * `Post::scopePublished()`, así que el admin lo refleja sin cambiar el estado
+ * ni depender de un cron. El cálculo se hace en cliente comparando instantes
+ * (`publishedAt` llega como ISO8601 con offset), no horas de pared.
+ */
+function isScheduledVisible(post: PostRow): boolean {
+    return (
+        post.status === 'scheduled' &&
+        post.publishedAt !== null &&
+        new Date(post.publishedAt).getTime() <= Date.now()
+    );
+}
+
+function isPubliclyVisible(post: PostRow): boolean {
+    return (
+        (post.status === 'published' && post.publishedAt !== null) ||
+        isScheduledVisible(post)
+    );
+}
+
+/**
+ * Etiqueta del badge: un `scheduled` ya vencido se muestra como
+ * "Visible · programado"; el resto conserva su estado real. El `scheduled`
+ * futuro o sin fecha sigue siendo "Programado".
+ */
+function statusLabel(post: PostRow): string {
+    if (isScheduledVisible(post)) {
+        return 'Visible · programado';
+    }
+
+    return STATUS_LABEL[post.status] ?? post.status;
+}
+
 function patch(id: number, action: string) {
     router.patch(`/admin/posts/${id}/${action}`, {}, { preserveScroll: true });
 }
@@ -239,8 +274,7 @@ export default function PostsIndex({ posts, categories, filters }: IndexProps) {
                                         </td>
                                         <td className="px-4 py-3">
                                             <span className="rounded-full bg-qd-mist px-2.5 py-1 text-xs font-semibold dark:bg-qd-white/10">
-                                                {STATUS_LABEL[post.status] ??
-                                                    post.status}
+                                                {statusLabel(post)}
                                             </span>
                                         </td>
                                         <td className="px-4 py-3 text-center">
@@ -275,8 +309,9 @@ export default function PostsIndex({ posts, categories, filters }: IndexProps) {
                                                         rel="noreferrer"
                                                         className={cn(
                                                             'flex size-8 items-center justify-center rounded-lg border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2/40 hover:text-qd-teal-2 dark:border-qd-white/10 dark:text-qd-white/70',
-                                                            post.status !==
-                                                                'published' &&
+                                                            !isPubliclyVisible(
+                                                                post,
+                                                            ) &&
                                                                 'pointer-events-none opacity-40',
                                                         )}
                                                     >
