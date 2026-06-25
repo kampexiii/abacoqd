@@ -109,11 +109,17 @@ test('incluye un proyecto publicado/publicable y excluye los demás', function (
         ->not->toContain('proyecto-borrador');
 });
 
-test('incluye un post publicado y excluye borrador/programado', function () {
+test('incluye post publicado y programado vencido, excluye borrador y programado futuro', function () {
     Post::factory()->create([
         'status' => PostStatus::Published->value,
         'published_at' => now()->subDay(),
         'slug' => ['es' => 'post-publicado', 'en' => 'published-post'],
+    ]);
+
+    Post::factory()->create([
+        'status' => PostStatus::Scheduled->value,
+        'published_at' => now()->subMinutes(5),
+        'slug' => ['es' => 'post-programado-vencido', 'en' => 'scheduled-due-post'],
     ]);
 
     Post::factory()->create([
@@ -125,15 +131,16 @@ test('incluye un post publicado y excluye borrador/programado', function () {
     Post::factory()->create([
         'status' => PostStatus::Scheduled->value,
         'published_at' => now()->addDay(),
-        'slug' => ['es' => 'post-programado', 'en' => 'scheduled-post'],
+        'slug' => ['es' => 'post-programado-futuro', 'en' => 'scheduled-future-post'],
     ]);
 
     $body = (string) $this->get('/sitemap.xml')->getContent();
 
     expect($body)
         ->toContain('<loc>https://abacoqd.com/blog/post-publicado</loc>')
+        ->toContain('<loc>https://abacoqd.com/blog/post-programado-vencido</loc>')
         ->not->toContain('post-borrador')
-        ->not->toContain('post-programado');
+        ->not->toContain('post-programado-futuro');
 });
 
 test('no incluye rutas privadas, de auth ni de idioma EN', function () {

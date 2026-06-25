@@ -114,9 +114,10 @@ class SitemapController extends Controller
     }
 
     /**
-     * Detalles de posts: mismas condiciones que Public\BlogController@show
-     * (publicado: estado Published + published_at) y con slug ES válido. Los
-     * borradores, programados, ocultos o sin fecha quedan fuera del scope.
+     * Detalles de posts: misma compuerta `Post::scopePublished()` que
+     * Public\BlogController@show (Published, o Scheduled ya vencido) y con slug
+     * ES válido. Los borradores, programados futuros, ocultos o sin fecha
+     * quedan fuera del scope.
      *
      * @return array<int, array<string, string|null>>
      */

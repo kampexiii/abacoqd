@@ -101,23 +101,39 @@ class Post extends Model
     }
 
     /**
-     * Posts visibles en público: estado `Published` y con fecha asignada.
+     * Posts visibles en público. Compuerta única para /blog, /blog/{slug},
+     * la landing y el sitemap, para que nunca diverjan.
      *
-     * No se aplica la compuerta `published_at <= now()`. Hacerlo ocultaba un
-     * post recién publicado durante horas: el editor elige la fecha en su hora
-     * local (p. ej. España, UTC+2) y el `datetime-local` se guardaba como si
-     * fuera UTC, quedando `published_at` por delante de `now()` (UTC) hasta que
-     * pasaba el desfase. La programación real se modela con el estado
-     * `Scheduled` (oculto hasta que un editor lo pasa a `Published`), no con una
-     * fecha futura sobre un post ya marcado como publicado. `published_at` se
-     * conserva para ordenar y para la fecha pública.
+     * Es visible:
+     * - `Published` con fecha asignada (se publica al guardar; sin compuerta
+     *   temporal, igual que antes).
+     * - `Scheduled` con `published_at <= now()`: un post programado se hace
+     *   visible solo cuando llega su hora, sin cron ni cambio manual a
+     *   `Published`. El futuro (`published_at > now()`) sigue oculto.
+     *
+     * La compuerta `published_at <= now()` es segura porque la app trabaja en
+     * `Europe/Madrid` (config/app.php, .env, phpunit.xml): el `datetime-local`
+     * que elige el editor y `now()` están en la misma zona. El antiguo desfase
+     * (fecha guardada como UTC frente a `now()` UTC) ya no aplica.
+     *
+     * Quedan fuera: `Draft`, `Scheduled` futuro, `Hidden`, soft-deleted y, en
+     * ambos casos, posts sin `published_at`. `published_at` se conserva además
+     * para ordenar y para la fecha pública.
      *
      * @param  Builder<self>  $query
      */
     public function scopePublished(Builder $query): void
     {
-        $query->where('status', PostStatus::Published->value)
-            ->whereNotNull('published_at');
+        $query->where(function (Builder $query): void {
+            $query->where(function (Builder $query): void {
+                $query->where('status', PostStatus::Published->value)
+                    ->whereNotNull('published_at');
+            })->orWhere(function (Builder $query): void {
+                $query->where('status', PostStatus::Scheduled->value)
+                    ->whereNotNull('published_at')
+                    ->where('published_at', '<=', now());
+            });
+        });
     }
 
     /**
