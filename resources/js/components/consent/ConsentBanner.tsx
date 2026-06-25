@@ -57,22 +57,22 @@ export default function ConsentBanner({
                 <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
                     <button
                         type="button"
-                        onClick={onConfigure}
-                        className="order-3 rounded-xl border border-qd-ink/15 px-4 py-2.5 text-sm font-semibold text-qd-ink transition-colors hover:border-qd-teal-2 hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 sm:order-1 dark:border-white/15 dark:text-qd-white dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime"
-                    >
-                        {t('consent.banner.configure')}
-                    </button>
-                    <button
-                        type="button"
                         onClick={onReject}
-                        className="order-2 rounded-xl border border-qd-ink/15 px-4 py-2.5 text-sm font-semibold text-qd-ink transition-colors hover:border-qd-teal-2 hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:border-white/15 dark:text-qd-white dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime"
+                        className="rounded-xl border border-qd-ink/15 px-4 py-2.5 text-sm font-semibold text-qd-ink transition-colors hover:border-qd-teal-2 hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:border-white/15 dark:text-qd-white dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime"
                     >
                         {t('consent.banner.reject')}
                     </button>
                     <button
                         type="button"
+                        onClick={onConfigure}
+                        className="rounded-xl border border-qd-ink/15 px-4 py-2.5 text-sm font-semibold text-qd-ink transition-colors hover:border-qd-teal-2 hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:border-white/15 dark:text-qd-white dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime"
+                    >
+                        {t('consent.banner.configure')}
+                    </button>
+                    <button
+                        type="button"
                         onClick={onAcceptAll}
-                        className="order-1 rounded-xl bg-qd-teal px-4 py-2.5 text-sm font-bold text-qd-ink transition-colors hover:bg-qd-teal-2 hover:text-qd-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 sm:order-3 dark:focus-visible:outline-qd-lime"
+                        className="rounded-xl bg-qd-teal px-4 py-2.5 text-sm font-bold text-qd-ink transition-colors hover:bg-qd-teal-2 hover:text-qd-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:focus-visible:outline-qd-lime"
                     >
                         {t('consent.banner.acceptAll')}
                     </button>
