@@ -6,14 +6,18 @@ use App\Enums\AppointmentBookingStatus;
 use App\Enums\AppointmentSlotStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Public\StoreAppointmentBookingRequest;
+use App\Mail\AppointmentBookingReceived;
 use App\Models\AppointmentBooking;
 use App\Models\AppointmentDay;
 use App\Models\AppointmentSlot;
 use App\Models\BookingSetting;
 use App\Models\Service;
+use App\Support\SiteSettings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -111,6 +115,20 @@ class BookingController extends Controller
 
             return $booking;
         });
+
+        // La reserva ya está confirmada y persistida (la transacción solo llega
+        // aquí si el slot estaba disponible): si la notificación por email falla
+        // (SMTP caído o mal configurado) se registra y se sigue, en vez de romper
+        // la confirmación al visitante por algo que no afecta a la reserva.
+        try {
+            Mail::to(SiteSettings::bookingRecipient())
+                ->send(new AppointmentBookingReceived($booking));
+        } catch (\Throwable $e) {
+            Log::error('No se pudo enviar la notificación de reserva.', [
+                'appointment_booking_id' => $booking->id,
+                'exception' => $e->getMessage(),
+            ]);
+        }
 
         return to_route('booking.show')->with('confirmedBookingId', $booking->id);
     }

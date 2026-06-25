@@ -25,7 +25,7 @@ WIP        = archivos sin commit o sin decisión de cierre
 
 ### Bloque 1 — Seguridad / cabeceras / CSP report-only — **CERRADO** (25/06)
 
-**Estado real:** cabeceras de seguridad implementadas y CSP en `Content-Security-Policy-Report-Only`. La incidencia nueva de CSP Report-Only por inline script en el HTML inicial quedó **diagnosticada y resuelta** moviendo el inicializador de tema/apariencia a un asset externo same-origin. Revalidación completada el 25/06: `composer test` con PHP de XAMPP en verde (Pint OK · PHPStan 0 errores · Pest 184/184, 910 aserciones) y revisión visual/interactiva en DevTools confirmada manualmente por Pablo sin errores ni warnings visuales relacionados con CSP, ni errores rojos críticos en consola. Las cuatro puertas de validación (`composer test`, `types:check`, `lint:check`, `build`) quedan en verde. **Sin commit aún** (pendiente de decisión de stage por rutas explícitas). Bloque 1 cerrado; queda habilitado el avance al Bloque 3.
+**Estado real:** cabeceras de seguridad implementadas y CSP en `Content-Security-Policy-Report-Only`. La incidencia nueva de CSP Report-Only por inline script en el HTML inicial quedó **diagnosticada y resuelta** moviendo el inicializador de tema/apariencia a un asset externo same-origin. Revalidación completada el 25/06: `composer test` con PHP de XAMPP en verde (Pint OK · PHPStan 0 errores · Pest 184/184, 910 aserciones) y revisión visual/interactiva en DevTools confirmada manualmente por Pablo sin errores ni warnings visuales relacionados con CSP, ni errores rojos críticos en consola. Las cuatro puertas de validación (`composer test`, `types:check`, `lint:check`, `build`) quedan en verde. **Commiteado** el 25/06 por rutas explícitas: `f478762 feat(security)` (middleware + asset de apariencia) y `75af905 docs(auditoria)` (cierre documental). Sin push. Bloque 1 cerrado; queda habilitado el avance al Bloque 3.
 
 **Archivos modificados:**
 - `app/Http/Middleware/SecurityHeaders.php` *(nuevo)*
@@ -60,6 +60,41 @@ WIP        = archivos sin commit o sin decisión de cierre
 
 **Riesgos pendientes:** la CSP va en **report-only** (aún no protege de inyección hasta el flip a enforce); el flip requiere tunear nonce/hash si se decide proteger JSON-LD/Inertia JSON y verificar Three.js/estilos; `X-Powered-By: PHP/8.4.12` sigue visible (se oculta en el Bloque 2). `composer test` y revisión visual/interactiva completados el 25/06; Bloque 1 cerrado, queda habilitado el avance al Bloque 3.
 
+### Bloque 3 — Correo contacto + reserva — **CERRADO** (25/06)
+
+**Estado real:** notificación de **reserva** por correo implementada reutilizando el patrón del formulario de **contacto**, con **diseño corporativo aprobado** en ambos emails. Contacto sigue funcionando igual (sin cambios de flujo). La reserva, tras confirmarse y persistirse dentro de la transacción, envía un aviso **fuera** de la transacción, solo si la reserva se creó, en `try/catch` con `Log::error` si falla (no rompe la confirmación al visitante ni duplica reservas). El receptor se resuelve por `SiteSettings::bookingRecipient()` (DB override `booking_recipient_email` > `config('site.contact.booking_recipient')`, que cae a `BOOKING_NOTIFY_EMAIL` y, si no, a `CONTACT_NOTIFY_EMAIL`). **Datos personales de prueba retirados** de configuración y documentación commiteables; proyecto preparado para SMTP corporativo final. **Sin commit aún** (pendiente de stage por rutas explícitas).
+
+**Diseño de emails (aprobado):** plantillas HTML table-based con estilos inline, Gmail-safe (sin CSS externo ni Tailwind), contenedor máx 640px sobre fondo `#F6F8F7`, tarjeta blanca, acento teal `#00BFA5` y lima `#A3E635` puntual. Cabecera con **logo AbacoQD insertado como CID embebido** (`$message->embed(...)`, no depende de `localhost`); badge `Nuevo contacto`/`Nueva reserva`, bloque de datos label/valor con email clicable, mensaje con borde izquierdo teal, bloque de estado y footer discreto. Los Mailables pasaron de `markdown:` a `view:` (cambio mínimo; lógica, asunto, receptor y datos `with()` intactos).
+
+**Assets de marca reubicados** (desde la raíz a la carpeta de marca existente):
+- `public/assets/branding/marca/logos/abacoqd-logo-completo-transparente.png` *(823×168, usado en los emails)*
+- `public/assets/branding/marca/logos/abacoqd-isotipo-transparente.png` *(303×168, disponible como fallback)*
+
+**Archivos modificados:**
+- `config/site.php` *(añade `contact.booking_recipient` con fallback a `CONTACT_NOTIFY_EMAIL`)*
+- `app/Support/SiteSettings.php` *(nuevo método `bookingRecipient()`, espejo de `formRecipient()`)*
+- `app/Mail/AppointmentBookingReceived.php` *(nuevo Mailable, espejo de `ContactMessageReceived`; carga `slot.day` y `service`; asunto con fecha/hora del slot; `view:`)*
+- `app/Mail/ContactMessageReceived.php` *(`markdown:` → `view:` para la plantilla rediseñada)*
+- `resources/views/emails/appointment-booking-received.blade.php` *(rediseño corporativo + logo CID)*
+- `resources/views/emails/contact-message-received.blade.php` *(rediseño corporativo + logo CID + fila Origen)*
+- `app/Http/Controllers/Public/BookingController.php` *(envío del correo tras la transacción, en `try/catch`)*
+- `.env.example` *(bloque SMTP corporativo genérico: `smtp.example.com`, `info@abacodev.com`, sin credenciales)*
+- `tests/Feature/AppointmentBookingTest.php` *(5 tests nuevos con `Mail::fake()`)*
+
+**Reglas respetadas:** sin hardcodear correos en el controlador; sin tocar el email público del footer ni datos legales; sin tocar hero/landing/topbar/footer/cookies/blog/admin; sin credenciales SMTP en código/docs/logs; `.env` local no se commitea.
+
+**Validaciones (verdes):**
+- `composer test` (PHP de XAMPP): Pint OK · PHPStan 0 errores · Pest **189/189** tests (antes 184; +5 de reserva), 934 aserciones (las plantillas y el `embed()` del logo se ejercitan al renderizar en los tests con transporte `array`).
+- `npm run types:check`: **OK** · `npm run lint:check`: **OK** · `npm run build`: **OK** (advertencias de tamaño de chunk preexistentes, no errores).
+
+**Cobertura de los tests nuevos:** la reserva se guarda y envía `AppointmentBookingReceived` al receptor esperado; el receptor respeta la setting `booking_recipient_email`; cae a config cuando no hay setting; **no** se envía correo cuando el slot ya no está disponible (solo 1 envío en doble reserva); un mailer que falla no pierde la reserva ni rompe la respuesta.
+
+**Prueba SMTP real:** validada correctamente el 25/06 con una **cuenta temporal de pruebas** (driver `smtp`, STARTTLS 587). Contacto y reserva llegaron a **bandeja principal** (no spam/promociones), primero en versión base, luego con diseño corporativo y finalmente con logo embebido. Los datos temporales de esa cuenta se retiraron de `.env`, `.env.example` y documentación; el `.env` local quedó en `MAIL_MAILER=log`, `MAIL_PASSWORD` vacío y sin correos personales.
+
+**Nota de producción:** el envío debe configurarse con un **SMTP corporativo autorizado** del dominio de Ábaco. `MAIL_FROM_ADDRESS` debe ser una cuenta autenticada del dominio corporativo (p. ej. `info@abacodev.com`, `andrescasanueva@abacodev.com` o la cuenta final que confirme Ábaco). Los destinatarios internos (`CONTACT_NOTIFY_EMAIL`, `BOOKING_NOTIFY_EMAIL`) se configuran por `.env`, sin tocar código. El email del usuario del formulario debe usarse como **`Reply-To`, no como `From`**, para evitar problemas de SPF/DKIM/DMARC; **revisar SPF, DKIM y DMARC** del dominio antes de producción. *Pendiente de código:* los Mailables actuales aún **no** fijan `Reply-To` (ver §13); es un ajuste mínimo recomendado antes de producción.
+
+**Riesgos pendientes / siguiente paso:** configurar SMTP corporativo y correos reales confirmados por Andrés; añadir `Reply-To` con el email del remitente en ambos Mailables. Siguiente bloque recomendado: **Bloque 4 — Cierre de WIP local** (shim CSP, blog editorial tras decidir `featured_image`, docs).
+
 ---
 
 ## 1. Resumen ejecutivo
@@ -91,7 +126,7 @@ Corrección de contexto (25/06): **`docs/informacionRequeridaSitioWeb.odt` es un
 
 | Gate | Resultado |
 |---|---|
-| `composer test` (Pint+PHPStan+Pest) | ✅ 184/184 tests, 910 aserciones, 0 errores estáticos; revalidado con PHP de XAMPP el 25/06 tras la corrección CSP inline |
+| `composer test` (Pint+PHPStan+Pest) | ✅ 189/189 tests, 934 aserciones, 0 errores estáticos; con PHP de XAMPP el 25/06 (incluye +5 tests de notificación de reserva del Bloque 3) |
 | `npm run types:check` | ✅ sin errores |
 | `npm run lint:check` | ✅ sin errores |
 | `npm run build` | ✅ 2.8 MB total; tras la corrección CSP inline, `cmd.exe /C npm run build` OK |
@@ -305,6 +340,7 @@ No certificable por `curl`. Indicios positivos en código: `aria-label`/`role=di
 - **(P2)** Que el seeder editorial asigne `featured_image` para ser reproducible.
 - **(DEP-ANDRÉS)** Sustituir el contenido demo (servicios, proyectos, metodología, equipo) por el real cuando Andrés lo entregue.
 - **(P2)** Confirmar reglas de upload (`mimes`/`max`/nombres) y descarga de CV.
+- **(P1)** Emails de contacto/reserva: añadir `Reply-To` con el email del remitente del formulario en `ContactMessageReceived` y `AppointmentBookingReceived` (hoy no lo fijan), para que el `From` quede como la cuenta corporativa autenticada y responder vaya al usuario. Acompañar de SMTP corporativo y revisión SPF/DKIM/DMARC antes de producción.
 - **(P3)** Plan de hreflang/EN si se decide indexar inglés.
 - **(P3)** Bump planificado de guzzle/psr7 y tooling npm.
 

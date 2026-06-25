@@ -15,10 +15,10 @@ Leyenda: `P0` bloquea producción/seguridad · `P1` importante antes de producci
 ## 0. Estado de partida (25/06)
 
 - Validaciones base **verdes**: `composer test` 184/184 · `tsc` limpio · `eslint` limpio · `build` OK. Tras la revisión CSP inline: `types:check`, `lint:check`, `cmd.exe /C npm run build` y `composer test` (revalidado con PHP de XAMPP) verdes.
-- **Correo**: `MAIL_MAILER=log` (no llega a Gmail; se escribe en `storage/logs/laravel.log`). Contacto envía (a log); **reserva NO envía correo** (no hay Mailable de reserva).
+- **Correo**: `MAIL_MAILER=log` en local (se escribe en `storage/logs/laravel.log`). Contacto y **reserva envían correo** (Bloque 3 cerrado el 25/06: Mailable `AppointmentBookingReceived` + receptor `SiteSettings::bookingRecipient()`). Entrega SMTP real **ya validada** con cuenta temporal; falta configurar el **SMTP corporativo** definitivo en producción.
 - **Seguridad**: Bloque 1 **CERRADO** (cabeceras + CSP report-only añadidas; incidencia `public/hot` resuelta; advertencia CSP inline diagnosticada y resuelta; `composer test` revalidado en verde con PHP de XAMPP y revisión visual/interactiva confirmada por Pablo el 25/06; ver [auditoría §0](auditoria25Junio.md)). Sigue pendiente para fases posteriores: flip de CSP a enforce, ocultar `X-Powered-By`, `APP_DEBUG=true`/`APP_ENV=local` (Bloque 2).
 - **WIP en árbol**: `vite.config.ts` (M, shim CSP) + `resources/js/vendor/` · **Bloque 1**: `app/Http/Middleware/SecurityHeaders.php` (nuevo), `bootstrap/app.php` (M), `resources/views/app.blade.php` (M), `public/assets/appearance-init.js` (nuevo) sin commit · seeder editorial + 21 `.webp` · `docs/auditoria25Junio.md` · `docs/roadmapCierre25Junio.md` · `.odt`. Nada staged.
-- **Cambio local ya aplicado** (autorizado): `.env` → `CONTACT_NOTIFY_EMAIL=pabloapariciocreativexiii@gmail.com` (gitignored, temporal de pruebas).
+- **`.env` local**: probado el 25/06 con una cuenta SMTP temporal de pruebas (entrega real validada); **datos temporales retirados** tras la validación. El `.env` queda en `MAIL_MAILER=log`, `MAIL_PASSWORD` vacío y receptores `info@abacodev.com`, preparado para SMTP corporativo final. El `.env` es gitignored y no se commitea.
 - **El `.odt`** = plantilla orientativa de Pablo. Todo el contenido en BD (servicios, proyectos, partners, metodología, equipo) es **demo/placeholder/legacy** hasta validación de Andrés.
 
 ---
@@ -29,7 +29,7 @@ Leyenda: `P0` bloquea producción/seguridad · `P1` importante antes de producci
 |---|---|---|---|
 | 1 | Cabeceras de seguridad + CSP report-only | **P0** | ✅ **CERRADO** (CSP inline resuelta; `composer test` + visual validados 25/06) |
 | 2 | Hardening de entorno (prod `.env`, debug off, X-Powered-By) | **P1** | — |
-| 3 | Correo real contacto + **reserva** (Mailable nuevo) | **P1** | SMTP creds |
+| 3 | Correo real contacto + **reserva** (Mailable nuevo) | **P1** | ✅ **CERRADO** (código + diseño + SMTP real validado 25/06; falta SMTP corporativo en prod) |
 | 4 | Cierre de WIP local (shim CSP, blog editorial, docs) | **WIP** | decisión `featured_image` |
 | 5 | Contenido DEMO/plantilla/placeholder | **DEP-ANDRÉS** | Andrés |
 | 6 | Contenido pendiente de Andrés | **DEP-ANDRÉS** | Andrés |
@@ -46,7 +46,7 @@ Leyenda: `P0` bloquea producción/seguridad · `P1` importante antes de producci
 0. Commit del shim CSP (prerequisito; ya está en el árbol).
 1. BLOQUE 1 — Seguridad: middleware de cabeceras + CSP report-only.   ← cerrado (25/06)
 2. `composer test` con PHP de XAMPP + revisión visual/interactiva rápida.   ← completado (25/06)
-3. BLOQUE 3 — Correo contacto/reserva (requiere SMTP).
+3. BLOQUE 3 — Correo contacto/reserva.   ← cerrado (25/06; código + prueba log. SMTP real pendiente de creds)
 4. BLOQUE 4 — Cierre de WIP (docs + blog editorial tras decidir featured_image).
 5. BLOQUE 2 — Hardening de entorno (preparar .env de producción).
 6. BLOQUE 7 — Decisión legal/permisos (despublicar / marcar DEMO). En paralelo, no técnico.
@@ -95,9 +95,11 @@ Leyenda: `P0` bloquea producción/seguridad · `P1` importante antes de producci
 
 **Acciones:** `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://abacoqd.com`, `SESSION_SECURE_COOKIE=true`, revisar `SESSION_SAME_SITE`/`TRUSTED_PROXIES`, ocultar `X-Powered-By` (`expose_php=Off`), SMTP real. Documentar claves en `.env.example`.
 
-### Bloque 3 — Correo contacto + reserva (P1)
+### Bloque 3 — Correo contacto + reserva (P1) — ✅ CERRADO (25/06)
 
-**Decisión A = SÍ:** implementar notificación de reserva (espejo de contacto). **Decisión B = SÍ:** SMTP real de Gmail en local para probar entrega real.
+**Estado real:** notificación de reserva implementada y **aprobada** el 25/06, con **diseño corporativo** en ambos emails (contacto y reserva) y **logo AbacoQD embebido por CID**. `composer test` verde (Pest 189/189, 934 aserciones, +5 tests de reserva), `types:check`/`lint:check`/`build` verdes. **Prueba SMTP real validada** con una cuenta temporal de pruebas: contacto y reserva llegaron a **bandeja principal** (no spam/promociones). Los **datos temporales personales se retiraron** de `.env`, `.env.example` y documentación; el proyecto queda preparado para SMTP corporativo final. PNG de marca reubicados en `public/assets/branding/marca/logos/abacoqd-logo-completo-transparente.png` y `…/abacoqd-isotipo-transparente.png`. Contacto sigue funcionando sin cambios. **Pendiente de producción:** SMTP corporativo del dominio de Ábaco, correos reales confirmados por Andrés, añadir `Reply-To` con el email del remitente y revisar SPF/DKIM/DMARC. Sin commit aún (pendiente de stage por rutas explícitas).
+
+**Decisión A = SÍ:** implementar notificación de reserva (espejo de contacto). **Decisión B = SÍ:** probar entrega real con una cuenta SMTP temporal en local (ya realizada y retirada el 25/06).
 
 **Archivos:**
 - `app/Mail/AppointmentBookingReceived.php` *(nuevo, espejo de `ContactMessageReceived`)*
@@ -108,33 +110,35 @@ Leyenda: `P0` bloquea producción/seguridad · `P1` importante antes de producci
 - `.env` local *(SMTP + opcional `BOOKING_NOTIFY_EMAIL`)* · `.env.example` *(documentar `BOOKING_NOTIFY_EMAIL=`)*
 - `tests/Feature/...` *(test de envío de reserva, espejo del de contacto)*
 
-**Receptor:** `BOOKING_NOTIFY_EMAIL` separada y clara, con **fallback** a `CONTACT_NOTIFY_EMAIL` → durante la prueba ambos van al mismo Gmail sin config extra; en prod se separan. Nunca hardcodear el correo en el controlador. **No** cambiar el email público del footer ni datos legales.
+**Receptor:** `BOOKING_NOTIFY_EMAIL` separada y clara, con **fallback** a `CONTACT_NOTIFY_EMAIL` → durante la prueba ambos fueron al mismo buzón sin config extra; en prod se separan. Nunca hardcodear el correo en el controlador. **No** cambiar el email público del footer ni datos legales.
 
 **Reglas de correcto funcionamiento:**
-- Contacto: se guarda en `contact_messages` + genera correo + (con SMTP) llega al Gmail.
-- Reserva: se guarda en `appointment_bookings` + genera correo + (con SMTP) llega al Gmail.
+- Contacto: se guarda en `contact_messages` + genera correo + (con SMTP) llega al receptor configurado.
+- Reserva: se guarda en `appointment_bookings` + genera correo + (con SMTP) llega al receptor configurado.
 - El correo de reserva se envía **fuera** de la transacción y solo si la reserva se creó (si el slot no está disponible, lanza `ValidationException` y no se envía nada).
 - No duplicar registros; no romper el flujo visual de confirmación; mantener CSRF, honeypot y throttle.
 
-**Variables `.env` exactas (según `config/mail.php`, que usa `MAIL_SCHEME`, NO `MAIL_ENCRYPTION`):**
+**Variables `.env` para producción (según `config/mail.php`, que usa `MAIL_SCHEME`, NO `MAIL_ENCRYPTION`):** configurar con el **SMTP corporativo** del dominio de Ábaco (placeholders, sin credenciales reales en docs).
 
 ```env
 MAIL_MAILER=smtp
-MAIL_HOST=smtp.gmail.com
+MAIL_HOST=smtp.example.com               # host SMTP corporativo de Ábaco
 MAIL_PORT=587
-MAIL_USERNAME=pabloapariciocreativexiii@gmail.com
-MAIL_PASSWORD=APP_PASSWORD_DE_16_CARACTERES   # sin espacios
-MAIL_SCHEME=null                              # 587 = STARTTLS automático
-MAIL_FROM_ADDRESS="pabloapariciocreativexiii@gmail.com"
-MAIL_FROM_NAME="AbacoQD (pruebas)"
-BOOKING_NOTIFY_EMAIL=pabloapariciocreativexiii@gmail.com   # opcional; si no, usa el de contacto
+MAIL_USERNAME=info@abacodev.com          # cuenta autenticada del dominio
+MAIL_PASSWORD=                           # secreto solo en .env, nunca en docs/repo
+MAIL_SCHEME=null                         # 587 = STARTTLS automático
+MAIL_FROM_ADDRESS="info@abacodev.com"    # From = cuenta corporativa autenticada
+MAIL_FROM_NAME="AbacoQD"
+CONTACT_NOTIFY_EMAIL=info@abacodev.com   # destinatario interno real
+BOOKING_NOTIFY_EMAIL=info@abacodev.com   # destinatario interno real (opcional; si no, usa el de contacto)
 ```
 
-- Gmail exige **2FA + App Password** (la contraseña normal no funciona).
+- `MAIL_FROM_ADDRESS` debe ser una **cuenta autenticada del dominio corporativo** (no el email del usuario del formulario, que va como `Reply-To`).
+- Revisar **SPF, DKIM y DMARC** del dominio antes de producción.
 - Puerto 465 (TLS implícito): `MAIL_PORT=465` y `MAIL_SCHEME=smtps`.
-- `MAIL_FROM_ADDRESS` debe ser la cuenta Gmail autenticada (Gmail reescribe el From).
 - **No** añadir `MAIL_ENCRYPTION` (el proyecto lo ignora).
 - Tras editar `.env`: **`php artisan config:clear`**.
+- *Validación histórica (25/06):* la entrega real se probó con una cuenta SMTP temporal de pruebas (retirada tras validar); contacto y reserva llegaron a bandeja principal.
 
 **Qué mirar en `storage/logs/laravel.log`:** con `log`, el correo aparece con `To:`/`Subject:`; con SMTP, un fallo registra `No se pudo enviar...` (el lead/reserva igualmente queda guardado).
 
@@ -233,7 +237,7 @@ Implementa la notificación de reserva por correo en AbacoQD (Decisión A = sí)
 7. tests/Feature: añade test que envíe la reserva y afirme Mail::assertSent(AppointmentBookingReceived) al receptor, que la reserva se guarda y que NO se envía si el slot no está disponible.
 8. Valida con Mail::fake en tests + composer test, types:check, lint:check, build. No commitees; enséñame el diff.
 
-Nota: el .env local con SMTP real de Gmail (App Password) y BOOKING_NOTIFY_EMAIL lo configura el responsable; ejecutar php artisan config:clear para la prueba de entrega real.
+Nota: el `.env` local con el SMTP de pruebas y `BOOKING_NOTIFY_EMAIL` lo configura el responsable (credenciales solo en `.env`, nunca en repo/docs); ejecutar `php artisan config:clear` para la prueba de entrega real. En producción se usa el SMTP corporativo del dominio de Ábaco.
 ```
 
 ---
@@ -243,7 +247,7 @@ Nota: el .env local con SMTP real de Gmail (App Password) y BOOKING_NOTIFY_EMAIL
 ```txt
 [ ] APP_ENV=production / APP_DEBUG=false / APP_URL=https://abacoqd.com / APP_TIMEZONE=Europe/Madrid
 [ ] SESSION_SECURE_COOKIE=true (HTTPS); revisar SAME_SITE / TRUSTED_PROXIES
-[ ] SMTP real (no log, no Gmail de Pablo); From corporativo verificado; probar contacto y reserva
+[ ] SMTP corporativo (no log, no cuenta personal de pruebas); From corporativo autenticado + Reply-To del usuario; SPF/DKIM/DMARC revisados; probar contacto y reserva
 [ ] Cabeceras de seguridad activas; CSP enforce tras tuneo; ocultar X-Powered-By
 [ ] CONTACT_NOTIFY_EMAIL y BOOKING_NOTIFY_EMAIL = correos reales confirmados por Andrés
 [ ] Decisión legal de proyectos/partners (despublicar/DEMO) + revisión jurídica de legales
@@ -261,9 +265,10 @@ Nota: el .env local con SMTP real de Gmail (App Password) y BOOKING_NOTIFY_EMAIL
 
 ## 7. Qué revertir/cambiar antes de producción (correo)
 
-- `MAIL_MAILER` → SMTP corporativo real (nunca `log`, nunca el Gmail de Pablo).
-- `MAIL_FROM_ADDRESS`/`MAIL_FROM_NAME` → remitente verificado del dominio final.
-- `CONTACT_NOTIFY_EMAIL` y `BOOKING_NOTIFY_EMAIL` → correos reales confirmados por Andrés.
+- `MAIL_MAILER` → SMTP corporativo real (nunca `log`, nunca una cuenta personal de pruebas).
+- `MAIL_FROM_ADDRESS`/`MAIL_FROM_NAME` → remitente **autenticado** del dominio corporativo final.
+- `CONTACT_NOTIFY_EMAIL` y `BOOKING_NOTIFY_EMAIL` → correos internos reales confirmados por Ábaco / Andrés.
+- Añadir `Reply-To` con el email del usuario del formulario en ambos Mailables (el `From` no debe ser el email del usuario); revisar **SPF, DKIM y DMARC** del dominio.
 - La notificación de reserva queda **permanente** (no temporal).
 
 ---

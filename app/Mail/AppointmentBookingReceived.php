@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\ContactMessage;
+use App\Models\AppointmentBooking;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
@@ -10,27 +10,27 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ContactMessageReceived extends Mailable
+class AppointmentBookingReceived extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public ContactMessage $contactMessage)
+    public function __construct(public AppointmentBooking $booking)
     {
-        $this->contactMessage->loadMissing('service');
+        $this->booking->loadMissing(['slot.day', 'service']);
     }
 
     public function envelope(): Envelope
     {
-        $serviceTitle = $this->serviceTitle();
+        $slot = $this->booking->slot;
 
-        $subject = $serviceTitle !== null
-            ? "Nuevo contacto desde AbacoQD · {$serviceTitle}"
-            : 'Nuevo contacto desde AbacoQD';
+        $subject = $slot !== null
+            ? 'Nueva reserva desde AbacoQD · '.$slot->starts_at->format('d/m/Y H:i')
+            : 'Nueva reserva desde AbacoQD';
 
         return new Envelope(
             subject: $subject,
             replyTo: [
-                new Address((string) $this->contactMessage->email, (string) $this->contactMessage->name),
+                new Address((string) $this->booking->email, (string) $this->booking->name),
             ],
         );
     }
@@ -38,14 +38,14 @@ class ContactMessageReceived extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.contact-message-received',
+            view: 'emails.appointment-booking-received',
             with: ['serviceTitle' => $this->serviceTitle()],
         );
     }
 
     private function serviceTitle(): ?string
     {
-        $title = $this->contactMessage->service?->title;
+        $title = $this->booking->service?->title;
 
         if (! is_array($title)) {
             return null;

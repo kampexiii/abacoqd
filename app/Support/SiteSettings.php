@@ -111,6 +111,16 @@ class SiteSettings
     }
 
     /**
+     * Receptor de las notificaciones de reserva (DB override o fallback config).
+     * Espejo de formRecipient(); el fallback de config ya cae al receptor de
+     * contacto cuando no hay BOOKING_NOTIFY_EMAIL definido.
+     */
+    public static function bookingRecipient(): string
+    {
+        return (string) self::value(self::overrides(), 'booking_recipient_email', config('site.contact.booking_recipient'));
+    }
+
+    /**
      * Persiste un map clave => valor en el grupo `site`.
      *
      * @param  array<string, mixed>  $values

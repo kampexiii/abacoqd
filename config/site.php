@@ -24,6 +24,9 @@ return [
         'city_country' => 'Madrid, España',
         // Receptor de los formularios públicos (contacto/reserva).
         'form_recipient' => env('CONTACT_NOTIFY_EMAIL', 'info@abacodev.com'),
+        // Receptor de las notificaciones de reserva. Si no se define
+        // BOOKING_NOTIFY_EMAIL, cae al receptor de contacto.
+        'booking_recipient' => env('BOOKING_NOTIFY_EMAIL') ?: env('CONTACT_NOTIFY_EMAIL', 'info@abacodev.com'),
     ],
 
     'social' => [
