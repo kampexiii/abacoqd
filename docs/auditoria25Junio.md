@@ -1,0 +1,434 @@
+# Auditoría global AbacoQD — 25 de junio de 2026
+
+> Documento **vivo** de auditoría y seguimiento. La auditoría inicial no modificó código ni BD; a partir de su cierre, este documento **registra la ejecución de los bloques** del [roadmap](roadmapCierre25Junio.md) (ver §0). Foto del estado real cruzada con `/docs` y verificada contra el código, la BD local y el sitio en ejecución.
+>
+> Stack: Laravel 13.15.0 (PHP 8.4.12) · Inertia · React 19 · TypeScript · Tailwind v4 · SQLite (local).
+> Rama actual: `master`. Fecha de referencia: `2026-06-25`.
+
+Leyenda de prioridad:
+
+```txt
+P0  = bloquea producción / seguridad crítica / rompe funcionalidad
+P1  = importante antes de producción
+P2  = mejora recomendable
+P3  = mejora futura
+DEP-ANDRÉS = dependencia externa de contenido (no la resuelve el equipo técnico)
+DECISIÓN   = pendiente de decisión técnica/negocio
+WIP        = archivos sin commit o sin decisión de cierre
+```
+
+---
+
+## 0. Registro de ejecución de bloques (vivo)
+
+> Bitácora que se actualiza al cerrar o bloquear cada bloque del [roadmap](roadmapCierre25Junio.md).
+
+### Bloque 1 — Seguridad / cabeceras / CSP report-only — **CERRADO** (25/06)
+
+**Estado real:** cabeceras de seguridad implementadas y CSP en `Content-Security-Policy-Report-Only`. La incidencia nueva de CSP Report-Only por inline script en el HTML inicial quedó **diagnosticada y resuelta** moviendo el inicializador de tema/apariencia a un asset externo same-origin. Revalidación completada el 25/06: `composer test` con PHP de XAMPP en verde (Pint OK · PHPStan 0 errores · Pest 184/184, 910 aserciones) y revisión visual/interactiva en DevTools confirmada manualmente por Pablo sin errores ni warnings visuales relacionados con CSP, ni errores rojos críticos en consola. Las cuatro puertas de validación (`composer test`, `types:check`, `lint:check`, `build`) quedan en verde. **Sin commit aún** (pendiente de decisión de stage por rutas explícitas). Bloque 1 cerrado; queda habilitado el avance al Bloque 3.
+
+**Archivos modificados:**
+- `app/Http/Middleware/SecurityHeaders.php` *(nuevo)*
+- `bootstrap/app.php` *(registro del middleware en el grupo `web`, append, sin tocar los existentes)*
+- `resources/views/app.blade.php` *(elimina el script ejecutable inline de tema; añade `data-appearance` y carga `/assets/appearance-init.js`)*
+- `public/assets/appearance-init.js` *(nuevo inicializador temprano de tema/apariencia, permitido por `script-src 'self'`)*
+- `docs/auditoria25Junio.md`
+- `docs/roadmapCierre25Junio.md`
+
+**Cabeceras añadidas** (no pisan cabeceras ya presentes): `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()`, `Cross-Origin-Opener-Policy: same-origin`, `Cross-Origin-Resource-Policy: same-origin`, `Content-Security-Policy-Report-Only` (CSP base, **sin enforce, sin `unsafe-eval`, sin terceros**), `Strict-Transport-Security` **solo** en prod+HTTPS.
+
+**`curl -I http://127.0.0.1:8000/`:** las 6 cabeceras estáticas + `Content-Security-Policy-Report-Only` presentes; **sin** `Content-Security-Policy` enforce; **sin** `unsafe-eval`; **sin `unsafe-inline` en `script-src`** (`style-src 'unsafe-inline'` sigue igual por estilos inline del stack); HSTS ausente en local http (correcto).
+
+**Incidencia `public/hot` resuelta:** El fallo de `SeoRobotsTest` fue causado por un `public/hot` obsoleto que apuntaba a un servidor Vite caído. No estaba relacionado con el middleware de cabeceras. Se resolvió retirando el `public/hot` huérfano. Con el middleware activo y sin `public/hot`, las validaciones vuelven a verde.
+
+**Incidencia CSP Report-Only detectada:** CSP Report-Only detecta un inline script en el HTML inicial. No bloquea todavía, pero debe resolverse o documentarse antes de pasar a CSP enforce.
+
+**Diagnóstico CSP:** Chrome DevTools/CDP confirmó antes del cambio un `ContentSecurityPolicyIssue` con `violatedDirective: script-src-elem`, `isReportOnly: true`, `contentSecurityPolicyViolationType: kInlineViolation`, `sourceCodeLocation` en `http://127.0.0.1:8000/` línea 7. El origen real era el `<script>` ejecutable de tema/apariencia en `resources/views/app.blade.php`; no venía de `public/hot` (no existe), React Refresh/Vite dev (HTML servido desde `public/build`), JSON-LD ni Inertia JSON.
+
+**Solución aplicada:** el script inline de tema se movió a `public/assets/appearance-init.js` y el layout expone la preferencia con `data-appearance="{{ $appearance ?? 'system' }}"`. El script se sirve como `<script src=".../assets/appearance-init.js"></script>`, same-origin y compatible con `script-src 'self'`. No se añadió `unsafe-inline`, no se añadió `unsafe-eval`, no se relajó la CSP y la cabecera sigue en Report-Only.
+
+**Validaciones tras la revisión CSP:**
+- `php artisan route:list`: en WSL falla por `php: not found`; revalidado con PHP de XAMPP (`/mnt/c/xampp/php/php.exe artisan route:list`) → **160 rutas**.
+- `curl -I http://127.0.0.1:8000/` con `curl.exe` contra `artisan serve` de XAMPP → **200 OK**, `Content-Security-Policy-Report-Only` presente, **sin** `Content-Security-Policy` enforce, **sin** `unsafe-eval`, **sin** `unsafe-inline` en `script-src`.
+- HTML inicial: ya no contiene el script ejecutable inline de apariencia; carga `/assets/appearance-init.js`. JSON-LD e Inertia JSON permanecen como scripts no ejecutables.
+- DevTools/Chrome CDP posterior → eventos CSP relevantes `[]`; desaparece la advertencia de inline script.
+- `composer test`: intento WSL bloqueado por `php: not found`; revalidado con PHP de XAMPP (`C:\xampp\php\php.exe C:\ProgramData\ComposerSetup\bin\composer.phar test`) el 25/06 → **verde**: Pint OK · PHPStan 0 errores · Pest 184/184 tests, 910 aserciones.
+- `npm run types:check`: **OK**.
+- `npm run lint:check`: **OK**.
+- `npm run build`: WSL falla por Wayfinder (`php: not found`); `cmd.exe /C npm run build`: **OK**.
+- Revisión visual rápida completa (home, hero/cubo, topbar, tema claro/oscuro/sistema, consola sin rojo crítico): **completada y validada por Pablo el 25/06** mediante revisión manual en DevTools; sin errores ni warnings visuales relacionados con CSP, sin errores rojos críticos en consola.
+
+**Riesgos pendientes:** la CSP va en **report-only** (aún no protege de inyección hasta el flip a enforce); el flip requiere tunear nonce/hash si se decide proteger JSON-LD/Inertia JSON y verificar Three.js/estilos; `X-Powered-By: PHP/8.4.12` sigue visible (se oculta en el Bloque 2). `composer test` y revisión visual/interactiva completados el 25/06; Bloque 1 cerrado, queda habilitado el avance al Bloque 3.
+
+---
+
+## 1. Resumen ejecutivo
+
+El proyecto está **técnicamente muy avanzado y sano**. Las cuatro puertas de validación del proyecto pasan en verde a 25/06:
+
+- `composer test`: **Pint OK · PHPStan 0 errores · Pest 184 tests / 910 aserciones OK**.
+- `npm run types:check` (tsc): **limpio**.
+- `npm run lint:check` (eslint): **limpio**.
+- `npm run build`: artefactos generados (2.8 MB).
+
+Las vistas públicas y el panel admin están implementados; la reserva propia, el blog programado, el SEO base (incluido **JSON-LD que ahora sí se sirve en el HTML**), el sitemap dinámico, el aviso simple de cookies y el RBAC con protección de PII funcionan y están verificados en runtime.
+
+**No está listo para producción todavía**, por tres frentes claros:
+
+1. **Hardening de seguridad**: el Bloque 1 (cabeceras + CSP Report-Only) está **cerrado** el 25/06, con `composer test` y revisión visual revalidados en verde; siguen pendientes CSP enforce, ocultar `X-Powered-By` y configuración `local`/`debug` (P1 de hardening, Bloque 2).
+2. **Riesgo legal/reputacional de contenido**: hay **11 proyectos y 17 partners con marcas reales de terceros** (Iberia, Meliá, Leroy Merlin, Jack & Jones, Wible…) **publicados** (`show_on_home/projects/collaborations = 1`) cuyo permiso de publicación está **pendiente** según el propio backlog. Todo el contenido cargado es **demo/legacy sin permiso confirmado**; ningún proyecto está confirmado como publicable.
+3. **WIP sin cerrar**: blog editorial (seeder + 21 imágenes), shim CSP de Vite y el propio `.odt`, todo sin commit.
+
+Corrección de contexto (25/06): **`docs/informacionRequeridaSitioWeb.odt` es una plantilla orientativa preparada por Pablo**, con ejemplos rellenados para indicar a Andrés qué debe devolver y en qué formato. **No es contenido confirmado ni entregado por Andrés.** Por tanto, sus textos (Quiénes somos, 8 servicios, 6 fases de metodología, proyecto CIETE, bio de Pablo) son **ejemplos de plantilla**, no datos reales. El contenido definitivo **sigue pendiente de Andrés**, y lo ya cargado en BD debe tratarse como **demo/placeholder** hasta que Andrés lo confirme.
+
+**Veredicto:** listo para seguir cargando contenido; **no** listo para producción hasta cerrar hardening de seguridad, decisión de permisos de proyectos/partners y revisión legal.
+
+---
+
+## 2. Estado real del proyecto
+
+### 2.1 Validaciones (ejecutadas hoy)
+
+| Gate | Resultado |
+|---|---|
+| `composer test` (Pint+PHPStan+Pest) | ✅ 184/184 tests, 910 aserciones, 0 errores estáticos; revalidado con PHP de XAMPP el 25/06 tras la corrección CSP inline |
+| `npm run types:check` | ✅ sin errores |
+| `npm run lint:check` | ✅ sin errores |
+| `npm run build` | ✅ 2.8 MB total; tras la corrección CSP inline, `cmd.exe /C npm run build` OK |
+| `composer audit` | ⚠️ 3 advisories medium (transitivas) |
+| `npm audit --omit=dev` | ⚠️ 2 critical en `shell-quote`→`concurrently` (tooling de build, no se envía al navegador) |
+
+### 2.2 Estado de la base de datos (local, hoy)
+
+| Entidad | Cantidad | Notas |
+|---|---|---|
+| Posts | 21 | **Todos `scheduled`**: 3 vencidos→visibles, 18 futuros→ocultos |
+| Post destacado | 1 | `abacoqd-renovamos-identidad-...` (vencido hoy 14:20 → visible) |
+| Categorías / Tags | 16 / 21 | del seeder editorial |
+| Partners | 17 | marcas reales (clientes y colaboradores) |
+| Projects | 11 | **todos públicos**, demo/legacy sin permiso confirmado |
+| Services | 6 | demo/placeholder; la plantilla de Pablo ejemplifica 8 (no vinculante) |
+| Team members | 2 | Andrés y Pablo; **ambos sin foto** |
+| FAQs | 7 | chatbot/página |
+| Contact messages | 0 | — |
+| Appointment bookings | 0 | — |
+| Usuarios | 2 | 1 `super_admin` + 1 `editor` |
+
+### 2.3 Runtime verificado (servidor local `php artisan serve`)
+
+- `/`, `/blog/{slug}`, `/servicios/{slug}`, `/proyectos/{slug}` → **2 nodos `application/ld+json` cada uno** (JSON-LD servido en HTML inicial; ver §9).
+- `/robots.txt` correcto: `Disallow` admin/dashboard/settings/auth, `Sitemap: https://abacoqd.com/sitemap.xml`.
+- `/sitemap.xml`: 31 `<loc>`; **excluye** posts programados futuros, **incluye** los vencidos. ✅
+- `/admin/dashboard` sin sesión → `302` (gate de auth). ✅
+
+---
+
+## 3. Módulos terminados
+
+**Público**
+
+- Home/landing con hero protegido (cubo + partículas), Metodología, Servicios (+detalle), Proyectos (+detalle), Quiénes somos, Blog (+detalle con TOC), Contacto, Reserva, Legales (aviso/privacidad/cookies), páginas de error 404/500/503.
+- Topbar final sin botón Reservar; footer con datos desde `settings`; tema claro/oscuro/sistema; widget de accesibilidad; chatbot/FAQ con fallback.
+- **Aviso simple de cookies técnicas** (`CookieNotice.tsx`): sin categorías, sin panel de preferencias, sin analítica, sin Consent Mode; solo `localStorage` (`abacoqd_cookie_notice_v1`). Reapertura desde `/cookies`. ✅
+- **Blog programado sin cron**: scope único `Post::published()` que hace visible `scheduled` cuando `published_at <= now()`; mismo gate para `/blog`, detalle, landing y sitemap. ✅
+- **SEO base**: title/description/canonical/robots, Open Graph, Twitter Cards, **JSON-LD**, sitemap dinámico, robots. ✅
+- **Reserva propia** (`appointment_days/slots/bookings`) con transacción + bloqueo de fila contra doble reserva; fallback a contacto.
+- **Formularios** (contacto y reserva): honeypot server-side (`prohibited`), `throttle:public-forms` (6/min/IP), consentimiento de privacidad obligatorio separado del de marketing.
+
+**Admin**
+
+- Dashboard, Servicios, Posts (+categorías/tags), Partners, Projects, Team members, FAQs, Reservas (calendario/días/slots/bookings/settings), Contactos/leads, Usuarios, Settings globales.
+- CRUD con paginación, filtros, toggles de visibilidad/flags, soft-deletes en posts (archivar), limpieza de media reemplazada.
+- **RBAC** con `admin` (super_admin/admin/editor) + `role:` fino: usuarios solo `super_admin`; contactos/reservas/settings solo `super_admin,admin`; `viewer` fuera del panel.
+
+---
+
+## 4. Módulos / piezas pendientes
+
+| Pieza | Estado | Prioridad |
+|---|---|---|
+| Cabeceras de seguridad (CSP, XFO, etc.) | No existen | **P0/P1** |
+| Hardening de entorno producción (`.env`, SMTP real, build prod) | Solo local | **P1** |
+| Despliegue de la CSP estricta (shim Vite ya iniciado) | WIP | DECISIÓN/P1 |
+| Contenido real de servicios (BD tiene 6 demo; plantilla ejemplifica 8) | Pendiente | DEP-ANDRÉS |
+| Proyectos reales (CIETE es solo ejemplo de plantilla) | Pendiente | DEP-ANDRÉS |
+| Decisión sobre proyectos/partners legacy publicados | Pendiente permiso | **P0 legal** |
+| Fotos de equipo (Andrés y Pablo) | Nulas | DEP-ANDRÉS |
+| Emails finales de contacto y reserva | Ejemplos en blanco en la plantilla | DEP-ANDRÉS |
+| Revisión jurídica de textos legales | Borrador | DEP-ANDRÉS/P1 |
+| hreflang / indexación EN | Fuera por decisión actual | DECISIÓN/P3 |
+| Analítica/CMP | Sin analítica (decisión actual) | DECISIÓN |
+
+---
+
+## 5. Contenido pendiente de Andrés
+
+**Sobre `docs/informacionRequeridaSitioWeb.odt`:** es una **plantilla orientativa preparada por Pablo**, con ejemplos rellenados para que Andrés sepa qué devolver y en qué formato. **No es contenido confirmado ni entregado por Andrés** y no debe cargarse como contenido real. Lo que hoy hay en BD (servicios, proyectos, partners, metodología, equipo) es **demo/placeholder** y queda pendiente de sustituir por el contenido real de Andrés.
+
+**Pendiente de Andrés (DEP-ANDRÉS):**
+
+1. Textos definitivos "Quién es Abaco Developments" y "Qué es AbacoQD".
+2. Servicios reales (nombre + descripción) y su número final (la BD tiene 6 demo; la plantilla ejemplifica 8, no vinculante).
+3. Fases de metodología definitivas (la BD tiene pasos demo).
+4. Proyectos reales (CIETE aparece solo como ejemplo en la plantilla; ningún proyecto está confirmado como publicable) y **permiso explícito** para mostrar proyectos/partners/logos/capturas/reseñas (clave para §10 legal).
+5. Equipo: bios definitivas, fotos de Pablo y Andrés (ambos `visible` sin foto), LinkedIn/GitHub reales y decisión de si Andrés aparece como miembro público.
+6. Reseñas/testimonios reales (hoy el footer solo enlaza Google Reviews, oculto si no hay URL).
+7. Email destino de avisos de **reserva** y de mensajes de **contacto** (hoy cae a `info@abacodev.com` vía `CONTACT_NOTIFY_EMAIL`).
+8. Usuario real del panel para Andrés (crear con contraseña segura).
+9. Teléfono legal visible principal, política de redirección de `abacodev.com`, ubicación de logos UE/FSE+, redes sociales y horarios.
+
+> El avance técnico **no se bloquea** por esto: es dependencia externa de contenido. El sitio puede progresar con datos demo claramente marcados.
+
+---
+
+## 6. WIP local pendiente de cerrar (no stageado)
+
+Working tree: 1 modificado, resto sin trackear. **Nada en staging.**
+
+| Grupo | Archivos | Recomendación |
+|---|---|---|
+| **B. WIP técnico (CSP)** | `vite.config.ts` (M) + `resources/js/vendor/es-toolkit-global-this.ts` (??) | **Commit conjunto.** El shim sustituye el `globalThis` de `es-toolkit` (patrón tipo `Function()`/eval) por uno CSP-safe; es la base para una CSP sin `unsafe-eval`. Van juntos o el build rompe. |
+| **C. WIP editorial** | `database/seeders/BlogEditorialJulyAugust2026Seeder.php` (??) | Commit propio. Ojo: el seeder **no** está en `DatabaseSeeder` y pone `featured_image = null` en posts nuevos (ver bug §7.1). |
+| **D. Assets** | `public/uploads/blog/posts/*.webp` (21) | Commit junto al seeder editorial. La BD ya referencia estos 21 ficheros; sin commit, un clon/redeploy pierde las portadas. |
+| **E. Docs** | `docs/informacionRequeridaSitioWeb.odt` (??), `docs/auditoria25Junio.md` (este) | Decisión: ¿se versiona el `.odt`? Contiene datos de contacto. Sugerido commit doc separado. |
+
+> Verificado: `resources/js/vendor/` **no** está gitignored.
+
+Sobre los commits "CMP complejo": `e69e355`, `686a0b1`, `12a9949` **siguen en el historial** (no hubo `git revert`). Su lógica fue **sustituida** por `7591469 refactor(cookies): simplificar aviso de cookies técnicas`. El working tree actual **no** contiene lógica compleja de consent/tracking (confirmado leyendo `CookieNotice.tsx`).
+
+---
+
+## 7. Bugs detectados
+
+### 7.1 (P1 / WIP) Seeder editorial no reproduce las portadas
+`BlogEditorialJulyAugust2026Seeder` hace `if ($isNew) { $post->featured_image = null; }` y nunca asigna la ruta `.webp`. La BD actual tiene las 21 portadas porque se **subieron a mano** desde el admin. En un `migrate:fresh --seed` + seeder editorial, los posts quedarían **sin portada**. → El estado actual no es reproducible desde código. Decidir: (a) que el seeder asigne `/uploads/blog/posts/{slug}.webp`, o (b) documentar carga manual.
+
+### 7.2 (Info/DECISIÓN) Seeder editorial fuera del pipeline
+No está en `DatabaseSeeder::run()`. Un `db:seed` base **no** crea el blog editorial. Correcto si es intencional, pero hay que decidir el camino de despliegue.
+
+### 7.3 (DEP-ANDRÉS) El contenido cargado es demo, no real
+La BD tiene 6 servicios **demo/placeholder** (y proyectos/metodología/equipo también demo). La plantilla de Pablo ejemplifica 8 servicios, pero **no es contenido confirmado**: el catálogo real lo debe entregar Andrés. No cargar los ejemplos de la plantilla como reales.
+
+### 7.4 (P2) Chunk `SiteFooter` desproporcionado
+`SiteFooter-*.js` = 121 KB (mayor que muchas páginas completas). Posible arrastre de iconos/deps. Revisar tree-shaking del footer (ver §11).
+
+**No es bug:** las claves "duplicadas" de `settings` (`cif`, `registry`, `public_brand_name`) son pares `(group, key)` distintos; la tabla tiene `unique(['group','key'])` y `SiteSettings` lee solo `group='site'`. Correcto.
+
+> QA visual real (cross-browser, hidratación, foco, layout) **no** se puede certificar con `curl`; ver §12 y el checklist de §5-original. Requiere navegador real (Chrome/Firefox/Brave).
+
+---
+
+## 8. Riesgos de ciberseguridad
+
+### 8.1 (P0) Cabeceras de seguridad ausentes
+`curl -I /` confirma que **no** se emiten: `Content-Security-Policy`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `Strict-Transport-Security`, `Cross-Origin-Opener-Policy`, `Cross-Origin-Resource-Policy`. Recomendado: middleware Laravel para todas (HSTS solo en prod/HTTPS) + CSP apoyada en el shim WIP. **No** añadir `unsafe-eval`; **no** relajar CSP; el trabajo del `vite.config.ts` va justo en esa dirección.
+
+### 8.2 (P1) Configuración de entorno
+`.env`/`.env.example`: `APP_ENV=local`, `APP_DEBUG=true`, `APP_URL=http://localhost`, `MAIL_MAILER=log`, `DB=sqlite`. Para producción: `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://abacoqd.com`, SMTP real, `SESSION_SECURE_COOKIE=true`, revisar `SESSION_SAME_SITE`/`TRUSTED_PROXIES`. Buen detalle ya presente: `AppServiceProvider` exige en producción `Password::min(12)` con `uncompromised()` y prohíbe comandos destructivos de BD.
+
+### 8.3 (P2) Fuga de información de servidor
+Respuesta incluye `X-Powered-By: PHP/8.4.12`. Ocultar en prod (`expose_php=Off` / cabecera).
+
+### 8.4 (Bajo) Cookies de sesión
+`abacoqd-session` ya sale `httponly; samesite=lax`. Falta solo `Secure` (depende de HTTPS/`SESSION_SECURE_COOKIE` en prod). `XSRF-TOKEN` `samesite=lax` sin `httponly` es correcto (lo lee JS). CSRF de Laravel activo.
+
+### 8.5 (OK) XSS / HTML / Markdown
+- Posts: `Str::markdown()` (CommonMark) **escapa el HTML crudo por defecto**; `dangerouslySetInnerHTML` en `BlogPost.tsx` es seguro con ese origen.
+- JSON-LD: se escapa `<`→`<` (cliente) y `JSON_HEX_TAG|HEX_APOS|HEX_QUOT|HEX_AMP` (blade). Correcto.
+- Otros `dangerouslySetInnerHTML`: `SeoHead.tsx` (JSON-LD controlado) y `two-factor-setup-modal.tsx` (SVG del QR generado por Fortify, no entrada de usuario). Riesgo bajo.
+- No se encontró `DOMPurify`/`marked`/`html-react-parser`; no hace falta para el origen actual. Si en el futuro el admin permite HTML crudo en posts, **habría que sanitizar**.
+
+### 8.6 (OK) SQL Injection
+Búsqueda de `DB::raw|whereRaw|orderByRaw|selectRaw|statement|unprepared`: **sin coincidencias**. Búsquedas/filtros (`scopeSearch`, filtros admin, slugs) usan binding de Eloquent (`like` con `%term%` parametrizado). Sin vector.
+
+### 8.7 (OK) Mass assignment / validación
+Modelos con `#[Fillable([...])]` explícito; controladores usan `FormRequest` + `validated()` (no `request()->all()` sin filtrar). `authorize()` público en formularios públicos (correcto) y RBAC por ruta en admin.
+
+### 8.8 (OK, con nota) RBAC / PII
+- Gate `admin` = super_admin/admin/editor; `users` solo super_admin; `contacts`/`booking`/`settings` solo super_admin/admin; `viewer` fuera. Sólido.
+- **PII**: `contact_messages` guarda `ip_address` y `user_agent` del visitante, además de email/teléfono/empresa, y `appointment_bookings` guarda datos de contacto. **Debe declararse en la política de privacidad** (base legal, finalidad, retención). Hoy editor no ve contactos; bien.
+
+### 8.9 (P1/P2) Uploads
+Servicios de media propios (`PostCoverImageService`, `TeamMemberPhotoService`, etc.) y limpieza de media reemplazada (commit `7e09165`). **Verificar** en los `FormRequest`/servicios: regla `mimes`/`mimetypes` + `max:` por tipo (webp/pdf), nombres derivados de slug (evita path traversal), y bloqueo de ejecutables. CV en `/uploads/team-members-cv/*.pdf` es de descarga directa (sin auth) — aceptable si es público por diseño; confirmar que no se filtran PDFs no publicados.
+
+### 8.10 (Formularios / spam) — buena base
+Honeypot (`prohibited`) + `throttle:public-forms` 6/min/IP + consentimiento. Opciones a futuro: (A) mantener honeypot+throttle [actual, suficiente para lanzar]; (B) throttle adicional por ruta; (C) Cloudflare/WAF en prod; (D) sin Captcha por ahora. **Recomendado: A (+C cuando haya hosting/CDN).**
+
+### 8.11 (Dependencias — reportar, no actualizar)
+- `composer audit`: 3 medium → `guzzlehttp/guzzle (<7.12.1)` (CVE-2026-55767, CVE-2026-55568) y `guzzlehttp/psr7 (<2.12.1)` (CVE-2026-55766). Transitivas; impacto real bajo en este uso. Planificar bump.
+- `npm audit --omit=dev`: 2 critical en `shell-quote` vía `concurrently`. Es **tooling de scripts/build**, no se empaqueta al navegador → riesgo de producción bajo. Bump cuando toque.
+
+---
+
+## 9. Riesgos SEO
+
+- **JSON-LD: RESUELTO.** La auditoría previa lo daba como "no aparece en HTML". Hoy `curl` confirma **2 nodos `application/ld+json`** en home, blog, servicio y proyecto, servidos desde `app.blade.php` (con escape `JSON_HEX_*`) y reconciliados por `SeoHead.tsx`. ✅
+- robots.txt y sitemap correctos; el sitemap respeta el gate de visibilidad (excluye futuros). ✅
+- `noindex`/gating en admin/auth/dashboard/settings: vía robots + redirect de auth. ✅
+- **ES-only por decisión actual**: sin `/en`, sin `hreflang` (documentado en `SeoHead`). `docs/03_SEO` aspira a hreflang; hoy es decisión consciente, no bug. Si se activa EN, hay que añadir hreflang y canonical EN sin romper. (P3/DECISIÓN)
+- **Canonical**: depende de `canonical_domain` en settings (sitemap ya emite `abacoqd.com`). Verificar que en prod `APP_URL`/canonical no quede en `localhost`. (P1)
+
+---
+
+## 10. Riesgos legales
+
+- **(P0) Proyectos/partners de terceros publicados sin permiso confirmado.** 11 proyectos y 17 partners con marcas reales (Iberia, Meliá, Leroy Merlin, Jack & Jones, Wible, Cognodata…) están `is_active` y visibles en home/proyectos/colaboraciones. El backlog lista "Proyectos/logos/capturas/reseñas **con permiso**" como pendiente y el brief prohíbe publicar datos sin permiso. **Mientras no haya autorización**, esto es exposición legal/reputacional. Recomendación (decisión, no tocar ahora): despublicar o marcar como demo hasta confirmar permisos. (CIETE no es excepción: aparece solo como ejemplo en la plantilla de Pablo, no como proyecto autorizado.)
+- **(P1) Textos legales en borrador**: aviso legal/privacidad/cookies pendientes de revisión jurídica. La **privacidad debe reflejar** el almacenamiento de IP/User-Agent y la retención de leads/reservas.
+- **(P1) Cookies**: el aviso actual es solo de cookies técnicas y **coincide** con la realidad (sin analítica). Verificar que el texto de `/cookies` no prometa herramientas no activas y explique el `localStorage` del propio aviso.
+- **(DEP-ANDRÉS)** Teléfono legal principal, datos de la S.L., política de `abacodev.com` y ubicación obligatoria de logos UE/FSE+.
+
+---
+
+## 11. Riesgos de rendimiento
+
+- Build total **2.8 MB**. Chunks mayores:
+  - `Home-*.js` **708 KB** (hero Three.js / cubo de cristal) → principal coste de carga inicial de la landing (LCP/peso). **P1**: confirmar lazy-load/code-split del cubo y `prefers-reduced-motion` (la zona del hero está protegida; optimizar **carga**, no rediseñar).
+  - `jsx-runtime-*.js` 315 KB, `app-*.js` 290 KB, `app-*.css` 215 KB.
+  - `SiteFooter-*.js` **121 KB** → desproporcionado; revisar imports de iconos/deps (P2, ver §7.4).
+- Fuentes con `preload` (woff2) ya en cabecera `Link`. ✅
+- Imágenes de blog en `.webp`. Verificar `width/height`/`alt`/`loading=lazy` en las tarjetas para CLS. (P2)
+
+Clasificación: **P1** peso del chunk Home; **P2** footer, dimensiones de imágenes; sin P0 de rendimiento.
+
+---
+
+## 12. Riesgos de accesibilidad (requiere navegador real)
+
+No certificable por `curl`. Indicios positivos en código: `aria-label`/`role=dialog` en cookies, `focus-visible:outline`, widget de accesibilidad propio, `useSyncExternalStore` para evitar flash de hidratación. **Checklist manual pendiente** (Chrome/Firefox/Brave): navegación por teclado y foco visible en topbar/CTAs/formularios, contraste de la paleta (teal/lima sobre claros), `prefers-reduced-motion` en hero/cubo y carruseles, `alt` reales en imágenes de blog/equipo, jerarquía H1/H2 por página, `lang` correcto al cambiar idioma, errores de validación anunciados. (P1 antes de producción.)
+
+---
+
+## 13. Mejoras recomendadas
+
+- **(P1)** Middleware de cabeceras de seguridad + CSP estricta apoyada en el shim WIP.
+- **(P1)** Lazy-load/code-split del hero Three.js; revisar chunk del footer.
+- **(P2)** Que el seeder editorial asigne `featured_image` para ser reproducible.
+- **(DEP-ANDRÉS)** Sustituir el contenido demo (servicios, proyectos, metodología, equipo) por el real cuando Andrés lo entregue.
+- **(P2)** Confirmar reglas de upload (`mimes`/`max`/nombres) y descarga de CV.
+- **(P3)** Plan de hreflang/EN si se decide indexar inglés.
+- **(P3)** Bump planificado de guzzle/psr7 y tooling npm.
+
+---
+
+## 14. Qué NO tocar todavía
+
+- **Hero protegido** (`AbacoHero`, `AbacoCrystalCube`, `FloatingHeader`, `HeroParticleField`, estilos y assets de marca). Solo optimizar carga si se aprueba fase.
+- **Landing, topbar, footer, cookies, blog, admin y seguridad** ya cerrados: no rehacer.
+- **`vite.config.ts`**: el cambio WIP es legítimo (CSP). No revertir ni meterle `unsafe-eval`.
+- **Lógica de consent/tracking**: no reintroducir el CMP complejo; el aviso simple es la decisión vigente.
+- **Estados/fechas de los posts programados**: no publicar manualmente; el gate temporal es intencional.
+- **Datos de proyectos/partners**: no inventar ni añadir; la decisión es de permisos, no de código.
+
+---
+
+## 15. Orden recomendado de próximos bloques
+
+```txt
+1. Cerrar WIP en commits limpios y separados (shim CSP / blog editorial+assets / docs).
+2. Decisión de negocio: permisos de proyectos/partners reales → despublicar/marcar demo
+   lo no autorizado (todo es demo/legacy sin permiso). (desbloquea el riesgo legal P0)
+3. Seguridad: middleware de cabeceras + CSP estricta (sin unsafe-eval) usando el shim.
+4. Reproducibilidad del blog: que el seeder asigne portadas; decidir pipeline de seed.
+5. Sustituir el contenido demo por el real cuando Andrés lo entregue (servicios, proyectos, metodología, equipo).
+6. Hardening de entorno + SMTP real + usuario admin real (preparar .env de producción).
+7. Rendimiento: lazy-load hero / chunk footer.
+8. QA real cross-browser + accesibilidad (Chrome/Firefox/Brave).
+9. Revisión jurídica de legales y privacidad (IP/UA, retención).
+10. Recoger datos finales de Andrés (fotos, emails, teléfono, redirección dominio).
+```
+
+---
+
+## 16. Commits recomendados para cerrar WIP
+
+```txt
+1. commit: build(csp): shim CSP-safe para globalThis de es-toolkit
+   archivos: vite.config.ts, resources/js/vendor/es-toolkit-global-this.ts
+   motivo: eliminar patrón eval-like; base para CSP sin unsafe-eval. Van juntos.
+
+2. commit: feat(blog): seeder editorial julio/agosto 2026 + portadas
+   archivos: database/seeders/BlogEditorialJulyAugust2026Seeder.php,
+             public/uploads/blog/posts/*.webp (21)
+   motivo: cerrar el contenido editorial WIP que la BD ya referencia.
+   nota: antes de commitear, resolver bug §7.1 (seeder debe asignar featured_image)
+         y decidir si entra en DatabaseSeeder.
+
+3. commit: docs(auditoria): informe de auditoría 25/06 (+ plantilla de requisitos)
+   archivos: docs/auditoria25Junio.md (y, si se versiona, docs/informacionRequeridaSitioWeb.odt)
+   motivo: dejar la foto de estado de la auditoría.
+   nota: el .odt es la plantilla de requisitos de Pablo (con datos de contacto de ejemplo); confirmar si debe versionarse.
+```
+
+> No usar `git add .` ni `git add -A`: stagear por rutas explícitas para no mezclar grupos.
+
+---
+
+## 17. Checklist de producción
+
+```txt
+[ ] APP_ENV=production / APP_DEBUG=false / APP_URL=https://abacoqd.com / APP_TIMEZONE=Europe/Madrid
+[ ] APP_KEY generada y única en el entorno
+[ ] SESSION_SECURE_COOKIE=true (HTTPS) y revisar SAME_SITE / TRUSTED_PROXIES
+[ ] SMTP real (MAIL_MAILER != log) + remitente verificado; probar email de contacto y reserva
+[ ] Cabeceras de seguridad (CSP estricta, XFO, XCTO, Referrer, Permissions, HSTS)
+[ ] Ocultar X-Powered-By
+[ ] Decisión y aplicación de permisos de proyectos/partners (legal)
+[ ] Revisión jurídica de aviso legal / privacidad (IP, UA, retención) / cookies
+[ ] Carga de contenido real de Andrés (servicios, proyectos, metodología, equipo, fotos, emails) — sustituir demo
+[ ] Usuario admin real de Andrés con contraseña segura (Password::min(12) ya forzado en prod) + 2FA si aplica
+[ ] migraciones aplicadas; decisión de seeders de producción (¿blog editorial?)
+[ ] storage:link + permisos storage/ y bootstrap/cache
+[ ] cache de config/rutas/vistas + build de producción
+[ ] sitemap/robots/canonical apuntando a dominio final (no localhost)
+[ ] decisión documentada sobre abacodev.com (redirección/convivencia)
+[ ] SSL, backups, logs y monitorización básica
+[ ] Bump de dependencias con CVE (guzzle/psr7) y tooling npm
+[ ] QA cross-browser + accesibilidad superados
+```
+
+---
+
+## 18. Conclusión
+
+- **¿Listo para seguir cargando contenido?** **Sí.** La base técnica es sólida y verde. El contenido sigue **pendiente de Andrés** (el `.odt` es solo una plantilla de Pablo, no contenido confirmado) y lo que hay en BD es demo/placeholder; el avance técnico no está bloqueado por ello.
+- **¿Listo para producción?** **No todavía.** Bloquean: (1) cabeceras de seguridad/CSP y hardening de entorno; (2) la **decisión legal sobre proyectos/partners reales publicados sin permiso confirmado**; (3) revisión jurídica de legales; y el cierre del WIP. Ninguno es estructural; son pasos acotados.
+
+---
+
+### Cierre accionable
+
+```txt
+Siguiente bloque recomendado:
+1. Cerrar WIP en 3 commits separados (shim CSP / blog editorial+assets / docs).
+2. Resolver el riesgo legal P0: permisos de proyectos/partners (despublicar/marcar demo; todo es demo/legacy sin permiso).
+3. Middleware de cabeceras de seguridad + CSP estricta apoyada en el shim (sin unsafe-eval).
+
+Microcommits sugeridos:
+1. commit: build(csp): shim CSP-safe globalThis es-toolkit
+   archivos: vite.config.ts, resources/js/vendor/es-toolkit-global-this.ts
+   motivo: base para CSP sin unsafe-eval.
+2. commit: feat(blog): seeder editorial + 21 portadas webp
+   archivos: database/seeders/BlogEditorialJulyAugust2026Seeder.php, public/uploads/blog/posts/*.webp
+   motivo: cerrar contenido editorial (resolver antes featured_image del seeder).
+3. commit: docs(auditoria): informe 25/06 (+ plantilla de requisitos)
+   archivos: docs/auditoria25Junio.md (+ .odt si se versiona)
+   motivo: foto de estado de la auditoría (el .odt es plantilla de Pablo, no contenido confirmado).
+
+Pendiente de Andrés:
+1. Fotos de Pablo y Andrés; LinkedIn/GitHub reales de Pablo.
+2. Emails finales de contacto y de avisos de reserva.
+3. Más proyectos reales + permiso de proyectos/partners/logos/reseñas.
+4. Teléfono legal principal, política de abacodev.com, logos UE/FSE+, redes y horarios.
+5. Usuario real del panel.
+
+Pendiente de seguridad:
+1. Cabeceras de seguridad + CSP estricta (sin unsafe-eval).
+2. Hardening de .env producción (APP_DEBUG=false, SESSION_SECURE_COOKIE, SMTP real) + ocultar X-Powered-By.
+3. Confirmar reglas de upload (mimes/max/nombres) y declarar PII (IP/UA) en privacidad.
+4. Bump planificado de guzzle/psr7 y tooling npm.
+
+Pendiente producción:
+1. Decisión legal de proyectos/partners + revisión jurídica de legales.
+2. Dominio/canonical/sitemap a abacoqd.com (no localhost) y redirección de abacodev.com.
+3. Reproducibilidad de seeders (portadas del blog) + usuario admin real + storage:link + cache + backups.
+```

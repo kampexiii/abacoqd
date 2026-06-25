@@ -1,0 +1,277 @@
+# Roadmap de cierre técnico — AbacoQD
+
+> Plan de cierre para llevar AbacoQD a producción con el menor riesgo posible.
+> Derivado de [auditoria25Junio.md](auditoria25Junio.md). Fecha: **25/06/2026**.
+> Stack real: **Laravel 13.15.0 · PHP 8.4.12 · Inertia · React 19 · TypeScript · Tailwind v4 · SQLite (local)**. Rama: `master`. Mail driver actual: `log`.
+>
+> **Criterio rector:** precisión antes que velocidad. Cambios quirúrgicos. Sin refactors grandes, sin "ya que estamos", sin reescrituras. No tocar BD/migraciones sin confirmación. No tocar hero, landing, topbar, footer, cookies, blog ni admin salvo lo estrictamente necesario.
+>
+> **Regla de proceso AbacoQD:** si durante un bloque aparece un error, warning crítico o incidencia técnica verificable, no se ignora aunque pertenezca parcialmente a otro bloque. Se lista, diagnostica, resuelve si es razonable y seguro, se documenta en `docs/auditoria25Junio.md` y en este roadmap, y no se avanza al bloque siguiente hasta dejarlo cerrado o claramente bloqueado.
+
+Leyenda: `P0` bloquea producción/seguridad · `P1` importante antes de producción · `P2` recomendable · `DEP-ANDRÉS` dependencia de contenido externa · `DECISIÓN` decisión técnica/negocio · `WIP` archivos sin commit.
+
+---
+
+## 0. Estado de partida (25/06)
+
+- Validaciones base **verdes**: `composer test` 184/184 · `tsc` limpio · `eslint` limpio · `build` OK. Tras la revisión CSP inline: `types:check`, `lint:check`, `cmd.exe /C npm run build` y `composer test` (revalidado con PHP de XAMPP) verdes.
+- **Correo**: `MAIL_MAILER=log` (no llega a Gmail; se escribe en `storage/logs/laravel.log`). Contacto envía (a log); **reserva NO envía correo** (no hay Mailable de reserva).
+- **Seguridad**: Bloque 1 **CERRADO** (cabeceras + CSP report-only añadidas; incidencia `public/hot` resuelta; advertencia CSP inline diagnosticada y resuelta; `composer test` revalidado en verde con PHP de XAMPP y revisión visual/interactiva confirmada por Pablo el 25/06; ver [auditoría §0](auditoria25Junio.md)). Sigue pendiente para fases posteriores: flip de CSP a enforce, ocultar `X-Powered-By`, `APP_DEBUG=true`/`APP_ENV=local` (Bloque 2).
+- **WIP en árbol**: `vite.config.ts` (M, shim CSP) + `resources/js/vendor/` · **Bloque 1**: `app/Http/Middleware/SecurityHeaders.php` (nuevo), `bootstrap/app.php` (M), `resources/views/app.blade.php` (M), `public/assets/appearance-init.js` (nuevo) sin commit · seeder editorial + 21 `.webp` · `docs/auditoria25Junio.md` · `docs/roadmapCierre25Junio.md` · `.odt`. Nada staged.
+- **Cambio local ya aplicado** (autorizado): `.env` → `CONTACT_NOTIFY_EMAIL=pabloapariciocreativexiii@gmail.com` (gitignored, temporal de pruebas).
+- **El `.odt`** = plantilla orientativa de Pablo. Todo el contenido en BD (servicios, proyectos, partners, metodología, equipo) es **demo/placeholder/legacy** hasta validación de Andrés.
+
+---
+
+## 1. Matriz de bloques
+
+| # | Bloque | Prioridad | Bloqueado por |
+|---|---|---|---|
+| 1 | Cabeceras de seguridad + CSP report-only | **P0** | ✅ **CERRADO** (CSP inline resuelta; `composer test` + visual validados 25/06) |
+| 2 | Hardening de entorno (prod `.env`, debug off, X-Powered-By) | **P1** | — |
+| 3 | Correo real contacto + **reserva** (Mailable nuevo) | **P1** | SMTP creds |
+| 4 | Cierre de WIP local (shim CSP, blog editorial, docs) | **WIP** | decisión `featured_image` |
+| 5 | Contenido DEMO/plantilla/placeholder | **DEP-ANDRÉS** | Andrés |
+| 6 | Contenido pendiente de Andrés | **DEP-ANDRÉS** | Andrés |
+| 7 | Legal/permisos proyectos·partners·logos·capturas·reseñas | **P0 legal** | Andrés + decisión |
+| 8 | Producción/despliegue | **P1** | bloques 1-3 |
+| 9 | QA final (cross-browser + a11y) | **P1** | bloques 1-8 |
+| — | CSP estricta (flip report-only → enforce) | **DECISIÓN/P1** | tras tunear |
+
+---
+
+## 2. Orden de ejecución recomendado
+
+```
+0. Commit del shim CSP (prerequisito; ya está en el árbol).
+1. BLOQUE 1 — Seguridad: middleware de cabeceras + CSP report-only.   ← cerrado (25/06)
+2. `composer test` con PHP de XAMPP + revisión visual/interactiva rápida.   ← completado (25/06)
+3. BLOQUE 3 — Correo contacto/reserva (requiere SMTP).
+4. BLOQUE 4 — Cierre de WIP (docs + blog editorial tras decidir featured_image).
+5. BLOQUE 2 — Hardening de entorno (preparar .env de producción).
+6. BLOQUE 7 — Decisión legal/permisos (despublicar / marcar DEMO). En paralelo, no técnico.
+7. CSP estricta (flip a enforce) tras tunear nonce JSON-LD y Three.js/estilos.
+8. BLOQUE 9 — QA final cross-browser + accesibilidad.
+```
+
+**Primer bloque = Seguridad.** Es P0, el más independiente de Andrés y de **riesgo mínimo**: las cabeceras estáticas no afectan al render ni al hero, y la CSP entra en **Report-Only** (solo reporta, no bloquea) → no rompe Vite ni el hero, sin `unsafe-eval` ni relajar nada. El shim WIP de `vite.config.ts` es justo la base para una CSP futura sin `unsafe-eval`.
+
+---
+
+## 3. Bloques en detalle
+
+### Bloque 1 — Seguridad (P0) — ✅ CERRADO (25/06)
+
+**Estado real:** cabeceras añadidas y CSP mantenida en `Content-Security-Policy-Report-Only`, sin enforce, sin `unsafe-eval` y sin `unsafe-inline` en `script-src`. La incidencia anterior de `public/hot` quedó resuelta y separada del middleware. La nueva advertencia de navegador se confirmó como un inline script propio de tema/apariencia en `resources/views/app.blade.php` y se resolvió moviéndolo a `public/assets/appearance-init.js`. DevTools/Chrome CDP posterior ya no reporta la violación CSP (`[]`). **Sin commit aún.**
+
+**Validación final (25/06):** `route:list` con PHP de XAMPP → 160 rutas; `curl -I` → CSP Report-Only presente, sin enforce, sin `unsafe-eval`, sin `unsafe-inline` en `script-src`; `types:check`, `lint:check` y `cmd.exe /C npm run build` → verdes. `composer test` revalidado con PHP de XAMPP (`C:\xampp\php\php.exe C:\ProgramData\ComposerSetup\bin\composer.phar test`) → **verde**: Pint OK · PHPStan 0 errores · Pest 184/184, 910 aserciones. Revisión visual/interactiva rápida completada y confirmada manualmente por Pablo en DevTools: sin errores ni warnings visuales relacionados con CSP, sin errores rojos críticos en consola. Bloque 1 cerrado; queda habilitado el avance al Bloque 3.
+
+**Objetivo:** defensa en profundidad sin romper nada.
+
+**Archivos:**
+- `app/Http/Middleware/SecurityHeaders.php` *(nuevo)*
+- `bootstrap/app.php` *(registrar en grupo `web`, append)*
+- `resources/views/app.blade.php` *(sin script ejecutable inline de apariencia; usa `data-appearance` + asset externo)*
+- `public/assets/appearance-init.js` *(nuevo asset externo same-origin para tema temprano)*
+- Prereq: commitear shim WIP (`vite.config.ts` + `resources/js/vendor/es-toolkit-global-this.ts`).
+
+**Cabeceras:**
+- `X-Frame-Options: DENY`
+- `X-Content-Type-Options: nosniff`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()`
+- `Cross-Origin-Opener-Policy: same-origin`
+- `Cross-Origin-Resource-Policy: same-origin`
+- `Strict-Transport-Security: max-age=31536000; includeSubDomains` → **solo** si `request->secure() && app()->isProduction()`
+- `Content-Security-Policy-Report-Only` (NO enforce, **implementada**): `default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: blob:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; media-src 'self'; worker-src 'self' blob:; manifest-src 'self'; form-action 'self'`
+
+**Reglas duras:** no `unsafe-eval`, no relajar CSP, no tocar el hero ni componentes protegidos, no reintroducir CMP, mantener aviso simple de cookies técnicas, HSTS solo en prod/HTTPS.
+
+**Validación:** `curl -I`, luego `composer test`, `npm run types:check`, `npm run lint:check`, `npm run build`. Confirmar que home y hero cargan sin errores en consola. Estado actual: las cuatro puertas en verde y revisión visual confirmada; Bloque 1 cerrado, avance a Bloque 3 habilitado.
+
+### Bloque 2 — Hardening de entorno (P1)
+
+**Objetivo:** dejar el entorno listo para prod (sin código).
+
+**Acciones:** `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://abacoqd.com`, `SESSION_SECURE_COOKIE=true`, revisar `SESSION_SAME_SITE`/`TRUSTED_PROXIES`, ocultar `X-Powered-By` (`expose_php=Off`), SMTP real. Documentar claves en `.env.example`.
+
+### Bloque 3 — Correo contacto + reserva (P1)
+
+**Decisión A = SÍ:** implementar notificación de reserva (espejo de contacto). **Decisión B = SÍ:** SMTP real de Gmail en local para probar entrega real.
+
+**Archivos:**
+- `app/Mail/AppointmentBookingReceived.php` *(nuevo, espejo de `ContactMessageReceived`)*
+- `resources/views/emails/appointment-booking-received.blade.php` *(nuevo, espejo del de contacto)*
+- `app/Http/Controllers/Public/BookingController.php` *(enviar tras la transacción, solo si se creó; try/catch + `Log::error`)*
+- `app/Support/SiteSettings.php` *(añadir `bookingRecipient()` espejo de `formRecipient()`)*
+- `config/site.php` *(clave `contact.booking_recipient` con fallback al receptor de contacto)*
+- `.env` local *(SMTP + opcional `BOOKING_NOTIFY_EMAIL`)* · `.env.example` *(documentar `BOOKING_NOTIFY_EMAIL=`)*
+- `tests/Feature/...` *(test de envío de reserva, espejo del de contacto)*
+
+**Receptor:** `BOOKING_NOTIFY_EMAIL` separada y clara, con **fallback** a `CONTACT_NOTIFY_EMAIL` → durante la prueba ambos van al mismo Gmail sin config extra; en prod se separan. Nunca hardcodear el correo en el controlador. **No** cambiar el email público del footer ni datos legales.
+
+**Reglas de correcto funcionamiento:**
+- Contacto: se guarda en `contact_messages` + genera correo + (con SMTP) llega al Gmail.
+- Reserva: se guarda en `appointment_bookings` + genera correo + (con SMTP) llega al Gmail.
+- El correo de reserva se envía **fuera** de la transacción y solo si la reserva se creó (si el slot no está disponible, lanza `ValidationException` y no se envía nada).
+- No duplicar registros; no romper el flujo visual de confirmación; mantener CSRF, honeypot y throttle.
+
+**Variables `.env` exactas (según `config/mail.php`, que usa `MAIL_SCHEME`, NO `MAIL_ENCRYPTION`):**
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=pabloapariciocreativexiii@gmail.com
+MAIL_PASSWORD=APP_PASSWORD_DE_16_CARACTERES   # sin espacios
+MAIL_SCHEME=null                              # 587 = STARTTLS automático
+MAIL_FROM_ADDRESS="pabloapariciocreativexiii@gmail.com"
+MAIL_FROM_NAME="AbacoQD (pruebas)"
+BOOKING_NOTIFY_EMAIL=pabloapariciocreativexiii@gmail.com   # opcional; si no, usa el de contacto
+```
+
+- Gmail exige **2FA + App Password** (la contraseña normal no funciona).
+- Puerto 465 (TLS implícito): `MAIL_PORT=465` y `MAIL_SCHEME=smtps`.
+- `MAIL_FROM_ADDRESS` debe ser la cuenta Gmail autenticada (Gmail reescribe el From).
+- **No** añadir `MAIL_ENCRYPTION` (el proyecto lo ignora).
+- Tras editar `.env`: **`php artisan config:clear`**.
+
+**Qué mirar en `storage/logs/laravel.log`:** con `log`, el correo aparece con `To:`/`Subject:`; con SMTP, un fallo registra `No se pudo enviar...` (el lead/reserva igualmente queda guardado).
+
+### Bloque 4 — Cierre de WIP local (WIP)
+
+- **Shim CSP**: `vite.config.ts` + `resources/js/vendor/es-toolkit-global-this.ts` → commit conjunto (base de CSP sin `unsafe-eval`).
+- **Blog editorial**: `database/seeders/BlogEditorialJulyAugust2026Seeder.php` + `public/uploads/blog/posts/*.webp` → tras **decidir `featured_image`** (hoy el seeder pone `null` en posts nuevos; las portadas actuales se subieron a mano y no son reproducibles en `migrate:fresh --seed`) y si entra en `DatabaseSeeder`.
+- **Docs**: `docs/auditoria25Junio.md` + `docs/roadmapCierre25Junio.md` (+ `.odt` si se decide versionar).
+
+### Bloques 5 y 6 — Contenido demo / pendiente de Andrés (DEP-ANDRÉS)
+
+No cargar nada del `.odt` como real. Si no hay contenido confirmado: estados vacíos honestos o marcado DEMO. Pendiente de Andrés: textos "Quiénes somos", catálogo real de servicios y metodología, proyectos reales, fotos/bios de equipo, reseñas reales, emails finales, usuario real del panel, teléfono legal, redes, horarios, política de `abacodev.com`.
+
+### Bloque 7 — Legal / permisos (P0 legal)
+
+11 proyectos + 17 partners con marcas reales **publicados sin permiso confirmado**. Decisión (no técnica): despublicar o marcar DEMO hasta autorización expresa. No publicar CIETE, servicios, metodología, bio de Pablo ni reseñas/logos sin confirmación. Adaptar textos legales (revisión jurídica), declarar PII (IP/User-Agent) en privacidad.
+
+### Bloque 8 — Producción / despliegue (P1)
+
+Ver checklist en §6.
+
+### Bloque 9 — QA final (P1)
+
+Cross-browser (Chrome/Firefox/Brave) + accesibilidad (teclado, foco, contraste, `prefers-reduced-motion`, alt, headings). Requiere navegador real.
+
+### CSP estricta — flip a enforce (DECISIÓN)
+
+Tras tunear: nonce/hash para el JSON-LD inline y verificar Three.js/estilos. Aplicar enforce solo en producción y tras validar con report-only sin violaciones.
+
+---
+
+## 4. Microcommits propuestos (separados)
+
+```
+1. build(csp): shim CSP-safe para globalThis de es-toolkit
+   vite.config.ts, resources/js/vendor/es-toolkit-global-this.ts
+
+2. docs(auditoria): informe 25/06 + roadmap de cierre (+ corregir Laravel 13)
+   docs/auditoria25Junio.md, docs/roadmapCierre25Junio.md
+   (+ docs/informacionRequeridaSitioWeb.odt si se versiona)
+
+3. feat(security): cabeceras de seguridad + CSP report-only
+   app/Http/Middleware/SecurityHeaders.php, bootstrap/app.php
+
+4. feat(booking): notificar nuevas reservas por correo
+   app/Mail/AppointmentBookingReceived.php,
+   resources/views/emails/appointment-booking-received.blade.php,
+   app/Http/Controllers/Public/BookingController.php,
+   app/Support/SiteSettings.php, config/site.php,
+   .env.example (BOOKING_NOTIFY_EMAIL=), tests/Feature/...
+
+5. feat(blog): seeder editorial julio/agosto + portadas   (tras decidir featured_image)
+   database/seeders/BlogEditorialJulyAugust2026Seeder.php, public/uploads/blog/posts/*.webp
+```
+
+> Stagear siempre por rutas explícitas. Nunca `git add .` / `-A`. El `.env` con SMTP **no se commitea** (gitignored).
+
+---
+
+## 5. Prompts listos para ejecutar
+
+### 5.1 Bloque 1 — Seguridad
+
+```text
+Implementa el bloque de seguridad de AbacoQD. Cambios quirúrgicos, sin tocar hero/landing/topbar/footer/cookies/blog/admin, sin unsafe-eval, sin relajar CSP, sin CMP.
+
+1. Crea app/Http/Middleware/SecurityHeaders.php que añada a respuestas web:
+   - X-Frame-Options: DENY
+   - X-Content-Type-Options: nosniff
+   - Referrer-Policy: strict-origin-when-cross-origin
+   - Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()
+   - Cross-Origin-Opener-Policy: same-origin
+   - Cross-Origin-Resource-Policy: same-origin
+   - Strict-Transport-Security: max-age=31536000; includeSubDomains  → SOLO si $request->secure() && app()->isProduction()
+   - Content-Security-Policy-Report-Only (NO enforce): default-src 'self'; base-uri 'self';
+     frame-ancestors 'none'; object-src 'none'; img-src 'self' data:; font-src 'self';
+     style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'.
+2. Regístralo en bootstrap/app.php en el grupo web (append), después de los middleware existentes. No quites encryptCookies ni HandleInertiaRequests.
+3. NO toques vite.config.ts (su shim ya está). NO añadas unsafe-eval. NO conviertas la CSP a enforce.
+4. Valida: curl -I http://127.0.0.1:8000/ , luego composer test, npm run types:check, npm run lint:check, npm run build. Todo verde.
+5. Reporta el curl -I y confirma que el hero y la home cargan sin errores en consola. No commitees; primero enséñame el diff.
+```
+
+### 5.2 Bloque 3 — Correo contacto/reserva
+
+```text
+Implementa la notificación de reserva por correo en AbacoQD (Decisión A = sí), reutilizando el patrón de contacto. Sin hardcodear correos, sin tocar el email público del footer ni datos legales, sin tocar hero/landing/topbar/footer/cookies/blog/admin.
+
+1. config/site.php: bajo 'contact', añade
+   'booking_recipient' => env('BOOKING_NOTIFY_EMAIL') ?: env('CONTACT_NOTIFY_EMAIL', 'info@abacodev.com'),
+2. app/Support/SiteSettings.php: añade bookingRecipient() espejo de formRecipient(), leyendo setting 'booking_recipient_email' con fallback a config('site.contact.booking_recipient').
+3. app/Mail/AppointmentBookingReceived.php: Mailable espejo de ContactMessageReceived (recibe AppointmentBooking, asunto "Nueva reserva desde AbacoQD · {fecha/hora}", markdown 'emails.appointment-booking-received', carga slot.day y service).
+4. resources/views/emails/appointment-booking-received.blade.php: espejo del de contacto, con datos de la reserva (nombre, email, teléfono, empresa, servicio, fecha/hora del slot, mensaje, consentimientos).
+5. app/Http/Controllers/Public/BookingController.php@store: tras la DB::transaction que crea la reserva (fuera de la transacción, solo si se creó), envía Mail::to(SiteSettings::bookingRecipient())->send(new AppointmentBookingReceived($booking)) dentro de try/catch con Log::error en fallo (igual que ContactController). No cambies el flujo de confirmación ni el redirect.
+6. .env.example: añade comentada BOOKING_NOTIFY_EMAIL= (sin valor).
+7. tests/Feature: añade test que envíe la reserva y afirme Mail::assertSent(AppointmentBookingReceived) al receptor, que la reserva se guarda y que NO se envía si el slot no está disponible.
+8. Valida con Mail::fake en tests + composer test, types:check, lint:check, build. No commitees; enséñame el diff.
+
+Nota: el .env local con SMTP real de Gmail (App Password) y BOOKING_NOTIFY_EMAIL lo configura el responsable; ejecutar php artisan config:clear para la prueba de entrega real.
+```
+
+---
+
+## 6. Checklist de producción
+
+```txt
+[ ] APP_ENV=production / APP_DEBUG=false / APP_URL=https://abacoqd.com / APP_TIMEZONE=Europe/Madrid
+[ ] SESSION_SECURE_COOKIE=true (HTTPS); revisar SAME_SITE / TRUSTED_PROXIES
+[ ] SMTP real (no log, no Gmail de Pablo); From corporativo verificado; probar contacto y reserva
+[ ] Cabeceras de seguridad activas; CSP enforce tras tuneo; ocultar X-Powered-By
+[ ] CONTACT_NOTIFY_EMAIL y BOOKING_NOTIFY_EMAIL = correos reales confirmados por Andrés
+[ ] Decisión legal de proyectos/partners (despublicar/DEMO) + revisión jurídica de legales
+[ ] Contenido real de Andrés cargado (sustituir demo) o estados vacíos honestos
+[ ] Reproducibilidad de seeders (portadas del blog) + usuario admin real + 2FA si aplica
+[ ] migraciones aplicadas; decisión de seeders de producción
+[ ] storage:link + permisos storage/ y bootstrap/cache; cache de config/rutas/vistas; build prod
+[ ] sitemap/robots/canonical a dominio final (no localhost); decisión sobre abacodev.com
+[ ] SSL, backups, logs y monitorización básica
+[ ] Bump de dependencias con CVE (guzzle/psr7) y tooling npm
+[ ] QA cross-browser + accesibilidad superados
+```
+
+---
+
+## 7. Qué revertir/cambiar antes de producción (correo)
+
+- `MAIL_MAILER` → SMTP corporativo real (nunca `log`, nunca el Gmail de Pablo).
+- `MAIL_FROM_ADDRESS`/`MAIL_FROM_NAME` → remitente verificado del dominio final.
+- `CONTACT_NOTIFY_EMAIL` y `BOOKING_NOTIFY_EMAIL` → correos reales confirmados por Andrés.
+- La notificación de reserva queda **permanente** (no temporal).
+
+---
+
+## 8. Decisiones abiertas
+
+- Flip de CSP report-only → enforce (nonce JSON-LD, Three.js/estilos).
+- `featured_image` del seeder editorial y si entra en `DatabaseSeeder`.
+- ¿Se versiona el `.odt`?
+- ¿`BOOKING_NOTIFY_EMAIL` separada (recomendado, con fallback a contacto) o receptor compartido?
+- Permisos de proyectos/partners/logos/reseñas (negocio + Andrés).
