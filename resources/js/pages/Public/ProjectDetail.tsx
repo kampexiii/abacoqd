@@ -12,7 +12,9 @@ import {
     Users,
     Zap,
 } from 'lucide-react';
+import { useEffect } from 'react';
 
+import { trackEvent } from '@/components/analytics/events';
 import PublicPageHero from '@/components/public/PublicPageHero';
 import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
@@ -132,6 +134,13 @@ function BrandPattern({
 
 export default function ProjectDetail({ project, related }: ProjectDetailProps) {
     const { t, locale } = useLanguage();
+    const projectSlug = localizedText(project.slug, locale);
+
+    // Evento interno no invasivo (sin PII): vista de proyecto.
+    useEffect(() => {
+        trackEvent('project_view', { slug: projectSlug, type: 'project' });
+    }, [projectSlug]);
+
     const title = localizedText(project.title, locale);
     const summary = localizedText(project.summary, locale);
     const description = optionalText(project.description, locale);

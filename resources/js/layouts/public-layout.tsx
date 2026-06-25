@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 
 import AccessibilityFab from '@/components/a11y/AccessibilityFab';
 import ChatbotFab from '@/components/chat/ChatbotFab';
+import ConsentManager from '@/components/consent/ConsentManager';
 import FloatingHeader from '@/components/FloatingHeader';
 import WaveBackground from '@/components/public/WaveBackground';
 import SiteFooter from '@/components/SiteFooter';
@@ -45,6 +46,8 @@ export default function PublicLayout({
 
             <AccessibilityFab />
             <ChatbotFab />
+
+            <ConsentManager />
         </div>
     );
 }

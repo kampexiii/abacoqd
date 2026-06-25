@@ -6,8 +6,9 @@ import {
     Clock,
     MailQuestion,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { trackEvent } from '@/components/analytics/events';
 import BookingCalendarPicker from '@/components/public/BookingCalendarPicker';
 import FormField, {
     formFieldInputClass,
@@ -99,6 +100,17 @@ export default function Booking({
             null,
         [selectedDay, selectedSlotId],
     );
+
+    // Evento interno no invasivo (sin PII): intención de iniciar reserva, una
+    // sola vez al elegir el primer hueco. No altera la selección ni el submit.
+    const bookingStartTracked = useRef(false);
+
+    useEffect(() => {
+        if (selectedSlotId !== null && !bookingStartTracked.current) {
+            bookingStartTracked.current = true;
+            trackEvent('booking_start_intent', { type: 'booking' });
+        }
+    }, [selectedSlotId]);
 
     return (
         <PublicLayout>
@@ -473,6 +485,12 @@ export default function Booking({
                                                 <button
                                                     type="submit"
                                                     disabled={processing}
+                                                    onClick={() =>
+                                                        trackEvent(
+                                                            'booking_submit_intent',
+                                                            { type: 'booking' },
+                                                        )
+                                                    }
                                                     className="inline-flex items-center justify-center gap-2 rounded-xl bg-qd-lime px-5 py-3 text-sm font-semibold text-qd-ink transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60"
                                                 >
                                                     {processing

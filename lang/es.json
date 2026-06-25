@@ -40,6 +40,39 @@
         "focusStrong": "Foco reforzado",
         "reset": "Restablecer"
     },
+    "consent": {
+        "banner": {
+            "title": "Tu privacidad",
+            "body": "Usamos cookies técnicas necesarias para que la web funcione. También podemos preparar medición anónima y mejoras de experiencia si nos das permiso. Puedes aceptar, rechazar o configurar tus preferencias.",
+            "acceptAll": "Aceptar todo",
+            "reject": "Rechazar",
+            "configure": "Configurar",
+            "policyLink": "Política de cookies"
+        },
+        "preferences": {
+            "title": "Preferencias de cookies",
+            "description": "Elige qué categorías permites. Las cookies técnicas necesarias están siempre activas. En esta fase no usamos proveedores externos ni cargamos scripts de terceros.",
+            "necessary": {
+                "title": "Necesarias",
+                "description": "Imprescindibles para el funcionamiento del sitio (seguridad, sesión, preferencias). No se pueden desactivar.",
+                "always": "Siempre activo"
+            },
+            "analytics": {
+                "title": "Analítica",
+                "description": "Medición anónima y eventos internos para entender el uso del sitio y mejorarlo. Hoy no se envía nada a terceros."
+            },
+            "marketing": {
+                "title": "Comportamiento",
+                "description": "Herramientas propias de comportamiento, como mapas de calor, para futuras mejoras de experiencia. No activas todavía."
+            },
+            "save": "Guardar preferencias",
+            "acceptAll": "Aceptar todo",
+            "reject": "Rechazar"
+        },
+        "reopen": {
+            "label": "Preferencias de cookies"
+        }
+    },
     "chatbot": {
         "openLabel": "Abrir asistente",
         "title": "Asistente Abaco",
@@ -1530,6 +1563,10 @@
                         {
                             "type": "p",
                             "text": "Actualmente no activamos cookies analíticas no necesarias sin consentimiento previo. Si se incorporan herramientas de analítica o de terceros, se actualizará esta política y se habilitará un mecanismo de consentimiento cuando proceda."
+                        },
+                        {
+                            "type": "p",
+                            "text": "El sitio dispone de un sistema propio de consentimiento (CMP de AbacoQD). En esta fase no se carga ninguna herramienta de analítica externa, ni mapas de calor, ni scripts de terceros: la medición prevista es anónima e interna y solo se prepararía tras el consentimiento correspondiente."
                         }
                     ]
                 },
@@ -1540,6 +1577,10 @@
                         {
                             "type": "p",
                             "text": "La persona usuaria puede configurar o eliminar las cookies y el almacenamiento local desde las opciones de su navegador. La desactivación de algunas tecnologías técnicas puede afectar al funcionamiento del sitio."
+                        },
+                        {
+                            "type": "p",
+                            "text": "Las preferencias de consentimiento se guardan en el almacenamiento local del navegador, sin datos personales. Puede cambiarlas o revocarlas en cualquier momento desde el panel de preferencias de cookies del sitio."
                         }
                     ]
                 },
