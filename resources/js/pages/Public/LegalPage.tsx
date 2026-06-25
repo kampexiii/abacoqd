@@ -1,5 +1,6 @@
-import { ArrowRight, Cookie, ShieldCheck } from 'lucide-react';
+import { ArrowRight, ShieldCheck } from 'lucide-react';
 
+import { COOKIE_NOTICE_STORAGE_KEY } from '@/components/cookies/CookieNotice';
 import PublicPageHero from '@/components/public/PublicPageHero';
 import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
@@ -144,6 +145,19 @@ export default function LegalPage({ kind }: { readonly kind: LegalPageKind }) {
     const sections = sectionsFor(locale, kind);
     const showToc = sections.length >= 4;
 
+    // Solo en /cookies: permite volver a mostrar el aviso simple de cookies
+    // borrando la marca de localStorage y recargando. No abre panel ni gestiona
+    // categorías; el aviso vuelve a aparecer al recargar al no haber aceptación.
+    const reshowCookieNotice = (): void => {
+        try {
+            window.localStorage.removeItem(COOKIE_NOTICE_STORAGE_KEY);
+        } catch {
+            // Almacenamiento no disponible: nada que borrar.
+        }
+
+        window.location.reload();
+    };
+
     return (
         <PublicLayout>
             <SeoHead />
@@ -175,34 +189,15 @@ export default function LegalPage({ kind }: { readonly kind: LegalPageKind }) {
                             {t('legalPages.common.draftNotice')}
                         </p>
 
-                        {/* Gestión de preferencias: solo en /cookies. Reabre el
-                            panel del CMP vía evento `window` (sin chip flotante
-                            permanente en la landing). */}
+                        {/* Solo en /cookies: volver a mostrar el aviso simple */}
                         {kind === 'cookies' && (
-                            <div className="mt-6 rounded-2xl border border-qd-mist bg-qd-white p-5 sm:p-6 dark:border-white/10 dark:bg-qd-surface">
-                                <h2 className="flex items-center gap-2 text-base font-bold text-qd-ink dark:text-qd-white">
-                                    <Cookie
-                                        aria-hidden="true"
-                                        size={18}
-                                        className="text-qd-teal-2 dark:text-qd-teal"
-                                    />
-                                    {t('consent.manage.title')}
-                                </h2>
-                                <p className="mt-1.5 text-sm leading-relaxed text-qd-text-high">
-                                    {t('consent.manage.description')}
-                                </p>
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        window.dispatchEvent(
-                                            new Event('abacoqd:open-consent'),
-                                        )
-                                    }
-                                    className="mt-4 inline-flex items-center gap-2 rounded-xl bg-qd-teal px-4 py-2.5 text-sm font-bold text-qd-ink transition-colors hover:bg-qd-teal-2 hover:text-qd-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:focus-visible:outline-qd-lime"
-                                >
-                                    {t('consent.manage.action')}
-                                </button>
-                            </div>
+                            <button
+                                type="button"
+                                onClick={reshowCookieNotice}
+                                className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-qd-mist px-4 py-1.5 text-sm font-semibold text-qd-text-high transition hover:border-qd-teal-2 hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:border-white/15 dark:text-qd-text-medium dark:hover:border-qd-teal dark:hover:text-qd-teal"
+                            >
+                                {t('cookieNotice.reopen')}
+                            </button>
                         )}
 
                         {/* Cuerpo legal */}

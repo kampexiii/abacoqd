@@ -22,6 +22,14 @@
     "layout": {
         "skipToContent": "Skip to content"
     },
+    "cookieNotice": {
+        "ariaLabel": "Cookie notice",
+        "title": "Your privacy",
+        "body": "We use technical cookies required for the website to work correctly. We don't use analytics, heatmaps or third-party providers at this stage.",
+        "accept": "Got it",
+        "policyLink": "Cookie policy",
+        "reopen": "Show cookie notice again"
+    },
     "a11y": {
         "openLabel": "Accessibility options",
         "title": "Accessibility",
@@ -39,41 +47,6 @@
         "readableFont": "Readable font",
         "focusStrong": "Stronger focus",
         "reset": "Reset"
-    },
-    "consent": {
-        "banner": {
-            "title": "Your privacy",
-            "body": "We use necessary technical cookies so the site works. We may also prepare anonymous measurement and experience improvements if you allow it. You can accept, reject or configure your preferences.",
-            "acceptAll": "Accept all",
-            "reject": "Reject",
-            "configure": "Configure",
-            "policyLink": "Cookie policy"
-        },
-        "preferences": {
-            "title": "Cookie preferences",
-            "description": "Choose which categories you allow. Necessary technical cookies are always on. In this phase we don't use external providers or load third-party scripts.",
-            "necessary": {
-                "title": "Necessary",
-                "description": "Essential for the site to work (security, session, preferences). These can't be turned off.",
-                "always": "Always on"
-            },
-            "analytics": {
-                "title": "Analytics",
-                "description": "Anonymous measurement and internal events to understand site usage and improve it. Nothing is sent to third parties today."
-            },
-            "marketing": {
-                "title": "Behaviour",
-                "description": "Our own behaviour tools, such as heatmaps, for future experience improvements. Not active yet."
-            },
-            "save": "Save preferences",
-            "acceptAll": "Accept all",
-            "reject": "Reject"
-        },
-        "manage": {
-            "title": "Your cookie preferences",
-            "description": "You can change which categories you allow at any time. Necessary technical cookies are always on.",
-            "action": "Change cookie preferences"
-        }
     },
     "chatbot": {
         "openLabel": "Open assistant",
@@ -1565,10 +1538,6 @@
                         {
                             "type": "p",
                             "text": "We currently do not activate non-necessary analytics cookies without prior consent. If analytics or third-party tools are incorporated, this policy will be updated and a consent mechanism will be enabled where applicable."
-                        },
-                        {
-                            "type": "p",
-                            "text": "The site has its own consent system (AbacoQD CMP). In this phase no external analytics tool, heatmaps or third-party scripts are loaded: any planned measurement is anonymous and internal, and would only be prepared after the relevant consent."
                         }
                     ]
                 },
@@ -1579,10 +1548,6 @@
                         {
                             "type": "p",
                             "text": "The user can configure or delete cookies and local storage from their browser options. Disabling some technical technologies may affect the operation of the site."
-                        },
-                        {
-                            "type": "p",
-                            "text": "Consent preferences are stored in the browser's local storage, without personal data. You can change or withdraw them at any time from the site's cookie preferences panel."
                         }
                     ]
                 },

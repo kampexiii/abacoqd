@@ -11,9 +11,8 @@ import {
     Twitter,
     User,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { emitInternalEvent } from '@/components/privacy/internal-events';
 import PublicPageHero from '@/components/public/PublicPageHero';
 import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
@@ -61,13 +60,6 @@ type BlogPostPageProps = {
 export default function BlogPost({ post, related }: BlogPostPageProps) {
     const { t, locale } = useLanguage();
     const [copied, setCopied] = useState(false);
-
-    const postSlug = localizedText(post.slug, locale);
-
-    // Evento interno no invasivo (sin PII): vista de post.
-    useEffect(() => {
-        emitInternalEvent('blog_post_view', { slug: postSlug, type: 'blog_post' });
-    }, [postSlug]);
 
     const title = localizedText(post.title, locale);
     const excerpt = localizedText(post.excerpt, locale);

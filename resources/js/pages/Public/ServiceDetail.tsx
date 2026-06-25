@@ -12,9 +12,7 @@ import {
     Zap,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { useEffect } from 'react';
 
-import { emitInternalEvent } from '@/components/privacy/internal-events';
 import PublicPageHero from '@/components/public/PublicPageHero';
 import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
@@ -125,12 +123,6 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
         t(`${translationPath}.summary`);
     const detailImageSrc = SERVICE_DETAIL_IMAGES[serviceKey ?? 'web'];
     const slug = serviceSlug(service, locale);
-
-    // Evento interno no invasivo (sin PII): vista de servicio.
-    useEffect(() => {
-        emitInternalEvent('service_view', { slug, type: 'service' });
-    }, [slug]);
-
     const contactUrl = contactShow.url({
         query: {
             servicio: slug,

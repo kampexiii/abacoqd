@@ -86,14 +86,6 @@ class HandleInertiaRequests extends Middleware
             // editable: grupo `site` de `settings` con fallback config/site.php.
             // Los componentes solo consumen estos datos, no los definen inline.
             'siteSettings' => SiteSettings::shared(),
-            // Flags del CMP propio AbacoQD (config/site.php). Solo dos booleanos:
-            // si se muestra el banner de consentimiento y si se permitiría
-            // tracking externo (false en esta fase; no hay proveedores ni se
-            // cargan scripts externos). Sin IDs, sin GTM/GA4/Clarity.
-            'consent' => [
-                'enabled' => (bool) config('site.consent.enabled'),
-                'externalTracking' => (bool) config('site.consent.external_tracking'),
-            ],
             // SEO base servido (title/description/canonical/robots). Para páginas
             // estáticas se resuelve por `page_key`; los detalles con modelo lo
             // sobrescriben en su controlador. Se sirve también en el HTML inicial

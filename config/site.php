@@ -50,27 +50,6 @@ return [
         'text' => null,
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Consentimiento (CMP propio AbacoQD)
-    |--------------------------------------------------------------------------
-    |
-    | Flags de seguridad del banner de consentimiento propio. NO hay IDs ni
-    | proveedores externos en esta fase: aunque la persona usuaria acepte, no se
-    | carga ningún script externo mientras `external_tracking` sea false (y aun
-    | siendo true, hoy no hay loaders registrados). Se exponen a React como prop
-    | compartida de Inertia (`consent`, ver HandleInertiaRequests) solo para
-    | mostrar/ocultar el CMP, nunca para inyectar scripts.
-    |
-    */
-    'consent' => [
-        // Muestra el CMP en el layout público. Si es false, no se renderiza.
-        'enabled' => filter_var(env('ABACO_CONSENT_ENABLED', true), FILTER_VALIDATE_BOOLEAN),
-        // Permitiría (en el futuro) cargar scripts externos tras consentimiento.
-        // En esta fase debe quedar false: no hay proveedores activados.
-        'external_tracking' => filter_var(env('ABACO_EXTERNAL_TRACKING_ENABLED', false), FILTER_VALIDATE_BOOLEAN),
-    ],
-
     'domain' => [
         'canonical' => 'https://abacoqd.com/',
         'previous' => 'https://abacodev.com/',
