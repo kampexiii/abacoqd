@@ -17,8 +17,7 @@ import esLang from '../../../../lang/es.json';
  *
  * El contenido (secciones) es estructurado, no HTML libre, así que se lee
  * directamente del árbol i18n por idioma (el helper `t()` solo resuelve
- * strings). Es texto base pendiente de revisión jurídica final; no constituye
- * asesoramiento jurídico.
+ * strings). Las páginas comparten estructura y datos corporativos confirmados.
  *
  * Los datos corporativos van aquí como constante confirmada; cuando exista un
  * canal de `settings` públicos, el bloque de contacto debe leerlos de ahí.
@@ -180,13 +179,10 @@ export default function LegalPage({ kind }: { readonly kind: LegalPageKind }) {
                     )}
                 >
                     <div className="min-w-0">
-                        {/* Última actualización + aviso de borrador discreto */}
+                        {/* Última actualización */}
                         <p className="text-sm text-qd-text-medium">
                             {t('legalPages.common.updatedLabel')}:{' '}
                             {t('legalPages.common.updatedValue')}
-                        </p>
-                        <p className="mt-2 max-w-2xl text-xs leading-relaxed text-qd-text-medium/80">
-                            {t('legalPages.common.draftNotice')}
                         </p>
 
                         {/* Solo en /cookies: volver a mostrar el aviso simple */}
@@ -194,7 +190,7 @@ export default function LegalPage({ kind }: { readonly kind: LegalPageKind }) {
                             <button
                                 type="button"
                                 onClick={reshowCookieNotice}
-                                className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-qd-mist px-4 py-1.5 text-sm font-semibold text-qd-text-high transition hover:border-qd-teal-2 hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:border-white/15 dark:text-qd-text-medium dark:hover:border-qd-teal dark:hover:text-qd-teal"
+                                className="mt-5 inline-flex max-w-full items-center gap-1.5 rounded-full border border-qd-mist px-4 py-1.5 text-left text-sm leading-snug font-semibold text-qd-text-high transition hover:border-qd-teal-2 hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:border-white/15 dark:text-qd-text-medium dark:hover:border-qd-teal dark:hover:text-qd-teal"
                             >
                                 {t('cookieNotice.reopen')}
                             </button>

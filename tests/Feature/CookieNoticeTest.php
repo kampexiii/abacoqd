@@ -72,6 +72,6 @@ test('los textos del aviso simple existen en ambos idiomas', function () {
     $es = json_decode(File::get(lang_path('es.json')), true);
     $en = json_decode(File::get(lang_path('en.json')), true);
 
-    expect($es['cookieNotice']['reopen'])->toBe('Volver a mostrar aviso de cookies');
+    expect($es['cookieNotice']['reopen'])->toBe('Volver a mostrar el aviso informativo de cookies');
     expect($en['cookieNotice'])->toHaveKeys(['title', 'body', 'accept', 'policyLink', 'reopen']);
 });
