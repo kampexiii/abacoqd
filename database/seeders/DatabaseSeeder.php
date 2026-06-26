@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             FaqSeeder::class,
             SeoMetadataSeeder::class,
             AbacoHistoricalProjectsSeeder::class,
+            ConfirmedProjectsSeeder::class,
             TeamMemberSeeder::class,
             AdminUserSeeder::class,
         ]);
