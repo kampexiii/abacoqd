@@ -17,7 +17,7 @@ Leyenda: `P0` bloquea producción/seguridad · `P1` importante antes de producci
 - Validaciones base **verdes**: `composer test` 184/184 · `tsc` limpio · `eslint` limpio · `build` OK. Tras la revisión CSP inline: `types:check`, `lint:check`, `cmd.exe /C npm run build` y `composer test` (revalidado con PHP de XAMPP) verdes.
 - **Correo**: `MAIL_MAILER=log` en local (se escribe en `storage/logs/laravel.log`). Contacto y **reserva envían correo** (Bloque 3 cerrado el 25/06: Mailable `AppointmentBookingReceived` + receptor `SiteSettings::bookingRecipient()`). Entrega SMTP real **ya validada** con cuenta temporal; falta configurar el **SMTP corporativo** definitivo en producción.
 - **Seguridad**: Bloque 1 **CERRADO** (cabeceras + CSP report-only añadidas; incidencia `public/hot` resuelta; advertencia CSP inline diagnosticada y resuelta; `composer test` revalidado en verde con PHP de XAMPP y revisión visual/interactiva confirmada por Pablo el 25/06; ver [auditoría §0](auditoria25Junio.md)). Sigue pendiente para fases posteriores: flip de CSP a enforce, ocultar `X-Powered-By`, `APP_DEBUG=true`/`APP_ENV=local` (Bloque 2).
-- **WIP en árbol**: `vite.config.ts` (M, shim CSP) + `resources/js/vendor/` · **Bloque 1**: `app/Http/Middleware/SecurityHeaders.php` (nuevo), `bootstrap/app.php` (M), `resources/views/app.blade.php` (M), `public/assets/appearance-init.js` (nuevo) sin commit · seeder editorial + 21 `.webp` · `docs/auditoria25Junio.md` · `docs/roadmapCierre25Junio.md` · `.odt`. Nada staged.
+- **WIP en árbol**: **Bloque 4 CERRADO (26/06)** — shim CSP/Vite (`vite.config.ts` + `resources/js/vendor/`), `.odt` ignorado, 21 `.webp` commiteadas como assets reales, seeder editorial temporal eliminado (untracked) y `BlogPostSeeder` eliminado como fuente duplicada. Tras el cierre no queda WIP en el árbol salvo la documentación de este cierre. Sin push.
 - **`.env` local**: probado el 25/06 con una cuenta SMTP temporal de pruebas (entrega real validada); **datos temporales retirados** tras la validación. El `.env` queda en `MAIL_MAILER=log`, `MAIL_PASSWORD` vacío y receptores `info@abacodev.com`, preparado para SMTP corporativo final. El `.env` es gitignored y no se commitea.
 - **El `.odt`** = plantilla orientativa de Pablo. Todo el contenido en BD (servicios, proyectos, partners, metodología, equipo) es **demo/placeholder/legacy** hasta validación de Andrés.
 
@@ -30,7 +30,7 @@ Leyenda: `P0` bloquea producción/seguridad · `P1` importante antes de producci
 | 1 | Cabeceras de seguridad + CSP report-only | **P0** | ✅ **CERRADO** (CSP inline resuelta; `composer test` + visual validados 25/06) |
 | 2 | Hardening de entorno (prod `.env`, debug off, X-Powered-By) | **P1** | — |
 | 3 | Correo real contacto + **reserva** (Mailable nuevo) | **P1** | ✅ **CERRADO** (código + diseño + SMTP real validado 25/06; falta SMTP corporativo en prod) |
-| 4 | Cierre de WIP local (shim CSP, blog editorial, docs) | **WIP** | decisión `featured_image` |
+| 4 | Cierre de WIP local (shim CSP, blog assets, seeders, docs) | **WIP** | ✅ **CERRADO** (26/06; 4 commits por rutas explícitas, sin push) |
 | 5 | Contenido DEMO/plantilla/placeholder | **DEP-ANDRÉS** | Andrés |
 | 6 | Contenido pendiente de Andrés | **DEP-ANDRÉS** | Andrés |
 | 7 | Legal/permisos proyectos·partners·logos·capturas·reseñas | **P0 legal** | Andrés + decisión |
@@ -47,7 +47,7 @@ Leyenda: `P0` bloquea producción/seguridad · `P1` importante antes de producci
 1. BLOQUE 1 — Seguridad: middleware de cabeceras + CSP report-only.   ← cerrado (25/06)
 2. `composer test` con PHP de XAMPP + revisión visual/interactiva rápida.   ← completado (25/06)
 3. BLOQUE 3 — Correo contacto/reserva.   ← cerrado (25/06; código + prueba log. SMTP real pendiente de creds)
-4. BLOQUE 4 — Cierre de WIP (docs + blog editorial tras decidir featured_image).
+4. BLOQUE 4 — Cierre de WIP (shim CSP, blog assets, seeders, docs).   ← cerrado (26/06)
 5. BLOQUE 2 — Hardening de entorno (preparar .env de producción).
 6. BLOQUE 7 — Decisión legal/permisos (despublicar / marcar DEMO). En paralelo, no técnico.
 7. CSP estricta (flip a enforce) tras tunear nonce JSON-LD y Three.js/estilos.
@@ -142,11 +142,16 @@ BOOKING_NOTIFY_EMAIL=info@abacodev.com   # destinatario interno real (opcional; 
 
 **Qué mirar en `storage/logs/laravel.log`:** con `log`, el correo aparece con `To:`/`Subject:`; con SMTP, un fallo registra `No se pudo enviar...` (el lead/reserva igualmente queda guardado).
 
-### Bloque 4 — Cierre de WIP local (WIP)
+### Bloque 4 — Cierre de WIP local — **CERRADO** (26/06)
 
-- **Shim CSP**: `vite.config.ts` + `resources/js/vendor/es-toolkit-global-this.ts` → commit conjunto (base de CSP sin `unsafe-eval`).
-- **Blog editorial**: `database/seeders/BlogEditorialJulyAugust2026Seeder.php` + `public/uploads/blog/posts/*.webp` → tras **decidir `featured_image`** (hoy el seeder pone `null` en posts nuevos; las portadas actuales se subieron a mano y no son reproducibles en `migrate:fresh --seed`) y si entra en `DatabaseSeeder`.
-- **Docs**: `docs/auditoria25Junio.md` + `docs/roadmapCierre25Junio.md` (+ `.odt` si se decide versionar).
+Cerrado por rutas explícitas, sin `git add .`/`-A`, sin push, sin tocar BD/seeders/migraciones. Detalle completo y auditoría de seeders en [auditoría §0 · Bloque 4](auditoria25Junio.md).
+
+- **Shim CSP**: `4445568 build(csp)` — `vite.config.ts` + `resources/js/vendor/es-toolkit-global-this.ts` (base de CSP sin `unsafe-eval`).
+- **`.odt`**: `2262e33 chore(docs)` — regla específica en `.gitignore`; la plantilla deja de ser untracked y **no** se versiona.
+- **Imágenes blog**: `1da653a assets(blog)` — 21 `.webp` commiteadas como **assets reales** (no temporales; mismo criterio para logos/partners/proyectos/servicios/equipo). Ninguna borrada.
+- **Seeders editoriales**: `BlogEditorialJulyAugust2026Seeder` eliminado por untracked; `d2760c4 chore(seeders)` elimina `BlogPostSeeder` y su llamada en `DatabaseSeeder`. Política: **no** mantener seeders editoriales/de posts como fuente duplicada de contenido ya en BD.
+- **Docs**: este cierre actualiza `docs/auditoria25Junio.md` + `docs/roadmapCierre25Junio.md`.
+- **Propuesta futura (no implementada)**: mecanismo de backup/snapshot versionable al guardar servicios/proyectos/partners/equipo/settings desde admin; sustituye seeders editoriales manuales; se diseña aparte y se confirma antes de tocar código. No aplica al blog editorial.
 
 ### Bloques 5 y 6 — Contenido demo / pendiente de Andrés (DEP-ANDRÉS)
 
@@ -190,8 +195,12 @@ Tras tunear: nonce/hash para el JSON-LD inline y verificar Three.js/estilos. Apl
    app/Support/SiteSettings.php, config/site.php,
    .env.example (BOOKING_NOTIFY_EMAIL=), tests/Feature/...
 
-5. feat(blog): seeder editorial julio/agosto + portadas   (tras decidir featured_image)
-   database/seeders/BlogEditorialJulyAugust2026Seeder.php, public/uploads/blog/posts/*.webp
+5. [HECHO 26/06] Bloque 4 — cierre de WIP (4 commits por rutas explícitas):
+   - 4445568 build(csp): vite.config.ts + resources/js/vendor/es-toolkit-global-this.ts
+   - 2262e33 chore(docs): .gitignore (ignora docs/informacionRequeridaSitioWeb.odt)
+   - 1da653a assets(blog): public/uploads/blog/posts/*.webp (21 portadas reales)
+   - d2760c4 chore(seeders): elimina BlogPostSeeder + llamada en DatabaseSeeder
+   (El seeder editorial julio/agosto se descartó: untracked, no se versiona.)
 ```
 
 > Stagear siempre por rutas explícitas. Nunca `git add .` / `-A`. El `.env` con SMTP **no se commitea** (gitignored).
@@ -276,7 +285,9 @@ Nota: el `.env` local con el SMTP de pruebas y `BOOKING_NOTIFY_EMAIL` lo configu
 ## 8. Decisiones abiertas
 
 - Flip de CSP report-only → enforce (nonce JSON-LD, Three.js/estilos).
-- `featured_image` del seeder editorial y si entra en `DatabaseSeeder`.
-- ¿Se versiona el `.odt`?
+- ~~`featured_image` del seeder editorial y si entra en `DatabaseSeeder`~~ → **resuelto (26/06)**: seeders editoriales de blog descartados; portadas versionadas como assets.
+- ~~¿Se versiona el `.odt`?~~ → **resuelto (26/06)**: no se versiona, ignorado en `.gitignore`.
+- Diseñar el mecanismo futuro de **backup/snapshot** de contenido crítico (servicios/proyectos/partners/equipo/settings) — pendiente de diseño y confirmación.
+- Auditoría de seeders: revisar `TeamMemberSeeder`, `AbacoHistoricalProjectsSeeder` (riesgo legal Bloque 7) y el `Test User`/`AdminUserSeeder` (guardas de entorno).
 - ¿`BOOKING_NOTIFY_EMAIL` separada (recomendado, con fallback a contacto) o receptor compartido?
 - Permisos de proyectos/partners/logos/reseñas (negocio + Andrés).

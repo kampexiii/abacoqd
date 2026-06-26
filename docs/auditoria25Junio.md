@@ -95,6 +95,40 @@ WIP        = archivos sin commit o sin decisión de cierre
 
 **Riesgos pendientes / siguiente paso:** configurar SMTP corporativo y correos reales confirmados por Andrés; añadir `Reply-To` con el email del remitente en ambos Mailables. Siguiente bloque recomendado: **Bloque 4 — Cierre de WIP local** (shim CSP, blog editorial tras decidir `featured_image`, docs).
 
+### Bloque 4 — Cierre de WIP local — **CERRADO** (26/06)
+
+**Estado real:** WIP local del árbol revisado, clasificado y cerrado por rutas explícitas, sin tocar BD, sin ejecutar seeders ni migraciones, sin push. Decisiones de Pablo aplicadas: (1) shim CSP/Vite commiteado; (2) plantilla `.odt` ignorada; (3) seeder editorial temporal eliminado por untracked; (4) las 21 imágenes `.webp` del blog **commiteadas como assets reales** (no temporales: el mismo criterio aplicará a logos, partners, proyectos, servicios y equipo); (5) `BlogPostSeeder` eliminado como **fuente duplicada** de posts ya cargados en BD. Las cuatro puertas de validación (`build`, `types:check`, `lint:check`, `composer test`) quedaron en verde en cada commit. **La BD no se tocó**: los posts y sus portadas ya viven en la base de datos; aquí solo se versionan los assets y se retira el código de siembra editorial.
+
+**Commits (rutas explícitas, sin `git add .`/`-A`, sin push):**
+- `4445568 build(csp): redirect es-toolkit globalThis to safe shim` — `vite.config.ts` (M) + `resources/js/vendor/es-toolkit-global-this.ts` (nuevo). Redirige `es-toolkit/dist/_internal/globalThis` a un shim local seguro, evitando el patrón `Function()`/eval indirecto incompatible con CSP estricta. Prerrequisito del futuro flip de CSP a enforce.
+- `2262e33 chore(docs): ignore local content request template` — `.gitignore` (regla específica `docs/informacionRequeridaSitioWeb.odt`). La plantilla orientativa de Pablo para Andrés deja de aparecer como untracked y **no** se versiona; **no es fuente de verdad del proyecto**.
+- `1da653a assets(blog): add post cover images` — 21 `.webp` en `public/uploads/blog/posts/` (assets reales de posts ya en BD; sin commit aparecerían portadas rotas en despliegue). Ninguna imagen borrada ni movida.
+- `d2760c4 chore(seeders): remove blog post content seeder` — elimina `database/seeders/BlogPostSeeder.php` y retira su llamada de `DatabaseSeeder.php`. Ningún test dependía de él (Pest 189/189 sigue verde).
+
+**Seeder editorial previo:** `database/seeders/BlogEditorialJulyAugust2026Seeder.php` ya se había eliminado por estar **untracked** (Git no registra ese borrado; nunca estuvo en `DatabaseSeeder`).
+
+**Política técnica fijada:** no se mantienen **seeders editoriales de blog** ni seeders de posts como fuente duplicada de contenido ya gestionado en BD/admin. Las imágenes `.webp` asociadas a contenido sí se versionan como assets del sitio.
+
+**Auditoría de seeders restantes (10 llamados desde `DatabaseSeeder` + orquestador):**
+
+| Seeder | En DatabaseSeeder | Siembra | Clasificación | Acción |
+|---|---|---|---|---|
+| `SettingsSeeder` | Sí | Settings corporativos/contacto/SEO confirmados | Base | Mantener |
+| `MethodologyStepSeeder` | Sí | Pasos de metodología (producto) | Base | Mantener |
+| `ServiceSeeder` | Sí | Los 6 servicios documentados | Base | Mantener |
+| `BlogTaxonomySeeder` | Sí | Categorías/tags base ("without fake posts") | Base/estructura | Mantener (no borrar) |
+| `BookingSettingsSeeder` | Sí | Config de reservas | Base | Mantener |
+| `FaqSeeder` | Sí | FAQs del sitio | Base | Mantener |
+| `SeoMetadataSeeder` | Sí | SEO de páginas estáticas ES/EN | Base | Mantener |
+| `TeamMemberSeeder` | Sí | Perfiles reales de equipo (foto Andrés) | Base (real) | Revisar (contenido real, candidato a snapshot futuro) |
+| `AbacoHistoricalProjectsSeeder` | Sí | Proyectos/partners históricos (`permission_status=pending`) | Revisar (riesgo legal) | Revisar — liga al P0 legal de permisos (Bloque 7) |
+| `AdminUserSeeder` | Sí | super_admin demo `admin@abacoqd.local/password`, idempotente, no-op en prod | Demo/placeholder controlado | Mantener — verificar guarda de entorno |
+| `DatabaseSeeder` | — | Orquestador + crea `Test User` `test@example.com` (factory) | Mixto | Revisar — el `Test User` es dato demo creado en cada `db:seed` |
+
+**Propuesta futura (NO implementada en este bloque):** mecanismo de **backup/snapshot** que, al guardar desde admin servicios, proyectos, partners, equipo o settings, genere/exporte snapshots versionables del contenido crítico, sustituyendo la idea de seeders editoriales manuales. Aplica a servicios/proyectos/partners/equipo/settings, **no** al blog editorial. Debe diseñarse aparte y confirmarse antes de tocar código.
+
+**WIP restante tras el bloque:** ninguno en el árbol salvo los cambios de documentación de este cierre. Sin push.
+
 ---
 
 ## 1. Resumen ejecutivo
