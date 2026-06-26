@@ -8,13 +8,15 @@ use InvalidArgumentException;
 use RuntimeException;
 
 /**
- * Convierte cover/thumbnail/galería de `projects` a WebP y los guarda en
- * disco público.
+ * Convierte la imagen de proyecto (portada) y los logos de cliente/empresa de
+ * `projects` y los guarda en disco público.
  *
  * Mismo patrón y disco versionable (`public_uploads`) que
- * `ServiceImageService`/`PostCoverImageService`: solo se guarda la ruta
- * pública en BD, nunca el binario. La galería admite varias imágenes por
- * proyecto, cada una con sufijo numérico para no pisar las anteriores.
+ * `PartnerLogoService`/`ServiceImageService`: solo se guarda la ruta pública en
+ * BD, nunca el binario. Las imágenes raster (PNG/JPEG/WebP) se convierten a
+ * WebP; los logos pueden llegar en SVG (vectorial), que se conserva tal cual
+ * (no tiene sentido rasterizarlo). El control de qué formatos admite cada campo
+ * vive en `ProjectRequest` (la portada solo raster; los logos también SVG).
  */
 class ProjectImageService
 {
@@ -27,7 +29,7 @@ class ProjectImageService
     private const QUALITY = 88;
 
     /**
-     * @return string Ruta pública (`/uploads/projects/{slug}-{variant}.webp`).
+     * @return string Ruta pública (`/uploads/projects/{slug}-{variant}.webp|svg`).
      */
     public function storeFromPath(string $sourcePath, string $slug, string $variant): string
     {
@@ -35,6 +37,32 @@ class ProjectImageService
             throw new InvalidArgumentException("Source image not found: {$sourcePath}");
         }
 
+        $extension = strtolower(pathinfo($sourcePath, PATHINFO_EXTENSION));
+
+        if ($extension === 'svg') {
+            return $this->storeSvg($sourcePath, $slug, $variant);
+        }
+
+        return $this->storeRaster($sourcePath, $slug, $variant);
+    }
+
+    private function storeSvg(string $sourcePath, string $slug, string $variant): string
+    {
+        $contents = file_get_contents($sourcePath);
+
+        if ($contents === false || ! str_contains($contents, '<svg')) {
+            throw new InvalidArgumentException("File is not a valid SVG: {$sourcePath}");
+        }
+
+        $path = self::DIRECTORY.'/'."{$slug}-{$variant}.svg";
+
+        Storage::disk(self::DISK)->put($path, $contents);
+
+        return '/uploads/'.$path;
+    }
+
+    private function storeRaster(string $sourcePath, string $slug, string $variant): string
+    {
         if (! extension_loaded('gd') || ! function_exists('imagewebp')) {
             throw new RuntimeException('La extensión GD con soporte WebP no está disponible en este entorno.');
         }

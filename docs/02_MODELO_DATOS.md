@@ -3,6 +3,8 @@
 Última revisión: 26 de junio de 2026.
 
 > **Actualización Bloque 7 (26/06):** la gestión visible de **`permission_status`** se retiró del panel. La columna **se conserva** en `partners`, `projects` y `reviews` (sin migración: no se elimina todavía), pero el contenido creado/editado desde el CRUD o desde seeders se persiste como **`approved`** por compatibilidad. El enum `PermissionStatus` y los scopes `permitted()`/`publiclyListable()` siguen existiendo; al quedar todo `approved`, no bloquean. La publicación se controla por **estado + visibilidad** (`status`, `is_active`, `show_on_home`, `show_in_projects`, `show_in_collaborations`, `is_featured`, orden). El seeder legacy `AbacoHistoricalProjectsSeeder` se eliminó; el contenido confirmado vive en `ConfirmedProjectsSeeder` (hoy solo **CIETE**).
+>
+> **Media de proyecto (subfase 7.3, 26/06):** `projects` añade `logo`, `logo_dark` y `logo_alt` (migración aditiva `2026_06_26_000000_add_logos_to_projects_table`), espejo de `partners`: `logo` color (modo claro), `logo_dark` monocromo (modo oscuro), `logo_alt` texto alternativo. La **imagen del proyecto es una sola subida**: `cover_image` y `thumbnail_image` guardan la misma ruta (no hay miniatura separada). Solo se guardan rutas (`/uploads/projects/...`), nunca binarios; raster→WebP, SVG conservado.
 
 Fuente de verdad única del modelo de datos de AbacoQD. **Fase 2 (modelo de datos y migraciones) cerrada**: las migraciones, modelos, factories y seeders descritos aquí ya existen en `database/migrations`, `app/Models`, `database/factories` y `database/seeders`, y están validados con `composer test` (Pint + PHPStan + Pest) y `php artisan migrate:fresh --seed`.
 

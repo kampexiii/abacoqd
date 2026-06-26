@@ -42,7 +42,8 @@ abstract class ProjectRequest extends FormRequest
             'show_in_projects' => $this->boolean('show_in_projects'),
             'show_in_collaborations' => $this->boolean('show_in_collaborations'),
             'remove_cover_image' => $this->boolean('remove_cover_image'),
-            'remove_thumbnail_image' => $this->boolean('remove_thumbnail_image'),
+            'remove_logo' => $this->boolean('remove_logo'),
+            'remove_logo_dark' => $this->boolean('remove_logo_dark'),
         ]);
     }
 
@@ -106,10 +107,19 @@ abstract class ProjectRequest extends FormRequest
             'is_active' => ['boolean'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:65535'],
 
+            // Imagen del proyecto: una sola subida que alimenta portada y
+            // miniatura (el controlador copia la ruta a `thumbnail_image`). No
+            // hay subida manual de miniatura.
             'cover_image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:4096'],
             'remove_cover_image' => ['boolean'],
-            'thumbnail_image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:4096'],
-            'remove_thumbnail_image' => ['boolean'],
+
+            // Logo del cliente/empresa: color (modo claro) y monocromo (modo
+            // oscuro). Admiten SVG (se conserva vectorial) además de raster.
+            'logo' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            'remove_logo' => ['boolean'],
+            'logo_dark' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            'remove_logo_dark' => ['boolean'],
+            'logo_alt' => ['nullable', 'string', 'max:255'],
 
             'partners' => ['nullable', 'array'],
             'partners.*.id' => ['required', 'integer', 'exists:partners,id'],

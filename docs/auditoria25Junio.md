@@ -143,6 +143,15 @@ WIP        = archivos sin commit o sin decisión de cierre
 - **Compatibilidad interna:** la columna `permission_status` **no se elimina** (sin migración en esta subfase); el contenido creado/editado desde CRUD o seeders se persiste como `approved`. Los scopes públicos (`permitted`, `publiclyListable`) y el enum `PermissionStatus` se conservan intactos; al quedar todo `approved`, no bloquean.
 - **Validaciones:** `types:check`, `lint:check`, `build` OK; `composer test` **Pint OK · PHPStan 0 · Pest 189/189**. Sin push.
 
+**Subfase 7.3 — Media de proyecto (imagen única + logos de cliente) — CERRADA (26/06):**
+
+- **Imagen del proyecto = una sola subida.** El campo «Miniatura» desaparece del formulario; la imagen principal (`cover_image`) alimenta también `thumbnail_image` con **la misma ruta** (sin generar una segunda imagen ni pedir doble subida). Al quitarla, ambos campos quedan a `null` (sin borrar dos veces el mismo archivo).
+- **Logos de cliente/empresa en proyecto:** migración aditiva `2026_06_26_000000_add_logos_to_projects_table` añade `logo` (color, modo claro), `logo_dark` (monocromo, modo oscuro) y `logo_alt`, espejo de `partners`. **Aplicada con `php artisan migrate`** (no `migrate:fresh`); columnas existentes intactas.
+- **Conversión:** `ProjectImageService` convierte raster (PNG/JPEG/WebP) a **WebP** y conserva **SVG** vectorial (mismo patrón probado que `PartnerLogoService`). En BD solo rutas (`/uploads/projects/{slug}-{variant}.webp|svg`), nunca binarios; el original temporal se descarta.
+- **Naming por slug:** el nombre del archivo se resuelve desde el atributo JSON `slug` (las columnas generadas `slug_es`/`slug_en` no se cargan tras `save()`), no desde el id.
+- **Tests:** `tests/Feature/Admin/ProjectMediaTest.php` (3 casos: imagen única → cover=thumbnail; logos color/mono → rutas WebP; quitar imagen → ambos `null`).
+- **Validaciones:** `types:check`, `lint:check`, `build` OK; `composer test` **Pint OK · PHPStan 0 · Pest 192/192**. Sin push.
+
 ---
 
 ## 1. Resumen ejecutivo

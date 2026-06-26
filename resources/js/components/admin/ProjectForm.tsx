@@ -32,7 +32,9 @@ export type AdminProjectRecord = {
     readonly solution: Partial<LocalizedInput> | null;
     readonly result: Partial<LocalizedInput> | null;
     readonly coverImage: string | null;
-    readonly thumbnailImage: string | null;
+    readonly logo: string | null;
+    readonly logoDark: string | null;
+    readonly logoAlt: string | null;
     readonly technologies: readonly string[];
     readonly status: string;
     readonly year: number | null;
@@ -78,8 +80,11 @@ type ProjectFormData = {
     sort_order: number;
     cover_image: File | null;
     remove_cover_image: boolean;
-    thumbnail_image: File | null;
-    remove_thumbnail_image: boolean;
+    logo: File | null;
+    remove_logo: boolean;
+    logo_dark: File | null;
+    remove_logo_dark: boolean;
+    logo_alt: string;
     partners: { id: number; role: string; sort_order: number }[];
 };
 
@@ -128,8 +133,11 @@ export default function ProjectForm({
         sort_order: project?.sortOrder ?? defaultSortOrder,
         cover_image: null,
         remove_cover_image: false,
-        thumbnail_image: null,
-        remove_thumbnail_image: false,
+        logo: null,
+        remove_logo: false,
+        logo_dark: null,
+        remove_logo_dark: false,
+        logo_alt: project?.logoAlt ?? '',
         partners: (project?.partners ?? []).map((p) => ({
             id: p.id,
             role: p.role ?? 'other',
@@ -152,17 +160,29 @@ export default function ProjectForm({
         return null;
     }, [data.cover_image, data.remove_cover_image, project?.coverImage]);
 
-    const thumbnailPreview = useMemo(() => {
-        if (data.thumbnail_image instanceof File) {
-            return URL.createObjectURL(data.thumbnail_image);
+    const logoPreview = useMemo(() => {
+        if (data.logo instanceof File) {
+            return URL.createObjectURL(data.logo);
         }
 
-        if (project?.thumbnailImage && !data.remove_thumbnail_image) {
-            return project.thumbnailImage;
+        if (project?.logo && !data.remove_logo) {
+            return project.logo;
         }
 
         return null;
-    }, [data.thumbnail_image, data.remove_thumbnail_image, project]);
+    }, [data.logo, data.remove_logo, project]);
+
+    const logoDarkPreview = useMemo(() => {
+        if (data.logo_dark instanceof File) {
+            return URL.createObjectURL(data.logo_dark);
+        }
+
+        if (project?.logoDark && !data.remove_logo_dark) {
+            return project.logoDark;
+        }
+
+        return null;
+    }, [data.logo_dark, data.remove_logo_dark, project]);
 
     const setLocalized = (
         field:
@@ -376,36 +396,76 @@ export default function ProjectForm({
                 </FormSection>
 
                 <FormSection
-                    title="Imágenes"
-                    description="Se convierten automáticamente a WebP."
+                    title="Imagen del proyecto"
+                    description="Una sola imagen: se usará como portada y miniatura del proyecto. Raster se convierte a WebP."
+                >
+                    <ImageUpload
+                        label="Imagen del proyecto"
+                        preview={coverPreview}
+                        onUpload={(file) => {
+                            setData('cover_image', file);
+                            setData('remove_cover_image', false);
+                        }}
+                        onRemove={() => {
+                            setData('cover_image', null);
+                            setData('remove_cover_image', true);
+                        }}
+                        error={errors.cover_image}
+                    />
+                    <p className="mt-3 text-xs text-qd-text-medium dark:text-qd-white/40">
+                        La miniatura se genera automáticamente desde esta imagen.
+                    </p>
+                </FormSection>
+
+                <FormSection
+                    title="Logo del cliente / empresa"
+                    description="PNG/JPEG/WebP se convierten a WebP; SVG se conserva tal cual."
                 >
                     <div className="flex flex-wrap gap-8">
                         <ImageUpload
-                            label="Portada"
-                            preview={coverPreview}
+                            label="Logo color"
+                            hint="Se usa principalmente en modo claro."
+                            accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                            preview={logoPreview}
                             onUpload={(file) => {
-                                setData('cover_image', file);
-                                setData('remove_cover_image', false);
+                                setData('logo', file);
+                                setData('remove_logo', false);
                             }}
                             onRemove={() => {
-                                setData('cover_image', null);
-                                setData('remove_cover_image', true);
+                                setData('logo', null);
+                                setData('remove_logo', true);
                             }}
-                            error={errors.cover_image}
+                            error={errors.logo}
                         />
                         <ImageUpload
-                            label="Miniatura"
-                            preview={thumbnailPreview}
+                            label="Logo monocromo"
+                            hint="Se usa principalmente en modo oscuro."
+                            accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                            preview={logoDarkPreview}
                             onUpload={(file) => {
-                                setData('thumbnail_image', file);
-                                setData('remove_thumbnail_image', false);
+                                setData('logo_dark', file);
+                                setData('remove_logo_dark', false);
                             }}
                             onRemove={() => {
-                                setData('thumbnail_image', null);
-                                setData('remove_thumbnail_image', true);
+                                setData('logo_dark', null);
+                                setData('remove_logo_dark', true);
                             }}
-                            error={errors.thumbnail_image}
+                            error={errors.logo_dark}
                         />
+                    </div>
+                    <div className="mt-4">
+                        <Field
+                            label="Texto alternativo del logo"
+                            hint="Describe el logo para accesibilidad (recomendado)."
+                            error={errors.logo_alt}
+                        >
+                            <Input
+                                value={data.logo_alt}
+                                onChange={(e) =>
+                                    setData('logo_alt', e.target.value)
+                                }
+                            />
+                        </Field>
                     </div>
                 </FormSection>
 
@@ -731,12 +791,16 @@ function ToggleRow({
 
 function ImageUpload({
     label,
+    hint,
+    accept = 'image/png,image/jpeg,image/webp',
     preview,
     onUpload,
     onRemove,
     error,
 }: {
     readonly label: string;
+    readonly hint?: string;
+    readonly accept?: string;
     readonly preview: string | null;
     readonly onUpload: (file: File | null) => void;
     readonly onRemove: () => void;
@@ -763,11 +827,16 @@ function ImageUpload({
                 Subir
                 <input
                     type="file"
-                    accept="image/png,image/jpeg,image/webp"
+                    accept={accept}
                     className="hidden"
                     onChange={(e) => onUpload(e.target.files?.[0] ?? null)}
                 />
             </label>
+            {hint && !error && (
+                <p className="text-xs text-qd-text-medium dark:text-qd-white/40">
+                    {hint}
+                </p>
+            )}
             {preview && (
                 <button
                     type="button"

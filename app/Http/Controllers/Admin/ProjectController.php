@@ -157,6 +157,7 @@ class ProjectController extends Controller
             'client_partner_id' => $request->validated('client_partner_id'),
             'github_url' => $request->validated('github_url'),
             'external_url' => $request->validated('external_url'),
+            'logo_alt' => $request->validated('logo_alt'),
             // El permiso de publicación ya no se gestiona desde el panel: crear o
             // editar un proyecto implica que se puede publicar. Se persiste
             // `approved` internamente por compatibilidad con scopes/columna.
@@ -169,34 +170,79 @@ class ProjectController extends Controller
         ];
     }
 
+    /**
+     * Sincroniza la imagen del proyecto (una sola subida que alimenta portada y
+     * miniatura) y los logos color/monocromo del cliente. Borra el archivo
+     * anterior al reemplazar/quitar, sin borrar dos veces la misma ruta.
+     */
     private function syncImages(StoreProjectRequest|UpdateProjectRequest $request, Project $project): void
     {
-        $slug = $project->slug_es ?? $project->slug_en ?? (string) $project->id;
+        // `slug_es`/`slug_en` son columnas generadas por la BD y no se cargan en
+        // memoria tras `save()`; resolvemos desde el atributo JSON `slug`, ya
+        // poblado en store/update, con el id como último recurso.
+        $slugData = is_array($project->slug) ? $project->slug : [];
+        $slug = $slugData['es'] ?? $slugData['en'] ?? (string) $project->id;
 
+        // Imagen del proyecto: la misma ruta alimenta `cover_image` y
+        // `thumbnail_image` (no hay subida manual de miniatura).
         if ($request->hasFile('cover_image')) {
-            $previous = $project->cover_image;
+            $previousCover = $project->cover_image;
+            $previousThumb = $project->thumbnail_image;
             $path = $this->images->storeFromPath($request->file('cover_image')->getRealPath(), $slug, 'cover');
-            $project->update(['cover_image' => $path]);
+            $project->update(['cover_image' => $path, 'thumbnail_image' => $path]);
 
-            if ($previous !== null && $previous !== $path) {
-                $this->images->delete($previous);
+            $this->deleteReplaced($previousCover, $path);
+
+            if ($previousThumb !== $previousCover) {
+                $this->deleteReplaced($previousThumb, $path);
             }
-        } elseif ($request->boolean('remove_cover_image') && $project->cover_image !== null) {
-            $this->images->delete($project->cover_image);
-            $project->update(['cover_image' => null]);
+        } elseif ($request->boolean('remove_cover_image')) {
+            $cover = $project->cover_image;
+            $thumb = $project->thumbnail_image;
+
+            if ($cover !== null) {
+                $this->images->delete($cover);
+            }
+
+            if ($thumb !== null && $thumb !== $cover) {
+                $this->images->delete($thumb);
+            }
+
+            $project->update(['cover_image' => null, 'thumbnail_image' => null]);
         }
 
-        if ($request->hasFile('thumbnail_image')) {
-            $previous = $project->thumbnail_image;
-            $path = $this->images->storeFromPath($request->file('thumbnail_image')->getRealPath(), $slug, 'thumbnail');
-            $project->update(['thumbnail_image' => $path]);
+        $this->syncLogo($request, $project, $slug, 'logo', 'logo', 'remove_logo');
+        $this->syncLogo($request, $project, $slug, 'logo_dark', 'logo-dark', 'remove_logo_dark');
+    }
 
-            if ($previous !== null && $previous !== $path) {
-                $this->images->delete($previous);
-            }
-        } elseif ($request->boolean('remove_thumbnail_image') && $project->thumbnail_image !== null) {
-            $this->images->delete($project->thumbnail_image);
-            $project->update(['thumbnail_image' => null]);
+    /**
+     * Procesa un logo (color o monocromo): convierte/guarda y borra el anterior
+     * si se reemplaza o se quita.
+     */
+    private function syncLogo(
+        StoreProjectRequest|UpdateProjectRequest $request,
+        Project $project,
+        string $slug,
+        string $field,
+        string $variant,
+        string $removeFlag,
+    ): void {
+        if ($request->hasFile($field)) {
+            $previous = $project->{$field};
+            $path = $this->images->storeFromPath($request->file($field)->getRealPath(), $slug, $variant);
+            $project->update([$field => $path]);
+
+            $this->deleteReplaced($previous, $path);
+        } elseif ($request->boolean($removeFlag) && $project->{$field} !== null) {
+            $this->images->delete($project->{$field});
+            $project->update([$field => null]);
+        }
+    }
+
+    private function deleteReplaced(?string $previous, string $new): void
+    {
+        if ($previous !== null && $previous !== $new) {
+            $this->images->delete($previous);
         }
     }
 
@@ -274,7 +320,9 @@ class ProjectController extends Controller
             'challenge' => $project->challenge,
             'solution' => $project->solution,
             'result' => $project->result,
-            'thumbnailImage' => $project->thumbnail_image,
+            'logo' => $project->logo,
+            'logoDark' => $project->logo_dark,
+            'logoAlt' => $project->logo_alt,
             'technologies' => is_array($project->technologies) ? array_values($project->technologies) : [],
             'clientPartnerId' => $project->client_partner_id,
             'githubUrl' => $project->github_url,

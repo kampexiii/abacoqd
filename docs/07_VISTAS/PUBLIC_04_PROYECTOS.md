@@ -5,6 +5,8 @@
 Fuente de verdad de la página pública **Proyectos**: listado, detalle de proyecto y de la **sección Colaboraciones** dentro de la landing (bloque de logos, marcas y trabajos). Recupera y sustituye los antiguos borradores de portafolio y detalle de portafolio (ya retirados del archivo).
 
 > **Actualización Bloque 7 (26/06):** se eliminó el contenido legacy (11 proyectos + 17 partners de terceros) de la BD y su seeder. Queda **solo CIETE** como proyecto real confirmado, visible en `/proyectos`. La **sección Colaboraciones ya no tiene fallback estático de marcas reales** (`company-logos.ts` borrado): se alimenta solo de partners publicables desde BD y, si no hay, muestra un **estado vacío honesto** (sin logos de terceros, sin copy de «permiso»). La visibilidad pública se controla por estado + visibilidad; `permission_status` queda como compatibilidad interna (`approved`).
+>
+> **Media de proyecto (subfase 7.3, 26/06):** la tarjeta y el detalle usan `cover_image`; `thumbnail_image` apunta a la misma ruta que la portada (una sola imagen), por lo que `coverImage ?? thumbnailImage` sigue funcionando sin cambios. El proyecto puede tener logo de cliente color/monocromo (`logo`/`logo_dark`/`logo_alt`); su uso público (claro → `logo`, oscuro → `logo_dark` con fallback a `logo`, alt desde `logo_alt`) queda para una iteración posterior, no se rediseña aquí.
 
 > Naming final: el **topbar y la página pública** se llaman **Proyectos** (`/proyectos`). La **sección de la landing** con logos/empresas/trabajos se llama **Colaboraciones**. El **modelo interno** es `projects`, `partners`, `partner_project`. No se usa "Portafolios" como término público activo.
 

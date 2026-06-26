@@ -163,7 +163,9 @@ No cargar nada del `.odt` como real. Si no hay contenido confirmado: estados vac
 
 **Subfase 7.2 (CERRADA 26/06):** resuelto el **P0 legal**. Eliminados los 11 proyectos + 17 partners legacy de la BD local; retirado `AbacoHistoricalProjectsSeeder`; borrado el fallback estático de marcas (`company-logos.ts`) con estado vacío honesto en Colaboraciones. **Queda solo CIETE.** Retirado el concepto visible de «Permiso» del admin: la publicación se controla por estado + visibilidad; `permission_status` queda como compatibilidad interna (`approved`), sin migración (la columna no se elimina todavía). Validaciones verdes (Pest 189/189). Sin push. Detalle en [auditoría §0 · Bloque 7](auditoria25Junio.md).
 
-**Pendiente del bloque (próximas subfases):** media pipeline color/mono para Project (migración + `ProjectImageService` SVG), snapshots/backup seeders (partners→projects), carga manual de assets de CIETE, revisión jurídica de textos legales y PII (IP/User-Agent) en privacidad. Eliminación definitiva de la columna `permission_status` queda para una migración futura aparte.
+**Subfase 7.3 (CERRADA 26/06):** media de proyecto simplificada. Imagen única que alimenta portada **y** miniatura (sin subida manual de miniatura); logos de cliente color/monocromo + `logo_alt` añadidos a `projects` (migración aditiva aplicada con `migrate`); `ProjectImageService` convierte raster→WebP y conserva SVG. Tests `ProjectMediaTest` (Pest 192/192). Sin push.
+
+**Pendiente del bloque (próximas subfases):** snapshots/backup seeders (partners→projects), carga manual de assets de CIETE, revisión jurídica de textos legales y PII (IP/User-Agent) en privacidad. Eliminación definitiva de la columna `permission_status` queda para una migración futura aparte.
 
 ### Bloque 8 — Producción / despliegue (P1)
 
