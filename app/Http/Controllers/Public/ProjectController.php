@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\Project;
+use App\Models\Service;
 use App\Support\Seo\SeoResolver;
-use Illuminate\Database\Eloquent\Relations\Pivot;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -33,7 +33,7 @@ class ProjectController extends Controller
             ->published()
             ->projects()
             ->publiclyListable()
-            ->with(['clientPartner', 'partners'])
+            ->with(['partners', 'services'])
             ->ordered()
             ->paginate(self::PER_PAGE)
             ->withQueryString();
@@ -55,7 +55,7 @@ class ProjectController extends Controller
             ->published()
             ->projects()
             ->publiclyListable()
-            ->with(['clientPartner', 'partners', 'seoMetadata'])
+            ->with(['partners', 'services', 'seoMetadata'])
             ->where(function ($query) use ($slug): void {
                 $query->where('slug_es', $slug)->orWhere('slug_en', $slug);
             })
@@ -87,13 +87,15 @@ class ProjectController extends Controller
     }
 
     /**
+     * Resumen público de un proyecto/caso. El "cliente" es la empresa que lo
+     * solicita (`client_name` + logo del proyecto color/monocromo). El
+     * desarrollo es AbacoQD en solitario (`developmentMode = solo`) o con
+     * partners (`cooperative`); no se exponen roles técnicos ni permisos.
+     *
      * @return array<string, mixed>
      */
     private function projectSummary(Project $project): array
     {
-        $client = $project->clientPartner;
-        $executor = $project->partners->firstWhere('pivot.role', 'collaborator');
-        $settings = is_array($project->settings) ? $project->settings : [];
         $slug = is_array($project->slug) ? ($project->slug['es'] ?? null) : null;
 
         return [
@@ -107,12 +109,12 @@ class ProjectController extends Controller
             'technologies' => is_array($project->technologies) ? array_values($project->technologies) : [],
             'year' => $project->year,
             'clientName' => $project->client_name,
-            'partnerName' => $client?->name,
-            'partnerLogo' => $client?->logo,
-            'partnerLogoDark' => $client?->logo_dark,
-            'partnerLogoAlt' => $client?->logo_alt,
-            'executorName' => $executor?->name,
-            'isHistorical' => (bool) ($settings['is_historical'] ?? false),
+            'clientLogo' => $project->logo,
+            'clientLogoDark' => $project->logo_dark,
+            'clientLogoAlt' => $project->logo_alt,
+            'services' => $this->mapServices($project),
+            'developmentMode' => $project->partners->isEmpty() ? 'solo' : 'cooperative',
+            'partners' => $this->mapPartners($project),
         ];
     }
 
@@ -121,33 +123,6 @@ class ProjectController extends Controller
      */
     private function projectDetail(Project $project): array
     {
-        $roleLabels = [
-            'client' => 'client',
-            'collaborator' => 'collaborator',
-            'technology_partner' => 'technologyPartner',
-            'brand' => 'brand',
-            'other' => 'other',
-        ];
-
-        $partners = $project->partners
-            ->map(function (Partner $partner) use ($roleLabels): array {
-                $pivot = $partner->getRelationValue('pivot');
-                $pivotRole = $pivot instanceof Pivot ? $pivot->getAttribute('role') : null;
-                $role = is_string($pivotRole) ? $pivotRole : 'other';
-
-                return [
-                    'id' => $partner->id,
-                    'name' => $partner->name,
-                    'logo' => $partner->logo,
-                    'logoDark' => $partner->logo_dark,
-                    'logoAlt' => $partner->logo_alt,
-                    'website' => $partner->website,
-                    'roleKey' => $roleLabels[$role] ?? 'other',
-                ];
-            })
-            ->values()
-            ->all();
-
         return [
             ...$this->projectSummary($project),
             'description' => $project->description,
@@ -156,7 +131,46 @@ class ProjectController extends Controller
             'result' => $project->result,
             'gallery' => is_array($project->gallery) ? array_values($project->gallery) : [],
             'externalUrl' => $project->external_url,
-            'partners' => $partners,
         ];
+    }
+
+    /**
+     * Servicios/capacidades reales asociados (desde `services`). Texto bilingüe
+     * para localizar en el cliente; sin texto libre.
+     *
+     * @return list<array{name: mixed, slug: string|null}>
+     */
+    private function mapServices(Project $project): array
+    {
+        return array_values($project->services
+            ->map(function (Service $service): array {
+                $slugEs = data_get($service->slug, 'es');
+
+                return [
+                    'name' => $service->title,
+                    'slug' => is_string($slugEs) ? $slugEs : null,
+                ];
+            })
+            ->all());
+    }
+
+    /**
+     * Partners que co-desarrollaron el proyecto junto a AbacoQD (proyecto
+     * cooperativo). No se expone el rol técnico de `partner_project`.
+     *
+     * @return list<array{id: int, name: string, logo: string|null, logoDark: string|null, logoAlt: string|null, website: string|null}>
+     */
+    private function mapPartners(Project $project): array
+    {
+        return array_values($project->partners
+            ->map(fn (Partner $partner): array => [
+                'id' => $partner->id,
+                'name' => $partner->name,
+                'logo' => $partner->logo,
+                'logoDark' => $partner->logo_dark,
+                'logoAlt' => $partner->logo_alt,
+                'website' => $partner->website,
+            ])
+            ->all());
     }
 }

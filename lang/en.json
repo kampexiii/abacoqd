@@ -853,8 +853,16 @@
         "meta": {
             "year": "Year",
             "capabilities": "Service / capabilities",
-            "role": "Role",
+            "development": "Development",
             "technologies": "Technologies"
+        },
+        "development": {
+            "soloLabel": "Project developed independently",
+            "cooperativeLabel": "Collaborative project"
+        },
+        "clientDev": {
+            "requestedBy": "Requested by",
+            "developedBy": "Developed by"
         },
         "blocks": {
             "context": {

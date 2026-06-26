@@ -19,6 +19,11 @@ import { show as contactShow } from '@/routes/contact';
 import { localizedText } from './Services';
 import type { LocalizedText } from './Services';
 
+type ProjectService = {
+    readonly name: LocalizedText;
+    readonly slug: string | null;
+};
+
 type PublicProject = {
     readonly id: number;
     readonly title: LocalizedText;
@@ -30,12 +35,11 @@ type PublicProject = {
     readonly technologies: readonly unknown[];
     readonly year: number | null;
     readonly clientName: string | null;
-    readonly partnerName: string | null;
-    readonly partnerLogo: string | null;
-    readonly partnerLogoDark: string | null;
-    readonly partnerLogoAlt: string | null;
-    readonly executorName: string | null;
-    readonly isHistorical: boolean;
+    readonly clientLogo: string | null;
+    readonly clientLogoDark: string | null;
+    readonly clientLogoAlt: string | null;
+    readonly services: readonly ProjectService[];
+    readonly developmentMode: 'solo' | 'cooperative';
 };
 
 type PaginationLink = {
@@ -267,31 +271,23 @@ export default function Projects({ projects }: ProjectsProps) {
         const summary = localizedText(project.summary, locale);
         const slug = localizedText(project.slug, locale);
         const cover = project.coverImage ?? project.thumbnailImage;
-        const technologies = project.technologies.filter(
-            (tech): tech is string =>
-                typeof tech === 'string' && tech.length > 0,
+        const serviceNames = project.services.map((service) =>
+            localizedText(service.name, locale),
         );
-        const partnerLabel =
-            project.partnerName ??
-            project.clientName ??
-            t('projectsPage.card.internalProject');
+        const clientLabel =
+            project.clientName ?? t('projectsPage.card.internalProject');
         const consultUrl = contactShow.url({ query: { proyecto: slug } });
         const detailUrl =
             project.detailUrl ?? (slug ? `/proyectos/${slug}` : null);
         const cardUrl = detailUrl ?? consultUrl;
-        const statusBadges = [
-            project.isHistorical ? t('projectsPage.badge.historical') : null,
-        ].filter((badge): badge is string => badge !== null);
+        const developmentLabel =
+            project.developmentMode === 'cooperative'
+                ? t('projectDetail.development.cooperativeLabel')
+                : t('projectDetail.development.soloLabel');
 
         return (
             <article className="group flex flex-col overflow-hidden rounded-2xl border border-qd-mist bg-qd-white shadow-[0_18px_60px_-42px_rgba(7,17,26,0.35)] transition duration-300 hover:-translate-y-1 hover:border-qd-teal-2/70 dark:border-qd-white/10 dark:bg-qd-white/5 dark:hover:border-qd-teal/70">
                 <div className="relative">
-                    {statusBadges.length > 0 && (
-                        <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-qd-ink/85 px-3 py-1 text-[11px] font-bold text-qd-white backdrop-blur-sm">
-                            <span className="size-1.5 rounded-full bg-qd-lime" />
-                            {statusBadges.join(' · ')}
-                        </span>
-                    )}
                     <a
                         href={cardUrl}
                         aria-label={`${t('projectsPage.card.viewProject')}: ${title}`}
@@ -326,27 +322,25 @@ export default function Projects({ projects }: ProjectsProps) {
 
                 <div className="flex flex-1 flex-col p-6">
                     <div className="flex min-h-9 items-center gap-3">
-                        {project.partnerLogo ? (
+                        {project.clientLogo ? (
                             <span className="flex h-9 max-w-28 items-center">
                                 <img
-                                    src={project.partnerLogo}
-                                    alt={project.partnerLogoAlt ?? partnerLabel}
+                                    src={project.clientLogo}
+                                    alt={project.clientLogoAlt ?? clientLabel}
                                     className={cn(
                                         'max-h-8 w-auto max-w-28 object-contain',
-                                        project.partnerLogoDark &&
-                                            'dark:hidden',
-                                        !project.partnerLogoDark &&
+                                        project.clientLogoDark && 'dark:hidden',
+                                        !project.clientLogoDark &&
                                             'dark:brightness-0 dark:invert',
                                     )}
                                     loading="lazy"
                                     decoding="async"
                                 />
-                                {project.partnerLogoDark && (
+                                {project.clientLogoDark && (
                                     <img
-                                        src={project.partnerLogoDark}
+                                        src={project.clientLogoDark}
                                         alt={
-                                            project.partnerLogoAlt ??
-                                            partnerLabel
+                                            project.clientLogoAlt ?? clientLabel
                                         }
                                         className="hidden max-h-8 w-auto max-w-28 object-contain dark:block"
                                         loading="lazy"
@@ -360,18 +354,18 @@ export default function Projects({ projects }: ProjectsProps) {
                             </span>
                         )}
                         <span className="text-xs font-semibold text-qd-text-medium">
-                            {partnerLabel}
+                            {clientLabel}
                         </span>
                     </div>
 
-                    {technologies.length > 0 && (
+                    {serviceNames.length > 0 && (
                         <div className="mt-4 flex flex-wrap gap-2">
-                            {technologies.slice(0, 3).map((tech) => (
+                            {serviceNames.slice(0, 3).map((name) => (
                                 <span
-                                    key={tech}
+                                    key={name}
                                     className="rounded-full border border-qd-teal-2/10 bg-qd-mist/60 px-3 py-1 text-xs font-medium text-qd-text-high dark:border-qd-teal/15 dark:bg-qd-white/5"
                                 >
-                                    {tech}
+                                    {name}
                                 </span>
                             ))}
                         </div>
@@ -389,15 +383,9 @@ export default function Projects({ projects }: ProjectsProps) {
                         {summary}
                     </p>
 
-                    {project.executorName &&
-                        project.executorName !== project.partnerName && (
-                            <p className="mt-3 text-xs text-qd-text-medium">
-                                {t('projectsPage.card.executorBy')}:{' '}
-                                <span className="font-semibold text-qd-text-high">
-                                    {project.executorName}
-                                </span>
-                            </p>
-                        )}
+                    <p className="mt-3 text-xs text-qd-text-medium">
+                        {developmentLabel}
+                    </p>
 
                     <div className="mt-6 flex items-center justify-between gap-3 border-t border-qd-mist pt-4 dark:border-qd-white/10">
                         <span className="flex items-center gap-2 text-xs text-qd-text-medium">
@@ -411,7 +399,7 @@ export default function Projects({ projects }: ProjectsProps) {
                                 </span>
                             )}
                             {project.year && <span aria-hidden="true">·</span>}
-                            <span>{partnerLabel}</span>
+                            <span>{clientLabel}</span>
                         </span>
                         <a
                             href={cardUrl}

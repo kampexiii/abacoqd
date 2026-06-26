@@ -7,6 +7,8 @@ Gestión del contenido público, marca, settings, metodología, servicios, proye
 > **Actualización Bloque 7 (26/06):** los CRUD de **proyectos** y **partners** ya no exponen el campo/columna **«Permiso»**. El listado y el formulario se gestionan por **Estado + Visibilidad** (estado del proyecto, activo, home/proyectos/colaboraciones, destacado, orden) y, en partners, por activo + noria de Colaboraciones. `permission_status` se persiste internamente como `approved`. Tanto partner como proyecto soportan **logo color (`logo`) + logo monocromo (`logo_dark`) + `logo_alt`** (claro → color, oscuro → monocromo).
 >
 > **Media de proyecto (subfase 7.3, 26/06):** el formulario de proyecto tiene **una sola subida de imagen** («Imagen del proyecto»): se usa como portada y miniatura (no hay subida manual de miniatura). Aparte, el bloque **«Logo del cliente / empresa»** con logo color, logo monocromo y texto alternativo. Raster→WebP, SVG conservado; en BD solo rutas.
+>
+> **Servicios del proyecto (subfase 7.4, 26/06):** el formulario de proyecto incluye **«Servicios / capacidades»** como multiselección desde `services` (no texto libre); los servicios inactivos asociados se muestran marcados como «Inactivo» para no perder contexto. No se muestra «Rol» ni «Permiso».
 
 ## 1. Settings / marca / datos corporativos
 

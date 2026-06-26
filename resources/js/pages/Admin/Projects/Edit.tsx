@@ -1,16 +1,22 @@
 import { Head } from '@inertiajs/react';
 
 import ProjectForm from '@/components/admin/ProjectForm';
-import type { AdminProjectRecord, Option, PartnerOption } from '@/components/admin/ProjectForm';
+import type {
+    AdminProjectRecord,
+    Option,
+    PartnerOption,
+    ServiceOption,
+} from '@/components/admin/ProjectForm';
 import AdminLayout from '@/layouts/admin-layout';
 
 type EditProps = {
     readonly project: AdminProjectRecord;
     readonly statuses: readonly Option[];
     readonly partners: readonly PartnerOption[];
+    readonly services: readonly ServiceOption[];
 };
 
-export default function ProjectsEdit({ project, statuses, partners }: EditProps) {
+export default function ProjectsEdit({ project, statuses, partners, services }: EditProps) {
     const name = project.title?.es ?? project.title?.en ?? 'Editar proyecto';
 
     return (
@@ -23,7 +29,7 @@ export default function ProjectsEdit({ project, statuses, partners }: EditProps)
             ]}
         >
             <Head title={`Editar · ${name} · Admin AbacoQD`} />
-            <ProjectForm mode="edit" statuses={statuses} partners={partners} project={project} />
+            <ProjectForm mode="edit" statuses={statuses} partners={partners} services={services} project={project} />
         </AdminLayout>
     );
 }

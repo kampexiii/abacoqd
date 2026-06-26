@@ -5,6 +5,8 @@
 Esta es la **única fuente de verdad de la landing**. Fusiona el handoff de orden/dark-light/frames con el detalle sección por sección. Sustituye a los antiguos documentos de handoff y detalle de la home. Fuente de verdad visual: `mockups/abacoqd-web.pen`. Paleta, tipografía, tokens, componentes y animaciones globales en `04_IDENTIDAD_UI_COMPONENTES.md`. Modelo de datos en `02_MODELO_DATOS.md`. La metodología se resume aquí y se detalla en `PUBLIC_02_METODOLOGIA_PROCESO.md`.
 
 > Producto completo y definitivo para el 30/06. No empezar implementación hasta documentación aprobada.
+>
+> **Colaboraciones (subfase 7.4, 26/06):** la sección Colaboraciones muestra **proyectos/casos** con `show_in_collaborations`, no logos sueltos. Cada tarjeta: logo del cliente (color claro / monocromo oscuro), nombre del cliente, nombre del proyecto, chips de servicios, año, modo de desarrollo (AbacoQD en solitario o cooperativo con partners) y CTA «Ver proyecto». Sin proyectos publicables marcados, estado vacío honesto (sin marcas de terceros, sin lenguaje de «permiso»). Ya no se usa la noria de logos de partners.
 
 ## Identificación
 

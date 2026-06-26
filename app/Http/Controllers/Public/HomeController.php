@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\Post;
+use App\Models\Project;
+use App\Models\Service;
 use Illuminate\Database\Eloquent\Builder;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -14,12 +16,11 @@ class HomeController extends Controller
     /**
      * Render the public landing.
      *
-     * La sección Colaboraciones (noria) se alimenta de `partners` marcados como
-     * activos y "Mostrar en noria" (`show_in_collaborations`), publicables vía
-     * `Partner::scopePubliclyListable`
-     * y con logo disponible. La pertenencia de un partner a un proyecto se
-     * modela con `partner_project`; no decide la noria ni se usan flags de
-     * Project. Si no hay datos, se muestra un estado vacío sin romper la sección.
+     * La sección Colaboraciones muestra PROYECTOS/casos (no logos sueltos):
+     * proyectos publicables marcados con `show_in_collaborations`, cada uno con
+     * su cliente, logo color/monocromo, servicios, año, modo de desarrollo
+     * (AbacoQD en solitario o cooperativo con partners) y enlace al detalle. Sin
+     * datos, la sección muestra un estado vacío honesto sin inventar contenido.
      *
      * La sección Blog usa el post destacado (`Post::featured()`) como card
      * grande y los 2 últimos publicados como cards pequeñas, excluyendo el
@@ -28,11 +29,12 @@ class HomeController extends Controller
      */
     public function index(): Response
     {
-        $collaborationPartners = Partner::query()
+        $collaborationProjects = Project::query()
             ->active()
+            ->published()
             ->collaborations()
             ->publiclyListable()
-            ->whereNotNull('logo')
+            ->with(['partners', 'services'])
             ->ordered()
             ->get();
 
@@ -58,22 +60,45 @@ class HomeController extends Controller
             'latestPosts' => $latestPosts
                 ->map(fn (Post $post): array => $this->postSummary($post))
                 ->values(),
-            'collaborations' => $collaborationPartners
-                ->map(function (Partner $partner): array {
-                    $settings = is_array($partner->settings) ? $partner->settings : [];
-
-                    return [
-                        'slug' => $partner->slug,
-                        'name' => $partner->name,
-                        'logoLight' => $partner->logo,
-                        'logoDark' => $partner->logo_dark,
-                        'logoAlt' => $partner->logo_alt,
-                        'href' => '/proyectos',
-                        'isHistorical' => (bool) ($settings['is_historical'] ?? false),
-                    ];
-                })
+            'collaborations' => $collaborationProjects
+                ->map(fn (Project $project): array => $this->collaborationItem($project))
                 ->values(),
         ]);
+    }
+
+    /**
+     * Item de la sección Colaboraciones: un proyecto/caso con su cliente, logo
+     * color/monocromo, servicios, año, modo de desarrollo y enlace al detalle.
+     *
+     * @return array<string, mixed>
+     */
+    private function collaborationItem(Project $project): array
+    {
+        $slug = is_array($project->slug) ? ($project->slug['es'] ?? null) : null;
+
+        return [
+            'id' => $project->id,
+            'title' => $project->title,
+            'slug' => $slug,
+            'detailUrl' => $slug ? "/proyectos/{$slug}" : '/proyectos',
+            'clientName' => $project->client_name,
+            'clientLogo' => $project->logo,
+            'clientLogoDark' => $project->logo_dark,
+            'clientLogoAlt' => $project->logo_alt,
+            'year' => $project->year,
+            'developmentMode' => $project->partners->isEmpty() ? 'solo' : 'cooperative',
+            'services' => $project->services
+                ->map(fn (Service $service): mixed => $service->title)
+                ->values(),
+            'partners' => $project->partners
+                ->map(fn (Partner $partner): array => [
+                    'name' => $partner->name,
+                    'logo' => $partner->logo,
+                    'logoDark' => $partner->logo_dark,
+                    'logoAlt' => $partner->logo_alt,
+                ])
+                ->values(),
+        ];
     }
 
     /**

@@ -70,6 +70,22 @@ class Project extends Model
     }
 
     /**
+     * Servicios/capacidades reales aplicadas en el proyecto, elegidas desde
+     * `services` (no texto libre). Si un servicio se desactiva, la relación se
+     * conserva; si se borra, la fila pivote cae por cascade sin romper el
+     * proyecto.
+     *
+     * @return BelongsToMany<Service, $this>
+     */
+    public function services(): BelongsToMany
+    {
+        return $this->belongsToMany(Service::class)
+            ->withPivot('sort_order')
+            ->withTimestamps()
+            ->orderByPivot('sort_order');
+    }
+
+    /**
      * @return HasMany<Review, $this>
      */
     public function reviews(): HasMany

@@ -152,6 +152,16 @@ WIP        = archivos sin commit o sin decisión de cierre
 - **Tests:** `tests/Feature/Admin/ProjectMediaTest.php` (3 casos: imagen única → cover=thumbnail; logos color/mono → rutas WebP; quitar imagen → ambos `null`).
 - **Validaciones:** `types:check`, `lint:check`, `build` OK; `composer test` **Pint OK · PHPStan 0 · Pest 192/192**. Sin push.
 
+**Subfase 7.4 — Datos públicos de Proyecto y Colaboraciones — CERRADA (26/06):**
+
+- **Proyecto ↔ Servicios:** nueva relación M:N `project_service` (migración aditiva aplicada con `migrate`). El servicio/capacidades del proyecto se elige desde `services` (no texto libre); si un servicio se desactiva la relación se conserva (se marca «Inactivo» en admin), si se borra cae por cascade sin romper el proyecto. CIETE asociado por slug a **Aplicaciones a medida · CRM, datos y procesos · Integraciones digitales** (sin IDs hardcodeados).
+- **Fuera de la UI pública:** `approved`/`Aprobado`, `permiso`/`permission`, `estado de validación`, `Rol`/`Roles del proyecto` y «Quién participa». El payload público ya no envía `permissionStatus`/`isApproved`/roles; `permission_status` queda solo como compatibilidad interna.
+- **Detalle de proyecto rehecho:** banner con logo del cliente (color claro / monocromo oscuro) + nombre + proyecto + chips de servicios + desarrollo; datos clave (Año · Servicios · Desarrollo · Tecnologías, sin «Rol»); sección **«Cliente y desarrollo»** (Solicitado por / Desarrollado por con logo AbacoQD y, si aplica, partners). `developmentMode = solo | cooperative` (CIETE = «Proyecto desarrollado en solitario»).
+- **Colaboraciones (home):** ahora muestra **proyectos/casos** (cliente, logo, servicios, año, desarrollo, CTA «Ver proyecto»), no logos sueltos. Sin proyectos `show_in_collaborations`, estado vacío honesto. CIETE no está en colaboraciones (flag en false).
+- **Seeder no destructivo:** `ConfirmedProjectsSeeder` ya no pisa la media subida por CRUD en re-seed (solo la inicializa al crear).
+- **Tests:** `ProjectPresentationTest` (relación servicios, borrado de servicio no rompe el proyecto, CIETE↔servicios por seeder, payload público sin campos internos ni roles).
+- **Validaciones:** `types:check`, `lint:check`, `build` OK; `composer test` **Pint OK · PHPStan 0 · Pest 196/196**. Sin push.
+
 ---
 
 ## 1. Resumen ejecutivo

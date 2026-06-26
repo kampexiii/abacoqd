@@ -1,16 +1,21 @@
 import { Head } from '@inertiajs/react';
 
 import ProjectForm from '@/components/admin/ProjectForm';
-import type { Option, PartnerOption } from '@/components/admin/ProjectForm';
+import type {
+    Option,
+    PartnerOption,
+    ServiceOption,
+} from '@/components/admin/ProjectForm';
 import AdminLayout from '@/layouts/admin-layout';
 
 type CreateProps = {
     readonly statuses: readonly Option[];
     readonly partners: readonly PartnerOption[];
+    readonly services: readonly ServiceOption[];
     readonly nextSortOrder: number;
 };
 
-export default function ProjectsCreate({ statuses, partners, nextSortOrder }: CreateProps) {
+export default function ProjectsCreate({ statuses, partners, services, nextSortOrder }: CreateProps) {
     return (
         <AdminLayout
             title="Nuevo proyecto"
@@ -25,6 +30,7 @@ export default function ProjectsCreate({ statuses, partners, nextSortOrder }: Cr
                 mode="create"
                 statuses={statuses}
                 partners={partners}
+                services={services}
                 defaultSortOrder={nextSortOrder}
             />
         </AdminLayout>

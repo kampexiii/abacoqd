@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\StoreProjectRequest;
 use App\Http\Requests\Admin\UpdateProjectRequest;
 use App\Models\Partner;
 use App\Models\Project;
+use App\Models\Service;
 use App\Services\Media\ProjectImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -58,6 +59,7 @@ class ProjectController extends Controller
         return Inertia::render('Admin/Projects/Create', [
             'statuses' => $this->statusOptions(),
             'partners' => $this->partnerOptions(),
+            'services' => $this->serviceOptions(),
             'nextSortOrder' => (int) (Project::max('sort_order') ?? 0) + 1,
         ]);
     }
@@ -69,6 +71,7 @@ class ProjectController extends Controller
 
         $this->syncImages($request, $project);
         $this->syncPartners($request, $project);
+        $this->syncServices($request, $project);
 
         return to_route('admin.projects.index')
             ->with('toast', ['type' => 'success', 'message' => 'Proyecto creado.']);
@@ -80,6 +83,7 @@ class ProjectController extends Controller
             'project' => $this->adminRecord($project),
             'statuses' => $this->statusOptions(),
             'partners' => $this->partnerOptions(),
+            'services' => $this->serviceOptions(),
         ]);
     }
 
@@ -90,6 +94,7 @@ class ProjectController extends Controller
 
         $this->syncImages($request, $project);
         $this->syncPartners($request, $project);
+        $this->syncServices($request, $project);
 
         return to_route('admin.projects.index')
             ->with('toast', ['type' => 'success', 'message' => 'Proyecto actualizado.']);
@@ -267,6 +272,24 @@ class ProjectController extends Controller
     }
 
     /**
+     * Sincroniza los servicios/capacidades del proyecto desde `services` (ids).
+     * Sin texto libre; el orden de selección define `sort_order`.
+     */
+    private function syncServices(StoreProjectRequest|UpdateProjectRequest $request, Project $project): void
+    {
+        $ids = $request->validated('services') ?? [];
+
+        $sync = [];
+        $order = 0;
+
+        foreach ($ids as $id) {
+            $sync[(int) $id] = ['sort_order' => $order += 1];
+        }
+
+        $project->services()->sync($sync);
+    }
+
+    /**
      * @return array<string, string|null>|null
      */
     private function localized(mixed $value): ?array
@@ -327,6 +350,7 @@ class ProjectController extends Controller
             'clientPartnerId' => $project->client_partner_id,
             'githubUrl' => $project->github_url,
             'externalUrl' => $project->external_url,
+            'serviceIds' => $project->services->pluck('id')->values(),
             'partners' => $project->partners->map(fn (Partner $partner): array => [
                 'id' => $partner->id,
                 'name' => $partner->name,
@@ -364,6 +388,31 @@ class ProjectController extends Controller
             ->orderBy('name')
             ->get(['id', 'name'])
             ->map(fn (Partner $partner): array => ['value' => $partner->id, 'label' => $partner->name])
+            ->all());
+    }
+
+    /**
+     * Servicios seleccionables (desde `services`). Los activos/publicables van
+     * primero; los inactivos se marcan para no perder contexto en edición.
+     *
+     * @return list<array{value: int, label: string, inactive: bool}>
+     */
+    private function serviceOptions(): array
+    {
+        return array_values(Service::query()
+            ->orderByDesc('is_active')
+            ->ordered()
+            ->get(['id', 'title', 'is_active'])
+            ->map(function (Service $service): array {
+                $es = data_get($service->title, 'es');
+                $en = data_get($service->title, 'en');
+
+                return [
+                    'value' => $service->id,
+                    'label' => is_string($es) ? $es : (is_string($en) ? $en : '—'),
+                    'inactive' => ! $service->is_active,
+                ];
+            })
             ->all());
     }
 }

@@ -165,7 +165,9 @@ No cargar nada del `.odt` como real. Si no hay contenido confirmado: estados vac
 
 **Subfase 7.3 (CERRADA 26/06):** media de proyecto simplificada. Imagen única que alimenta portada **y** miniatura (sin subida manual de miniatura); logos de cliente color/monocromo + `logo_alt` añadidos a `projects` (migración aditiva aplicada con `migrate`); `ProjectImageService` convierte raster→WebP y conserva SVG. Tests `ProjectMediaTest` (Pest 192/192). Sin push.
 
-**Pendiente del bloque (próximas subfases):** snapshots/backup seeders (partners→projects), carga manual de assets de CIETE, revisión jurídica de textos legales y PII (IP/User-Agent) en privacidad. Eliminación definitiva de la columna `permission_status` queda para una migración futura aparte.
+**Subfase 7.4 (CERRADA 26/06):** presentación pública de Proyecto/Colaboraciones replanteada. Relación M:N `project_service` (servicio elegido desde `services`, no texto libre); detalle de proyecto sin `approved`/`permiso`/`Rol`/«Quién participa», con cliente+logo (color/mono por tema), chips de servicios y desarrollo solo/cooperativo; Colaboraciones muestra proyectos/casos (no logos sueltos) con estado vacío honesto. CIETE = desarrollado en solitario, asociado a 3 servicios reales. Tests `ProjectPresentationTest` (Pest 196/196). Sin push.
+
+**Pendiente del bloque (próximas subfases):** snapshots/backup seeders (partners→projects), revisión jurídica de textos legales y PII (IP/User-Agent) en privacidad. Eliminación definitiva de la columna `permission_status` queda para una migración futura aparte.
 
 ### Bloque 8 — Producción / despliegue (P1)
 

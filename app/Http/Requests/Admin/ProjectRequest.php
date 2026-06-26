@@ -125,6 +125,11 @@ abstract class ProjectRequest extends FormRequest
             'partners.*.id' => ['required', 'integer', 'exists:partners,id'],
             'partners.*.role' => ['required', 'string', Rule::in(['client', 'collaborator', 'technology_partner', 'brand', 'other'])],
             'partners.*.sort_order' => ['nullable', 'integer', 'min:0'],
+
+            // Servicios/capacidades reales del proyecto (desde `services`, no
+            // texto libre).
+            'services' => ['nullable', 'array'],
+            'services.*' => ['integer', 'exists:services,id'],
         ];
     }
 

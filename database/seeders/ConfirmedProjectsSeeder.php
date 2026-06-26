@@ -6,6 +6,7 @@ use App\Enums\PermissionStatus;
 use App\Enums\ProjectStatus;
 use App\Models\Project;
 use App\Models\SeoMetadata;
+use App\Models\Service;
 use Illuminate\Database\Seeder;
 
 /**
@@ -75,6 +76,13 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
                 'year' => 2026,
                 'client_name' => 'CIETE Arquitectos S.L.',
+                // Servicios/capacidades reales aplicadas, por slug de `services`
+                // (no IDs, no texto libre). Solo servicios ya existentes.
+                'service_slugs' => [
+                    'aplicaciones-a-medida',
+                    'crm-datos-y-procesos',
+                    'integraciones-digitales',
+                ],
                 'permission_notes' => 'Proyecto confirmado. Realizado sin partner ni colaborador externo.',
                 'sort_order' => 1,
                 'settings' => [
@@ -106,9 +114,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 'challenge' => $data['challenge'],
                 'solution' => $data['solution'],
                 'result' => $data['result'],
-                'cover_image' => null,
-                'thumbnail_image' => null,
-                'gallery' => [],
                 'technologies' => $data['technologies'],
                 'status' => ProjectStatus::Published->value,
                 'year' => $data['year'],
@@ -127,13 +132,22 @@ class ConfirmedProjectsSeeder extends Seeder
                 'settings' => $data['settings'],
             ];
 
+            // La media (cover/thumbnail/gallery/logos) se gestiona desde el CRUD;
+            // el seeder solo la inicializa al crear y NO la pisa en re-seed para
+            // no borrar assets subidos a mano.
+            $mediaDefaults = [
+                'cover_image' => null,
+                'thumbnail_image' => null,
+                'gallery' => [],
+            ];
+
             // Idempotente: localizar por slug ES (columna generada) sin duplicar.
             $project = Project::query()->where('slug_es', $data['slug']['es'])->first();
 
             if ($project) {
                 $project->update($attributes);
             } else {
-                $project = Project::create($attributes);
+                $project = Project::create($attributes + $mediaDefaults);
             }
 
             // SEO por entidad (patrón polimórfico de ServiceSeeder).
@@ -150,6 +164,22 @@ class ConfirmedProjectsSeeder extends Seeder
                     ],
                 );
             }
+
+            // Servicios reales por slug (no IDs). Solo asocia los que existen en
+            // BD; nunca crea servicios nuevos. Idempotente.
+            $serviceSlugs = $data['service_slugs'] ?? [];
+            $sync = [];
+            $order = 0;
+
+            foreach ($serviceSlugs as $slug) {
+                $service = Service::query()->where('slug_es', $slug)->first();
+
+                if ($service !== null) {
+                    $sync[$service->id] = ['sort_order' => $order += 1];
+                }
+            }
+
+            $project->services()->sync($sync);
         }
     }
 }

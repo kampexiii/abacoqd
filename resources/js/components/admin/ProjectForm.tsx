@@ -15,6 +15,11 @@ import { cn } from '@/lib/utils';
 export type LocalizedInput = { es: string; en: string };
 export type Option = { readonly value: string; readonly label: string };
 export type PartnerOption = { readonly value: number; readonly label: string };
+export type ServiceOption = {
+    readonly value: number;
+    readonly label: string;
+    readonly inactive: boolean;
+};
 export type ProjectPartner = {
     readonly id: number;
     readonly name: string;
@@ -48,6 +53,7 @@ export type AdminProjectRecord = {
     readonly isActive: boolean;
     readonly sortOrder: number;
     readonly partners: readonly ProjectPartner[];
+    readonly serviceIds: readonly number[];
 };
 
 const ROLE_OPTIONS = [
@@ -86,12 +92,14 @@ type ProjectFormData = {
     remove_logo_dark: boolean;
     logo_alt: string;
     partners: { id: number; role: string; sort_order: number }[];
+    services: number[];
 };
 
 type ProjectFormProps = {
     readonly mode: 'create' | 'edit';
     readonly statuses: readonly Option[];
     readonly partners: readonly PartnerOption[];
+    readonly services: readonly ServiceOption[];
     readonly project?: AdminProjectRecord;
     readonly defaultSortOrder?: number;
 };
@@ -106,6 +114,7 @@ export default function ProjectForm({
     mode,
     statuses,
     partners,
+    services,
     project,
     defaultSortOrder = 1,
 }: ProjectFormProps) {
@@ -143,6 +152,7 @@ export default function ProjectForm({
             role: p.role ?? 'other',
             sort_order: p.sortOrder ?? 0,
         })),
+        services: [...(project?.serviceIds ?? [])],
     });
 
     const { data, setData, processing } = form;
@@ -210,6 +220,15 @@ export default function ProjectForm({
                       ...data.partners,
                       { id, role: 'other', sort_order: data.partners.length },
                   ],
+        );
+    };
+
+    const toggleService = (id: number) => {
+        setData(
+            'services',
+            data.services.includes(id)
+                ? data.services.filter((serviceId) => serviceId !== id)
+                : [...data.services, id],
         );
     };
 
@@ -380,6 +399,45 @@ export default function ProjectForm({
                             />
                         </Field>
                     </div>
+                </FormSection>
+
+                <FormSection
+                    title="Servicios / capacidades"
+                    description="Selecciona los servicios relacionados con este proyecto. Se eligen desde Servicios; no es texto libre."
+                >
+                    {services.length === 0 ? (
+                        <p className="text-sm text-qd-text-medium dark:text-qd-white/50">
+                            No hay servicios disponibles. Crea servicios primero.
+                        </p>
+                    ) : (
+                        <div className="flex flex-col gap-2">
+                            {services.map((service) => (
+                                <label
+                                    key={service.value}
+                                    className="flex items-center gap-2 rounded-lg border border-qd-mist p-2 dark:border-qd-white/10"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        checked={data.services.includes(
+                                            service.value,
+                                        )}
+                                        onChange={() =>
+                                            toggleService(service.value)
+                                        }
+                                        className="size-4"
+                                    />
+                                    <span className="flex-1 text-sm text-qd-ink dark:text-qd-white">
+                                        {service.label}
+                                    </span>
+                                    {service.inactive && (
+                                        <span className="rounded-full bg-qd-mist px-2 py-0.5 text-xs font-semibold text-qd-text-medium dark:bg-qd-white/10">
+                                            Inactivo
+                                        </span>
+                                    )}
+                                </label>
+                            ))}
+                        </div>
+                    )}
                 </FormSection>
 
                 <FormSection
