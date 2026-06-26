@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Admin;
 
-use App\Enums\PermissionStatus;
 use App\Enums\ProjectStatus;
 use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
@@ -11,9 +10,10 @@ use Illuminate\Validation\Rule;
 /**
  * Reglas compartidas de validación de `projects` para crear/editar.
  *
- * Un proyecto publicado necesita título, slug y resumen en ES, además de
- * permiso aprobado (no se publica de cara al público sin permiso real del
- * cliente/colaborador).
+ * Un proyecto publicado necesita título, slug y resumen en ES. El permiso de
+ * publicación ya no se gestiona desde el panel; el controlador persiste
+ * `permission_status = approved` para el contenido creado/editado (la columna
+ * se conserva por compatibilidad con scopes existentes).
  */
 abstract class ProjectRequest extends FormRequest
 {
@@ -99,9 +99,6 @@ abstract class ProjectRequest extends FormRequest
             'client_partner_id' => ['nullable', 'integer', 'exists:partners,id'],
             'github_url' => ['nullable', 'url', 'max:2048'],
             'external_url' => ['nullable', 'url', 'max:2048'],
-
-            'permission_status' => ['required', Rule::enum(PermissionStatus::class)],
-            'permission_notes' => ['nullable', 'string', 'max:2000'],
 
             'show_on_home' => ['boolean'],
             'show_in_projects' => ['boolean'],

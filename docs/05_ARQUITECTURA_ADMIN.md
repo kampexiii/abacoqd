@@ -1,8 +1,10 @@
 Ñ# Arquitectura admin y contenido editable — AbacoQD
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 26 de junio de 2026.
 
 Fuente de verdad de arquitectura general del admin y de qué contenido debe ser editable. No implica crear migraciones ni tocar código en esta fase.
+
+> **Actualización Bloque 7 (26/06):** el concepto visible de **«Permiso»** se retiró del admin de proyectos y partners: sin columna `Permiso` en los listados, sin selector/notas de permiso en los formularios, sin badges Pendiente/Aprobado/Rechazado/Desconocido. La gestión queda basada en **Estado + Visibilidad** (activo/inactivo, home/proyectos/colaboraciones, destacado, orden). Crear o editar contenido implica que se puede usar; internamente se guarda `permission_status=approved` por compatibilidad (la columna no se elimina todavía).
 
 ## Estado técnico real
 

@@ -129,6 +129,20 @@ WIP        = archivos sin commit o sin decisión de cierre
 
 **WIP restante tras el bloque:** ninguno en el árbol salvo los cambios de documentación de este cierre. Sin push.
 
+### Bloque 7 — Proyectos / Partners / Colaboraciones — **EN CURSO** (26/06)
+
+**Subfase 7.7A — Seeder de CIETE — CERRADA (26/06):** creado `database/seeders/ConfirmedProjectsSeeder.php` (proyectos reales confirmados, idempotente por `slug_es`, SEO por entidad como `ServiceSeeder`) y registrado en `DatabaseSeeder`. CIETE (`ERP CIETE — Gestión interna de trabajos, pedidos y facturación`, `CIETE Arquitectos S.L.`, 2026) entra **sin partner ni `partner_project`**, sin imágenes (pendientes de carga manual desde el CRUD). Commit `4769f18`.
+
+**Subfase 7.2 — Limpieza legacy + retirada de «Permiso» — CERRADA (26/06):**
+
+- **Resuelve el riesgo legal P0** (§10): se elimina la fuga de marcas reales de terceros.
+- **Legacy retirado:** `AbacoHistoricalProjectsSeeder` eliminado y descolgado de `DatabaseSeeder`; en una migración total ya no vuelven Meliá, Iberia, Leroy Merlin, Jack & Jones, Wible, Malababa, etc.
+- **BD local limpiada** (transacción): `partner_project`, `reviews`, `projects` y `partners` borrados; reseed solo de CIETE. Estado final: **1 proyecto (CIETE), 0 partners, 0 `partner_project`, 0 reviews**. Backup local no commiteable `database/database.before-bloque7-legacy-clean.sqlite` (gitignored).
+- **Fallback estático eliminado:** `resources/js/data/company-logos.ts` borrado y `CollaborationsSection.tsx` deja de usar logos hardcodeados. Si la BD no devuelve partners publicables, la noria muestra **estado vacío honesto** (sin marcas de terceros, sin copy de «permiso»).
+- **Concepto visible de «Permiso» retirado del admin:** columnas `Permiso` fuera de los listados de proyectos/partners; selects/notas de permiso fuera de los formularios; `permissionStatuses` ya no se envía desde los controladores. La publicación se gestiona por **estado + visibilidad** (`status`, `is_active`, `show_on_home`, `show_in_projects`, `show_in_collaborations`, `is_featured`, orden).
+- **Compatibilidad interna:** la columna `permission_status` **no se elimina** (sin migración en esta subfase); el contenido creado/editado desde CRUD o seeders se persiste como `approved`. Los scopes públicos (`permitted`, `publiclyListable`) y el enum `PermissionStatus` se conservan intactos; al quedar todo `approved`, no bloquean.
+- **Validaciones:** `types:check`, `lint:check`, `build` OK; `composer test` **Pint OK · PHPStan 0 · Pest 189/189**. Sin push.
+
 ---
 
 ## 1. Resumen ejecutivo
@@ -341,7 +355,7 @@ Honeypot (`prohibited`) + `throttle:public-forms` 6/min/IP + consentimiento. Opc
 
 ## 10. Riesgos legales
 
-- **(P0) Proyectos/partners de terceros publicados sin permiso confirmado.** 11 proyectos y 17 partners con marcas reales (Iberia, Meliá, Leroy Merlin, Jack & Jones, Wible, Cognodata…) están `is_active` y visibles en home/proyectos/colaboraciones. El backlog lista "Proyectos/logos/capturas/reseñas **con permiso**" como pendiente y el brief prohíbe publicar datos sin permiso. **Mientras no haya autorización**, esto es exposición legal/reputacional. Recomendación (decisión, no tocar ahora): despublicar o marcar como demo hasta confirmar permisos. (CIETE no es excepción: aparece solo como ejemplo en la plantilla de Pablo, no como proyecto autorizado.)
+- **(P0 — RESUELTO 26/06, Bloque 7 subfase 7.2)** ~~Proyectos/partners de terceros publicados sin permiso confirmado.~~ Los 11 proyectos y 17 partners legacy (Iberia, Meliá, Leroy Merlin, Jack & Jones, Wible, Cognodata…) se eliminaron de la BD local, su seeder (`AbacoHistoricalProjectsSeeder`) se retiró, y el fallback estático de marcas reales en Colaboraciones (`company-logos.ts`) se borró. Queda **solo CIETE** como proyecto real confirmado por Pablo. La gestión visible de «permiso» se retiró del admin: la publicación se controla por estado + visibilidad y `permission_status` queda como compatibilidad interna (`approved`).
 - **(P1) Textos legales en borrador**: aviso legal/privacidad/cookies pendientes de revisión jurídica. La **privacidad debe reflejar** el almacenamiento de IP/User-Agent y la retención de leads/reservas.
 - **(P1) Cookies**: el aviso actual es solo de cookies técnicas y **coincide** con la realidad (sin analítica). Verificar que el texto de `/cookies` no prometa herramientas no activas y explique el `localStorage` del propio aviso.
 - **(DEP-ANDRÉS)** Teléfono legal principal, datos de la S.L., política de `abacodev.com` y ubicación obligatoria de logos UE/FSE+.

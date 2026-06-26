@@ -7,11 +7,10 @@ import AdminLayout from '@/layouts/admin-layout';
 type EditProps = {
     readonly project: AdminProjectRecord;
     readonly statuses: readonly Option[];
-    readonly permissionStatuses: readonly Option[];
     readonly partners: readonly PartnerOption[];
 };
 
-export default function ProjectsEdit({ project, statuses, permissionStatuses, partners }: EditProps) {
+export default function ProjectsEdit({ project, statuses, partners }: EditProps) {
     const name = project.title?.es ?? project.title?.en ?? 'Editar proyecto';
 
     return (
@@ -24,7 +23,7 @@ export default function ProjectsEdit({ project, statuses, permissionStatuses, pa
             ]}
         >
             <Head title={`Editar · ${name} · Admin AbacoQD`} />
-            <ProjectForm mode="edit" statuses={statuses} permissionStatuses={permissionStatuses} partners={partners} project={project} />
+            <ProjectForm mode="edit" statuses={statuses} partners={partners} project={project} />
         </AdminLayout>
     );
 }

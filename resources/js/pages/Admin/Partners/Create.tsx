@@ -6,11 +6,10 @@ import AdminLayout from '@/layouts/admin-layout';
 
 type CreateProps = {
     readonly types: readonly Option[];
-    readonly permissionStatuses: readonly Option[];
     readonly nextSortOrder: number;
 };
 
-export default function PartnersCreate({ types, permissionStatuses, nextSortOrder }: CreateProps) {
+export default function PartnersCreate({ types, nextSortOrder }: CreateProps) {
     return (
         <AdminLayout
             title="Nuevo partner"
@@ -21,7 +20,7 @@ export default function PartnersCreate({ types, permissionStatuses, nextSortOrde
             ]}
         >
             <Head title="Nuevo partner · Admin AbacoQD" />
-            <PartnerForm mode="create" types={types} permissionStatuses={permissionStatuses} defaultSortOrder={nextSortOrder} />
+            <PartnerForm mode="create" types={types} defaultSortOrder={nextSortOrder} />
         </AdminLayout>
     );
 }

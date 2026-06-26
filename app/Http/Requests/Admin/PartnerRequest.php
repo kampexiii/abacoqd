@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Admin;
 
 use App\Enums\PartnerType;
-use App\Enums\PermissionStatus;
 use App\Enums\UserRole;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -13,8 +12,9 @@ use Illuminate\Validation\Rule;
  *
  * `name`/`slug` son columnas planas (no bilingües, a diferencia de
  * `services`/`posts`): el modelo y la migración cerrada de Fase 2 no
- * versionan partners por idioma. Solo se publica de cara al público con
- * `permission_status = approved` (gating de permisos de marca).
+ * versionan partners por idioma. El permiso de publicación ya no se gestiona
+ * desde el panel; el controlador persiste `permission_status = approved` para
+ * el contenido creado/editado (la columna se conserva por compatibilidad).
  */
 abstract class PartnerRequest extends FormRequest
 {
@@ -50,7 +50,6 @@ abstract class PartnerRequest extends FormRequest
      */
     public function rules(): array
     {
-        $approved = $this->input('permission_status') === PermissionStatus::Approved->value;
         $ignoreId = $this->ignorePartnerId();
 
         return [
@@ -65,7 +64,7 @@ abstract class PartnerRequest extends FormRequest
             'remove_logo' => ['boolean'],
             'logo_dark' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
             'remove_logo_dark' => ['boolean'],
-            'logo_alt' => [Rule::requiredIf($approved), 'nullable', 'string', 'max:255'],
+            'logo_alt' => ['nullable', 'string', 'max:255'],
 
             'website' => ['nullable', 'url', 'max:2048'],
 
@@ -76,9 +75,6 @@ abstract class PartnerRequest extends FormRequest
             'description' => ['nullable', 'array'],
             'description.es' => ['nullable', 'string', 'max:2000'],
             'description.en' => ['nullable', 'string', 'max:2000'],
-
-            'permission_status' => ['required', Rule::enum(PermissionStatus::class)],
-            'permission_notes' => ['nullable', 'string', 'max:2000'],
 
             'show_in_collaborations' => ['boolean'],
             'is_active' => ['boolean'],
@@ -96,7 +92,6 @@ abstract class PartnerRequest extends FormRequest
             'slug.required' => 'El slug es obligatorio.',
             'slug.unique' => 'Ya existe un partner con ese slug.',
             'slug.regex' => 'El slug solo admite minúsculas, números y guiones.',
-            'logo_alt.required' => 'El texto alternativo del logo es obligatorio para mostrar este partner con permiso aprobado.',
         ];
     }
 }

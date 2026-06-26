@@ -7,10 +7,9 @@ import AdminLayout from '@/layouts/admin-layout';
 type EditProps = {
     readonly partner: AdminPartnerRecord;
     readonly types: readonly Option[];
-    readonly permissionStatuses: readonly Option[];
 };
 
-export default function PartnersEdit({ partner, types, permissionStatuses }: EditProps) {
+export default function PartnersEdit({ partner, types }: EditProps) {
     return (
         <AdminLayout
             title={partner.name}
@@ -21,7 +20,7 @@ export default function PartnersEdit({ partner, types, permissionStatuses }: Edi
             ]}
         >
             <Head title={`Editar · ${partner.name} · Admin AbacoQD`} />
-            <PartnerForm mode="edit" types={types} permissionStatuses={permissionStatuses} partner={partner} />
+            <PartnerForm mode="edit" types={types} partner={partner} />
         </AdminLayout>
     );
 }

@@ -1,8 +1,10 @@
 # ADMIN_02 — Contenido, marca, servicios, partners y proyectos
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 26 de junio de 2026.
 
 Gestión del contenido público, marca, settings, metodología, servicios, proyectos, partners, reviews y legal/cookies editable (página pública **Proyectos** y sección de landing **Colaboraciones**). Patrones comunes en `ADMIN_01_LAYOUT_DASHBOARD_PATRONES.md`.
+
+> **Actualización Bloque 7 (26/06):** los CRUD de **proyectos** y **partners** ya no exponen el campo/columna **«Permiso»**. El listado y el formulario se gestionan por **Estado + Visibilidad** (estado del proyecto, activo, home/proyectos/colaboraciones, destacado, orden) y, en partners, por activo + noria de Colaboraciones. `permission_status` se persiste internamente como `approved`. El partner sigue soportando **logo color (`logo`) + logo monocromo (`logo_dark`)** + `logo_alt`; el proyecto, de momento, cover/thumbnail/gallery (logo color/mono de proyecto queda para la subfase de media pipeline).
 
 ## 1. Settings / marca / datos corporativos
 

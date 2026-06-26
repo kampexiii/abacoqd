@@ -35,13 +35,11 @@ export type AdminProjectRecord = {
     readonly thumbnailImage: string | null;
     readonly technologies: readonly string[];
     readonly status: string;
-    readonly permissionStatus: string;
     readonly year: number | null;
     readonly clientName: string | null;
     readonly clientPartnerId: number | null;
     readonly githubUrl: string | null;
     readonly externalUrl: string | null;
-    readonly permissionNotes: string | null;
     readonly showOnHome: boolean;
     readonly showInProjects: boolean;
     readonly showInCollaborations: boolean;
@@ -73,8 +71,6 @@ type ProjectFormData = {
     client_partner_id: number | '';
     github_url: string;
     external_url: string;
-    permission_status: string;
-    permission_notes: string;
     show_on_home: boolean;
     show_in_projects: boolean;
     show_in_collaborations: boolean;
@@ -90,7 +86,6 @@ type ProjectFormData = {
 type ProjectFormProps = {
     readonly mode: 'create' | 'edit';
     readonly statuses: readonly Option[];
-    readonly permissionStatuses: readonly Option[];
     readonly partners: readonly PartnerOption[];
     readonly project?: AdminProjectRecord;
     readonly defaultSortOrder?: number;
@@ -105,7 +100,6 @@ function localized(
 export default function ProjectForm({
     mode,
     statuses,
-    permissionStatuses,
     partners,
     project,
     defaultSortOrder = 1,
@@ -127,8 +121,6 @@ export default function ProjectForm({
         client_partner_id: project?.clientPartnerId ?? '',
         github_url: project?.githubUrl ?? '',
         external_url: project?.externalUrl ?? '',
-        permission_status: project?.permissionStatus ?? 'pending',
-        permission_notes: project?.permissionNotes ?? '',
         show_on_home: project?.showOnHome ?? false,
         show_in_projects: project?.showInProjects ?? true,
         show_in_collaborations: project?.showInCollaborations ?? false,
@@ -582,49 +574,6 @@ export default function ProjectForm({
                                         Number(e.target.value),
                                     )
                                 }
-                            />
-                        </Field>
-                    </div>
-                </FormSection>
-
-                <FormSection
-                    title="Permiso de publicación"
-                    description="Solo proyectos aprobados se publican."
-                >
-                    <div className="flex flex-col gap-4">
-                        <Field
-                            label="Estado del permiso"
-                            error={errors.permission_status}
-                        >
-                            <select
-                                value={data.permission_status}
-                                onChange={(e) =>
-                                    setData('permission_status', e.target.value)
-                                }
-                                className={selectClass}
-                            >
-                                {permissionStatuses.map((option) => (
-                                    <option
-                                        key={option.value}
-                                        value={option.value}
-                                    >
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </Field>
-
-                        <Field
-                            label="Notas de permiso"
-                            error={errors.permission_notes}
-                        >
-                            <textarea
-                                value={data.permission_notes}
-                                onChange={(e) =>
-                                    setData('permission_notes', e.target.value)
-                                }
-                                rows={3}
-                                className={textareaClass}
                             />
                         </Field>
                     </div>

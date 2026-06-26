@@ -321,7 +321,13 @@
             "title": "Projects and collaborations that connect experience, technology and business",
             "lead": "We work on our own projects, collaborative initiatives or projects developed alongside partners, always adapting the solution to each client's real context.",
             "cta": "View projects",
-            "visualAria": "Collaboration and partner logos pending publication permission"
+            "visualAria": "Project and collaboration logos",
+            "empty": {
+                "title": "First cases in preparation.",
+                "subtitle": "We are preparing the next publishable projects.",
+                "services": "View services",
+                "contact": "Tell us about your project"
+            }
         },
         "blog": {
             "eyebrow": "BLOG",

@@ -31,7 +31,6 @@ type ProjectRow = {
     readonly title: LocalizedText | null;
     readonly slug: LocalizedText | null;
     readonly status: string;
-    readonly permissionStatus: string;
     readonly coverImage: string | null;
     readonly clientName: string | null;
     readonly year: number | null;
@@ -50,13 +49,6 @@ const STATUS_LABEL: Record<string, string> = {
     draft: 'Borrador',
     published: 'Publicado',
     hidden: 'Oculto',
-};
-
-const PERMISSION_LABEL: Record<string, string> = {
-    pending: 'Pendiente',
-    approved: 'Aprobado',
-    rejected: 'Rechazado',
-    unknown: 'Desconocido',
 };
 
 function patch(id: number, action: string) {
@@ -180,7 +172,6 @@ export default function ProjectsIndex({ projects, filters }: IndexProps) {
                                     <th className="px-4 py-3">Proyecto</th>
                                     <th className="px-4 py-3">Cliente</th>
                                     <th className="px-4 py-3">Estado</th>
-                                    <th className="px-4 py-3">Permiso</th>
                                     <th className="px-4 py-3 text-center">
                                         Home
                                     </th>
@@ -231,21 +222,6 @@ export default function ProjectsIndex({ projects, filters }: IndexProps) {
                                             <span className="rounded-full bg-qd-mist px-2.5 py-1 text-xs font-semibold dark:bg-qd-white/10">
                                                 {STATUS_LABEL[project.status] ??
                                                     project.status}
-                                            </span>
-                                        </td>
-                                        <td className="px-4 py-3">
-                                            <span
-                                                className={cn(
-                                                    'rounded-full px-2.5 py-1 text-xs font-semibold',
-                                                    project.permissionStatus ===
-                                                        'approved'
-                                                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'
-                                                        : 'bg-qd-mist dark:bg-qd-white/10',
-                                                )}
-                                            >
-                                                {PERMISSION_LABEL[
-                                                    project.permissionStatus
-                                                ] ?? project.permissionStatus}
                                             </span>
                                         </td>
                                         <td className="px-4 py-3 text-center">

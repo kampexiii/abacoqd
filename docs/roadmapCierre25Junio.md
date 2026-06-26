@@ -33,7 +33,7 @@ Leyenda: `P0` bloquea producción/seguridad · `P1` importante antes de producci
 | 4 | Cierre de WIP local (shim CSP, blog assets, seeders, docs) | **WIP** | ✅ **CERRADO** (26/06; 4 commits por rutas explícitas, sin push) |
 | 5 | Contenido DEMO/plantilla/placeholder | **DEP-ANDRÉS** | Andrés |
 | 6 | Contenido pendiente de Andrés | **DEP-ANDRÉS** | Andrés |
-| 7 | Legal/permisos proyectos·partners·logos·capturas·reseñas | **P0 legal** | Andrés + decisión |
+| 7 | Proyectos/Partners/Colaboraciones (limpieza legacy + media + CIETE) | **P0 legal** | 🔄 **EN CURSO** (7.7A + 7.2 cerradas 26/06; P0 legal resuelto) |
 | 8 | Producción/despliegue | **P1** | bloques 1-3 |
 | 9 | QA final (cross-browser + a11y) | **P1** | bloques 1-8 |
 | — | CSP estricta (flip report-only → enforce) | **DECISIÓN/P1** | tras tunear |
@@ -157,9 +157,13 @@ Cerrado por rutas explícitas, sin `git add .`/`-A`, sin push, sin tocar BD/seed
 
 No cargar nada del `.odt` como real. Si no hay contenido confirmado: estados vacíos honestos o marcado DEMO. Pendiente de Andrés: textos "Quiénes somos", catálogo real de servicios y metodología, proyectos reales, fotos/bios de equipo, reseñas reales, emails finales, usuario real del panel, teléfono legal, redes, horarios, política de `abacodev.com`.
 
-### Bloque 7 — Legal / permisos (P0 legal)
+### Bloque 7 — Proyectos / Partners / Colaboraciones — **EN CURSO** (26/06)
 
-11 proyectos + 17 partners con marcas reales **publicados sin permiso confirmado**. Decisión (no técnica): despublicar o marcar DEMO hasta autorización expresa. No publicar CIETE, servicios, metodología, bio de Pablo ni reseñas/logos sin confirmación. Adaptar textos legales (revisión jurídica), declarar PII (IP/User-Agent) en privacidad.
+**Subfase 7.7A (CERRADA 26/06):** `ConfirmedProjectsSeeder` con CIETE (proyecto real, en solitario, sin partner). Commit `4769f18`.
+
+**Subfase 7.2 (CERRADA 26/06):** resuelto el **P0 legal**. Eliminados los 11 proyectos + 17 partners legacy de la BD local; retirado `AbacoHistoricalProjectsSeeder`; borrado el fallback estático de marcas (`company-logos.ts`) con estado vacío honesto en Colaboraciones. **Queda solo CIETE.** Retirado el concepto visible de «Permiso» del admin: la publicación se controla por estado + visibilidad; `permission_status` queda como compatibilidad interna (`approved`), sin migración (la columna no se elimina todavía). Validaciones verdes (Pest 189/189). Sin push. Detalle en [auditoría §0 · Bloque 7](auditoria25Junio.md).
+
+**Pendiente del bloque (próximas subfases):** media pipeline color/mono para Project (migración + `ProjectImageService` SVG), snapshots/backup seeders (partners→projects), carga manual de assets de CIETE, revisión jurídica de textos legales y PII (IP/User-Agent) en privacidad. Eliminación definitiva de la columna `permission_status` queda para una migración futura aparte.
 
 ### Bloque 8 — Producción / despliegue (P1)
 
@@ -288,6 +292,7 @@ Nota: el `.env` local con el SMTP de pruebas y `BOOKING_NOTIFY_EMAIL` lo configu
 - ~~`featured_image` del seeder editorial y si entra en `DatabaseSeeder`~~ → **resuelto (26/06)**: seeders editoriales de blog descartados; portadas versionadas como assets.
 - ~~¿Se versiona el `.odt`?~~ → **resuelto (26/06)**: no se versiona, ignorado en `.gitignore`.
 - Diseñar el mecanismo futuro de **backup/snapshot** de contenido crítico (servicios/proyectos/partners/equipo/settings) — pendiente de diseño y confirmación.
-- Auditoría de seeders: revisar `TeamMemberSeeder`, `AbacoHistoricalProjectsSeeder` (riesgo legal Bloque 7) y el `Test User`/`AdminUserSeeder` (guardas de entorno).
+- Auditoría de seeders: ~~`AbacoHistoricalProjectsSeeder` (riesgo legal Bloque 7)~~ → **eliminado (26/06, subfase 7.2)**; revisar aún `TeamMemberSeeder` y el `Test User`/`AdminUserSeeder` (guardas de entorno).
+- ~~Permisos de proyectos/partners~~ → **resuelto (26/06)**: gestión visible de «permiso» retirada del admin; columna `permission_status` queda como compatibilidad interna (`approved`); eliminación de la columna pendiente de migración futura.
 - ¿`BOOKING_NOTIFY_EMAIL` separada (recomendado, con fallback a contacto) o receptor compartido?
 - Permisos de proyectos/partners/logos/reseñas (negocio + Andrés).

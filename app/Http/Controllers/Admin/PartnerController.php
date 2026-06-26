@@ -54,7 +54,6 @@ class PartnerController extends Controller
     {
         return Inertia::render('Admin/Partners/Create', [
             'types' => $this->typeOptions(),
-            'permissionStatuses' => $this->permissionStatusOptions(),
             'nextSortOrder' => (int) (Partner::max('sort_order') ?? 0) + 1,
         ]);
     }
@@ -75,7 +74,6 @@ class PartnerController extends Controller
         return Inertia::render('Admin/Partners/Edit', [
             'partner' => $this->adminRecord($partner),
             'types' => $this->typeOptions(),
-            'permissionStatuses' => $this->permissionStatusOptions(),
         ]);
     }
 
@@ -132,8 +130,10 @@ class PartnerController extends Controller
             'website' => $request->validated('website'),
             'social_links' => $this->normalizeSocialLinks($request->validated('social_links')),
             'description' => $this->localized($request->validated('description')),
-            'permission_status' => $request->validated('permission_status'),
-            'permission_notes' => $request->validated('permission_notes'),
+            // El permiso de publicación ya no se gestiona desde el panel: crear o
+            // editar un partner implica que se puede usar. Se persiste `approved`
+            // internamente por compatibilidad con scopes/columna existentes.
+            'permission_status' => PermissionStatus::Approved->value,
             'show_in_collaborations' => $request->boolean('show_in_collaborations'),
             'is_active' => $request->boolean('is_active'),
             'sort_order' => (int) $request->validated('sort_order'),
@@ -216,7 +216,6 @@ class PartnerController extends Controller
             'slug' => $partner->slug,
             'type' => $partner->type->value,
             'logo' => $partner->logo,
-            'permissionStatus' => $partner->permission_status->value,
             'isActive' => $partner->is_active,
             'showInCollaborations' => $partner->show_in_collaborations,
             'sortOrder' => $partner->sort_order,
@@ -236,7 +235,6 @@ class PartnerController extends Controller
             'website' => $partner->website,
             'socialLinks' => $partner->social_links,
             'description' => $partner->description,
-            'permissionNotes' => $partner->permission_notes,
         ];
     }
 
@@ -251,19 +249,6 @@ class PartnerController extends Controller
             ['value' => PartnerType::Provider->value, 'label' => 'Proveedor'],
             ['value' => PartnerType::Institutional->value, 'label' => 'Institucional'],
             ['value' => PartnerType::Other->value, 'label' => 'Otro'],
-        ];
-    }
-
-    /**
-     * @return list<array{value: string, label: string}>
-     */
-    private function permissionStatusOptions(): array
-    {
-        return [
-            ['value' => PermissionStatus::Pending->value, 'label' => 'Pendiente'],
-            ['value' => PermissionStatus::Approved->value, 'label' => 'Aprobado'],
-            ['value' => PermissionStatus::Rejected->value, 'label' => 'Rechazado'],
-            ['value' => PermissionStatus::Unknown->value, 'label' => 'Desconocido'],
         ];
     }
 }

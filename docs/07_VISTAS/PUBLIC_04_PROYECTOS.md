@@ -1,8 +1,10 @@
 # PUBLIC_04 — Proyectos
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 26 de junio de 2026.
 
 Fuente de verdad de la página pública **Proyectos**: listado, detalle de proyecto y de la **sección Colaboraciones** dentro de la landing (bloque de logos, marcas y trabajos). Recupera y sustituye los antiguos borradores de portafolio y detalle de portafolio (ya retirados del archivo).
+
+> **Actualización Bloque 7 (26/06):** se eliminó el contenido legacy (11 proyectos + 17 partners de terceros) de la BD y su seeder. Queda **solo CIETE** como proyecto real confirmado, visible en `/proyectos`. La **sección Colaboraciones ya no tiene fallback estático de marcas reales** (`company-logos.ts` borrado): se alimenta solo de partners publicables desde BD y, si no hay, muestra un **estado vacío honesto** (sin logos de terceros, sin copy de «permiso»). La visibilidad pública se controla por estado + visibilidad; `permission_status` queda como compatibilidad interna (`approved`).
 
 > Naming final: el **topbar y la página pública** se llaman **Proyectos** (`/proyectos`). La **sección de la landing** con logos/empresas/trabajos se llama **Colaboraciones**. El **modelo interno** es `projects`, `partners`, `partner_project`. No se usa "Portafolios" como término público activo.
 

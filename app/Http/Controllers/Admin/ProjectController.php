@@ -57,7 +57,6 @@ class ProjectController extends Controller
     {
         return Inertia::render('Admin/Projects/Create', [
             'statuses' => $this->statusOptions(),
-            'permissionStatuses' => $this->permissionStatusOptions(),
             'partners' => $this->partnerOptions(),
             'nextSortOrder' => (int) (Project::max('sort_order') ?? 0) + 1,
         ]);
@@ -80,7 +79,6 @@ class ProjectController extends Controller
         return Inertia::render('Admin/Projects/Edit', [
             'project' => $this->adminRecord($project),
             'statuses' => $this->statusOptions(),
-            'permissionStatuses' => $this->permissionStatusOptions(),
             'partners' => $this->partnerOptions(),
         ]);
     }
@@ -159,8 +157,10 @@ class ProjectController extends Controller
             'client_partner_id' => $request->validated('client_partner_id'),
             'github_url' => $request->validated('github_url'),
             'external_url' => $request->validated('external_url'),
-            'permission_status' => $request->validated('permission_status'),
-            'permission_notes' => $request->validated('permission_notes'),
+            // El permiso de publicación ya no se gestiona desde el panel: crear o
+            // editar un proyecto implica que se puede publicar. Se persiste
+            // `approved` internamente por compatibilidad con scopes/columna.
+            'permission_status' => PermissionStatus::Approved->value,
             'show_on_home' => $request->boolean('show_on_home'),
             'show_in_projects' => $request->boolean('show_in_projects'),
             'show_in_collaborations' => $request->boolean('show_in_collaborations'),
@@ -249,7 +249,6 @@ class ProjectController extends Controller
             'title' => $project->title,
             'slug' => $project->slug,
             'status' => $project->status->value,
-            'permissionStatus' => $project->permission_status->value,
             'coverImage' => $project->cover_image,
             'clientName' => $project->client_name ?? $project->clientPartner?->name,
             'year' => $project->year,
@@ -280,7 +279,6 @@ class ProjectController extends Controller
             'clientPartnerId' => $project->client_partner_id,
             'githubUrl' => $project->github_url,
             'externalUrl' => $project->external_url,
-            'permissionNotes' => $project->permission_notes,
             'partners' => $project->partners->map(fn (Partner $partner): array => [
                 'id' => $partner->id,
                 'name' => $partner->name,
@@ -306,19 +304,6 @@ class ProjectController extends Controller
             ['value' => ProjectStatus::Draft->value, 'label' => 'Borrador'],
             ['value' => ProjectStatus::Published->value, 'label' => 'Publicado'],
             ['value' => ProjectStatus::Hidden->value, 'label' => 'Oculto'],
-        ];
-    }
-
-    /**
-     * @return list<array{value: string, label: string}>
-     */
-    private function permissionStatusOptions(): array
-    {
-        return [
-            ['value' => PermissionStatus::Pending->value, 'label' => 'Pendiente'],
-            ['value' => PermissionStatus::Approved->value, 'label' => 'Aprobado'],
-            ['value' => PermissionStatus::Rejected->value, 'label' => 'Rechazado'],
-            ['value' => PermissionStatus::Unknown->value, 'label' => 'Desconocido'],
         ];
     }
 

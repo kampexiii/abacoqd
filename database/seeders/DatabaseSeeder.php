@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
             BookingSettingsSeeder::class,
             FaqSeeder::class,
             SeoMetadataSeeder::class,
-            AbacoHistoricalProjectsSeeder::class,
             ConfirmedProjectsSeeder::class,
             TeamMemberSeeder::class,
             AdminUserSeeder::class,

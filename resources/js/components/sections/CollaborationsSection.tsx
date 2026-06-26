@@ -1,9 +1,7 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Send } from 'lucide-react';
 import { useEffect, useMemo, useRef } from 'react';
 
 import type { CSSProperties } from 'react';
-import type { CompanyLogo } from '@/data/company-logos';
-import { COMPANY_LOGOS } from '@/data/company-logos';
 import { useInView } from '@/hooks/use-in-view';
 import { useLanguage } from '@/hooks/use-language';
 import { cn } from '@/lib/utils';
@@ -23,10 +21,6 @@ type CollaborationsSectionProps = {
     readonly items?: readonly CollaborationItem[];
 };
 
-type ReadyCompanyLogo = CompanyLogo & {
-    readonly logoLight: string;
-};
-
 type OrbitLogo = {
     readonly slug: string;
     readonly name: string;
@@ -37,30 +31,6 @@ type OrbitLogo = {
     readonly isHistorical: boolean;
     readonly isApproved: boolean;
 };
-
-const isReadyLogo = (logo: CompanyLogo): logo is ReadyCompanyLogo =>
-    logo.logoReady && typeof logo.logoLight === 'string';
-
-const isActiveReadyLogo = (logo: CompanyLogo): logo is ReadyCompanyLogo =>
-    logo.active && isReadyLogo(logo);
-
-/**
- * Fallback temporal: la fuente principal de Colaboraciones es BD vía props
- * (`partners`, `projects`, `partner_project`). Este estático solo evita dejar
- * la landing vacía si no hay registros renderizables en preview local.
- */
-const FALLBACK_ORBIT_LOGOS: readonly OrbitLogo[] = COMPANY_LOGOS.filter(
-    isActiveReadyLogo,
-).map((logo) => ({
-    slug: logo.slug,
-    name: logo.name,
-    logoLight: logo.logoLight,
-    logoDark: logo.logoDark,
-    alt: logo.alt,
-    href: logo.url ?? `/proyectos#${logo.slug}`,
-    isHistorical: false,
-    isApproved: true,
-}));
 
 const FULL_ROTATION_MS = 56_000;
 const ORBIT_RADIUS_PERCENT = 35.5;
@@ -219,21 +189,23 @@ const toOrbitLogo = (
     isApproved: item.isApproved ?? false,
 });
 
+/**
+ * La sección Colaboraciones se alimenta SOLO de datos reales desde BD
+ * (`partners`/`projects` vía props). No hay fallback estático de marcas: si no
+ * hay registros publicables, la sección muestra un estado vacío honesto, sin
+ * mostrar logos de terceros.
+ */
 const resolveOrbitLogos = (
     items: readonly CollaborationItem[] | undefined,
-): readonly OrbitLogo[] => {
-    const databaseLogos = (items ?? [])
-        .filter(isReadyCollaborationItem)
-        .map(toOrbitLogo);
-
-    return databaseLogos.length > 0 ? databaseLogos : FALLBACK_ORBIT_LOGOS;
-};
+): readonly OrbitLogo[] =>
+    (items ?? []).filter(isReadyCollaborationItem).map(toOrbitLogo);
 
 export default function CollaborationsSection({
     items,
 }: CollaborationsSectionProps) {
     const { t } = useLanguage();
     const orbitLogos = useMemo(() => resolveOrbitLogos(items), [items]);
+    const hasLogos = orbitLogos.length > 0;
     const { ref, inView } = useInView<HTMLDivElement>({ threshold: 0.12 });
     const orbitRef = useRef<HTMLDivElement>(null);
     const bubbleRefs = useRef<Array<HTMLAnchorElement | null>>([]);
@@ -375,14 +347,67 @@ export default function CollaborationsSection({
                         </a>
                     </div>
 
-                    <div
-                        ref={orbitRef}
-                        className={cn(
-                            'qd-collab-orbital abaco-reveal',
-                            inView && 'is-visible',
-                        )}
-                        aria-label={t('home.collaborations.visualAria')}
-                    >
+                    {!hasLogos ? (
+                        <div
+                            className={cn(
+                                'qd-collab-empty abaco-reveal',
+                                inView && 'is-visible',
+                            )}
+                        >
+                            <a
+                                href="/proyectos"
+                                className="qd-collab-empty__mark"
+                                aria-label={t('home.collaborations.cta')}
+                            >
+                                <img
+                                    src="/assets/branding/marca/logos/abacoqd-lockup-mono-ink.svg"
+                                    alt=""
+                                    aria-hidden="true"
+                                    className="qd-collab-empty__mark-logo qd-collab-empty__mark-logo--light"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                                <img
+                                    src="/assets/branding/marca/logos/abacoqd-lockup-mono-white.svg"
+                                    alt=""
+                                    aria-hidden="true"
+                                    className="qd-collab-empty__mark-logo qd-collab-empty__mark-logo--dark"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            </a>
+                            <h3 className="qd-collab-empty__title">
+                                {t('home.collaborations.empty.title')}
+                            </h3>
+                            <p className="qd-collab-empty__text">
+                                {t('home.collaborations.empty.subtitle')}
+                            </p>
+                            <div className="qd-collab-empty__actions">
+                                <a
+                                    href="/servicios"
+                                    className="qd-collab-empty__cta qd-collab-empty__cta--ghost"
+                                >
+                                    {t('home.collaborations.empty.services')}
+                                    <ArrowRight aria-hidden="true" size={16} />
+                                </a>
+                                <a
+                                    href="/contacto"
+                                    className="qd-collab-empty__cta qd-collab-empty__cta--solid"
+                                >
+                                    {t('home.collaborations.empty.contact')}
+                                    <Send aria-hidden="true" size={16} />
+                                </a>
+                            </div>
+                        </div>
+                    ) : (
+                        <div
+                            ref={orbitRef}
+                            className={cn(
+                                'qd-collab-orbital abaco-reveal',
+                                inView && 'is-visible',
+                            )}
+                            aria-label={t('home.collaborations.visualAria')}
+                        >
                         <span
                             className="qd-collab-orbital__track"
                             aria-hidden="true"
@@ -484,7 +509,8 @@ export default function CollaborationsSection({
                                 </a>
                             );
                         })}
-                    </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </section>

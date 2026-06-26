@@ -6,12 +6,11 @@ import AdminLayout from '@/layouts/admin-layout';
 
 type CreateProps = {
     readonly statuses: readonly Option[];
-    readonly permissionStatuses: readonly Option[];
     readonly partners: readonly PartnerOption[];
     readonly nextSortOrder: number;
 };
 
-export default function ProjectsCreate({ statuses, permissionStatuses, partners, nextSortOrder }: CreateProps) {
+export default function ProjectsCreate({ statuses, partners, nextSortOrder }: CreateProps) {
     return (
         <AdminLayout
             title="Nuevo proyecto"
@@ -25,7 +24,6 @@ export default function ProjectsCreate({ statuses, permissionStatuses, partners,
             <ProjectForm
                 mode="create"
                 statuses={statuses}
-                permissionStatuses={permissionStatuses}
                 partners={partners}
                 defaultSortOrder={nextSortOrder}
             />

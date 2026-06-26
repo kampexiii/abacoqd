@@ -22,7 +22,6 @@ type PartnerRow = {
     readonly slug: string;
     readonly type: string;
     readonly logo: string | null;
-    readonly permissionStatus: string;
     readonly isActive: boolean;
     readonly showInCollaborations: boolean;
 };
@@ -38,13 +37,6 @@ const TYPE_LABEL: Record<string, string> = {
     provider: 'Proveedor',
     institutional: 'Institucional',
     other: 'Otro',
-};
-
-const PERMISSION_LABEL: Record<string, string> = {
-    pending: 'Pendiente',
-    approved: 'Aprobado',
-    rejected: 'Rechazado',
-    unknown: 'Desconocido',
 };
 
 function patch(id: number, action: string) {
@@ -162,7 +154,6 @@ export default function PartnersIndex({ partners, filters }: IndexProps) {
                                 <tr className="border-b border-qd-mist text-left text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:border-qd-white/10 dark:text-qd-white/50">
                                     <th className="px-4 py-3">Partner</th>
                                     <th className="px-4 py-3">Tipo</th>
-                                    <th className="px-4 py-3">Permiso</th>
                                     <th className="px-4 py-3 text-center">
                                         Activo
                                     </th>
@@ -210,21 +201,6 @@ export default function PartnersIndex({ partners, filters }: IndexProps) {
                                         <td className="px-4 py-3 text-qd-text-high dark:text-qd-white/70">
                                             {TYPE_LABEL[partner.type] ??
                                                 partner.type}
-                                        </td>
-                                        <td className="px-4 py-3">
-                                            <span
-                                                className={cn(
-                                                    'rounded-full px-2.5 py-1 text-xs font-semibold',
-                                                    partner.permissionStatus ===
-                                                        'approved'
-                                                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'
-                                                        : 'bg-qd-mist dark:bg-qd-white/10',
-                                                )}
-                                            >
-                                                {PERMISSION_LABEL[
-                                                    partner.permissionStatus
-                                                ] ?? partner.permissionStatus}
-                                            </span>
                                         </td>
                                         <td className="px-4 py-3 text-center">
                                             <RowToggle

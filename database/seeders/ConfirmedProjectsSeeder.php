@@ -9,14 +9,14 @@ use App\Models\SeoMetadata;
 use Illuminate\Database\Seeder;
 
 /**
- * Proyectos REALES confirmados por Pablo, publicables con permiso aprobado.
+ * Proyectos REALES confirmados por Pablo, los únicos publicables.
  *
- * A diferencia de `AbacoHistoricalProjectsSeeder` (casos legacy/demo aportados
- * por Ábaco, `permission_status=pending`, ocultos en producción), este seeder
- * solo contiene proyectos verificados que sí pueden publicarse
- * (`permission_status=approved`). Irá creciendo conforme se confirmen más
- * proyectos; no sustituye al futuro sistema de snapshots automáticos, es la
- * solución limpia para el cierre actual.
+ * El seeder de casos legacy/demo aportados por Ábaco se retiró en el Bloque 7
+ * (limpieza de proyectos/partners sin confirmar). Este seeder solo contiene
+ * proyectos verificados que sí pueden publicarse y persiste
+ * `permission_status=approved` por compatibilidad con los scopes existentes
+ * (la gestión visible de permisos se eliminó del panel). Irá creciendo conforme
+ * se confirmen más proyectos; no sustituye al futuro sistema de snapshots.
  *
  * Reglas respetadas:
  * - No toca imágenes/logos: cover/thumbnail/gallery quedan vacíos y se cargan a

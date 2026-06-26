@@ -1,6 +1,8 @@
 # Modelo de datos — AbacoQD
 
-Última revisión: 18 de junio de 2026.
+Última revisión: 26 de junio de 2026.
+
+> **Actualización Bloque 7 (26/06):** la gestión visible de **`permission_status`** se retiró del panel. La columna **se conserva** en `partners`, `projects` y `reviews` (sin migración: no se elimina todavía), pero el contenido creado/editado desde el CRUD o desde seeders se persiste como **`approved`** por compatibilidad. El enum `PermissionStatus` y los scopes `permitted()`/`publiclyListable()` siguen existiendo; al quedar todo `approved`, no bloquean. La publicación se controla por **estado + visibilidad** (`status`, `is_active`, `show_on_home`, `show_in_projects`, `show_in_collaborations`, `is_featured`, orden). El seeder legacy `AbacoHistoricalProjectsSeeder` se eliminó; el contenido confirmado vive en `ConfirmedProjectsSeeder` (hoy solo **CIETE**).
 
 Fuente de verdad única del modelo de datos de AbacoQD. **Fase 2 (modelo de datos y migraciones) cerrada**: las migraciones, modelos, factories y seeders descritos aquí ya existen en `database/migrations`, `app/Models`, `database/factories` y `database/seeders`, y están validados con `composer test` (Pint + PHPStan + Pest) y `php artisan migrate:fresh --seed`.
 

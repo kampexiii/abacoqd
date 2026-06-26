@@ -27,8 +27,6 @@ export type AdminPartnerRecord = {
     readonly website: string | null;
     readonly socialLinks: readonly SocialLink[] | null;
     readonly description: Partial<LocalizedInput> | null;
-    readonly permissionStatus: string;
-    readonly permissionNotes: string | null;
     readonly showInCollaborations: boolean;
     readonly isActive: boolean;
     readonly sortOrder: number;
@@ -46,8 +44,6 @@ type PartnerFormData = {
     website: string;
     social_links: { platform: string; url: string }[];
     description: LocalizedInput;
-    permission_status: string;
-    permission_notes: string;
     show_in_collaborations: boolean;
     is_active: boolean;
     sort_order: number;
@@ -56,7 +52,6 @@ type PartnerFormData = {
 type PartnerFormProps = {
     readonly mode: 'create' | 'edit';
     readonly types: readonly Option[];
-    readonly permissionStatuses: readonly Option[];
     readonly partner?: AdminPartnerRecord;
     readonly defaultSortOrder?: number;
 };
@@ -70,7 +65,6 @@ function localized(
 export default function PartnerForm({
     mode,
     types,
-    permissionStatuses,
     partner,
     defaultSortOrder = 1,
 }: PartnerFormProps) {
@@ -91,8 +85,6 @@ export default function PartnerForm({
             url: link.url ?? '',
         })),
         description: localized(partner?.description),
-        permission_status: partner?.permissionStatus ?? 'pending',
-        permission_notes: partner?.permissionNotes ?? '',
         show_in_collaborations: partner?.showInCollaborations ?? true,
         is_active: partner?.isActive ?? true,
         sort_order: partner?.sortOrder ?? defaultSortOrder,
@@ -342,7 +334,7 @@ export default function PartnerForm({
                     <div className="mt-4">
                         <Field
                             label="Texto alternativo del logo"
-                            hint="Obligatorio si el permiso está aprobado."
+                            hint="Describe el logo para accesibilidad (recomendado)."
                             error={errors.logo_alt}
                         >
                             <Input
@@ -358,60 +350,19 @@ export default function PartnerForm({
 
             <div className="flex flex-col gap-6">
                 <FormSection
-                    title="Permiso de marca"
-                    description="Solo partners aprobados se publican."
+                    title="Publicación"
+                    description="Orden de aparición en la noria de Colaboraciones."
                 >
-                    <div className="flex flex-col gap-4">
-                        <Field
-                            label="Estado del permiso"
-                            error={errors.permission_status}
-                        >
-                            <select
-                                value={data.permission_status}
-                                onChange={(e) =>
-                                    setData('permission_status', e.target.value)
-                                }
-                                className={selectClass}
-                            >
-                                {permissionStatuses.map((option) => (
-                                    <option
-                                        key={option.value}
-                                        value={option.value}
-                                    >
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
-                        </Field>
-
-                        <Field
-                            label="Notas de permiso"
-                            error={errors.permission_notes}
-                        >
-                            <textarea
-                                value={data.permission_notes}
-                                onChange={(e) =>
-                                    setData('permission_notes', e.target.value)
-                                }
-                                rows={3}
-                                className={textareaClass}
-                            />
-                        </Field>
-
-                        <Field label="Orden" error={errors.sort_order}>
-                            <Input
-                                type="number"
-                                min={0}
-                                value={data.sort_order}
-                                onChange={(e) =>
-                                    setData(
-                                        'sort_order',
-                                        Number(e.target.value),
-                                    )
-                                }
-                            />
-                        </Field>
-                    </div>
+                    <Field label="Orden" error={errors.sort_order}>
+                        <Input
+                            type="number"
+                            min={0}
+                            value={data.sort_order}
+                            onChange={(e) =>
+                                setData('sort_order', Number(e.target.value))
+                            }
+                        />
+                    </Field>
                 </FormSection>
 
                 <FormSection
