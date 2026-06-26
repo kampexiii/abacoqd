@@ -386,9 +386,31 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                                     <h3 className="mt-4 text-sm font-bold text-qd-ink dark:text-qd-white">
                                         {item.label}
                                     </h3>
-                                    <p className="mt-3 text-sm leading-relaxed text-qd-text-high">
-                                        {item.value}
-                                    </p>
+                                    {item.key === 'development' ? (
+                                        <>
+                                            <div className="mt-3 flex flex-wrap items-center gap-3">
+                                                <AbacoLogo className="h-6" />
+                                                {isCooperative &&
+                                                    project.partners.map(
+                                                        (partner) => (
+                                                            <PartnerLogo
+                                                                key={partner.id}
+                                                                partner={
+                                                                    partner
+                                                                }
+                                                            />
+                                                        ),
+                                                    )}
+                                            </div>
+                                            <p className="mt-3 text-sm leading-relaxed text-qd-text-high">
+                                                {item.value}
+                                            </p>
+                                        </>
+                                    ) : (
+                                        <p className="mt-3 text-sm leading-relaxed text-qd-text-high">
+                                            {item.value}
+                                        </p>
+                                    )}
                                 </article>
                             );
                         })}
@@ -433,55 +455,30 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
             {cover && (
                 <section className="bg-qd-white dark:bg-qd-ink">
                     <div className="mx-auto max-w-310 px-5 pb-14 sm:px-8 sm:pb-16">
-                        <figure className="overflow-hidden rounded-2xl border border-qd-ink/10 bg-qd-white shadow-[0_24px_80px_-48px_rgba(7,17,26,0.45)] dark:border-qd-white/10 dark:bg-qd-surface">
-                            <img
-                                src={cover}
-                                alt={title}
-                                loading="lazy"
-                                className="aspect-video w-full object-cover"
-                            />
+                        <figure className="group relative overflow-hidden rounded-3xl border border-qd-ink/10 bg-qd-bg p-1.5 shadow-[0_34px_90px_-52px_rgba(7,17,26,0.5)] dark:border-qd-white/10 dark:bg-qd-surface">
+                            <div className="relative overflow-hidden rounded-[1.35rem]">
+                                <img
+                                    src={cover}
+                                    alt={title}
+                                    loading="lazy"
+                                    className="aspect-video w-full object-cover transition duration-500 motion-safe:group-hover:scale-[1.02]"
+                                />
+                                <div
+                                    aria-hidden="true"
+                                    className="pointer-events-none absolute inset-0 bg-linear-to-t from-qd-ink/80 via-qd-ink/10 to-transparent"
+                                />
+                                {project.clientName && (
+                                    <figcaption className="absolute inset-x-0 bottom-0 flex items-center gap-3 p-6 sm:p-8">
+                                        <span className="inline-flex items-center rounded-full bg-qd-white/12 px-3 py-1 text-xs font-semibold text-qd-white/90 backdrop-blur-sm">
+                                            {project.clientName}
+                                        </span>
+                                    </figcaption>
+                                )}
+                            </div>
                         </figure>
                     </div>
                 </section>
             )}
-
-            {/* Cliente y desarrollo */}
-            <section className="bg-[linear-gradient(90deg,#effaff_0%,#f8fdff_46%,#edf9fb_100%)] dark:bg-none dark:bg-qd-surface">
-                <div className="mx-auto grid max-w-310 gap-10 px-5 py-12 sm:grid-cols-2 sm:px-8">
-                    <div>
-                        <h2 className="text-base font-bold text-qd-ink dark:text-qd-white">
-                            {t('projectDetail.clientDev.requestedBy')}
-                        </h2>
-                        <div className="mt-6 flex h-14 items-center">
-                            <ClientLogo project={project} className="h-12" />
-                        </div>
-                        {project.clientName && (
-                            <p className="mt-3 text-sm font-semibold text-qd-text-high">
-                                {project.clientName}
-                            </p>
-                        )}
-                    </div>
-
-                    <div className="border-qd-ink/10 sm:border-l sm:pl-10 dark:border-qd-white/10">
-                        <h2 className="text-base font-bold text-qd-ink dark:text-qd-white">
-                            {t('projectDetail.clientDev.developedBy')}
-                        </h2>
-                        <div className="mt-6 flex h-14 flex-wrap items-center gap-4">
-                            <AbacoLogo className="h-8" />
-                            {isCooperative &&
-                                project.partners.map((partner) => (
-                                    <PartnerLogo
-                                        key={partner.id}
-                                        partner={partner}
-                                    />
-                                ))}
-                        </div>
-                        <p className="mt-3 text-sm font-semibold text-qd-text-high">
-                            {developmentLabel}
-                        </p>
-                    </div>
-                </div>
-            </section>
 
             {/* Tecnologías */}
             {technologies.length > 0 && (

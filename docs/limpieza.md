@@ -59,6 +59,11 @@ Pendiente real no maquillado:
 - Los avisos admin, factories, tests y docs conservan estados internos cuando son utiles para gestion o historico.
 - La columna `permission_status` y enums `pending/approved` siguen existiendo como compatibilidad de modelo/admin; no se ha tocado migracion.
 
+## Cierre adicional - Subfase 7.5 (2026-06-26)
+
+- Se retiran del bundle las claves de idioma muertas del antiguo detalle de proyecto: `projectDetail.partners` (incluia "Quien participa", "Roles del proyecto", "Los roles salen..."), `projectDetail.roles`, `projectDetail.process`, `projectDetail.media` (incluia "Aprobado") y `projectDetail.clientDev`; tambien `projectsPage.badge` y `projectsPage.card.executorBy`. Ya no se renderizaban, pero `lang/*.json` viaja en el bundle. Verificado: `Quien participa` / `Roles del proyecto` / `Los roles salen` ausentes en `public/build` tras `npm run build`.
+- El detalle de proyecto elimina el bloque duplicado "Cliente y desarrollo"; el banner superior queda como unica pieza de cliente/desarrollo.
+
 ## Criterio de clasificacion
 
 - **Alto**: texto visible en web publica, o dato interno incluido en payload publico, que transmite falta de cierre, validacion pendiente, staging, demo o dato sin confirmar.

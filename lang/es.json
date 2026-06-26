@@ -810,11 +810,7 @@
         "card": {
             "internalProject": "Proyecto interno",
             "viewProject": "Ver proyecto",
-            "consultSimilar": "Consultar proyecto similar",
-            "executorBy": "Ejecutado por"
-        },
-        "badge": {
-            "historical": "Histórico"
+            "consultSimilar": "Consultar proyecto similar"
         },
         "pagination": {
             "label": "Paginación de proyectos",
@@ -860,10 +856,6 @@
             "soloLabel": "Proyecto desarrollado en solitario",
             "cooperativeLabel": "Proyecto cooperativo"
         },
-        "clientDev": {
-            "requestedBy": "Solicitado por",
-            "developedBy": "Desarrollado por"
-        },
         "blocks": {
             "context": {
                 "title": "El contexto"
@@ -878,33 +870,8 @@
                 "title": "El resultado"
             }
         },
-        "process": {
-            "eyebrow": "CÓMO LO HICIMOS",
-            "title": "Cómo abordamos el proyecto.",
-            "validation": "Documentamos el contexto, las decisiones técnicas y las capacidades aplicadas en el proyecto.",
-            "capabilities": "Capacidades registradas"
-        },
         "technologies": {
             "title": "Tecnologías utilizadas"
-        },
-        "media": {
-            "fallback": "Imagen representativa de Abaco Developments"
-        },
-        "partners": {
-            "eyebrow": "PARTNERS Y ROLES",
-            "title": "Quién participa en el proyecto",
-            "partner": "Partner",
-            "rolesTitle": "Roles del proyecto",
-            "note": "Mostramos solo roles confirmados para este proyecto.",
-            "direct": "Proyecto realizado directamente por Abaco Developments.",
-            "website": "Visitar web"
-        },
-        "roles": {
-            "client": "Cliente / destinatario",
-            "collaborator": "Ejecutor / colaborador",
-            "technologyPartner": "Partner tecnológico",
-            "brand": "Marca relacionada",
-            "other": "Otro rol"
         },
         "related": {
             "title": "Proyectos relacionados",

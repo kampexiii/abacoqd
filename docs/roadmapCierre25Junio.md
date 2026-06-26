@@ -167,6 +167,8 @@ No cargar nada del `.odt` como real. Si no hay contenido confirmado: estados vac
 
 **Subfase 7.4 (CERRADA 26/06):** presentación pública de Proyecto/Colaboraciones replanteada. Relación M:N `project_service` (servicio elegido desde `services`, no texto libre); detalle de proyecto sin `approved`/`permiso`/`Rol`/«Quién participa», con cliente+logo (color/mono por tema), chips de servicios y desarrollo solo/cooperativo; Colaboraciones muestra proyectos/casos (no logos sueltos) con estado vacío honesto. CIETE = desarrollado en solitario, asociado a 3 servicios reales. Tests `ProjectPresentationTest` (Pest 196/196). Sin push.
 
+**Subfase 7.5 (CERRADA 26/06):** ajuste final del detalle de proyecto. Se elimina el segundo bloque «Cliente y desarrollo» (duplicaba el banner); el banner superior queda como única pieza de cliente/desarrollo. Cabecera/imagen con acabado premium (overlay, hairline, sombra y hover sutil bajo `motion-safe`), sin tocar hero/cubo. Datos clave con card «Desarrollo» (logo AbacoQD + texto solo/cooperativo). Limpieza de claves de idioma muertas (`projectDetail.partners/roles/process/media/clientDev`, `projectsPage.badge/executorBy`) verificada ausente en `public/build`. Pest 196/196. Sin push.
+
 **Pendiente del bloque (próximas subfases):** snapshots/backup seeders (partners→projects), revisión jurídica de textos legales y PII (IP/User-Agent) en privacidad. Eliminación definitiva de la columna `permission_status` queda para una migración futura aparte.
 
 ### Bloque 8 — Producción / despliegue (P1)

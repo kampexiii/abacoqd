@@ -810,11 +810,7 @@
         "card": {
             "internalProject": "Internal project",
             "viewProject": "View project",
-            "consultSimilar": "Ask about a similar project",
-            "executorBy": "Delivered by"
-        },
-        "badge": {
-            "historical": "Historical"
+            "consultSimilar": "Ask about a similar project"
         },
         "pagination": {
             "label": "Projects pagination",
@@ -860,10 +856,6 @@
             "soloLabel": "Project developed independently",
             "cooperativeLabel": "Collaborative project"
         },
-        "clientDev": {
-            "requestedBy": "Requested by",
-            "developedBy": "Developed by"
-        },
         "blocks": {
             "context": {
                 "title": "The context"
@@ -878,33 +870,8 @@
                 "title": "The result"
             }
         },
-        "process": {
-            "eyebrow": "HOW WE DID IT",
-            "title": "How we approached the project.",
-            "validation": "We document the context, technical decisions and capabilities applied in the project.",
-            "capabilities": "Recorded capabilities"
-        },
         "technologies": {
             "title": "Technologies used"
-        },
-        "media": {
-            "fallback": "Representative image of Abaco Developments"
-        },
-        "partners": {
-            "eyebrow": "PARTNERS AND ROLES",
-            "title": "Who participates in the project",
-            "partner": "Partner",
-            "rolesTitle": "Project roles",
-            "note": "We only show confirmed roles for this project.",
-            "direct": "Project delivered directly by Abaco Developments.",
-            "website": "Visit website"
-        },
-        "roles": {
-            "client": "Client / recipient",
-            "collaborator": "Delivery collaborator",
-            "technologyPartner": "Technology partner",
-            "brand": "Related brand",
-            "other": "Other role"
         },
         "related": {
             "title": "Related projects",

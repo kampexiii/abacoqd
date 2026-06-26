@@ -162,6 +162,15 @@ WIP        = archivos sin commit o sin decisión de cierre
 - **Tests:** `ProjectPresentationTest` (relación servicios, borrado de servicio no rompe el proyecto, CIETE↔servicios por seeder, payload público sin campos internos ni roles).
 - **Validaciones:** `types:check`, `lint:check`, `build` OK; `composer test` **Pint OK · PHPStan 0 · Pest 196/196**. Sin push.
 
+**Subfase 7.5 — Ajuste final del detalle de proyecto y Colaboraciones — CERRADA (26/06):**
+
+- **Sin duplicidad:** se elimina el segundo bloque «Cliente y desarrollo» del detalle, que repetía cliente/desarrollo. El **banner superior** queda como única pieza de identidad (cliente + logo + proyecto + chips de servicios + desarrollo con logo AbacoQD y, si aplica, partners). Sin huecos ni secciones vacías.
+- **Cabecera/imagen premium:** contenedor con hairline, radio y sombra sutil, overlay de gradiente con cliente+título integrados y hover muy leve bajo `motion-safe` (respeta `prefers-reduced-motion`). No se toca hero ni cubo.
+- **Datos clave:** Año · Servicios · Desarrollo · Tecnologías (sin «Rol»). La card «Desarrollo» muestra el logo AbacoQD (+ partners si es cooperativo) y el texto «en solitario»/«cooperativo».
+- **Limpieza de bundle:** se retiran claves de idioma muertas de `projectDetail` (`partners`/`roles`/`process`/`media`/`clientDev`) y de `projectsPage` (`badge`/`executorBy`) que ya no se renderizaban pero viajaban en el bundle con textos prohibidos («Quién participa», «Roles del proyecto», «Aprobado»). Verificado: ausentes en `public/build`.
+- **Colaboraciones:** sin cambios de comportamiento (ya muestra proyectos/casos con estado vacío honesto desde 7.4).
+- **Validaciones:** `types:check`, `lint:check`, `build` OK; `composer test` **Pint OK · PHPStan 0 · Pest 196/196**. Sin push.
+
 ---
 
 ## 1. Resumen ejecutivo
