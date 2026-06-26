@@ -30,3 +30,6 @@ yarn-error.log
 /.agents
 /.claude
 /skills-lock.json
+
+# Plantilla local enviada a Andrés. No es contenido confirmado del sitio.
+docs/informacionRequeridaSitioWeb.odt
