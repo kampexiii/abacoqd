@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
             MethodologyStepSeeder::class,
             ServiceSeeder::class,
             BlogTaxonomySeeder::class,
-            BlogPostSeeder::class,
             BookingSettingsSeeder::class,
             FaqSeeder::class,
             SeoMetadataSeeder::class,
