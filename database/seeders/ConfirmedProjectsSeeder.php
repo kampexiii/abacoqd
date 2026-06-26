@@ -9,9 +9,9 @@ use App\Models\SeoMetadata;
 use Illuminate\Database\Seeder;
 
 /**
- * Proyectos REALES confirmados por Pablo, los únicos publicables.
+ * Proyectos reales confirmados, los únicos publicables.
  *
- * El seeder de casos legacy/demo aportados por Ábaco se retiró en el Bloque 7
+ * El seeder de casos legacy aportados por Ábaco se retiró en el Bloque 7
  * (limpieza de proyectos/partners sin confirmar). Este seeder solo contiene
  * proyectos verificados que sí pueden publicarse y persiste
  * `permission_status=approved` por compatibilidad con los scopes existentes
@@ -20,7 +20,7 @@ use Illuminate\Database\Seeder;
  *
  * Reglas respetadas:
  * - No toca imágenes/logos: cover/thumbnail/gallery quedan vacíos y se cargan a
- *   mano desde el CRUD admin (`settings.images_pending_manual_upload = true`).
+ *   mano desde el CRUD admin (`settings.images_manual_upload_required = true`).
  * - No crea Partner ni relación `partner_project`: proyectos en solitario.
  * - Idempotente: busca por `slug_es` y actualiza/crea, sin duplicar ni tocar
  *   otros proyectos ni partners.
@@ -75,14 +75,14 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
                 'year' => 2026,
                 'client_name' => 'CIETE Arquitectos S.L.',
-                'permission_notes' => 'Proyecto real confirmado por Pablo. Realizado en solitario, sin partner ni colaborador. Imágenes/logos pendientes de carga manual desde el CRUD.',
+                'permission_notes' => 'Proyecto confirmado. Realizado sin partner ni colaborador externo.',
                 'sort_order' => 1,
                 'settings' => [
-                    'source' => 'confirmed_by_pablo',
+                    'source' => 'confirmed_internal',
                     'confirmed_at' => '2026-06-26',
                     'project_kind' => 'internal_erp',
                     'has_partner' => false,
-                    'images_pending_manual_upload' => true,
+                    'images_manual_upload_required' => true,
                 ],
                 'seo' => [
                     'es' => [

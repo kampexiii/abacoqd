@@ -12,11 +12,10 @@ import MethodologyProcessCube from './MethodologyProcessCube';
  * 6 pasos (`MethodologyProcessCube`), efecto cubo 3D infinito con una cara
  * activa por vez y máximo dos durante la transición, con toda la información
  * del paso en una única cara (sin frontal/back). Banda-puente "Estudio inicial"
- * SIN chip "Gratuito" (política comercial pendiente de aprobación — no se
- * promete gratuidad).
+ * sin promesa de gratuidad.
  */
 
-// Destino del enlace de metodología. Provisional hasta que exista /metodologia.
+// Destino del enlace de metodología.
 const METODOLOGIA_HREF = '/metodologia';
 
 export default function MethodologySection() {
@@ -75,9 +74,7 @@ export default function MethodologySection() {
                 <MethodologyProcessCube />
             </div>
 
-            {/* Banda-puente "Estudio inicial" — acotada, sin promesa de gratuidad.
-                PENDIENTE: chip "Gratuito" solo si se aprueba la política comercial
-                (docs/07_VISTAS/PUBLIC_02_METODOLOGIA_PROCESO.md). */}
+            {/* Banda-puente "Estudio inicial" — acotada, sin promesa de gratuidad. */}
             <div className="mx-auto mt-12 w-full max-w-[1240px] px-4 sm:px-6">
                 <div className="qd-glass flex flex-col gap-4 rounded-2xl border-qd-teal/30 p-6 sm:flex-row sm:items-center sm:gap-6 sm:p-7">
                     <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-qd-teal/30 bg-qd-teal/10 text-qd-teal-2 dark:text-qd-teal">

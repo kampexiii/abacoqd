@@ -21,7 +21,7 @@ class BookingSettingsSeeder extends Seeder
                 'settings' => [
                     'recommended_provider' => 'Cal.com',
                     'alternative_provider' => 'Calendly',
-                    'status' => 'pending_provider_confirmation',
+                    'status' => 'provider_not_configured',
                 ],
             ],
         );

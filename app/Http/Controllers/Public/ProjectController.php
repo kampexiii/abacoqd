@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Public;
 
-use App\Enums\PermissionStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\Project;
@@ -20,10 +19,8 @@ class ProjectController extends Controller
      * docs/07_VISTAS/PUBLIC_04_PROYECTOS.md.
      *
      * Gating de publicación (Project/Partner::scopePubliclyListable):
-     * - En producción solo se listan proyectos/partners con permiso aprobado.
-     * - Fuera de producción (local/preview) también los marcados con
-     *   `settings.show_in_local_preview = true` (históricos aportados por Ábaco,
-     *   pendientes de validación). Así se valida la maquetación con datos reales
+     * - En producción solo se listan registros publicables.
+     * - Fuera de producción se permite revisar registros marcados para revisión local
      *   sin falsear permisos en producción.
      *
      * Si no hay contenido publicable, la vista muestra un estado vacío honesto.
@@ -116,8 +113,6 @@ class ProjectController extends Controller
             'partnerLogoAlt' => $client?->logo_alt,
             'executorName' => $executor?->name,
             'isHistorical' => (bool) ($settings['is_historical'] ?? false),
-            'isApproved' => $project->permission_status === PermissionStatus::Approved,
-            'permissionStatus' => $project->permission_status->value,
         ];
     }
 
@@ -161,8 +156,6 @@ class ProjectController extends Controller
             'result' => $project->result,
             'gallery' => is_array($project->gallery) ? array_values($project->gallery) : [],
             'externalUrl' => $project->external_url,
-            'permissionNotes' => $project->permission_notes,
-            'settings' => is_array($project->settings) ? $project->settings : [],
             'partners' => $partners,
         ];
     }

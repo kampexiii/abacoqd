@@ -11,7 +11,7 @@ namespace App\Support\Seo;
  * Reglas (decisión cerrada del bloque SEO):
  *   - Solo datos confirmados desde `config/site.php` o derivados de modelos
  *     publicados. No se inventan rating/review/price/offer/horarios/personas ni
- *     redes no confirmadas; los campos sin dato se omiten (no van vacíos).
+ *     redes sin dato; los campos ausentes se omiten (no van vacíos).
  *   - URLs absolutas sobre el dominio canónico, solo ES (`inLanguage: es-ES`).
  *     Nunca `/en` ni `hreflang`.
  *   - Organization y WebSite comparten `@id` estables para enlazar el grafo;

@@ -108,9 +108,8 @@ class Partner extends Model
     }
 
     /**
-     * Publicable de cara al sitio: aprobado siempre; fuera de producción
-     * también los marcados con `settings.show_in_local_preview` (históricos
-     * en validación). Centraliza el gating de previsualización.
+     * Publicable de cara al sitio: en producción solo registros aprobados;
+     * fuera de producción permite registros marcados para revisión local.
      *
      * @param  Builder<self>  $query
      */

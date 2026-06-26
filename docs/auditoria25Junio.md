@@ -525,3 +525,42 @@ Pendiente producción:
 2. Dominio/canonical/sitemap a abacoqd.com (no localhost) y redirección de abacodev.com.
 3. Reproducibilidad de seeders (portadas del blog) + usuario admin real + storage:link + cache + backups.
 ```
+
+---
+
+## 19. Limpieza final de textos publicos y payload - 26/06
+
+Estado: ejecutada en fuentes, payload publico y build.
+
+Alcance aplicado:
+
+- Textos publicos ES/EN de cookies, chatbot, contacto, aviso legal EN, politica de cookies EN, detalle de proyecto y estados vacios.
+- Payload publico de proyectos y colaboraciones enviado por Inertia.
+- Seeders/settings que pueden alimentar datos publicados.
+- Manifiestos publicos de logos bajo `public/assets`.
+- Comentarios no renderizados con lenguaje de preview, pendiente o validacion interna.
+
+Cambios relevantes:
+
+- `ProjectController` deja de enviar `permissionNotes`, `settings` completos, `permissionStatus` e `isApproved` a la vista publica de detalle de proyecto.
+- `HomeController`, `Projects.tsx` y `CollaborationsSection.tsx` dejan de exponer badges publicos basados en estado interno de permiso.
+- Los fallbacks de proyecto pasan a copy neutro u ocultan bloques sin dato real; partners vacios muestran que el proyecto fue realizado directamente por Abaco Developments.
+- Las menciones a Pablo en seeders/settings y constantes publicas se sustituyen por identificadores neutros (`confirmed_internal`, `WAVE_PATH`) o copy institucional.
+- La etiqueta publica de WhatsApp vinculada a Andres pasa a atencion comercial; el perfil publico se mantiene como contenido institucional.
+- `be now Partner` y logos/entradas no verificadas se retiran de footer y manifiestos publicos.
+- La politica de cookies queda alineada con la decision vigente: cookies tecnicas y preferencias de tema, idioma y accesibilidad; sin analitica, mapas de calor, publicidad ni proveedores externos.
+
+Validaciones:
+
+- `npm run types:check`: verde.
+- `npm run lint:check`: verde.
+- `cmd.exe /C npm run build`: verde; build regenerado.
+- Busqueda de cierre en fuentes publicas, `public/assets` y `public/build`: sin coincidencias de los textos criticos exactos eliminados.
+- `composer test`: no ejecutado en esta pasada; PHP/Composer de XAMPP quedo bloqueado por el sandbox con error WSL/vsock y la solicitud de escalado fue rechazada por limite de uso.
+
+Hallazgos mantenidos:
+
+- Estados internos `pending/approved` en enums, migraciones y admin: compatibilidad tecnica, no contenido publico.
+- Placeholders de formularios: falso positivo de UI.
+- Factories, tests, seeders de admin y documentacion historica: solo desarrollo/auditoria.
+- Decision sobre `abacodev.com`: no se afirma redireccion definitiva hasta decision externa.

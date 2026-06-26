@@ -40,9 +40,8 @@ import { show as contactShow } from '@/routes/contact';
  * canónico, pero conectar esta vista al admin es un paso aparte (Fase 4/5)
  * que no rompe este diseño cuando se haga.
  *
- * El paso 02 no publica la palabra "gratuito": la política comercial del
- * estudio inicial sigue pendiente de aprobación (mismo criterio que la
- * landing, que ya usa "Estudio inicial" sin esa palabra).
+ * El paso 02 no publica la palabra "gratuito"; se mantiene el mismo criterio
+ * que la landing, que ya usa "Estudio inicial" sin esa palabra.
  */
 
 type StepKey =

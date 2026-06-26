@@ -56,7 +56,7 @@ initializeTheme();
 initializeLanguage();
 
 // This will apply persisted accessibility preferences on load...
-// PENDIENTE TÉCNICO: envolver la app con MotionConfig reducedMotion="user"
+// Mejora tecnica planificada: envolver la app con MotionConfig reducedMotion="user"
 // cuando se instale `motion` en este bloque/fase (docs §8). Mientras tanto,
 // reduced-motion se cubre con CSS (@media + clase html.a11y-reduce-motion).
 initializeAccessibility();

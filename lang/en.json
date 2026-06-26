@@ -25,7 +25,7 @@
     "cookieNotice": {
         "ariaLabel": "Cookie notice",
         "title": "Your privacy",
-        "body": "We use technical cookies required for the website to work correctly. We don't use analytics, heatmaps or third-party providers at this stage.",
+        "body": "We use necessary technical cookies and theme, language and accessibility preferences. We do not use analytics, heatmaps, advertising or third-party providers.",
         "accept": "Got it",
         "policyLink": "Cookie policy",
         "reopen": "Show cookie notice again"
@@ -61,7 +61,7 @@
         },
         "moreInfo": "More information",
         "restart": "Start over",
-        "emptyState": "We will add frequent questions here soon. In the meantime, reach us through any of these channels.",
+        "emptyState": "You can contact the team through any of these channels.",
         "fallbackTitle": "Prefer to talk to the team?",
         "goToContact": "Go to Contact",
         "whatsapp": "WhatsApp"
@@ -166,7 +166,7 @@
                     "chips": [
                         "Fast delivery",
                         "Modern stack",
-                        "Real validation"
+                        "Real test"
                     ]
                 }
             }
@@ -278,17 +278,17 @@
             "lead": "We are building this space with real feedback from those who already work with us.",
             "cards": {
                 "first": {
-                    "quote": "Verified reviews pending connection with our public profile.",
-                    "role": "Review pending publication"
+                    "quote": "We only show reviews when they come from verified public sources.",
+                    "role": "Verified public source"
                 },
                 "second": {
-                    "quote": "Verified reviews pending connection with our public profile.",
-                    "role": "Review pending publication"
+                    "quote": "We only show reviews when they come from verified public sources.",
+                    "role": "Verified public source"
                 }
             },
             "panel": {
                 "title": "Help us grow",
-                "description": "Verified reviews pending connection with our public profile.",
+                "description": "We only show reviews when they come from verified public sources.",
                 "leaveReview": "Leave a review",
                 "viewProfile": "View Google profile"
             }
@@ -323,8 +323,8 @@
             "cta": "View projects",
             "visualAria": "Project and collaboration logos",
             "empty": {
-                "title": "First cases in preparation.",
-                "subtitle": "We are preparing the next publishable projects.",
+                "title": "No cases are published yet.",
+                "subtitle": "We will show projects here when they can be published with permission and real context.",
                 "services": "View services",
                 "contact": "Tell us about your project"
             }
@@ -335,7 +335,7 @@
             "lead": "We share lessons, technical judgement and resources to better understand how technology can accelerate real processes.",
             "cta": "Read article",
             "ctaAll": "View all articles",
-            "emptyText": "We're preparing the first articles for the blog."
+            "emptyText": "No blog articles are published yet."
         },
         "cta": {
             "eyebrow": "LET'S START",
@@ -372,7 +372,7 @@
         "details": {
             "email": "Email",
             "phone": "Phone",
-            "whatsapp": "WhatsApp / direct contact with Andrés",
+            "whatsapp": "WhatsApp / commercial support",
             "address": "Address"
         },
         "form": {
@@ -570,7 +570,7 @@
             "mvp": {
                 "title": "MVPs and prototypes",
                 "description": "We validate your idea with a first functional version to learn quickly, reduce risk and prepare the next step.",
-                "chips": ["MVP", "Prototypes", "Validation"]
+                "chips": ["MVP", "Prototypes", "Testing"]
             }
         },
         "choose": {
@@ -627,7 +627,7 @@
                 },
                 "review": {
                     "title": "Review",
-                    "description": "We test functionality, experience and critical points before preparing delivery."
+                    "description": "We test functionality, experience and critical points before delivery."
                 },
                 "deliver": {
                     "title": "Deliver",
@@ -695,7 +695,7 @@
                     "Multi-role panels",
                     "Custom workflows",
                     "Internal APIs",
-                    "Data validation",
+                    "Data control",
                     "Maintainable base"
                 ]
             },
@@ -749,7 +749,7 @@
                     "Webhooks",
                     "Data synchronisation",
                     "Platform connectors",
-                    "Validation and control",
+                    "Review and control",
                     "Technical documentation"
                 ]
             },
@@ -766,7 +766,7 @@
                     "Scope definition",
                     "Functional prototypes",
                     "Flow design",
-                    "Technical validation",
+                    "Technical review",
                     "Scalable base",
                     "Evolution plan"
                 ]
@@ -814,8 +814,7 @@
             "executorBy": "Delivered by"
         },
         "badge": {
-            "historical": "Historical",
-            "pendingValidation": "Pending validation"
+            "historical": "Historical"
         },
         "pagination": {
             "label": "Projects pagination",
@@ -825,12 +824,11 @@
         },
         "partners": {
             "title": "Partners we collaborate with",
-            "note": "We show these brands with their permission.",
-            "pendingNote": "Historical brands under validation — pending publication permission."
+            "note": "We show these brands with their permission."
         },
         "empty": {
-            "title": "First cases in preparation.",
-            "subtitle": "We're preparing the projects that can be shown publicly with permission and real context.",
+            "title": "No projects are published yet.",
+            "subtitle": "We will show projects here when they can be shared with permission and real context.",
             "services": "View services",
             "contact": "Tell us about your project"
         },
@@ -849,8 +847,8 @@
             "related": "View related projects"
         },
         "heroTagline": {
-            "title": "Historical case study.",
-            "subtitle": "Visible in local preview until permissions are closed."
+            "title": "Documented project.",
+            "subtitle": "Context, scope and applied capabilities."
         },
         "meta": {
             "year": "Year",
@@ -874,25 +872,23 @@
         },
         "process": {
             "eyebrow": "HOW WE DID IT",
-            "title": "Documented work pending final validation.",
-            "validation": "The information shown comes from Abaco's historical records and must be validated before being published as an approved case.",
+            "title": "How we approached the project.",
+            "validation": "We document the context, technical decisions and capabilities applied in the project.",
             "capabilities": "Recorded capabilities"
         },
         "technologies": {
             "title": "Technologies used"
         },
         "media": {
-            "fallback": "Project image pending validation",
-            "approved": "Approved",
-            "validation": "validation status",
-            "permission": "permission"
+            "fallback": "Representative image of Abaco Developments"
         },
         "partners": {
             "eyebrow": "PARTNERS AND ROLES",
             "title": "Who participates in the project",
             "partner": "Partner",
             "rolesTitle": "Project roles",
-            "note": "Roles come from the partner_project relation to avoid false attribution.",
+            "note": "We only show confirmed roles for this project.",
+            "direct": "Project delivered directly by Abaco Developments.",
             "website": "Visit website"
         },
         "roles": {
@@ -913,12 +909,6 @@
             "subtitle": "Tell us your context and we will review which solution fits best.",
             "primary": "Tell us about your project",
             "secondary": "Book a time"
-        },
-        "validation": {
-            "pendingNote": "Historical case pending final validation.",
-            "pendingSection": "Pending completion after validation.",
-            "pendingResult": "Result pending completion after validation. No unconfirmed metrics or conclusions are shown.",
-            "pendingShort": "Pending"
         }
     },
     "aboutPage": {
@@ -969,9 +959,9 @@
         },
         "team": {
             "title": "Meet the team",
-            "subtitle": "Publishable profiles of the team, collaborators or specialists linked to AbacoQD once they are validated.",
-            "emptyTitle": "Team in preparation",
-            "emptyText": "We'll show published profiles here once they're validated. Meanwhile, this page focuses on who we are, what AbacoQD is and what kind of solutions we build.",
+            "subtitle": "Public profiles of the team, collaborators or specialists linked to AbacoQD.",
+            "emptyTitle": "Team",
+            "emptyText": "This page focuses on who we are, what AbacoQD is and what kind of solutions we build.",
             "cvCta": "Download CV",
             "cvAriaLabel": "Download CV PDF for"
         },
@@ -1009,7 +999,7 @@
             "next": "Next page"
         },
         "empty": {
-            "noPostsTitle": "We're preparing the first articles.",
+            "noPostsTitle": "No articles are published yet.",
             "searchTitle": "We couldn't find any articles for that search.",
             "categoryTitle": "There are no articles published in this category yet.",
             "viewAll": "View all articles",
@@ -1102,7 +1092,7 @@
                         },
                         {
                             "type": "p",
-                            "text": "The historical domain https://abacodev.com/ belongs to ABACO; its coexistence with or redirection to the current domain is pending confirmation."
+                            "text": "The official website of ABACO is https://abacoqd.com/."
                         }
                     ]
                 },
@@ -1431,10 +1421,10 @@
         },
         "cookies": {
             "metaTitle": "Cookie policy · AbacoQD",
-            "metaDescription": "Information about the use of technical cookies, preferences and possible measurement tools on the Abaco Developments site.",
+            "metaDescription": "Information about the technical cookies and storage technologies required for the operation of the site.",
             "eyebrow": "COOKIES",
             "title": "Cookie policy",
-            "subtitle": "Information about the use of technical cookies, preferences and possible measurement tools.",
+            "subtitle": "Information about the technical cookies and storage technologies required for the operation of the site.",
             "breadcrumb": "Cookie policy",
             "sections": [
                 {
@@ -1460,8 +1450,8 @@
                             "items": [
                                 "Technical or necessary cookies: essential for the operation of the site.",
                                 "Preference cookies: remember the user's options, such as language or theme.",
-                                "Analytics cookies: allow measuring use of the site (only with consent).",
-                                "Third-party cookies: managed by external providers (only with consent)."
+                                "Analytics cookies: this site does not use analytics cookies.",
+                                "Third-party cookies: this site does not use third-party cookies, heatmaps, advertising tools or external tracking."
                             ]
                         }
                     ]
@@ -1542,7 +1532,7 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "We currently do not activate non-necessary analytics cookies without prior consent. If analytics or third-party tools are incorporated, this policy will be updated and a consent mechanism will be enabled where applicable."
+                            "text": "This site does not use analytics cookies, heatmaps, advertising tools, tracking pixels or external measurement providers."
                         }
                     ]
                 },
@@ -1638,7 +1628,7 @@
             "linkedin": "Abaco Developments on LinkedIn",
             "facebook": "Abaco Developments on Facebook",
             "googleReviews": "Reviews on Google",
-            "googleReviewsPending": "Google reviews (coming soon)",
+            "googleReviewsUnavailable": "Google reviews",
             "googleProfileLabel": "View Abaco Developments on Google",
             "googleReviewVerified": "verified review",
             "googleReviewsVerified": "verified reviews"

@@ -36,7 +36,6 @@ type PublicProject = {
     readonly partnerLogoAlt: string | null;
     readonly executorName: string | null;
     readonly isHistorical: boolean;
-    readonly isApproved: boolean;
 };
 
 type PaginationLink = {
@@ -282,9 +281,6 @@ export default function Projects({ projects }: ProjectsProps) {
         const cardUrl = detailUrl ?? consultUrl;
         const statusBadges = [
             project.isHistorical ? t('projectsPage.badge.historical') : null,
-            !project.isApproved
-                ? t('projectsPage.badge.pendingValidation')
-                : null,
         ].filter((badge): badge is string => badge !== null);
 
         return (

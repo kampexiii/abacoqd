@@ -48,7 +48,7 @@ type LegalTree = Record<Locale, { legalPages: Record<LegalPageKind, LegalContent
 
 const LEGAL_TREE = { es: esLang, en: enLang } as unknown as LegalTree;
 
-// Datos corporativos confirmados. Pendiente: servir desde `settings` públicos.
+// Datos corporativos confirmados; se mantienen aquí hasta centralizarlos en settings públicos.
 const COMPANY = {
     legalName: 'ABACO DIGITAL DEVELOPMENTS, S.L.',
     cif: 'B-88229364',

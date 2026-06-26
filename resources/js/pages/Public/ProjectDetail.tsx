@@ -53,7 +53,6 @@ type RelatedProject = {
     readonly partnerName: string | null;
     readonly clientName: string | null;
     readonly isHistorical: boolean;
-    readonly isApproved: boolean;
 };
 
 type ProjectDetailRecord = RelatedProject & {
@@ -69,9 +68,6 @@ type ProjectDetailRecord = RelatedProject & {
     readonly partnerLogoAlt: string | null;
     readonly executorName: string | null;
     readonly externalUrl: string | null;
-    readonly permissionNotes: string | null;
-    readonly permissionStatus: string;
-    readonly settings: Record<string, unknown>;
     readonly partners: readonly ProjectPartner[];
 };
 
@@ -149,78 +145,71 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
     const mainPartner = client ?? project.partners[0] ?? null;
     const partnerLabel =
         project.partnerName ?? project.clientName ?? mainPartner?.name ?? t('projectsPage.card.internalProject');
-    const pendingLong = t('projectDetail.validation.pendingSection');
+    const executorName = project.executorName ?? executorPartner?.name ?? '';
     const statusBadges = [
         project.isHistorical ? t('projectsPage.badge.historical') : null,
-        !project.isApproved ? t('projectsPage.badge.pendingValidation') : null,
     ].filter((badge): badge is string => badge !== null);
     const processItems = [
-        description || summary || t('projectDetail.validation.pendingSection'),
+        description || summary,
         t('projectDetail.process.validation'),
         technologies.length > 0
             ? `${t('projectDetail.process.capabilities')}: ${technologies.join(', ')}`
-            : t('projectDetail.validation.pendingSection'),
-    ];
+            : null,
+    ].filter((item): item is string => item !== null && item.length > 0);
 
     const infoBlocks = [
         {
             key: 'context',
             icon: Target,
             title: t('projectDetail.blocks.context.title'),
-            body: description || summary || t('projectDetail.validation.pendingSection'),
+            body: description || summary,
         },
         {
             key: 'challenge',
             icon: Mountain,
             title: t('projectDetail.blocks.challenge.title'),
-            body:
-                optionalText(project.challenge, locale) ||
-                t('projectDetail.validation.pendingSection'),
+            body: optionalText(project.challenge, locale),
         },
         {
             key: 'solution',
             icon: Boxes,
             title: t('projectDetail.blocks.solution.title'),
-            body:
-                optionalText(project.solution, locale) ||
-                t('projectDetail.validation.pendingSection'),
+            body: optionalText(project.solution, locale),
         },
         {
             key: 'result',
             icon: BarChart3,
             title: t('projectDetail.blocks.result.title'),
-            body:
-                optionalText(project.result, locale) ||
-                t('projectDetail.validation.pendingResult'),
+            body: optionalText(project.result, locale),
         },
-    ] as const;
+    ].filter((block) => block.body.length > 0);
 
     const meta = [
-        {
+        project.year ? {
             key: 'year',
             icon: CalendarDays,
             label: t('projectDetail.meta.year'),
-            value: project.year ? String(project.year) : t('projectDetail.validation.pendingShort'),
-        },
-        {
+            value: String(project.year),
+        } : null,
+        technologies.length > 0 ? {
             key: 'capabilities',
             icon: Users,
             label: t('projectDetail.meta.capabilities'),
-            value: technologies.slice(0, 2).join(' · ') || pendingLong,
-        },
-        {
+            value: technologies.slice(0, 2).join(' · '),
+        } : null,
+        executorName ? {
             key: 'role',
             icon: Users,
             label: t('projectDetail.meta.role'),
-            value: project.executorName ?? executorPartner?.name ?? pendingLong,
-        },
-        {
+            value: executorName,
+        } : null,
+        technologies.length > 0 ? {
             key: 'technologies',
             icon: Cpu,
             label: t('projectDetail.meta.technologies'),
-            value: technologies.slice(0, 3).join(' · ') || pendingLong,
-        },
-    ] as const;
+            value: technologies.slice(0, 3).join(' · '),
+        } : null,
+    ];
     const keyFactsTitle = locale === 'en' ? 'Key details' : 'Datos clave';
 
     return (
@@ -230,7 +219,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
             <PublicPageHero
                 eyebrow={t('projectDetail.hero.eyebrow')}
                 title={title}
-                subtitle={summary || t('projectDetail.validation.pendingSection')}
+                subtitle={summary}
                 currentLabel={title}
                 parentLabel={t('navigation.items.proyectos')}
                 parentHref="/proyectos"
@@ -279,6 +268,10 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                     </div>
                     <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                         {meta.map((item) => {
+                            if (item === null) {
+                                return null;
+                            }
+
                             const Icon = item.icon;
 
                             return (
@@ -345,7 +338,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                             {t('projectDetail.process.title')}
                         </h2>
                         <p className="mt-5 text-sm leading-relaxed text-qd-text-high sm:text-base">
-                            {description || summary || t('projectDetail.validation.pendingSection')}
+                            {description || summary}
                         </p>
                         <ul className="mt-8 divide-y divide-qd-ink/10 dark:divide-qd-white/10">
                             {processItems.map((item, index) => (
@@ -371,19 +364,18 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                         >
                             {t('projectDetail.technologies.title')}
                         </h2>
-                        <div className="mt-5 flex flex-wrap gap-3">
-                            {(technologies.length > 0
-                                ? technologies
-                                : [t('projectDetail.validation.pendingShort')]
-                            ).map((technology) => (
-                                <span
-                                    key={technology}
-                                    className="rounded-lg border border-qd-ink/10 bg-qd-white px-4 py-2 text-sm font-semibold text-qd-text-high dark:border-qd-white/10 dark:bg-qd-white/5"
-                                >
-                                    {technology}
-                                </span>
-                            ))}
-                        </div>
+                        {technologies.length > 0 && (
+                            <div className="mt-5 flex flex-wrap gap-3">
+                                {technologies.map((technology) => (
+                                    <span
+                                        key={technology}
+                                        className="rounded-lg border border-qd-ink/10 bg-qd-white px-4 py-2 text-sm font-semibold text-qd-text-high dark:border-qd-white/10 dark:bg-qd-white/5"
+                                    >
+                                        {technology}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
 
                         <figure className="relative mt-8 overflow-hidden rounded-2xl border border-qd-ink/10 bg-qd-white shadow-[0_24px_80px_-48px_rgba(7,17,26,0.45)] dark:border-qd-white/10 dark:bg-qd-surface">
                             {cover ? (
@@ -396,27 +388,6 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                             ) : (
                                 <BrandPattern label={t('projectDetail.media.fallback')} />
                             )}
-                            <div className="absolute bottom-0 left-0 flex w-full max-w-sm items-center gap-6 rounded-tr-2xl bg-qd-ink/94 px-7 py-5 text-qd-white backdrop-blur">
-                                <div>
-                                    <p className="text-2xl font-bold text-qd-white">
-                                        {project.isApproved
-                                            ? t('projectDetail.media.approved')
-                                            : t('projectDetail.validation.pendingShort')}
-                                    </p>
-                                    <p className="mt-1 text-xs text-qd-white/68">
-                                        {t('projectDetail.media.validation')}
-                                    </p>
-                                </div>
-                                <span className="h-10 w-px bg-qd-white/12" />
-                                <div>
-                                    <p className="text-2xl font-bold text-qd-white">
-                                        {project.permissionStatus}
-                                    </p>
-                                    <p className="mt-1 text-xs text-qd-white/68">
-                                        {t('projectDetail.media.permission')}
-                                    </p>
-                                </div>
-                            </div>
                         </figure>
                     </section>
                 </div>
@@ -489,7 +460,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                             ))}
                             {project.partners.length === 0 && (
                                 <p className="text-sm text-qd-text-high">
-                                    {t('projectDetail.validation.pendingSection')}
+                                    {t('projectDetail.partners.direct')}
                                 </p>
                             )}
                         </div>

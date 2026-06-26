@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 /**
  * Usuario super_admin de acceso al panel — SOLO entorno local/desarrollo.
  *
- * Credenciales demo (no producción): admin@abacoqd.local / password.
+ * Credenciales locales (no producción): admin@abacoqd.local / password.
  * Es idempotente (firstOrCreate por email): no duplica ni resetea la contraseña
  * si el usuario ya existe. En producción no crea nada.
  */

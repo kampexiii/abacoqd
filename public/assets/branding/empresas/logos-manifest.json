@@ -16,17 +16,6 @@
             "source_notes": "SVG oficial descargado desde Iberia."
         },
         {
-            "name": "Iksula",
-            "slug": "iksula",
-            "type": "colaboracion",
-            "status": "pendiente_fuente_verificable",
-            "original_path": null,
-            "optimized_light_path": null,
-            "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "Sitio protegido por Cloudflare y sin asset público verificable localizado durante la búsqueda."
-        },
-        {
             "name": "Leroy Merlin",
             "slug": "leroy-merlin",
             "type": "colaboracion",
@@ -36,17 +25,6 @@
             "optimized_dark_path": null,
             "source_url": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Leroy_Merlin_-_logo_%28France%2C_1995-%29.svg",
             "source_notes": "SVG obtenido desde Wikimedia Commons; la web oficial bloqueó la descarga automatizada."
-        },
-        {
-            "name": "IFW",
-            "slug": "ifw",
-            "type": "colaboracion",
-            "status": "pendiente_fuente_verificable",
-            "original_path": null,
-            "optimized_light_path": null,
-            "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "No se ha podido identificar una fuente pública fiable del logotipo bajo la marca IFW."
         },
         {
             "name": "Devtia",
@@ -126,28 +104,6 @@
             "source_notes": "SVG oficial descargado desde Urban Fisio."
         },
         {
-            "name": "Fantasy JP",
-            "slug": "fantasy-jp",
-            "type": "cliente_directo",
-            "status": "pendiente_fuente_verificable",
-            "original_path": null,
-            "optimized_light_path": null,
-            "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "Se localizaron dominios y recursos no confiables, pero ninguna fuente pública verificable del logotipo."
-        },
-        {
-            "name": "RB",
-            "slug": "rb",
-            "type": "cliente_directo",
-            "status": "pendiente_empresa_no_identificada",
-            "original_path": null,
-            "optimized_light_path": null,
-            "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "La marca RB es demasiado ambigua y no se ha podido atribuir un logotipo fiable al proyecto sin más contexto."
-        },
-        {
             "name": "YoSEO Marketing",
             "slug": "yoseo-marketing",
             "type": "cliente_directo",
@@ -157,17 +113,6 @@
             "optimized_dark_path": "public/assets/branding/empresas/clientes-directos/optimizados/yoseo-marketing-dark.webp",
             "source_url": "https://www.yoseomarketing.com/wp-content/uploads/2022/04/Logo-yoSEO1.png",
             "source_notes": "PNG oficial convertido a WEBP. Se generó variante dark manteniendo el acento azul y elevando el contraste del texto."
-        },
-        {
-            "name": "I Feel Web",
-            "slug": "i-feel-web",
-            "type": "cliente_directo",
-            "status": "pendiente_dominio_inactivo",
-            "original_path": null,
-            "optimized_light_path": null,
-            "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "No se encontró una web corporativa activa con asset público fiable; el dominio localizado parece expirado o reciclado."
         },
         {
             "name": "Meliá Hotels International",

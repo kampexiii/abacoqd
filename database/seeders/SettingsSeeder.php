@@ -26,7 +26,7 @@ class SettingsSeeder extends Seeder
             ['company', 'country', 'España', 'string', true, 'País confirmado.'],
             ['company', 'website', 'https://abacoqd.com/', 'url', true, 'Dominio canónico final.'],
             ['contact', 'phone', '+34 91 020 00 89', 'string', true, 'Teléfono fijo confirmado.'],
-            ['contact', 'whatsapp', '+34 647 51 81 00', 'string', true, 'WhatsApp / contacto directo Andrés.'],
+            ['contact', 'whatsapp', '+34 647 51 81 00', 'string', true, 'WhatsApp / atención comercial.'],
             ['contact', 'email_primary', 'info@abacodev.com', 'email', true, 'Email principal confirmado.'],
             ['contact', 'email_secondary', 'abacodevelopments@gmail.com', 'email', false, 'Email secundario confirmado, no necesariamente público.'],
             ['contact', 'email_andres', 'andrescasanueva@abacodev.com', 'email', false, 'Email de Andrés confirmado, no necesariamente público.'],
@@ -38,9 +38,9 @@ class SettingsSeeder extends Seeder
             ['seo', 'public_brand_name', 'Abaco Developments', 'string', true, 'Marca pública para SEO.'],
             ['legacy', 'previous_domain', 'https://abacodev.com/', 'url', false, 'Dominio histórico/investigado.'],
             ['legacy', 'previous_legal_url', 'https://www.abacodev.com/', 'url', false, 'URL legal histórica aportada.'],
-            ['legacy', 'redirect_policy', 'pendiente de confirmar', 'string', false, 'No hay 301 definitiva documentada.'],
+            ['legacy', 'redirect_policy', 'sin_decision_publica', 'string', false, 'No hay 301 documentada.'],
             ['institutional', 'eu_fse_text', 'Cofinanciado por la Unión Europea (FSE+) Subvención para la contratación de jóvenes - Comunidad de Madrid.', 'string', true, 'Texto institucional aportado.'],
-            ['institutional', 'benow_partner_logo', null, 'asset', false, 'Pendiente: no se ha podido verificar la fuente oficial de "be now Partner".'],
+            ['institutional', 'benow_partner_logo', null, 'asset', false, 'Logo institucional no verificado; no publicar sin fuente oficial.'],
             ['institutional', 'eu_cofunded_logo', '/assets/branding/institucional/optimizados/eu-cofinanciado-dark.webp', 'asset', true, 'Emblema oficial UE (Logo Download Centre, DG REGIO), variante blanca para fondo oscuro.'],
             ['institutional', 'european_funds_logo', '/assets/branding/institucional/optimizados/fondos-europeos.svg', 'asset', true, 'Logo oficial Fondos Europeos (Gobierno de España, vía Wikimedia Commons CC BY 4.0).'],
             ['theme', 'mode', 'system', 'string', true, 'Modo inicial: claro/oscuro/sistema.'],
@@ -49,9 +49,9 @@ class SettingsSeeder extends Seeder
             ['booking', 'recommended_provider', 'Cal.com', 'string', false, 'Proveedor recomendado documentalmente.'],
             ['booking', 'fast_option', 'Calendly', 'string', false, 'Alternativa rápida documental.'],
             ['booking', 'wordpress_option', 'Amelia', 'string', false, 'Solo si el stack final fuera WordPress.'],
-            ['analytics', 'recommended_stack', 'GTM + GA4 + Search Console', 'string', false, 'Stack recomendado, pendiente de confirmación.'],
-            ['analytics', 'recommended_cmp', 'CookieYes', 'string', false, 'CMP recomendado, pendiente de confirmación.'],
-            ['analytics', 'optional_session_insights', 'Clarity', 'string', false, 'Solo si se aprueba y queda bloqueado por consentimiento.'],
+            ['analytics', 'recommended_stack', null, 'string', false, 'No se usa analítica en el sitio público.'],
+            ['analytics', 'recommended_cmp', null, 'string', false, 'No se usa CMP de terceros en el sitio público.'],
+            ['analytics', 'optional_session_insights', null, 'string', false, 'No se usan herramientas de sesión en el sitio público.'],
         ];
 
         foreach ($settings as [$group, $key, $value, $type, $isPublic, $description]) {

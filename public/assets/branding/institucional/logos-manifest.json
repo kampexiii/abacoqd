@@ -24,18 +24,7 @@
             "optimized_light_path": "public/assets/branding/institucional/optimizados/fondos-europeos.svg",
             "optimized_dark_path": null,
             "source_url": "https://upload.wikimedia.org/wikipedia/commons/0/03/Logotipo_de_los_Fondos_Europeos.svg",
-            "source_notes": "SVG bajo licencia CC BY 4.0, atribuido a Gobierno de España (recreación de TheRichic en Wikimedia Commons) del logotipo oficial de identidad de la Secretaría General de Fondos Europeos. No se localizó una variante oficial en blanco/negativa para fondo oscuro; en la UI se muestra sobre una tarjeta clara para no recolorear el original. Pendiente sustituir por el archivo oficial directo de fondoseuropeos.hacienda.gob.es si se consigue."
-        },
-        {
-            "name": "be now Partner",
-            "slug": "benow-partner",
-            "type": "institucional",
-            "status": "pendiente_fuente_verificable",
-            "original_path": null,
-            "optimized_light_path": null,
-            "optimized_dark_path": null,
-            "source_url": null,
-            "source_notes": "No se ha podido identificar con confianza la empresa/red \"be now Partner\" (rayo entre \"be\" y \"now\", bloques rosa/amarillo) en búsquedas web; los resultados encontrados (despacho de abogados Benow Partners Madrid, fintech india Benow, ticketing alemán BeNow) no coinciden con el diseño aportado por el cliente. Pendiente de que el cliente facilite el archivo o la web oficial."
+            "source_notes": "SVG bajo licencia CC BY 4.0, atribuido a Gobierno de España (recreación de TheRichic en Wikimedia Commons) del logotipo oficial de identidad de la Secretaría General de Fondos Europeos. No se localizó una variante oficial en blanco/negativa para fondo oscuro; en la UI se muestra sobre una tarjeta clara para no recolorear el original."
         }
     ]
 }

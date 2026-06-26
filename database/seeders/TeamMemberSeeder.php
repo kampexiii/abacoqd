@@ -11,13 +11,13 @@ use Illuminate\Support\Facades\Storage;
  * Perfiles reales de `team_members`. Idempotente vía `updateOrCreate` por
  * `slug`: no duplica al re-ejecutar `migrate:fresh --seed`.
  *
- * La foto de Andrés se procesa desde un PNG temporal aportado en la raíz del
+ * La foto de Andrés se procesa desde un PNG local aportado en la raíz del
  * proyecto (`andres.png`, fuera de control de versiones) usando
  * `TeamMemberPhotoService`, el mismo servicio que deberá reutilizar el futuro
  * CRUD admin al subir/cambiar fotos. Prioridad para resolver `photo`:
- * 1) PNG temporal en la raíz, si está presente (se convierte de nuevo);
+ * 1) PNG local en la raíz, si está presente (se convierte de nuevo);
  * 2) WebP ya versionado en `public/uploads/team-members` (clon limpio del
- *    repo, sin el PNG temporal pero con el asset ya commiteado);
+ *    repo, sin el PNG local pero con el asset ya commiteado);
  * 3) valor ya guardado en BD para ese slug (re-seed sin wipe);
  * 4) `null` si no hay ninguna de las anteriores.
  */
@@ -64,7 +64,7 @@ class TeamMemberSeeder extends Seeder
                 'is_visible' => true,
                 'is_active' => true,
                 'settings' => [
-                    'validation_status' => 'pending_final_approval',
+                    'publication_status' => 'public',
                 ],
             ],
         );

@@ -20,8 +20,6 @@ Ver `logos-manifest.json` para fuente, licencia y notas de cada logo.
 - `fondos-europeos`: verificado, fuente pública (Gobierno de España vía
   Wikimedia Commons, CC BY 4.0), sin variante oscura oficial — se muestra
   sobre una tarjeta clara en el footer para no recolorear el original.
-- `benow-partner`: pendiente. No se ha podido verificar la empresa/red
-  correcta; falta que el cliente aporte el archivo o la web oficial.
 
 ## Normas de nombres
 

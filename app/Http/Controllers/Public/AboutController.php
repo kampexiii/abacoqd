@@ -14,8 +14,7 @@ class AboutController extends Controller
      * docs/07_VISTAS/PUBLIC_10_QUIENES_SOMOS.md.
      *
      * Solo se listan miembros visibles y activos: si no hay ninguno, la vista
-     * muestra un bloque corporativo de "equipo en preparación" en lugar de un
-     * grid vacío.
+     * muestra un bloque corporativo neutro en lugar de un grid vacío.
      */
     public function index(): Response
     {

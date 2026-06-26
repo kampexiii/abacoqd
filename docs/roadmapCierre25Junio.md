@@ -298,3 +298,32 @@ Nota: el `.env` local con el SMTP de pruebas y `BOOKING_NOTIFY_EMAIL` lo configu
 - ~~Permisos de proyectos/partners~~ → **resuelto (26/06)**: gestión visible de «permiso» retirada del admin; columna `permission_status` queda como compatibilidad interna (`approved`); eliminación de la columna pendiente de migración futura.
 - ¿`BOOKING_NOTIFY_EMAIL` separada (recomendado, con fallback a contacto) o receptor compartido?
 - Permisos de proyectos/partners/logos/reseñas (negocio + Andrés).
+
+---
+
+## 9. Limpieza final de textos publicos y payload - 26/06
+
+Estado: cerrado a nivel de fuentes publicas, payload y build. Queda pendiente ejecutar `composer test` fuera del sandbox.
+
+Hecho:
+
+- Limpieza de copy publico ES/EN en cookies, chatbot, contacto, aviso legal EN, politica de cookies EN, detalle de proyecto y estados vacios.
+- Sanitizacion de payload publico: el detalle de proyecto ya no envia `permissionNotes`, `settings` completos, `permissionStatus` ni `isApproved`.
+- Retirada de badges/fallbacks publicos de permisos o validacion en proyectos y colaboraciones.
+- Neutralizacion de seeders/settings publicables: sin `confirmed_by_pablo`, sin `pending_final_approval`, sin etiquetas publicas de contacto directo a Andres.
+- Retirada de `be now Partner` y logos/entradas no verificadas de manifiestos publicos.
+- Renombrado de constante interna `PABLO_WAVE_PATH` a `WAVE_PATH`.
+- Documentacion actualizada en `docs/limpieza.md` y `docs/auditoria25Junio.md`.
+
+Validaciones:
+
+- `npm run types:check`: verde.
+- `npm run lint:check`: verde.
+- `cmd.exe /C npm run build`: verde.
+- Busqueda de cierre en fuentes publicas, `public/assets` y `public/build`: sin restos exactos de las frases criticas eliminadas.
+- `composer test`: no ejecutado; bloqueado por el sandbox al invocar PHP/Composer de XAMPP.
+
+Siguiente accion recomendada:
+
+1. Ejecutar `composer test` en entorno local Windows/XAMPP sin sandbox.
+2. Si se commitea, stagear por rutas explicitas; no usar `git add .` ni `git add -A`.

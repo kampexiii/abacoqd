@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Public;
 
-use App\Enums\PermissionStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\Post;
@@ -16,11 +15,11 @@ class HomeController extends Controller
      * Render the public landing.
      *
      * La sección Colaboraciones (noria) se alimenta de `partners` marcados como
-     * activos y "Mostrar en noria" (`show_in_collaborations`), con permiso
-     * publicable (aprobado o preview local vía `Partner::scopePubliclyListable`)
+     * activos y "Mostrar en noria" (`show_in_collaborations`), publicables vía
+     * `Partner::scopePubliclyListable`
      * y con logo disponible. La pertenencia de un partner a un proyecto se
      * modela con `partner_project`; no decide la noria ni se usan flags de
-     * Project. Si no hay datos, la noria cae a su fallback estático sin romperse.
+     * Project. Si no hay datos, se muestra un estado vacío sin romper la sección.
      *
      * La sección Blog usa el post destacado (`Post::featured()`) como card
      * grande y los 2 últimos publicados como cards pequeñas, excluyendo el
@@ -71,7 +70,6 @@ class HomeController extends Controller
                         'logoAlt' => $partner->logo_alt,
                         'href' => '/proyectos',
                         'isHistorical' => (bool) ($settings['is_historical'] ?? false),
-                        'isApproved' => $partner->permission_status === PermissionStatus::Approved,
                     ];
                 })
                 ->values(),

@@ -14,7 +14,6 @@ export type CollaborationItem = {
     readonly logoAlt?: string | null;
     readonly href?: string | null;
     readonly isHistorical?: boolean;
-    readonly isApproved?: boolean;
 };
 
 type CollaborationsSectionProps = {
@@ -29,7 +28,6 @@ type OrbitLogo = {
     readonly alt: string;
     readonly href: string;
     readonly isHistorical: boolean;
-    readonly isApproved: boolean;
 };
 
 const FULL_ROTATION_MS = 56_000;
@@ -186,7 +184,6 @@ const toOrbitLogo = (
     alt: item.logoAlt ?? `Logotipo de ${item.name}`,
     href: item.href ?? `/proyectos#${item.slug}`,
     isHistorical: item.isHistorical ?? false,
-    isApproved: item.isApproved ?? false,
 });
 
 /**
@@ -450,9 +447,6 @@ export default function CollaborationsSection({
                             const statusBadges = [
                                 logo.isHistorical
                                     ? t('projectsPage.badge.historical')
-                                    : null,
-                                !logo.isApproved
-                                    ? t('projectsPage.badge.pendingValidation')
                                     : null,
                             ].filter((badge): badge is string => badge !== null);
 

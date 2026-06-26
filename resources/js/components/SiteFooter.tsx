@@ -175,9 +175,6 @@ export default function SiteFooter() {
                         </div>
 
                         <div className="mt-[12px] flex flex-wrap items-center gap-2">
-                            <span className="inline-flex h-[30px] items-center rounded-[8px] border border-white/12 bg-[#101a25] px-3 text-[11px] font-extrabold text-[#c8d0d6]">
-                                be now Partner
-                            </span>
                             <span className="inline-flex h-[30px] items-center rounded-[8px] border border-white/12 bg-white px-3">
                                 <img
                                     src={fondosEuropeosLogo}
@@ -356,7 +353,7 @@ export default function SiteFooter() {
                                     <span className="flex items-center gap-2.5 text-qd-text-medium/60 italic">
                                         <GoogleGlyph />
                                         {t(
-                                            'footer.contact.googleReviewsPending',
+                                            'footer.contact.googleReviewsUnavailable',
                                         )}
                                     </span>
                                 )}

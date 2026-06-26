@@ -25,7 +25,7 @@
     "cookieNotice": {
         "ariaLabel": "Aviso de cookies",
         "title": "Tu privacidad",
-        "body": "Usamos cookies técnicas necesarias para que la web funcione correctamente. No usamos analítica, mapas de calor ni proveedores externos en esta fase.",
+        "body": "Usamos cookies técnicas necesarias y preferencias de tema, idioma y accesibilidad. No usamos analítica, mapas de calor, publicidad ni proveedores externos.",
         "accept": "Entendido",
         "policyLink": "Política de cookies",
         "reopen": "Volver a mostrar el aviso informativo de cookies"
@@ -61,7 +61,7 @@
         },
         "moreInfo": "Más información",
         "restart": "Empezar de nuevo",
-        "emptyState": "Pronto añadiremos preguntas frecuentes aquí. Mientras tanto, escríbenos por cualquiera de estos canales.",
+        "emptyState": "Puedes contactar con el equipo por cualquiera de estos canales.",
         "fallbackTitle": "¿Prefieres hablar con el equipo?",
         "goToContact": "Ir a Contacto",
         "whatsapp": "WhatsApp"
@@ -166,7 +166,7 @@
                     "chips": [
                         "Entrega rápida",
                         "Stack moderno",
-                        "Validación real"
+                        "Prueba real"
                     ]
                 }
             }
@@ -278,17 +278,17 @@
             "lead": "Estamos construyendo este espacio con opiniones reales de quienes ya trabajan con nosotros.",
             "cards": {
                 "first": {
-                    "quote": "Reseñas verificadas pendientes de conexión con perfil público.",
-                    "role": "Reseña en proceso de publicación"
+                    "quote": "Mostramos reseñas solo cuando proceden de fuentes públicas verificadas.",
+                    "role": "Fuente pública verificada"
                 },
                 "second": {
-                    "quote": "Reseñas verificadas pendientes de conexión con perfil público.",
-                    "role": "Reseña en proceso de publicación"
+                    "quote": "Mostramos reseñas solo cuando proceden de fuentes públicas verificadas.",
+                    "role": "Fuente pública verificada"
                 }
             },
             "panel": {
                 "title": "Ayúdanos a crecer",
-                "description": "Reseñas verificadas pendientes de conexión con perfil público.",
+                "description": "Mostramos reseñas solo cuando proceden de fuentes públicas verificadas.",
                 "leaveReview": "Dejar una reseña",
                 "viewProfile": "Ver perfil de Google"
             }
@@ -323,8 +323,8 @@
             "cta": "Ver proyectos",
             "visualAria": "Logos de proyectos y colaboraciones",
             "empty": {
-                "title": "Primeros casos en preparación.",
-                "subtitle": "Estamos preparando los próximos proyectos publicables.",
+                "title": "Aún no hay casos publicados.",
+                "subtitle": "Mostraremos aquí proyectos cuando puedan publicarse con permiso y contexto real.",
                 "services": "Ver servicios",
                 "contact": "Cuéntanos tu proyecto"
             }
@@ -335,7 +335,7 @@
             "lead": "Compartimos aprendizajes, criterios técnicos y recursos para entender mejor cómo la tecnología puede acelerar procesos reales.",
             "cta": "Leer artículo",
             "ctaAll": "Ver todos los artículos",
-            "emptyText": "Estamos preparando los primeros artículos del blog."
+            "emptyText": "Aún no hay artículos publicados en el blog."
         },
         "cta": {
             "eyebrow": "EMPECEMOS",
@@ -372,7 +372,7 @@
         "details": {
             "email": "Email",
             "phone": "Teléfono",
-            "whatsapp": "WhatsApp / contacto directo Andrés",
+            "whatsapp": "WhatsApp / atención comercial",
             "address": "Dirección"
         },
         "form": {
@@ -570,7 +570,7 @@
             "mvp": {
                 "title": "MVPs y prototipos",
                 "description": "Validamos tu idea con una primera versión funcional para aprender rápido, reducir riesgo y preparar el siguiente paso.",
-                "chips": ["MVP", "Prototipos", "Validación"]
+                "chips": ["MVP", "Prototipos", "Prueba"]
             }
         },
         "choose": {
@@ -695,7 +695,7 @@
                     "Paneles multirol",
                     "Flujos de trabajo propios",
                     "APIs internas",
-                    "Validación de datos",
+                    "Control de datos",
                     "Base mantenible"
                 ]
             },
@@ -749,7 +749,7 @@
                     "Webhooks",
                     "Sincronización de datos",
                     "Conectores entre plataformas",
-                    "Validación y control",
+                    "Revisión y control",
                     "Documentación técnica"
                 ]
             },
@@ -766,7 +766,7 @@
                     "Definición de alcance",
                     "Prototipos funcionales",
                     "Diseño de flujo",
-                    "Validación técnica",
+                    "Revisión técnica",
                     "Base escalable",
                     "Plan de evolución"
                 ]
@@ -814,8 +814,7 @@
             "executorBy": "Ejecutado por"
         },
         "badge": {
-            "historical": "Histórico",
-            "pendingValidation": "Pendiente de validación"
+            "historical": "Histórico"
         },
         "pagination": {
             "label": "Paginación de proyectos",
@@ -825,12 +824,11 @@
         },
         "partners": {
             "title": "Partners con los que colaboramos",
-            "note": "Mostramos estas marcas con su permiso.",
-            "pendingNote": "Marcas históricas en validación — pendientes de permiso de publicación."
+            "note": "Mostramos estas marcas con su permiso."
         },
         "empty": {
-            "title": "Primeros casos en preparación.",
-            "subtitle": "Estamos preparando los proyectos que pueden mostrarse públicamente con permiso y contexto real.",
+            "title": "Aún no hay proyectos publicados.",
+            "subtitle": "Mostraremos aquí los proyectos que puedan compartirse con permiso y contexto real.",
             "services": "Ver servicios",
             "contact": "Cuéntanos tu proyecto"
         },
@@ -849,8 +847,8 @@
             "related": "Ver proyectos relacionados"
         },
         "heroTagline": {
-            "title": "Case study histórico.",
-            "subtitle": "Contenido visible en preview local hasta cerrar permisos."
+            "title": "Proyecto documentado.",
+            "subtitle": "Contexto, alcance y capacidades aplicadas."
         },
         "meta": {
             "year": "Año",
@@ -874,25 +872,23 @@
         },
         "process": {
             "eyebrow": "CÓMO LO HICIMOS",
-            "title": "Trabajo documentado pendiente de validación final.",
-            "validation": "La información mostrada procede del histórico aportado por Ábaco y debe validarse antes de publicarse como caso aprobado.",
+            "title": "Cómo abordamos el proyecto.",
+            "validation": "Documentamos el contexto, las decisiones técnicas y las capacidades aplicadas en el proyecto.",
             "capabilities": "Capacidades registradas"
         },
         "technologies": {
             "title": "Tecnologías utilizadas"
         },
         "media": {
-            "fallback": "Imagen del proyecto pendiente de validación",
-            "approved": "Aprobado",
-            "validation": "estado de validación",
-            "permission": "permiso"
+            "fallback": "Imagen representativa de Abaco Developments"
         },
         "partners": {
             "eyebrow": "PARTNERS Y ROLES",
             "title": "Quién participa en el proyecto",
             "partner": "Partner",
             "rolesTitle": "Roles del proyecto",
-            "note": "Los roles salen de la relación partner_project para no atribuir autorías falsas.",
+            "note": "Mostramos solo roles confirmados para este proyecto.",
+            "direct": "Proyecto realizado directamente por Abaco Developments.",
             "website": "Visitar web"
         },
         "roles": {
@@ -913,12 +909,6 @@
             "subtitle": "Cuéntanos tu contexto y revisamos qué solución encaja mejor.",
             "primary": "Cuéntanos tu proyecto",
             "secondary": "Reserva hora"
-        },
-        "validation": {
-            "pendingNote": "Caso histórico pendiente de validación final.",
-            "pendingSection": "Pendiente de completar tras validación.",
-            "pendingResult": "Resultado pendiente de completar tras validación. No se muestran métricas ni conclusiones no confirmadas.",
-            "pendingShort": "Pendiente"
         }
     },
     "aboutPage": {
@@ -969,9 +959,9 @@
         },
         "team": {
             "title": "Te presentamos al equipo",
-            "subtitle": "Perfiles publicables del equipo, colaboradores o especialistas vinculados a AbacoQD cuando estén validados.",
-            "emptyTitle": "Equipo en preparación",
-            "emptyText": "Mostraremos aquí los perfiles publicados cuando estén validados. Mientras tanto, esta página se centra en quiénes somos, qué es AbacoQD y qué tipo de soluciones construimos.",
+            "subtitle": "Perfiles públicos del equipo, colaboradores o especialistas vinculados a AbacoQD.",
+            "emptyTitle": "Equipo",
+            "emptyText": "Esta página se centra en quiénes somos, qué es AbacoQD y qué tipo de soluciones construimos.",
             "cvCta": "Descargar CV",
             "cvAriaLabel": "Descargar CV PDF de"
         },
@@ -1009,7 +999,7 @@
             "next": "Página siguiente"
         },
         "empty": {
-            "noPostsTitle": "Estamos preparando los primeros artículos.",
+            "noPostsTitle": "Aún no hay artículos publicados.",
             "searchTitle": "No hemos encontrado artículos con esa búsqueda.",
             "categoryTitle": "No hay artículos publicados en esta categoría.",
             "viewAll": "Ver todos los artículos",
@@ -1857,7 +1847,7 @@
                         },
                         {
                             "type": "p",
-                            "text": "Si en el futuro se incorporase alguna herramienta que requiera consentimiento, esta política se actualizará y se habilitará un mecanismo específico para aceptar, rechazar, configurar y revocar dicho consentimiento antes de cargar cualquier tecnología no necesaria."
+                            "text": "No se cargan tecnologías no necesarias ni proveedores externos de medición o seguimiento."
                         }
                     ]
                 },
@@ -1961,7 +1951,7 @@
             "linkedin": "LinkedIn de Abaco Developments",
             "facebook": "Facebook de Abaco Developments",
             "googleReviews": "Reseñas en Google",
-            "googleReviewsPending": "Reseñas en Google (próximamente)",
+            "googleReviewsUnavailable": "Reseñas en Google",
             "googleProfileLabel": "Ver el perfil de Abaco Developments en Google",
             "googleReviewVerified": "reseña verificada",
             "googleReviewsVerified": "reseñas verificadas"
