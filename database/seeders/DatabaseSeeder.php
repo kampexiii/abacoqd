@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             BookingSettingsSeeder::class,
             FaqSeeder::class,
             SeoMetadataSeeder::class,
+            ConfirmedPartnersSeeder::class,
             ConfirmedProjectsSeeder::class,
             TeamMemberSeeder::class,
             AdminUserSeeder::class,
