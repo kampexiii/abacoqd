@@ -51,10 +51,17 @@ function localizedText(value: LocalizedText | null, locale: Locale): string {
     return value[locale] ?? value.es ?? value.en ?? '';
 }
 
+function paragraphs(text: string): readonly string[] {
+    return text
+        .split('\n\n')
+        .map((paragraph) => paragraph.trim())
+        .filter(Boolean);
+}
+
 function initials(name: string): string {
     const parts = name.trim().split(/\s+/).filter(Boolean);
     const first = parts[0]?.[0] ?? '';
-    const second = parts.length > 1 ? parts[parts.length - 1]?.[0] ?? '' : '';
+    const second = parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? '') : '';
 
     return `${first}${second}`.toUpperCase();
 }
@@ -76,6 +83,107 @@ type AboutProps = {
     readonly teamMembers: readonly AboutTeamMember[];
 };
 
+function TeamMemberCard({
+    member,
+    locale,
+    cvCtaLabel,
+    cvAriaLabel,
+}: {
+    readonly member: AboutTeamMember;
+    readonly locale: Locale;
+    readonly cvCtaLabel: string;
+    readonly cvAriaLabel: string;
+}) {
+    const role = localizedText(member.role, locale);
+    const bio = localizedText(member.bio, locale);
+    const hasSocial =
+        member.linkedinUrl || member.githubUrl || member.personalUrl;
+
+    return (
+        <article className="abaco-card-hover flex h-full w-full flex-col rounded-2xl border border-qd-mist bg-qd-white p-8 text-center hover:-translate-y-1 hover:border-qd-teal-2/50 dark:border-qd-white/10 dark:bg-qd-surface dark:hover:border-qd-teal/50">
+            <div className="overflow-hidden rounded-xl border border-qd-mist bg-qd-mist p-1.5 dark:border-qd-teal/15 dark:bg-qd-white/5">
+                {member.photo ? (
+                    <img
+                        src={member.photo}
+                        alt={member.photoAlt ?? member.name}
+                        className="aspect-4/5 w-full rounded-lg object-cover object-[center_18%]"
+                    />
+                ) : (
+                    <div
+                        aria-hidden="true"
+                        className="flex aspect-4/5 w-full items-center justify-center rounded-lg bg-qd-mist text-4xl font-bold text-qd-teal-2 dark:bg-qd-white/5 dark:text-qd-teal"
+                    >
+                        {initials(member.name)}
+                    </div>
+                )}
+            </div>
+
+            <h3 className="mt-6 text-lg font-bold text-qd-ink dark:text-qd-white">
+                {member.name}
+            </h3>
+            {role && (
+                <p className="mt-1 text-sm font-semibold text-qd-teal-2 dark:text-qd-teal">
+                    {role}
+                </p>
+            )}
+            {bio && (
+                <p className="mt-3 text-sm leading-relaxed break-words text-qd-text-high">
+                    {bio}
+                </p>
+            )}
+
+            {(hasSocial || member.cvUrl) && (
+                <div className="mt-auto flex flex-wrap items-center justify-center gap-3 pt-7">
+                    {member.linkedinUrl && (
+                        <a
+                            href={member.linkedinUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`LinkedIn — ${member.name}`}
+                            className="flex size-9 items-center justify-center rounded-full border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2 hover:text-qd-teal-2 dark:border-qd-white/15 dark:text-qd-text-medium dark:hover:border-qd-teal dark:hover:text-qd-teal"
+                        >
+                            <Linkedin aria-hidden="true" size={16} />
+                        </a>
+                    )}
+                    {member.githubUrl && (
+                        <a
+                            href={member.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`GitHub — ${member.name}`}
+                            className="flex size-9 items-center justify-center rounded-full border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2 hover:text-qd-teal-2 dark:border-qd-white/15 dark:text-qd-text-medium dark:hover:border-qd-teal dark:hover:text-qd-teal"
+                        >
+                            <Github aria-hidden="true" size={16} />
+                        </a>
+                    )}
+                    {member.personalUrl && (
+                        <a
+                            href={member.personalUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Web — ${member.name}`}
+                            className="flex size-9 items-center justify-center rounded-full border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2 hover:text-qd-teal-2 dark:border-qd-white/15 dark:text-qd-text-medium dark:hover:border-qd-teal dark:hover:text-qd-teal"
+                        >
+                            <Globe aria-hidden="true" size={16} />
+                        </a>
+                    )}
+                    {member.cvUrl && (
+                        <a
+                            href={member.cvUrl}
+                            download
+                            aria-label={`${cvAriaLabel} ${member.name}`}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-qd-teal-2/40 px-3 py-1.5 text-xs font-bold text-qd-teal-2 transition hover:bg-qd-teal-2/10 dark:border-qd-teal/40 dark:text-qd-teal dark:hover:bg-qd-teal/10"
+                        >
+                            {cvCtaLabel}
+                            <Download aria-hidden="true" size={13} />
+                        </a>
+                    )}
+                </div>
+            )}
+        </article>
+    );
+}
+
 const VALUE_ITEMS: readonly {
     key: 'tailored' | 'speed' | 'criteria' | 'clarity' | 'technology';
     icon: LucideIcon;
@@ -89,12 +197,14 @@ const VALUE_ITEMS: readonly {
 
 export default function About({ teamMembers }: AboutProps) {
     const { t, locale } = useLanguage();
+    const leadMember = teamMembers[0] ?? null;
+    const supportingMembers = teamMembers.slice(1);
 
     const { ref: identityRef, inView: identityInView } =
         useInView<HTMLDivElement>({ threshold: 0.2 });
-    const { ref: valuesRef, inView: valuesInView } = useInView<HTMLDivElement>(
-        { threshold: 0.2 },
-    );
+    const { ref: valuesRef, inView: valuesInView } = useInView<HTMLDivElement>({
+        threshold: 0.2,
+    });
     const { ref: teamRef, inView: teamInView } = useInView<HTMLDivElement>({
         threshold: 0.1,
     });
@@ -134,9 +244,13 @@ export default function About({ teamMembers }: AboutProps) {
                             <h2 className="mt-5 text-2xl font-bold text-qd-ink sm:text-3xl dark:text-qd-white">
                                 {t('aboutPage.abacoDevelopments.title')}
                             </h2>
-                            <p className="mt-4 max-w-md text-sm leading-relaxed text-qd-text-high sm:text-base">
-                                {t('aboutPage.abacoDevelopments.text')}
-                            </p>
+                            <div className="mt-4 space-y-3 text-sm leading-relaxed text-qd-text-high sm:text-base">
+                                {paragraphs(
+                                    t('aboutPage.abacoDevelopments.text'),
+                                ).map((paragraph, index) => (
+                                    <p key={index}>{paragraph}</p>
+                                ))}
+                            </div>
                         </div>
 
                         <div className="rounded-3xl border border-qd-teal-2/20 bg-qd-white p-7 sm:p-9 dark:border-qd-teal/25 dark:bg-qd-white/5">
@@ -150,12 +264,13 @@ export default function About({ teamMembers }: AboutProps) {
                             <h2 className="mt-5 text-2xl font-bold text-qd-ink sm:text-3xl dark:text-qd-white">
                                 {t('aboutPage.abacoQD.title')}
                             </h2>
-                            <p className="mt-4 text-sm leading-relaxed text-qd-text-high sm:text-base">
-                                {t('aboutPage.abacoQD.text')}
-                            </p>
-                            <p className="mt-3 text-sm leading-relaxed text-qd-text-high sm:text-base">
-                                {t('aboutPage.abacoQD.support')}
-                            </p>
+                            <div className="mt-4 space-y-3 text-sm leading-relaxed text-qd-text-high sm:text-base">
+                                {paragraphs(t('aboutPage.abacoQD.text')).map(
+                                    (paragraph, index) => (
+                                        <p key={index}>{paragraph}</p>
+                                    ),
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -191,7 +306,9 @@ export default function About({ teamMembers }: AboutProps) {
                                     />
                                 </span>
                                 <h3 className="mt-4 text-base font-bold text-qd-ink dark:text-qd-white">
-                                    {t(`aboutPage.values.items.${item.key}.title`)}
+                                    {t(
+                                        `aboutPage.values.items.${item.key}.title`,
+                                    )}
                                 </h3>
                                 <p className="mt-2 text-sm leading-relaxed text-qd-text-high">
                                     {t(
@@ -230,139 +347,51 @@ export default function About({ teamMembers }: AboutProps) {
                     </p>
 
                     {teamMembers.length > 0 ? (
-                        <div
-                            ref={teamRef}
-                            className={cn(
-                                'abaco-stagger mt-12',
-                                teamMembers.length === 1
-                                    ? 'flex justify-center'
-                                    : 'grid gap-8 sm:grid-cols-2 lg:grid-cols-3',
-                                teamInView && 'is-visible',
-                            )}
-                        >
-                            {teamMembers.map((member) => {
-                                const role = localizedText(
-                                    member.role,
-                                    locale,
-                                );
-                                const bio = localizedText(member.bio, locale);
-                                const hasSocial =
-                                    member.linkedinUrl ||
-                                    member.githubUrl ||
-                                    member.personalUrl;
-
-                                return (
-                                    <article
-                                        key={member.id}
-                                        className={cn(
-                                            'abaco-card-hover flex flex-col rounded-2xl border border-qd-mist bg-qd-white p-8 hover:-translate-y-1 hover:border-qd-teal-2/50 dark:border-qd-white/10 dark:bg-qd-surface dark:hover:border-qd-teal/50',
-                                            teamMembers.length === 1 &&
-                                                'w-full max-w-95',
-                                        )}
-                                    >
-                                        <div className="overflow-hidden rounded-xl border border-qd-mist bg-qd-mist p-1.5 dark:border-qd-teal/15 dark:bg-qd-white/5">
-                                            {member.photo ? (
-                                                <img
-                                                    src={member.photo}
-                                                    alt={
-                                                        member.photoAlt ??
-                                                        member.name
-                                                    }
-                                                    className="aspect-4/5 w-full rounded-lg object-cover object-[center_18%]"
-                                                />
-                                            ) : (
-                                                <div
-                                                    aria-hidden="true"
-                                                    className="flex aspect-4/5 w-full items-center justify-center rounded-lg bg-qd-mist text-4xl font-bold text-qd-teal-2 dark:bg-qd-white/5 dark:text-qd-teal"
-                                                >
-                                                    {initials(member.name)}
-                                                </div>
+                        <div ref={teamRef} className="mt-12">
+                            {leadMember && (
+                                <div
+                                    className={cn(
+                                        'abaco-stagger grid gap-8 sm:grid-cols-2 lg:grid-cols-3',
+                                        teamInView && 'is-visible',
+                                    )}
+                                >
+                                    <div className="sm:col-span-2 sm:mx-auto sm:w-[calc(50%_-_1rem)] lg:col-span-1 lg:col-start-2 lg:w-auto">
+                                        <TeamMemberCard
+                                            member={leadMember}
+                                            locale={locale}
+                                            cvCtaLabel={t(
+                                                'aboutPage.team.cvCta',
                                             )}
-                                        </div>
+                                            cvAriaLabel={t(
+                                                'aboutPage.team.cvAriaLabel',
+                                            )}
+                                        />
+                                    </div>
+                                </div>
+                            )}
 
-                                        <h3 className="mt-6 text-lg font-bold text-qd-ink dark:text-qd-white">
-                                            {member.name}
-                                        </h3>
-                                        {role && (
-                                            <p className="mt-1 text-sm font-semibold text-qd-teal-2 dark:text-qd-teal">
-                                                {role}
-                                            </p>
-                                        )}
-                                        {bio && (
-                                            <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-qd-text-high">
-                                                {bio}
-                                            </p>
-                                        )}
-
-                                        {(hasSocial || member.cvUrl) && (
-                                            <div className="mt-6 flex flex-wrap items-center gap-3 pt-1">
-                                                {member.linkedinUrl && (
-                                                    <a
-                                                        href={
-                                                            member.linkedinUrl
-                                                        }
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        aria-label={`LinkedIn — ${member.name}`}
-                                                        className="flex size-9 items-center justify-center rounded-full border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2 hover:text-qd-teal-2 dark:border-qd-white/15 dark:text-qd-text-medium dark:hover:border-qd-teal dark:hover:text-qd-teal"
-                                                    >
-                                                        <Linkedin
-                                                            aria-hidden="true"
-                                                            size={16}
-                                                        />
-                                                    </a>
-                                                )}
-                                                {member.githubUrl && (
-                                                    <a
-                                                        href={member.githubUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        aria-label={`GitHub — ${member.name}`}
-                                                        className="flex size-9 items-center justify-center rounded-full border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2 hover:text-qd-teal-2 dark:border-qd-white/15 dark:text-qd-text-medium dark:hover:border-qd-teal dark:hover:text-qd-teal"
-                                                    >
-                                                        <Github
-                                                            aria-hidden="true"
-                                                            size={16}
-                                                        />
-                                                    </a>
-                                                )}
-                                                {member.personalUrl && (
-                                                    <a
-                                                        href={
-                                                            member.personalUrl
-                                                        }
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        aria-label={`Web — ${member.name}`}
-                                                        className="flex size-9 items-center justify-center rounded-full border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2 hover:text-qd-teal-2 dark:border-qd-white/15 dark:text-qd-text-medium dark:hover:border-qd-teal dark:hover:text-qd-teal"
-                                                    >
-                                                        <Globe
-                                                            aria-hidden="true"
-                                                            size={16}
-                                                        />
-                                                    </a>
-                                                )}
-                                                {member.cvUrl && (
-                                                    <a
-                                                        href={member.cvUrl}
-                                                        download
-                                                        aria-label={`${t('aboutPage.team.cvAriaLabel')} ${member.name}`}
-                                                        className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-qd-teal-2/40 px-3 py-1.5 text-xs font-bold text-qd-teal-2 transition hover:bg-qd-teal-2/10 dark:border-qd-teal/40 dark:text-qd-teal dark:hover:bg-qd-teal/10"
-                                                    >
-                                                        {t(
-                                                            'aboutPage.team.cvCta',
-                                                        )}
-                                                        <Download
-                                                            aria-hidden="true"
-                                                            size={13}
-                                                        />
-                                                    </a>
-                                                )}
-                                            </div>
-                                        )}
-                                    </article>
-                                );
-                            })}
+                            {supportingMembers.length > 0 && (
+                                <div
+                                    className={cn(
+                                        'abaco-stagger mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3',
+                                        teamInView && 'is-visible',
+                                    )}
+                                >
+                                    {supportingMembers.map((member) => (
+                                        <TeamMemberCard
+                                            key={member.id}
+                                            member={member}
+                                            locale={locale}
+                                            cvCtaLabel={t(
+                                                'aboutPage.team.cvCta',
+                                            )}
+                                            cvAriaLabel={t(
+                                                'aboutPage.team.cvAriaLabel',
+                                            )}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <div className="mx-auto mt-12 max-w-xl rounded-3xl border border-qd-mist bg-qd-white p-8 text-center sm:p-10 dark:border-qd-white/10 dark:bg-qd-white/5">

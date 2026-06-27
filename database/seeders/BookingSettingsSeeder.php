@@ -22,6 +22,7 @@ class BookingSettingsSeeder extends Seeder
                     'recommended_provider' => 'Cal.com',
                     'alternative_provider' => 'Calendly',
                     'status' => 'provider_not_configured',
+                    'notify_email' => 'info@abacoqd.com',
                 ],
             ],
         );

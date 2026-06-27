@@ -28,6 +28,7 @@ class ServiceController extends Controller
                 'slug',
                 'summary',
                 'icon',
+                'image',
                 'is_detail_enabled',
                 'settings',
             ]);
@@ -85,6 +86,7 @@ class ServiceController extends Controller
             'slug' => $service->slug,
             'summary' => $service->summary,
             'icon' => $service->icon,
+            'image' => $service->image,
             'isDetailEnabled' => $service->is_detail_enabled,
             'settings' => $service->settings,
         ];

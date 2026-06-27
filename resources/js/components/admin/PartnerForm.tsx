@@ -351,7 +351,7 @@ export default function PartnerForm({
             <div className="flex flex-col gap-6">
                 <FormSection
                     title="Publicación"
-                    description="Orden de aparición en la noria de Colaboraciones."
+                    description="Orden de aparición del partner en los listados internos."
                 >
                     <Field label="Orden" error={errors.sort_order}>
                         <Input
@@ -367,20 +367,13 @@ export default function PartnerForm({
 
                 <FormSection
                     title="Visibilidad"
-                    description="Si está activo, el partner existe en el sistema. La noria de Colaboraciones del landing solo muestra los marcados aquí. Dentro de un proyecto, el partner aparece por su relación con ese proyecto, no por estos ajustes."
+                    description="Si está activo, el partner existe en el sistema y puede asociarse a proyectos. Dentro de un proyecto, el partner aparece por su relación con ese proyecto. La sección Colaboraciones del landing se gestiona desde cada proyecto (Mostrar en Colaboraciones), no desde aquí."
                 >
                     <div className="flex flex-col divide-y divide-qd-mist dark:divide-qd-white/10">
                         <ToggleRow
                             label="Activo"
                             checked={data.is_active}
                             onChange={(v) => setData('is_active', v)}
-                        />
-                        <ToggleRow
-                            label="Mostrar en la noria de Colaboraciones"
-                            checked={data.show_in_collaborations}
-                            onChange={(v) =>
-                                setData('show_in_collaborations', v)
-                            }
                         />
                     </div>
                 </FormSection>

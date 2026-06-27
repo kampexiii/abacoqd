@@ -121,12 +121,11 @@ return [
     |--------------------------------------------------------------------------
     |
     | Destino de los avisos de nuevos mensajes del formulario público de
-    | contacto. Email principal confirmado en docs/01_BRIEF_ALCANCE.md:
-    | info@abacodev.com.
+    | contacto.
     |
     */
 
-    'contact_notify_address' => env('CONTACT_NOTIFY_EMAIL', 'info@abacodev.com'),
+    'contact_notify_address' => env('CONTACT_NOTIFY_EMAIL', 'info@abacoqd.com'),
 
     /*
     |--------------------------------------------------------------------------

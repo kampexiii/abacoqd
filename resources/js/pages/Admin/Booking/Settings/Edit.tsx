@@ -103,7 +103,7 @@ export default function BookingSettingsEdit({ setting }: EditProps) {
                                     type="email"
                                     value={form.data.notify_email}
                                     onChange={(e) => form.setData('notify_email', e.target.value)}
-                                    placeholder="reservas@abacodev.com"
+                                    placeholder="info@abacoqd.com"
                                 />
                             </Field>
                         </div>

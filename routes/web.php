@@ -92,6 +92,7 @@ Route::middleware(['auth', 'admin'])
         Route::patch('services/{service}/toggle-active', [AdminServiceController::class, 'toggleActive'])->name('services.toggle-active');
         Route::patch('services/{service}/toggle-home', [AdminServiceController::class, 'toggleHome'])->name('services.toggle-home');
         Route::patch('services/{service}/toggle-detail', [AdminServiceController::class, 'toggleDetail'])->name('services.toggle-detail');
+        Route::patch('services/{service}/toggle-featured', [AdminServiceController::class, 'toggleFeatured'])->name('services.toggle-featured');
 
         Route::get('posts', [AdminPostController::class, 'index'])->name('posts.index');
         Route::get('posts/create', [AdminPostController::class, 'create'])->name('posts.create');

@@ -23,10 +23,10 @@ return [
         'address' => 'Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid',
         'city_country' => 'Madrid, España',
         // Receptor de los formularios públicos (contacto/reserva).
-        'form_recipient' => env('CONTACT_NOTIFY_EMAIL', 'info@abacodev.com'),
+        'form_recipient' => env('CONTACT_NOTIFY_EMAIL', 'info@abacoqd.com'),
         // Receptor de las notificaciones de reserva. Si no se define
         // BOOKING_NOTIFY_EMAIL, cae al receptor de contacto.
-        'booking_recipient' => env('BOOKING_NOTIFY_EMAIL') ?: env('CONTACT_NOTIFY_EMAIL', 'info@abacodev.com'),
+        'booking_recipient' => env('BOOKING_NOTIFY_EMAIL') ?: env('CONTACT_NOTIFY_EMAIL', 'info@abacoqd.com'),
     ],
 
     'social' => [

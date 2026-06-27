@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreServiceRequest;
 use App\Http\Requests\Admin\UpdateServiceRequest;
 use App\Models\Service;
+use App\Services\Content\ServiceSnapshotWriter;
 use App\Services\Media\ServiceImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,7 +24,10 @@ use Inertia\Response;
  */
 class ServiceController extends Controller
 {
-    public function __construct(private readonly ServiceImageService $images) {}
+    public function __construct(
+        private readonly ServiceImageService $images,
+        private readonly ServiceSnapshotWriter $snapshots,
+    ) {}
 
     public function index(Request $request): Response
     {
@@ -72,6 +76,7 @@ class ServiceController extends Controller
         $service->save();
 
         $this->syncImage($request, $service);
+        $this->snapshots->write();
 
         return to_route('admin.services.index')
             ->with('toast', ['type' => 'success', 'message' => 'Servicio creado.']);
@@ -91,6 +96,7 @@ class ServiceController extends Controller
         $service->save();
 
         $this->syncImage($request, $service);
+        $this->snapshots->write();
 
         return to_route('admin.services.index')
             ->with('toast', ['type' => 'success', 'message' => 'Servicio actualizado.']);
@@ -106,6 +112,8 @@ class ServiceController extends Controller
             'status' => ServiceStatus::Hidden,
             'is_active' => false,
         ]);
+
+        $this->snapshots->write();
 
         return to_route('admin.services.index')
             ->with('toast', ['type' => 'success', 'message' => 'Servicio archivado (oculto e inactivo).']);
@@ -124,21 +132,75 @@ class ServiceController extends Controller
 
     public function toggleActive(Service $service): RedirectResponse
     {
-        $service->update(['is_active' => ! $service->is_active]);
+        $isActive = ! $service->is_active;
+
+        $service->update([
+            'is_active' => $isActive,
+            'is_featured' => $isActive ? $service->is_featured : false,
+            'show_on_home' => $isActive ? $service->is_featured : false,
+            'is_detail_enabled' => $isActive ? $service->is_detail_enabled : false,
+        ]);
 
         return back();
     }
 
     public function toggleHome(Service $service): RedirectResponse
     {
-        $service->update(['show_on_home' => ! $service->show_on_home]);
+        return $this->toggleFeatured($service);
+    }
+
+    public function toggleFeatured(Service $service): RedirectResponse
+    {
+        if ($service->is_featured) {
+            $service->update([
+                'is_featured' => false,
+                'show_on_home' => false,
+            ]);
+
+            return back();
+        }
+
+        if (! $service->is_active) {
+            return back()
+                ->withErrors(['is_featured' => $this->featuredRequiresActiveMessage()])
+                ->with('toast', ['type' => 'error', 'message' => $this->featuredRequiresActiveMessage()]);
+        }
+
+        if (! $service->is_detail_enabled) {
+            return back()
+                ->withErrors(['is_featured' => $this->featuredRequiresDetailMessage()])
+                ->with('toast', ['type' => 'error', 'message' => $this->featuredRequiresDetailMessage()]);
+        }
+
+        if ($this->featuredLimitReached($service)) {
+            return back()
+                ->withErrors(['is_featured' => $this->featuredLimitMessage()])
+                ->with('toast', ['type' => 'error', 'message' => $this->featuredLimitMessage()]);
+        }
+
+        $service->update([
+            'is_featured' => true,
+            'show_on_home' => true,
+        ]);
 
         return back();
     }
 
     public function toggleDetail(Service $service): RedirectResponse
     {
-        $service->update(['is_detail_enabled' => ! $service->is_detail_enabled]);
+        if (! $service->is_detail_enabled && ! $service->is_active) {
+            return back()
+                ->withErrors(['is_detail_enabled' => $this->detailRequiresActiveMessage()])
+                ->with('toast', ['type' => 'error', 'message' => $this->detailRequiresActiveMessage()]);
+        }
+
+        $isDetailEnabled = ! $service->is_detail_enabled;
+
+        $service->update([
+            'is_detail_enabled' => $isDetailEnabled,
+            'is_featured' => $isDetailEnabled ? $service->is_featured : false,
+            'show_on_home' => $isDetailEnabled ? $service->is_featured : false,
+        ]);
 
         return back();
     }
@@ -160,7 +222,8 @@ class ServiceController extends Controller
             'status' => $request->validated('status'),
             'sort_order' => (int) $request->validated('sort_order'),
             'is_active' => $request->boolean('is_active'),
-            'show_on_home' => $request->boolean('show_on_home'),
+            'is_featured' => $request->boolean('is_featured'),
+            'show_on_home' => $request->boolean('is_featured'),
             'is_detail_enabled' => $request->boolean('is_detail_enabled'),
         ];
     }
@@ -172,7 +235,12 @@ class ServiceController extends Controller
     {
         if ($request->hasFile('image')) {
             $previous = $service->image;
-            $slug = $service->slug_es ?? $service->slug_en ?? (string) $service->id;
+            // `slug_es`/`slug_en` son columnas generadas en BD: tras un
+            // `fill()->save()` en esta misma request (alta o cambio de slug)
+            // el modelo en memoria aún no las refleja. Se usa el atributo
+            // `slug` (recién asignado) en su lugar para no nombrar el
+            // archivo con el slug antiguo o con el id.
+            $slug = $service->slug['es'] ?? $service->slug['en'] ?? (string) $service->id;
             $path = $this->images->storeFromPath($request->file('image')->getRealPath(), $slug);
 
             $service->update(['image' => $path]);
@@ -241,6 +309,7 @@ class ServiceController extends Controller
             'slug' => $service->slug,
             'status' => $service->status->value,
             'isActive' => $service->is_active,
+            'isFeatured' => $service->is_featured,
             'showOnHome' => $service->show_on_home,
             'isDetailEnabled' => $service->is_detail_enabled,
             'sortOrder' => $service->sort_order,
@@ -271,6 +340,34 @@ class ServiceController extends Controller
         $slug = $service->slug_es ?? $service->slug_en;
 
         return $slug !== null ? url('/servicios/'.$slug) : null;
+    }
+
+    private function featuredLimitReached(Service $service): bool
+    {
+        return Service::query()
+            ->where('is_featured', true)
+            ->whereKeyNot($service->id)
+            ->count() >= Service::MAX_FEATURED_ON_HOME;
+    }
+
+    private function featuredLimitMessage(): string
+    {
+        return 'Solo se pueden destacar '.Service::MAX_FEATURED_ON_HOME.' servicios como máximo en la landing.';
+    }
+
+    private function featuredRequiresActiveMessage(): string
+    {
+        return 'Activa el servicio antes de destacarlo en la landing.';
+    }
+
+    private function featuredRequiresDetailMessage(): string
+    {
+        return 'Activa la página individual antes de destacar este servicio en la landing.';
+    }
+
+    private function detailRequiresActiveMessage(): string
+    {
+        return 'Activa el servicio antes de habilitar su página individual.';
     }
 
     /**

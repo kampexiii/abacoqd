@@ -30,6 +30,8 @@ class SettingsSeeder extends Seeder
             ['contact', 'email_primary', 'info@abacodev.com', 'email', true, 'Email principal confirmado.'],
             ['contact', 'email_secondary', 'abacodevelopments@gmail.com', 'email', false, 'Email secundario confirmado, no necesariamente público.'],
             ['contact', 'email_andres', 'andrescasanueva@abacodev.com', 'email', false, 'Email de Andrés confirmado, no necesariamente público.'],
+            ['site', 'form_recipient_email', 'info@abacoqd.com', 'email', false, 'Receptor interno de mensajes de contacto.'],
+            ['site', 'booking_recipient_email', 'info@abacoqd.com', 'email', false, 'Receptor interno de notificaciones de reserva.'],
             ['legal', 'owner', 'ABACO DIGITAL DEVELOPMENTS, S.L.', 'string', true, 'Responsable legal confirmado.'],
             ['legal', 'cif', 'B-88229364', 'string', true, 'CIF legal confirmado.'],
             ['legal', 'registry', 'Registro Mercantil de Madrid, Tomo 38273, Folio 65, Sección GNE, Hoja Nº 681002', 'string', true, 'Registro legal confirmado.'],

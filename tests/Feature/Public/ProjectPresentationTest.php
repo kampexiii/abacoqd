@@ -51,8 +51,8 @@ test('el seeder asocia CIETE a servicios reales existentes sin IDs hardcodeados'
     $slugs = $ciete->services->map(fn (Service $service): mixed => $service->slug_es)->all();
 
     expect($ciete->services()->count())->toBe(3)
-        ->and($slugs)->toContain('aplicaciones-a-medida')
-        ->and($slugs)->toContain('crm-datos-y-procesos')
+        ->and($slugs)->toContain('aplicaciones-gestion-medida')
+        ->and($slugs)->toContain('crm-datos-reporting')
         ->and($slugs)->toContain('integraciones-digitales');
 });
 

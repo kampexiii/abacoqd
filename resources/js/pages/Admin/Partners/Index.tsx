@@ -157,9 +157,6 @@ export default function PartnersIndex({ partners, filters }: IndexProps) {
                                     <th className="px-4 py-3 text-center">
                                         Activo
                                     </th>
-                                    <th className="px-4 py-3 text-center">
-                                        Noria de Colaboraciones
-                                    </th>
                                     <th className="px-4 py-3 text-right">
                                         Acciones
                                     </th>
@@ -209,19 +206,6 @@ export default function PartnersIndex({ partners, filters }: IndexProps) {
                                                     patch(
                                                         partner.id,
                                                         'toggle-active',
-                                                    )
-                                                }
-                                            />
-                                        </td>
-                                        <td className="px-4 py-3 text-center">
-                                            <RowToggle
-                                                checked={
-                                                    partner.showInCollaborations
-                                                }
-                                                onClick={() =>
-                                                    patch(
-                                                        partner.id,
-                                                        'toggle-collaborations',
                                                     )
                                                 }
                                             />

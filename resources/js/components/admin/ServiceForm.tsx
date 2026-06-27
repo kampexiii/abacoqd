@@ -29,7 +29,7 @@ export type AdminServiceRecord = {
     } | null;
     readonly status: string;
     readonly isActive: boolean;
-    readonly showOnHome: boolean;
+    readonly isFeatured: boolean;
     readonly isDetailEnabled: boolean;
     readonly sortOrder: number;
 };
@@ -44,7 +44,7 @@ type ServiceFormData = {
     status: string;
     sort_order: number;
     is_active: boolean;
-    show_on_home: boolean;
+    is_featured: boolean;
     is_detail_enabled: boolean;
     image: File | null;
     remove_image: boolean;
@@ -69,6 +69,11 @@ export default function ServiceForm({
 }: ServiceFormProps) {
     const { t } = useLanguage();
     const [activeLocale, setActiveLocale] = useState<Locale>('es');
+    const initialIsActive = service?.isActive ?? true;
+    const initialIsDetailEnabled =
+        initialIsActive && (service?.isDetailEnabled ?? false);
+    const initialIsFeatured =
+        initialIsActive && initialIsDetailEnabled && (service?.isFeatured ?? false);
 
     const form = useForm<ServiceFormData>({
         title: localized(service?.title),
@@ -82,9 +87,9 @@ export default function ServiceForm({
         },
         status: service?.status ?? 'draft',
         sort_order: service?.sortOrder ?? defaultSortOrder,
-        is_active: service?.isActive ?? true,
-        show_on_home: service?.showOnHome ?? true,
-        is_detail_enabled: service?.isDetailEnabled ?? false,
+        is_active: initialIsActive,
+        is_featured: initialIsFeatured,
+        is_detail_enabled: initialIsDetailEnabled,
         image: null,
         remove_image: false,
     });
@@ -117,6 +122,35 @@ export default function ServiceForm({
             ...data.cta,
             [group]: { ...data.cta[group], [locale]: value },
         });
+    };
+
+    const setActive = (value: boolean) => {
+        setData({
+            ...data,
+            is_active: value,
+            is_detail_enabled: value ? data.is_detail_enabled : false,
+            is_featured: value ? data.is_featured : false,
+        });
+    };
+
+    const setDetailEnabled = (value: boolean) => {
+        if (!data.is_active && value) {
+            return;
+        }
+
+        setData({
+            ...data,
+            is_detail_enabled: value,
+            is_featured: value ? data.is_featured : false,
+        });
+    };
+
+    const setFeatured = (value: boolean) => {
+        if (value && (!data.is_active || !data.is_detail_enabled)) {
+            return;
+        }
+
+        setData('is_featured', value);
     };
 
     const submit = (event: FormEvent) => {
@@ -309,14 +343,28 @@ export default function ServiceForm({
                     <div className="flex flex-col divide-y divide-qd-mist dark:divide-qd-white/10">
                         <ToggleRow
                             label={t('admin.services.fields.isActive')}
+                            description={t('admin.services.fields.isActiveHint')}
                             checked={data.is_active}
-                            onChange={(value) => setData('is_active', value)}
+                            onChange={setActive}
                         />
                         <ToggleRow
                             label={t('admin.services.fields.isDetailEnabled')}
                             description={t('admin.services.fields.isDetailEnabledHint')}
                             checked={data.is_detail_enabled}
-                            onChange={(value) => setData('is_detail_enabled', value)}
+                            disabled={!data.is_active && !data.is_detail_enabled}
+                            error={errors.is_detail_enabled}
+                            onChange={setDetailEnabled}
+                        />
+                        <ToggleRow
+                            label={t('admin.services.fields.isFeatured')}
+                            description={t('admin.services.fields.isFeaturedHint')}
+                            error={errors.is_featured}
+                            checked={data.is_featured}
+                            disabled={
+                                !data.is_featured &&
+                                (!data.is_active || !data.is_detail_enabled)
+                            }
+                            onChange={setFeatured}
                         />
                     </div>
                 </FormSection>
@@ -401,16 +449,20 @@ function Field({
 function ToggleRow({
     label,
     description,
+    error,
     checked,
+    disabled = false,
     onChange,
 }: {
     readonly label: string;
     readonly description?: string;
+    readonly error?: string;
     readonly checked: boolean;
+    readonly disabled?: boolean;
     readonly onChange: (value: boolean) => void;
 }) {
     return (
-        <div className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
+        <div className="flex items-start justify-between gap-4 py-3 first:pt-0 last:pb-0">
             <div>
                 <p className="text-sm font-medium text-qd-ink dark:text-qd-white">{label}</p>
                 {description && (
@@ -418,16 +470,19 @@ function ToggleRow({
                         {description}
                     </p>
                 )}
+                {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
             </div>
             <button
                 type="button"
                 role="switch"
                 aria-checked={checked}
                 aria-label={label}
+                disabled={disabled}
                 onClick={() => onChange(!checked)}
                 className={cn(
                     'relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition',
                     checked ? 'bg-qd-teal-2 dark:bg-qd-teal' : 'bg-qd-mist dark:bg-qd-white/15',
+                    disabled && 'cursor-not-allowed opacity-45',
                 )}
             >
                 <span

@@ -55,6 +55,15 @@ class HomeController extends Controller
             ->take(2)
             ->get();
 
+        $featuredServices = Service::query()
+            ->active()
+            ->published()
+            ->detailEnabled()
+            ->featured()
+            ->ordered()
+            ->take(3)
+            ->get();
+
         return Inertia::render('Public/Home', [
             'featuredPost' => $featuredPost ? $this->postSummary($featuredPost) : null,
             'latestPosts' => $latestPosts
@@ -62,6 +71,9 @@ class HomeController extends Controller
                 ->values(),
             'collaborations' => $collaborationProjects
                 ->map(fn (Project $project): array => $this->collaborationItem($project))
+                ->values(),
+            'featuredServices' => $featuredServices
+                ->map(fn (Service $service): array => $this->featuredServiceItem($service))
                 ->values(),
         ]);
     }
@@ -98,6 +110,26 @@ class HomeController extends Controller
                     'logoAlt' => $partner->logo_alt,
                 ])
                 ->values(),
+        ];
+    }
+
+    /**
+     * Item de la sección Servicios del landing: misma forma que `PublicService`
+     * (el tipo TypeScript compartido en `resources/js/lib/service-presentation.ts`).
+     *
+     * @return array<string, mixed>
+     */
+    private function featuredServiceItem(Service $service): array
+    {
+        return [
+            'id' => $service->id,
+            'title' => $service->title,
+            'slug' => $service->slug,
+            'summary' => $service->summary,
+            'icon' => $service->icon,
+            'image' => $service->image,
+            'isDetailEnabled' => $service->is_detail_enabled,
+            'settings' => $service->settings,
         ];
     }
 

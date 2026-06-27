@@ -1,10 +1,21 @@
-import { ArrowRight, BarChart2, Code2, Cpu, GitMerge, LayoutDashboard, Rocket } from 'lucide-react';
+import { ArrowRight, Send } from 'lucide-react';
 
 import { useInView } from '@/hooks/use-in-view';
 import { useLanguage } from '@/hooks/use-language';
+import {
+    localizedText,
+    resolveServiceKey,
+    SERVICE_PRESENTATION,
+} from '@/lib/service-presentation';
+import type { PublicService, ServiceKey } from '@/lib/service-presentation';
 import { cn } from '@/lib/utils';
+import { show as contactShow } from '@/routes/contact';
 
 // ─── Abstract visual components (decorative, aria-hidden) ────────────────────
+// Lenguaje visual propio de esta sección (cajitas/SVG con rgba literal), no
+// compartido con `ServiceMockup` de `pages/Public/Services.tsx`: un componente
+// de sección del landing no puede importar de `pages/**` sin romper el
+// code-splitting de Inertia.
 
 function VisualWeb() {
     return (
@@ -47,6 +58,32 @@ function VisualApps() {
                     ))}
                 </div>
             </div>
+        </div>
+    );
+}
+
+function VisualTools() {
+    return (
+        <div className="w-36 space-y-1.5 rounded-xl border border-[rgba(8,127,140,0.18)] dark:border-[rgba(122,191,191,0.14)] bg-white/80 dark:bg-[rgba(8,27,38,0.8)] p-2.5">
+            {[
+                { w: '70%', on: true },
+                { w: '55%', on: false },
+                { w: '82%', on: true },
+            ].map(({ w, on }, i) => (
+                <div key={i} className="flex items-center justify-between gap-2 rounded-lg bg-[rgba(8,127,140,0.05)] dark:bg-[rgba(8,127,140,0.1)] px-2 py-1.5">
+                    <span className="h-1.5 rounded-sm bg-[rgba(8,127,140,0.18)]" style={{ width: w }} />
+                    <span
+                        className={cn(
+                            'inline-flex h-3 w-5.5 shrink-0 items-center rounded-full px-0.5',
+                            on
+                                ? 'justify-end bg-[rgba(8,127,140,0.4)]'
+                                : 'justify-start bg-[rgba(8,127,140,0.14)]',
+                        )}
+                    >
+                        <span className="block h-2 w-2 rounded-full bg-white" />
+                    </span>
+                </div>
+            ))}
         </div>
     );
 }
@@ -170,22 +207,54 @@ function VisualMVP() {
     );
 }
 
-// ─── Service data ─────────────────────────────────────────────────────────────
+function VisualEvolution() {
+    return (
+        <div className="flex items-end gap-3">
+            <div className="flex h-16 items-end gap-1">
+                {[20, 30, 18, 26].map((h, i) => (
+                    <span key={i} className="w-2.5 rounded-t-sm bg-[rgba(8,127,140,0.14)]" style={{ height: h }} />
+                ))}
+            </div>
+            <ArrowRight
+                aria-hidden="true"
+                size={16}
+                className="shrink-0 text-[rgba(8,127,140,0.4)] dark:text-[rgba(122,191,191,0.4)]"
+            />
+            <div className="flex h-20 items-end gap-1">
+                {[30, 46, 58, 74].map((h, i) => (
+                    <span key={i} className="w-2.5 rounded-t-sm bg-[rgba(8,127,140,0.32)]" style={{ height: h }} />
+                ))}
+            </div>
+        </div>
+    );
+}
 
-const SERVICES = [
-    { key: 'web',          num: '01', icon: Code2,           Visual: VisualWeb },
-    { key: 'apps',         num: '02', icon: LayoutDashboard, Visual: VisualApps },
-    { key: 'ai',           num: '03', icon: Cpu,             Visual: VisualAI },
-    { key: 'crm',          num: '04', icon: BarChart2,       Visual: VisualCRM },
-    { key: 'integrations', num: '05', icon: GitMerge,        Visual: VisualIntegrations },
-    { key: 'mvp',          num: '06', icon: Rocket,          Visual: VisualMVP },
-] as const;
+const VISUALS: Record<ServiceKey, () => React.JSX.Element> = {
+    web: VisualWeb,
+    apps: VisualApps,
+    tools: VisualTools,
+    ai: VisualAI,
+    crm: VisualCRM,
+    integrations: VisualIntegrations,
+    mvp: VisualMVP,
+    evolution: VisualEvolution,
+};
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function ServicesSection() {
-    const { t } = useLanguage();
+type ServicesSectionProps = {
+    readonly services?: readonly PublicService[];
+};
+
+const CHIP_INDEXES = [0, 1, 2] as const;
+
+export default function ServicesSection({
+    services = [],
+}: ServicesSectionProps) {
+    const { t, locale } = useLanguage();
     const { ref, inView } = useInView<HTMLDivElement>({ threshold: 0.1 });
+    const hasServices = services.length > 0;
+    const visibleServices = services.slice(0, 3);
 
     return (
         <section id="servicios" className="abaco-section">
@@ -202,62 +271,130 @@ export default function ServicesSection() {
                     <p className="abaco-section-lead">{t('home.services.lead')}</p>
                 </div>
 
-                {/* Grid */}
-                <div className={cn('qd-srv-grid abaco-stagger', inView && 'is-visible')}>
-                    {SERVICES.map(({ key, num, icon: Icon, Visual }) => {
-                        const chips = t(`home.services.items.${key}.chips`) as unknown as string[];
+                {hasServices ? (
+                    <>
+                        {/* Grid */}
+                        <div className={cn('qd-srv-grid abaco-stagger', inView && 'is-visible')}>
+                            {visibleServices.map((service) => {
+                                const serviceKey =
+                                    resolveServiceKey(service.slug) ?? 'web';
+                                const presentation = SERVICE_PRESENTATION[serviceKey];
+                                const Visual = VISUALS[serviceKey];
+                                const servicePath = `home.services.items.${serviceKey}`;
+                                const chips = CHIP_INDEXES.map((chip) =>
+                                    t(`${servicePath}.chips.${chip}`),
+                                );
+                                const slug =
+                                    localizedText(service.slug, locale) ||
+                                    presentation.fallbackSlug[locale];
+                                const title =
+                                    localizedText(service.title, locale) ||
+                                    t(`${servicePath}.title`);
+                                const summary =
+                                    localizedText(service.summary, locale) ||
+                                    t(`${servicePath}.description`);
+                                const href = service.isDetailEnabled
+                                    ? `/servicios/${slug}`
+                                    : contactShow.url({ query: { servicio: slug } });
+                                const ctaLabel = service.isDetailEnabled
+                                    ? t('home.services.cardView')
+                                    : t('home.services.cardConsult');
 
-                        return (
-                            <article key={key} className="qd-srv-card">
-                                {/* Text body */}
-                                <div className="qd-srv-card__body">
-                                    <div className="qd-srv-card__head">
-                                        <span className="qd-srv-card__num">{num}</span>
-                                        <span className="qd-srv-card__icon">
-                                            <Icon size={17} aria-hidden />
-                                        </span>
-                                    </div>
-                                    <h3 className="qd-srv-card__title">
-                                        {t(`home.services.items.${key}.title`)}
-                                    </h3>
-                                    <p className="qd-srv-card__desc">
-                                        {t(`home.services.items.${key}.description`)}
-                                    </p>
-                                    {Array.isArray(chips) && chips.length > 0 && (
-                                        <div className="qd-srv-card__chips">
-                                            {chips.map((chip: string) => (
-                                                <span key={chip} className="qd-srv-chip">
-                                                    {chip}
+                                return (
+                                    <a
+                                        key={service.id}
+                                        href={href}
+                                        className="qd-srv-card"
+                                        aria-label={`${ctaLabel}: ${title}`}
+                                    >
+                                        <div className="qd-srv-card__media">
+                                            {service.image ? (
+                                                <img
+                                                    src={service.image}
+                                                    alt=""
+                                                    loading="lazy"
+                                                    className="qd-srv-card__image"
+                                                />
+                                            ) : (
+                                                <div className="qd-srv-card__fallback" aria-hidden>
+                                                    <Visual />
+                                                </div>
+                                            )}
+                                            <span className="qd-srv-card__wash" aria-hidden />
+
+                                            <div className="qd-srv-card__front">
+                                                <span className="qd-srv-card__kicker">
+                                                    {chips[0]}
                                                 </span>
-                                            ))}
+                                                <h3 className="qd-srv-card__title">
+                                                    {title}
+                                                </h3>
+                                                <span className="qd-srv-card__front-cta">
+                                                    {ctaLabel}
+                                                    <ArrowRight size={15} aria-hidden />
+                                                </span>
+                                            </div>
                                         </div>
-                                    )}
-                                    <a href="/contacto" className="qd-srv-card__cta">
-                                        {t('home.services.cta')}
-                                        <ArrowRight size={14} aria-hidden />
+
+                                        <div className="qd-srv-card__reveal">
+                                            <p className="qd-srv-card__desc">
+                                                {summary}
+                                            </p>
+                                            <div className="qd-srv-card__chips">
+                                                {chips.map((chip) => (
+                                                    <span key={chip} className="qd-srv-chip">
+                                                        {chip}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                            <span className="qd-srv-card__cta">
+                                                {ctaLabel}
+                                                <ArrowRight size={14} aria-hidden />
+                                            </span>
+                                        </div>
                                     </a>
-                                </div>
+                                );
+                            })}
+                        </div>
 
-                                {/* Decorative visual (desktop only) */}
-                                <div className="qd-srv-card__visual" aria-hidden>
-                                    <Visual />
-                                </div>
-                            </article>
-                        );
-                    })}
-                </div>
-
-                {/* Bottom CTA */}
-                <div className={cn('qd-srv-bottom abaco-reveal', inView && 'is-visible')}>
-                    <div className="qd-srv-bottom__text">
-                        <p className="qd-srv-bottom__q">{t('home.services.ctaQuestion')}</p>
-                        <p className="qd-srv-bottom__p">{t('home.services.ctaSupport')}</p>
+                        {/* Bottom CTA */}
+                        <div className={cn('qd-srv-bottom abaco-reveal', inView && 'is-visible')}>
+                            <div className="qd-srv-bottom__text">
+                                <p className="qd-srv-bottom__q">{t('home.services.ctaQuestion')}</p>
+                                <p className="qd-srv-bottom__p">{t('home.services.ctaSupport')}</p>
+                            </div>
+                            <a href="/servicios" className="qd-srv-bottom__btn">
+                                {t('home.services.ctaBtn')}
+                                <ArrowRight size={15} aria-hidden />
+                            </a>
+                        </div>
+                    </>
+                ) : (
+                    <div className={cn('qd-srv-empty abaco-reveal', inView && 'is-visible')}>
+                        <h3 className="qd-srv-empty__title">
+                            {t('home.services.empty.title')}
+                        </h3>
+                        <p className="qd-srv-empty__text">
+                            {t('home.services.empty.subtitle')}
+                        </p>
+                        <div className="qd-srv-empty__actions">
+                            <a
+                                href="/servicios"
+                                className="qd-srv-empty__cta qd-srv-empty__cta--ghost"
+                            >
+                                {t('home.services.empty.services')}
+                                <ArrowRight aria-hidden="true" size={16} />
+                            </a>
+                            <a
+                                href="/contacto"
+                                className="qd-srv-empty__cta qd-srv-empty__cta--solid"
+                            >
+                                {t('home.services.empty.contact')}
+                                <Send aria-hidden="true" size={16} />
+                            </a>
+                        </div>
                     </div>
-                    <a href="/contacto" className="qd-srv-bottom__btn">
-                        {t('home.services.ctaBtn')}
-                        <ArrowRight size={15} aria-hidden />
-                    </a>
-                </div>
+                )}
             </div>
         </section>
     );

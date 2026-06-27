@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BookingSettingRequest;
 use App\Models\BookingSetting;
+use App\Support\SiteSettings;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -33,13 +34,14 @@ class BookingSettingController extends Controller
         // estado) y solo añade/actualiza los defaults operativos de la agenda.
         $settings = is_array($setting->settings) ? $setting->settings : [];
         $maxAdvance = $request->validated('max_advance_days');
+        $notifyEmail = $request->validated('notify_email');
 
         $settings = array_merge($settings, [
             'default_duration_minutes' => (int) $request->validated('default_duration_minutes'),
             'default_capacity' => (int) $request->validated('default_capacity'),
             'min_advance_hours' => (int) $request->validated('min_advance_hours'),
             'max_advance_days' => $maxAdvance !== null ? (int) $maxAdvance : null,
-            'notify_email' => $request->validated('notify_email'),
+            'notify_email' => $notifyEmail,
         ]);
 
         $setting->fill([
@@ -49,6 +51,8 @@ class BookingSettingController extends Controller
             'fallback_to_contact' => $request->boolean('fallback_to_contact'),
             'settings' => $settings,
         ])->save();
+
+        SiteSettings::persist(['booking_recipient_email' => $notifyEmail]);
 
         return to_route('admin.booking.settings.edit')
             ->with('toast', ['type' => 'success', 'message' => 'Configuración de reserva actualizada.']);
@@ -70,7 +74,7 @@ class BookingSettingController extends Controller
             'defaultCapacity' => (int) ($settings['default_capacity'] ?? 1),
             'minAdvanceHours' => (int) ($settings['min_advance_hours'] ?? 0),
             'maxAdvanceDays' => isset($settings['max_advance_days']) ? (int) $settings['max_advance_days'] : null,
-            'notifyEmail' => $settings['notify_email'] ?? null,
+            'notifyEmail' => $settings['notify_email'] ?? SiteSettings::bookingRecipient(),
         ];
     }
 }

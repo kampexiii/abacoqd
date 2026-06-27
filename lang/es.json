@@ -7,6 +7,7 @@
         "languageSwitch": "Cambiar idioma a inglés",
         "openMenu": "Abrir menú",
         "menuTitle": "Menú",
+        "menuDescription": "Navegación principal del sitio",
         "themeLight": "Activar modo claro",
         "themeDark": "Activar modo oscuro",
         "themeSystem": "Activar modo sistema",
@@ -131,9 +132,17 @@
             "titleHighlight": "reales",
             "lead": "Diseñamos y desarrollamos herramientas digitales modernas, adaptadas a la realidad de cada proyecto.",
             "cta": "Consultar",
+            "cardView": "Ver servicio",
+            "cardConsult": "Consultar servicio",
             "ctaQuestion": "¿No encaja exactamente con lo que necesitas?",
             "ctaSupport": "Lo estudiamos contigo y planteamos una solución ajustada a tu caso.",
-            "ctaBtn": "Cuéntanos tu idea",
+            "ctaBtn": "Ver todos los servicios",
+            "empty": {
+                "title": "Por ahora no hay servicios destacados.",
+                "subtitle": "Consulta el catálogo completo de servicios o cuéntanos tu proyecto y te orientamos.",
+                "services": "Ver servicios",
+                "contact": "Cuéntanos tu proyecto"
+            },
             "items": {
                 "web": {
                     "title": "Desarrollo web rápido",
@@ -141,19 +150,24 @@
                     "chips": ["React / Vite", "Laravel", "SEO técnico"]
                 },
                 "apps": {
-                    "title": "Aplicaciones a medida",
-                    "description": "Herramientas internas o de cliente diseñadas para el proceso exacto que necesitas resolver.",
-                    "chips": ["Panel de control", "API propia", "Multi-rol"]
+                    "title": "Aplicaciones de gestión a medida",
+                    "description": "Plataformas internas para ordenar trabajos, pedidos, facturación y procesos diarios, adaptadas a cómo trabaja realmente cada equipo.",
+                    "chips": ["Gestión interna", "Multi-rol", "Procesos a medida"]
+                },
+                "tools": {
+                    "title": "Herramientas internas y paneles de administración",
+                    "description": "Paneles privados para gestionar contenido, clientes, servicios o reservas, sin depender de cambios en código para cada actualización.",
+                    "chips": ["Paneles privados", "Gestión de contenido", "Autonomía"]
                 },
                 "ai": {
-                    "title": "Automatización con IA",
-                    "description": "Flujos que procesan, clasifican o responden sin intervención manual, supervisados con criterio técnico.",
-                    "chips": ["Flujos con IA", "Webhooks", "Procesos auto."]
+                    "title": "Automatización de procesos con IA",
+                    "description": "Automatizamos tareas repetitivas y aplicamos IA supervisada para clasificar datos, generar borradores y acelerar procesos sin perder control humano.",
+                    "chips": ["IA supervisada", "Automatizaciones", "Procesos más rápidos"]
                 },
                 "crm": {
-                    "title": "CRM, datos y procesos",
-                    "description": "Centraliza la información de cliente y conecta tu operación comercial con los datos que importan.",
-                    "chips": ["Vista unificada", "KPIs", "Segmentación"]
+                    "title": "CRM, datos y reporting",
+                    "description": "Centralizamos información de clientes y actividad comercial en CRM, dashboards y reportes para decidir con datos más claros.",
+                    "chips": ["CRM a medida", "Dashboards", "Reporting"]
                 },
                 "integrations": {
                     "title": "Integraciones digitales",
@@ -161,13 +175,18 @@
                     "chips": ["REST / GraphQL", "Webhooks", "ERPs y CRMs"]
                 },
                 "mvp": {
-                    "title": "MVPs y prototipos",
-                    "description": "De la idea al producto funcional en el menor tiempo posible, con calidad real desde el primer día.",
+                    "title": "MVPs y prototipos funcionales",
+                    "description": "Convertimos una idea en una primera versión funcional para validarla antes de invertir en un desarrollo completo.",
                     "chips": [
                         "Entrega rápida",
-                        "Stack moderno",
-                        "Prueba real"
+                        "Validación real",
+                        "Base escalable"
                     ]
+                },
+                "evolution": {
+                    "title": "Mejora y evolución de software existente",
+                    "description": "Revisamos aplicaciones o webs ya existentes para mejorar su rendimiento, diseño, seguridad o estructura, y añadir nuevos módulos.",
+                    "chips": ["Auditoría técnica", "Nuevos módulos", "Más estable"]
                 }
             }
         },
@@ -322,9 +341,10 @@
             "lead": "Trabajamos sobre proyectos propios, colaborativos o desarrollados junto a partners, siempre adaptando la solución al contexto real de cada cliente.",
             "cta": "Ver proyectos",
             "visualAria": "Logos de proyectos y colaboraciones",
+            "with": "Con",
             "empty": {
                 "title": "Aún no hay casos publicados.",
-                "subtitle": "Mostraremos aquí proyectos cuando puedan publicarse con permiso y contexto real.",
+                "subtitle": "Mostraremos aquí proyectos reales en cuanto estén disponibles.",
                 "services": "Ver servicios",
                 "contact": "Cuéntanos tu proyecto"
             }
@@ -548,19 +568,24 @@
                 "chips": ["Web rápida", "SEO técnico", "Rendimiento"]
             },
             "apps": {
-                "title": "Aplicaciones a medida",
-                "description": "Software adaptado a tus procesos y objetivos, mantenible y pensado para crecer contigo sin encajar tu operación en una plantilla.",
-                "chips": ["SaaS", "Web app", "Escalable"]
+                "title": "Aplicaciones de gestión a medida",
+                "description": "Software de gestión interna —tipo CIETE— para trabajos, pedidos, facturación, usuarios y procesos, sin forzar tu operación en una plantilla.",
+                "chips": ["Gestión interna", "Multi-rol", "Escalable"]
+            },
+            "tools": {
+                "title": "Herramientas internas y paneles de administración",
+                "description": "Paneles de administración para gestionar contenido, clientes, servicios, proyectos o documentación, pensados para que controles tu información sin depender del código.",
+                "chips": ["Panel privado", "Multi-usuario", "Autonomía"]
             },
             "ai": {
-                "title": "Automatización con IA",
-                "description": "Automatizamos tareas repetitivas e integramos IA supervisada para acelerar decisiones sin perder control humano.",
+                "title": "Automatización de procesos con IA",
+                "description": "Reducimos trabajo repetitivo y aplicamos IA supervisada para clasificar información, generar borradores y conectar flujos sin perder criterio humano.",
                 "chips": ["IA supervisada", "Automatizaciones", "Eficiencia"]
             },
             "crm": {
-                "title": "CRM, datos y procesos",
-                "description": "Organizamos tus datos y procesos para tener visión clara del negocio y tomar mejores decisiones operativas.",
-                "chips": ["CRM", "Business intelligence", "Procesos"]
+                "title": "CRM, datos y reporting",
+                "description": "CRM personalizados, dashboards y reportes para centralizar información de clientes y procesos y decidir con datos más claros.",
+                "chips": ["CRM", "Dashboards", "Reporting"]
             },
             "integrations": {
                 "title": "Integraciones digitales",
@@ -568,9 +593,14 @@
                 "chips": ["APIs", "Integraciones", "Conectividad"]
             },
             "mvp": {
-                "title": "MVPs y prototipos",
-                "description": "Validamos tu idea con una primera versión funcional para aprender rápido, reducir riesgo y preparar el siguiente paso.",
-                "chips": ["MVP", "Prototipos", "Prueba"]
+                "title": "MVPs y prototipos funcionales",
+                "description": "Prototipos y MVPs funcionales para comprobar si una idea encaja con el negocio antes de invertir en un desarrollo completo.",
+                "chips": ["MVP", "Prototipos", "Validación"]
+            },
+            "evolution": {
+                "title": "Mejora y evolución de software existente",
+                "description": "Mejoramos aplicaciones, webs o herramientas ya creadas: rendimiento, diseño, seguridad o código, además de nuevos módulos para seguir creciendo.",
+                "chips": ["Auditoría", "Refactor", "Nuevos módulos"]
             }
         },
         "choose": {
@@ -679,60 +709,108 @@
                     "Rendimiento y Core Web Vitals",
                     "Integración con herramientas",
                     "Seguridad y buenas prácticas"
+                ],
+                "approach": [
+                    "Partimos de la estructura de la página: objetivos, secciones, jerarquía de contenidos y llamadas a la acción.",
+                    "Diseñamos una experiencia responsive cuidada, con navegación clara y contenido preparado para captar contactos.",
+                    "Desarrollamos la base con rendimiento, SEO técnico on-page y buenas prácticas de accesibilidad.",
+                    "Revisamos carga, formularios, enlaces y medición básica antes de publicar o dejarla lista para crecer."
                 ]
             },
             "apps": {
-                "title": "Aplicaciones a medida",
-                "summary": "Software adaptado a procesos reales para organizar trabajo, datos y usuarios sin forzar tu operación.",
+                "title": "Aplicaciones de gestión a medida",
+                "summary": "Plataformas de gestión interna para ordenar trabajos, pedidos, facturación y procesos, adaptadas a la forma real de trabajar de cada equipo.",
                 "problems": [
-                    "Trabajas con hojas, correos o herramientas separadas que ya no escalan bien.",
-                    "Necesitas un panel interno o producto digital con permisos y flujos propios.",
-                    "Tu proceso tiene reglas concretas que una herramienta genérica no resuelve con claridad.",
-                    "Buscas una base mantenible que pueda adaptarse a nuevos usos."
+                    "Gestionas trabajos, pedidos o facturación con hojas, correos o herramientas que ya no escalan.",
+                    "Necesitas un panel de gestión interna con usuarios, estados, filtros y procesos propios.",
+                    "Tu operativa diaria tiene reglas concretas que una herramienta genérica no resuelve con claridad.",
+                    "Buscas una plataforma mantenible que pueda crecer con el negocio."
                 ],
                 "capabilities": [
-                    "Arquitectura funcional",
+                    "Gestión de trabajos y pedidos",
+                    "Facturación integrada",
                     "Paneles multirol",
-                    "Flujos de trabajo propios",
-                    "APIs internas",
-                    "Control de datos",
+                    "Estados y filtros propios",
+                    "Procesos a medida",
                     "Base mantenible"
+                ],
+                "approach": [
+                    "Modelamos los procesos reales: trabajos, pedidos, estados, usuarios, permisos y puntos donde hoy se pierde tiempo.",
+                    "Definimos pantallas y flujos internos para que cada rol vea solo lo necesario y pueda operar sin rodeos.",
+                    "Construimos módulos mantenibles con filtros, acciones, validaciones y trazabilidad del trabajo diario.",
+                    "Probamos casos operativos completos y dejamos una base preparada para añadir facturación, reporting o integraciones."
+                ]
+            },
+            "tools": {
+                "title": "Herramientas internas y paneles de administración",
+                "summary": "Paneles privados de administración para gestionar contenido, clientes, servicios y procesos sin depender constantemente de cambios en código.",
+                "problems": [
+                    "Cada cambio de contenido o configuración depende de que alguien toque código.",
+                    "Necesitas un panel privado para gestionar clientes, servicios, proyectos o documentación.",
+                    "Varias personas necesitan gestionar información con permisos y roles distintos.",
+                    "Buscas controlar tu información sin depender de soporte técnico constante."
+                ],
+                "capabilities": [
+                    "Paneles de administración",
+                    "Gestión de contenido",
+                    "Roles y permisos",
+                    "Gestión documental",
+                    "Configuración sin código",
+                    "Base mantenible"
+                ],
+                "approach": [
+                    "Identificamos qué necesita gestionar el equipo sin tocar código: contenido, servicios, proyectos, reservas o documentación.",
+                    "Diseñamos CRUDs, permisos y estados para que el panel sea útil, controlado y fácil de mantener.",
+                    "Cuidamos validaciones, mensajes, navegación y vistas de listado para que la administración sea rápida.",
+                    "Entregamos un panel privado conectado a la web o al sistema existente, con autonomía para el equipo."
                 ]
             },
             "ai": {
-                "title": "Automatización con IA",
-                "summary": "Flujos asistidos por IA para reducir trabajo repetitivo y conectar decisiones con supervisión humana.",
+                "title": "Automatización de procesos con IA",
+                "summary": "Automatizaciones e IA supervisada para reducir tareas repetitivas y acelerar procesos internos sin perder control humano.",
                 "problems": [
-                    "Tu equipo repite tareas de clasificación, respuesta o preparación de información.",
-                    "Quieres incorporar IA sin perder control sobre criterios, datos y revisión final.",
-                    "Necesitas conectar automatizaciones con herramientas que ya usa el negocio.",
-                    "Buscas automatizar sin convertir la IA en una caja negra."
+                    "Tu equipo repite tareas de clasificación, redacción o preparación de información.",
+                    "Quieres aplicar IA sin perder control sobre criterios, datos y revisión final.",
+                    "Necesitas conectar automatizaciones con las herramientas que ya usa el negocio.",
+                    "Buscas acelerar procesos sin convertir la IA en una caja negra."
                 ],
                 "capabilities": [
-                    "Diseño de flujos con IA",
-                    "Supervisión humana",
-                    "Webhooks e integraciones",
-                    "Clasificación de información",
-                    "Asistentes internos",
+                    "Automatización de procesos",
+                    "IA supervisada",
+                    "Clasificación de datos",
+                    "Generación de borradores",
+                    "Conexión de flujos de trabajo",
                     "Trazabilidad del proceso"
+                ],
+                "approach": [
+                    "Seleccionamos tareas repetitivas donde la IA puede ayudar sin sustituir el criterio del equipo.",
+                    "Definimos entradas, reglas, límites y puntos de revisión humana para evitar automatizaciones opacas.",
+                    "Conectamos el flujo con herramientas existentes y registramos resultados, errores o decisiones relevantes.",
+                    "Probamos con casos reales, ajustamos prompts y reglas, y dejamos un proceso supervisable."
                 ]
             },
             "crm": {
-                "title": "CRM, datos y procesos",
-                "summary": "Estructura de datos y procesos para entender mejor la relación con clientes y operar con más claridad.",
+                "title": "CRM, datos y reporting",
+                "summary": "CRM, dashboards y reportes a medida para centralizar información de clientes y procesos y tomar decisiones con datos más claros.",
                 "problems": [
-                    "La información comercial está dispersa y cuesta entender el estado real de cada oportunidad.",
-                    "Necesitas ordenar etapas, responsables y datos clave para trabajar con más criterio.",
-                    "Quieres conectar CRM, reporting y procesos sin crear más trabajo manual.",
+                    "La información comercial está dispersa y cuesta ver el estado real de cada cliente o proceso.",
+                    "Necesitas un CRM, dashboard o reporte adaptado a tu forma de vender o gestionar.",
+                    "Quieres conectar CRM, métricas y procesos sin generar más trabajo manual.",
                     "Buscas tomar decisiones con datos más fiables y trazables."
                 ],
                 "capabilities": [
-                    "Modelado de datos",
-                    "Vista cliente 360",
-                    "Procesos comerciales",
+                    "CRM personalizado",
                     "Dashboards operativos",
-                    "Segmentación",
-                    "Integración con CRM"
+                    "Reporting a medida",
+                    "Filtros avanzados",
+                    "Métricas de negocio",
+                    "Vista unificada de cliente"
+                ],
+                "approach": [
+                    "Ordenamos el modelo de datos: clientes, oportunidades, actividad, estados y métricas realmente útiles.",
+                    "Diseñamos vistas de trabajo y dashboards para que el equipo encuentre información sin depender de hojas sueltas.",
+                    "Conectamos fuentes, filtros y reportes cuidando consistencia, permisos y calidad del dato.",
+                    "Validamos indicadores con el equipo y dejamos una base preparada para evolucionar el reporting."
                 ]
             },
             "integrations": {
@@ -751,24 +829,60 @@
                     "Conectores entre plataformas",
                     "Revisión y control",
                     "Documentación técnica"
+                ],
+                "approach": [
+                    "Mapeamos sistemas, APIs, formularios y bases de datos para entender qué información debe moverse y cuándo.",
+                    "Definimos contratos de datos, validaciones y tratamiento de errores antes de automatizar el intercambio.",
+                    "Construimos conectores, webhooks o procesos programados con logs que permitan detectar incidencias.",
+                    "Probamos sincronizaciones con casos reales y documentamos qué hace cada integración."
                 ]
             },
             "mvp": {
-                "title": "MVPs y prototipos",
-                "summary": "Primeras versiones funcionales para validar enfoque, experiencia y viabilidad antes de ampliar alcance.",
+                "title": "MVPs y prototipos funcionales",
+                "summary": "Prototipos y MVPs funcionales para validar una idea, un flujo o una hipótesis antes de invertir en un desarrollo completo.",
                 "problems": [
                     "Tienes una idea pero necesitas verla funcionando antes de invertir en una versión completa.",
                     "Quieres contrastar flujos, pantallas o hipótesis con una base usable.",
-                    "Necesitas una primera versión ordenada que pueda evolucionar si el enfoque encaja.",
+                    "Necesitas un primer panel o MVP ordenado que pueda evolucionar si el enfoque encaja.",
                     "Buscas reducir incertidumbre sin construir más de lo necesario."
                 ],
                 "capabilities": [
                     "Definición de alcance",
                     "Prototipos funcionales",
                     "Diseño de flujo",
-                    "Revisión técnica",
+                    "Validación con usuarios reales",
                     "Base escalable",
                     "Plan de evolución"
+                ],
+                "approach": [
+                    "Reducimos la idea a una primera versión comprobable: objetivo, usuarios, flujo crítico y límites del alcance.",
+                    "Diseñamos pantallas o prototipo funcional para validar la experiencia antes de ampliar.",
+                    "Construimos solo lo necesario para probar la hipótesis con una base ordenada y reutilizable.",
+                    "Recogemos aprendizaje y proponemos la siguiente iteración sin convertir el MVP en un producto sobredimensionado."
+                ]
+            },
+            "evolution": {
+                "title": "Mejora y evolución de software existente",
+                "summary": "Revisamos software existente para mejorar su estructura, rendimiento, seguridad o diseño, y prepararlo para seguir creciendo.",
+                "problems": [
+                    "Tu aplicación o web actual funciona, pero arrastra problemas de rendimiento o mantenimiento.",
+                    "Necesitas añadir nuevos módulos sobre una base que ya existe.",
+                    "El código existente es difícil de mantener o ha quedado desordenado con el tiempo.",
+                    "Buscas mejorar seguridad, diseño o usabilidad sin reconstruir desde cero."
+                ],
+                "capabilities": [
+                    "Auditoría técnica",
+                    "Mejora de rendimiento",
+                    "Refactor de código",
+                    "Nuevos módulos",
+                    "Mejora de seguridad",
+                    "Plan de evolución"
+                ],
+                "approach": [
+                    "Auditamos la base existente: rendimiento, seguridad, estructura, dependencias y puntos frágiles.",
+                    "Priorizamos mejoras por impacto y riesgo para intervenir sin romper lo que ya funciona.",
+                    "Refactorizamos, añadimos módulos o corregimos deuda técnica manteniendo compatibilidad con el negocio.",
+                    "Medimos la mejora y dejamos una ruta de evolución más clara para futuras fases."
                 ]
             }
         },
@@ -788,6 +902,12 @@
                 "Desarrollo iterativo",
                 "Revisión técnica",
                 "Entrega documentada"
+            ],
+            "approach": [
+                "Aterrizamos la necesidad y separamos lo imprescindible de lo accesorio.",
+                "Definimos el flujo, los datos y la forma de validar que la solución encaja.",
+                "Construimos una primera versión clara, revisable y preparada para evolucionar.",
+                "Entregamos documentación básica y próximos pasos realistas."
             ]
         }
     },
@@ -899,12 +1019,11 @@
         },
         "abacoDevelopments": {
             "title": "Quién es Abaco Developments",
-            "text": "Abaco Developments parte de una trayectoria vinculada a sistemas, datos, CRM, herramientas digitales y soluciones a medida. Su valor está en entender procesos reales y transformarlos en productos útiles, mantenibles y preparados para evolucionar."
+            "text": "En Abaco Developments creamos soluciones digitales a medida para empresas que necesitan ordenar procesos, mejorar su forma de trabajar y aprovechar mejor la tecnología.\n\nVenimos de la consultoría tecnológica, el CRM, los datos, la automatización, la analítica y el desarrollo digital. Esa experiencia nos ha permitido trabajar en proyectos donde la tecnología no es un añadido, sino una herramienta real para resolver problemas, conectar información y hacer que los equipos trabajen con más claridad.\n\nNuestra forma de trabajar parte siempre de entender primero el contexto de cada cliente. No creemos en soluciones genéricas ni en desarrollar por desarrollar. Antes de construir, analizamos qué necesita la empresa, qué proceso quiere mejorar y qué tipo de herramienta puede aportar valor de verdad.\n\nCon el tiempo, la tecnología ha cambiado y nosotros también hemos evolucionado. Hoy combinamos nuestra experiencia con nuevas herramientas de inteligencia artificial y desarrollo asistido para avanzar más rápido, pero siempre con criterio técnico, revisión humana y control sobre cada decisión importante.\n\nDesde Abaco Developments desarrollamos webs, aplicaciones a medida, automatizaciones, CRM, integraciones, MVPs y herramientas internas adaptadas a cada proyecto.\n\nNuestro objetivo es construir tecnología útil, segura y mantenible. Soluciones claras, bien pensadas y preparadas para ayudar a cada empresa a trabajar mejor, ahorrar tiempo y avanzar con una base digital más sólida."
         },
         "abacoQD": {
             "title": "Qué es AbacoQD",
-            "text": "Ábaco Quick Developments es una nueva iniciativa de Ábaco Developments destinada a la especialización en desarrollos rápidos y a medida, potenciados por las nuevas herramientas de codificación con IA. Esto genera unos proyectos más económicos y adaptados a las necesidades específicas de cada cliente.",
-            "support": "La idea no es sustituir el criterio técnico, sino acelerar el camino desde una necesidad real hasta una primera solución útil."
+            "text": "AbacoQD nace como una nueva forma de explicar y enfocar una parte de nuestro trabajo en Abaco Developments: el desarrollo rápido de soluciones digitales a medida.\n\nSignifica Ábaco Quick Developments y representa una manera más ágil, moderna y directa de construir proyectos digitales. Con AbacoQD queremos ayudar a empresas que necesitan avanzar rápido, pero sin renunciar al orden, la seguridad y el criterio técnico.\n\nTrabajamos con nuevas herramientas de inteligencia artificial y desarrollo asistido para acelerar fases del proceso como el análisis, la documentación, la creación de estructuras, la programación o la revisión. Pero no entendemos la IA como un sustituto del trabajo técnico, sino como una herramienta que nos permite ser más eficientes cuando se usa con supervisión y sentido.\n\nDesde AbacoQD desarrollamos webs, aplicaciones a medida, automatizaciones, integraciones, CRM, MVPs y herramientas internas pensadas para resolver necesidades concretas.\n\nNuestro objetivo es reducir tiempos, ajustar costes y crear soluciones más adaptadas a cada cliente, manteniendo siempre una forma de trabajo clara, revisada y preparada para crecer."
         },
         "values": {
             "title": "Qué nos define",
@@ -2026,9 +2145,14 @@
                 "status": "Estado",
                 "sortOrder": "Orden",
                 "isActive": "Activo",
-                "showOnHome": "En home",
-                "isFeatured": "Destacado",
+                "showOnHome": "Destacado en landing",
+                "isActiveHint": "Si se desactiva, no aparecerá en público ni podrá tener página individual o destaque.",
+                "isFeatured": "Destacado en landing",
+                "isFeaturedHint": "Aparece en la sección Servicios del home. Requiere servicio activo y página individual. Máximo 3.",
+                "isFeaturedRequiresActive": "Activa el servicio antes de destacarlo.",
+                "isFeaturedRequiresDetail": "Activa la página individual antes de destacarlo.",
                 "isDetailEnabled": "Página individual",
+                "isDetailRequiresActive": "Activa el servicio antes de habilitar su página individual.",
                 "isDetailEnabledHint": "Permite abrir una página propia para este servicio en /servicios/{slug}."
             },
             "form": {

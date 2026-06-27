@@ -37,6 +37,8 @@ class Service extends Model
     /** @use HasFactory<ServiceFactory> */
     use HasFactory;
 
+    public const MAX_FEATURED_ON_HOME = 3;
+
     /**
      * @return HasMany<ContactMessage, $this>
      */

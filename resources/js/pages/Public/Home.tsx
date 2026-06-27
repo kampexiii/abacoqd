@@ -8,6 +8,7 @@ import ServicesSection from '@/components/sections/ServicesSection';
 import SeoHead from '@/components/seo/SeoHead';
 import PublicLayout from '@/layouts/public-layout';
 import type { BlogPostSummary } from '@/lib/blog';
+import type { PublicService } from '@/lib/service-presentation';
 
 /**
  * Home / Landing pública AbacoQD.
@@ -24,19 +25,21 @@ type HomeProps = {
     readonly collaborations?: readonly CollaborationItem[];
     readonly featuredPost?: BlogPostSummary | null;
     readonly latestPosts?: readonly BlogPostSummary[];
+    readonly featuredServices?: readonly PublicService[];
 };
 
 export default function Home({
     collaborations = [],
     featuredPost = null,
     latestPosts = [],
+    featuredServices = [],
 }: HomeProps) {
     return (
         <PublicLayout waveHiddenUntilElementId="hero">
             <SeoHead />
             <AbacoHero />
             <MethodologySection />
-            <ServicesSection />
+            <ServicesSection services={featuredServices} />
             <CollaborationsSection items={collaborations} />
             <BlogSection
                 featuredPost={featuredPost}

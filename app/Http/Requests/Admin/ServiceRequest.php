@@ -4,8 +4,10 @@ namespace App\Http\Requests\Admin;
 
 use App\Enums\ServiceStatus;
 use App\Enums\UserRole;
+use App\Models\Service;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 /**
  * Reglas compartidas de validación de `services` para crear/editar.
@@ -35,12 +37,17 @@ abstract class ServiceRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        $isActive = $this->boolean('is_active');
+        $isDetailEnabled = $isActive && $this->boolean('is_detail_enabled');
+        $isFeatured = $isActive && $isDetailEnabled && $this->boolean('is_featured');
+
         // Normaliza booleanos enviados como string vía multipart (cuando hay
-        // imagen) para que la regla `boolean` sea estable.
+        // imagen) y cierra dependencias de visibilidad antes de validar.
         $this->merge([
-            'is_active' => $this->boolean('is_active'),
-            'show_on_home' => $this->boolean('show_on_home'),
-            'is_detail_enabled' => $this->boolean('is_detail_enabled'),
+            'is_active' => $isActive,
+            'is_featured' => $isFeatured,
+            'show_on_home' => $isFeatured,
+            'is_detail_enabled' => $isDetailEnabled,
             'remove_image' => $this->boolean('remove_image'),
         ]);
     }
@@ -94,12 +101,32 @@ abstract class ServiceRequest extends FormRequest
             'sort_order' => ['required', 'integer', 'min:0', 'max:65535'],
 
             'is_active' => ['boolean'],
+            'is_featured' => ['boolean'],
             'show_on_home' => ['boolean'],
             'is_detail_enabled' => ['boolean'],
 
             'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:4096'],
             'remove_image' => ['boolean'],
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator): void {
+            if (! $this->boolean('is_featured')) {
+                return;
+            }
+
+            $ignoreId = $this->ignoreServiceId();
+            $featuredCount = Service::query()
+                ->where('is_featured', true)
+                ->when($ignoreId !== null, fn ($query) => $query->whereKeyNot($ignoreId))
+                ->count();
+
+            if ($featuredCount >= Service::MAX_FEATURED_ON_HOME) {
+                $validator->errors()->add('is_featured', $this->featuredLimitMessage());
+            }
+        });
     }
 
     /**
@@ -118,5 +145,10 @@ abstract class ServiceRequest extends FormRequest
             'description.es.required' => 'La descripción larga es obligatoria si el detalle está habilitado.',
             'description.es.min' => 'La descripción larga debe tener al menos 40 caracteres.',
         ];
+    }
+
+    private function featuredLimitMessage(): string
+    {
+        return 'Solo se pueden destacar '.Service::MAX_FEATURED_ON_HOME.' servicios como máximo en la landing.';
     }
 }

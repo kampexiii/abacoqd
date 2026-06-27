@@ -47,29 +47,44 @@ class ConfirmedProjectsSeeder extends Seeder
                 'logo_alt' => $data['logo_alt'],
                 'show_on_home' => false,
                 'show_in_projects' => true,
-                'show_in_collaborations' => false,
                 'is_featured' => false,
                 'is_active' => true,
                 'sort_order' => $data['sort_order'],
                 'settings' => $data['settings'],
             ];
 
-            // La media (cover/thumbnail/gallery/logos) se inicializa solo al crear
-            // y no se pisa en re-seed.
-            $mediaDefaults = [
-                'cover_image' => null,
-                'thumbnail_image' => null,
-                'gallery' => [],
-                'logo' => null,
-                'logo_dark' => null,
-            ];
+            // Media versionable ya convertida a WebP en `public/uploads/projects`
+            // (la portada se reutiliza como miniatura). Las rutas se derivan del
+            // slug ES —la misma convención usada al generar los ficheros— y se
+            // aplican también en re-seed para que una BD reconstruida cargue la
+            // media sin subir nada a mano desde el panel.
+            $slugEs = $data['slug']['es'];
+            $coverPath = "/uploads/projects/{$slugEs}-cover.webp";
 
-            $project = Project::query()->where('slug_es', $data['slug']['es'])->first();
+            $attributes['cover_image'] = $coverPath;
+            $attributes['thumbnail_image'] = $coverPath;
+
+            // El logo de cliente/empresa solo se asigna en proyectos con logo
+            // entregado. Los proyectos propios/demo sin logo de cliente conservan el
+            // suyo (no se pisa) y se crean con logo nulo.
+            if ($data['has_client_logo'] ?? true) {
+                $attributes['logo'] = "/uploads/projects/{$slugEs}-logo.webp";
+                $attributes['logo_dark'] = "/uploads/projects/{$slugEs}-logo-dark.webp";
+            }
+
+            $project = Project::query()->where('slug_es', $slugEs)->first();
 
             if ($project) {
+                // En re-seed no se toca `show_in_collaborations`: es un flag de
+                // curación que se gestiona desde /admin/projects ("Mostrar en
+                // Colaboraciones") y debe sobrevivir a futuras siembras.
                 $project->update($attributes);
             } else {
-                $project = Project::create($attributes + $mediaDefaults);
+                // Al crear, el proyecto entra visible en la noria por defecto.
+                $project = Project::create($attributes + [
+                    'gallery' => [],
+                    'show_in_collaborations' => true,
+                ]);
             }
 
             foreach (['es', 'en'] as $locale) {
@@ -170,8 +185,8 @@ class ConfirmedProjectsSeeder extends Seeder
                 'client_name' => 'CIETE Arquitectos S.L.',
                 'logo_alt' => 'Logotipo de CIETE Arquitectos S.L.',
                 'service_slugs' => [
-                    'aplicaciones-a-medida',
-                    'crm-datos-y-procesos',
+                    'aplicaciones-gestion-medida',
+                    'crm-datos-reporting',
                     'integraciones-digitales',
                 ],
                 'sort_order' => 1,
@@ -234,8 +249,8 @@ class ConfirmedProjectsSeeder extends Seeder
                 'client_partner_slug' => 'control-cube',
                 'logo_alt' => 'Logotipo de Control Cube',
                 'service_slugs' => [
-                    'aplicaciones-a-medida',
-                    'crm-datos-y-procesos',
+                    'aplicaciones-gestion-medida',
+                    'crm-datos-reporting',
                     'integraciones-digitales',
                 ],
                 'sort_order' => 2,
@@ -305,11 +320,13 @@ class ConfirmedProjectsSeeder extends Seeder
                 'client_name' => 'AbacoQD',
                 'logo_alt' => 'Logotipo de AbacoQD',
                 'service_slugs' => [
-                    'aplicaciones-a-medida',
-                    'crm-datos-y-procesos',
+                    'aplicaciones-gestion-medida',
+                    'crm-datos-reporting',
                     'integraciones-digitales',
-                    'mvps-y-prototipos',
+                    'mvps-prototipos-funcionales',
                 ],
+                // Producto propio/demo: sin logo de cliente entregado.
+                'has_client_logo' => false,
                 'sort_order' => 3,
                 'settings' => [
                     'cover_image_alt' => 'Imagen corporativa del proyecto ERP Modular Genérico desarrollado por AbacoQD',
@@ -368,8 +385,8 @@ class ConfirmedProjectsSeeder extends Seeder
                 'client_partner_slug' => 'melia-hotels-international',
                 'logo_alt' => 'Logotipo de Meliá Hotels International',
                 'service_slugs' => [
-                    'aplicaciones-a-medida',
-                    'crm-datos-y-procesos',
+                    'aplicaciones-gestion-medida',
+                    'crm-datos-reporting',
                     'integraciones-digitales',
                 ],
                 'sort_order' => 4,
@@ -429,8 +446,8 @@ class ConfirmedProjectsSeeder extends Seeder
                 'client_partner_slug' => 'iberia',
                 'logo_alt' => 'Logotipo de Iberia',
                 'service_slugs' => [
-                    'crm-datos-y-procesos',
-                    'aplicaciones-a-medida',
+                    'crm-datos-reporting',
+                    'aplicaciones-gestion-medida',
                 ],
                 'sort_order' => 5,
                 'settings' => [
@@ -491,8 +508,8 @@ class ConfirmedProjectsSeeder extends Seeder
                 'collaborator_slugs' => ['cognodata'],
                 'logo_alt' => 'Logotipo de Leroy Merlin',
                 'service_slugs' => [
-                    'crm-datos-y-procesos',
-                    'automatizacion-con-ia',
+                    'crm-datos-reporting',
+                    'automatizacion-procesos-ia',
                     'integraciones-digitales',
                 ],
                 'sort_order' => 6,
@@ -615,8 +632,8 @@ class ConfirmedProjectsSeeder extends Seeder
                 'client_partner_slug' => 'jornada-perfecta',
                 'logo_alt' => 'Logotipo de Jornada Perfecta',
                 'service_slugs' => [
-                    'automatizacion-con-ia',
-                    'aplicaciones-a-medida',
+                    'automatizacion-procesos-ia',
+                    'aplicaciones-gestion-medida',
                     'integraciones-digitales',
                 ],
                 'sort_order' => 8,
@@ -677,8 +694,8 @@ class ConfirmedProjectsSeeder extends Seeder
                 'client_partner_slug' => 'devtia',
                 'logo_alt' => 'Logotipo de Devtia',
                 'service_slugs' => [
-                    'aplicaciones-a-medida',
-                    'crm-datos-y-procesos',
+                    'aplicaciones-gestion-medida',
+                    'crm-datos-reporting',
                 ],
                 'sort_order' => 9,
                 'settings' => [
@@ -739,8 +756,8 @@ class ConfirmedProjectsSeeder extends Seeder
                 'collaborator_slugs' => ['rb'],
                 'logo_alt' => 'Logotipo de Inspira',
                 'service_slugs' => [
-                    'crm-datos-y-procesos',
-                    'automatizacion-con-ia',
+                    'crm-datos-reporting',
+                    'automatizacion-procesos-ia',
                     'integraciones-digitales',
                 ],
                 'sort_order' => 10,
@@ -802,7 +819,7 @@ class ConfirmedProjectsSeeder extends Seeder
                 'collaborator_slugs' => ['i-feel-web'],
                 'logo_alt' => 'Logotipo de Malababa',
                 'service_slugs' => [
-                    'crm-datos-y-procesos',
+                    'crm-datos-reporting',
                     'integraciones-digitales',
                 ],
                 'sort_order' => 11,
@@ -865,7 +882,7 @@ class ConfirmedProjectsSeeder extends Seeder
                 'logo_alt' => 'Logotipo de WiBLE',
                 'service_slugs' => [
                     'desarrollo-web-rapido',
-                    'crm-datos-y-procesos',
+                    'crm-datos-reporting',
                 ],
                 'sort_order' => 12,
                 'settings' => [
@@ -925,8 +942,8 @@ class ConfirmedProjectsSeeder extends Seeder
                 'client_partner_slug' => 'urban-fisio',
                 'logo_alt' => 'Logotipo de Urban Fisio',
                 'service_slugs' => [
-                    'crm-datos-y-procesos',
-                    'aplicaciones-a-medida',
+                    'crm-datos-reporting',
+                    'aplicaciones-gestion-medida',
                 ],
                 'sort_order' => 13,
                 'settings' => [
@@ -986,9 +1003,9 @@ class ConfirmedProjectsSeeder extends Seeder
                 'client_partner_slug' => 'in-casa',
                 'logo_alt' => 'Logotipo de In Casa',
                 'service_slugs' => [
-                    'automatizacion-con-ia',
+                    'automatizacion-procesos-ia',
                     'integraciones-digitales',
-                    'aplicaciones-a-medida',
+                    'aplicaciones-gestion-medida',
                 ],
                 'sort_order' => 14,
                 'settings' => [
@@ -1002,6 +1019,71 @@ class ConfirmedProjectsSeeder extends Seeder
                     'en' => [
                         'title' => 'AI and IoT for In Casa | AbacoQD',
                         'description' => 'AI applied to IoT environments for In Casa, focused on elderly people’s homes.',
+                    ],
+                ],
+            ],
+
+            // ERP Genérico (Node.js) — base de gestión de obras, producto propio de AbacoQD.
+            [
+                'slug' => [
+                    'es' => 'erp-generico-gestion-obras-rentabilidad',
+                    'en' => 'generic-works-management-erp',
+                ],
+                'title' => [
+                    'es' => 'ERP Genérico de Gestión de Obras y Rentabilidad',
+                    'en' => 'Generic Works Management ERP',
+                ],
+                'summary' => [
+                    'es' => 'ERP genérico propio de AbacoQD sobre Node.js, concebido como base reutilizable para construir soluciones de gestión de obras a medida con control de rentabilidad por obra.',
+                    'en' => 'AbacoQD’s own generic ERP built on Node.js, conceived as a reusable foundation to build custom works-management solutions with per-project profitability control.',
+                ],
+                'description' => [
+                    'es' => 'AbacoQD necesitaba un desarrollo genérico de ERP que permitiera, a partir de una base común, crear desarrollos a medida para sus clientes. Es una herramienta interna para centralizar la operativa diaria y trabajar todas las gestiones de obras o proyectos: obras, trabajos, pedidos, planificación, facturación, importaciones, usuarios y estados de gestión.',
+                    'en' => 'AbacoQD needed a generic ERP development that, from a common base, would allow creating custom developments for its clients. It is an internal tool to centralize daily operations and manage all works or projects: works, jobs, orders, planning, invoicing, imports, users and management statuses.',
+                ],
+                'challenge' => [
+                    'es' => 'Partir de requerimientos genéricos para un ERP y construirlo desde cero, con el objetivo principal de que la parte analítica reflejara la rentabilidad de la compañía con la facultad de desglosarla por obras, además de planificar y verificar los trabajos del personal y controlar la calidad.',
+                    'en' => 'To start from generic ERP requirements and build it from scratch, with the main goal that the analytical layer would reflect the company’s profitability with the ability to break it down by project, alongside planning and verifying staff work and controlling quality.',
+                ],
+                'solution' => [
+                    'es' => 'Desarrollamos una aplicación web de gestión a medida, con panel interno, módulos diferenciados, control de usuarios, filtros avanzados, vistas de trabajo y gestión de pedidos, trabajos, facturas e importaciones. La solución se planteó con estructura modular para poder mantenerse, ampliarse y adaptarse a nuevas necesidades.',
+                    'en' => 'We developed a custom web management application, with an internal panel, differentiated modules, user control, advanced filters, work views and management of orders, jobs, invoices and imports. The solution was designed with a modular structure so it can be maintained, extended and adapted to new needs.',
+                ],
+                'result' => [
+                    'es' => 'AbacoQD dispuso de una base ERP genérica, ordenada y centralizada, preparada para gestionar procesos clave de obra desde un único entorno y servir de punto de partida en desarrollos a medida, dejando una base técnica preparada para futuras mejoras.',
+                    'en' => 'AbacoQD gained a generic, organized and centralized ERP foundation, ready to manage key project processes from a single environment and to serve as a starting point for custom developments, leaving a technical foundation prepared for future improvements.',
+                ],
+                'technologies' => [
+                    'Node.js',
+                    'Express',
+                    'React',
+                    'Arquitectura MVC',
+                    'MySQL/MariaDB',
+                    'API Facturadirecta',
+                    'ERP',
+                ],
+                'year' => 2026,
+                'client_name' => 'AbacoQD',
+                'logo_alt' => 'Logotipo de AbacoQD',
+                'service_slugs' => [
+                    'aplicaciones-gestion-medida',
+                    'crm-datos-reporting',
+                    'integraciones-digitales',
+                ],
+                // Producto propio/demo: sin logo de cliente entregado.
+                'has_client_logo' => false,
+                'sort_order' => 15,
+                'settings' => [
+                    'cover_image_alt' => 'Imagen corporativa del proyecto ERP Genérico de Gestión de Obras y Rentabilidad desarrollado por AbacoQD',
+                ],
+                'seo' => [
+                    'es' => [
+                        'title' => 'ERP Genérico de Gestión de Obras y Rentabilidad | AbacoQD',
+                        'description' => 'ERP genérico propio de AbacoQD sobre Node.js para gestión de obras, planificación, facturación y análisis de rentabilidad por obra.',
+                    ],
+                    'en' => [
+                        'title' => 'Generic Works Management ERP | AbacoQD',
+                        'description' => 'AbacoQD’s own generic Node.js ERP for works management, planning, invoicing and per-project profitability analysis.',
                     ],
                 ],
             ],

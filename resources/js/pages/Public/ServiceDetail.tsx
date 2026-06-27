@@ -18,16 +18,21 @@ import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
-import { cn } from '@/lib/utils';
-import { show as bookingShow } from '@/routes/booking';
-import { show as contactShow } from '@/routes/contact';
-
 import {
     localizedText,
     resolveServiceKey,
     SERVICE_PRESENTATION,
-} from './Services';
-import type { LocalizedText, PublicService, ServiceKey } from './Services';
+} from '@/lib/service-presentation';
+import type {
+    LocalizedText,
+    PublicService,
+    ServiceKey,
+} from '@/lib/service-presentation';
+import { cn } from '@/lib/utils';
+import { show as bookingShow } from '@/routes/booking';
+import { show as contactShow } from '@/routes/contact';
+
+import { ServiceMockup } from './Services';
 
 type ServiceDetailRecord = PublicService & {
     readonly description: LocalizedText;
@@ -39,6 +44,7 @@ type ServiceDetailProps = {
 
 const PROBLEM_INDEXES = [0, 1, 2, 3] as const;
 const CAPABILITY_INDEXES = [0, 1, 2, 3, 4, 5] as const;
+const APPROACH_INDEXES = [0, 1, 2, 3] as const;
 
 const DETAIL_BENEFITS: readonly {
     key: 'agility' | 'quality' | 'support' | 'technology';
@@ -50,7 +56,7 @@ const DETAIL_BENEFITS: readonly {
     { key: 'technology', icon: LockKeyhole },
 ] as const;
 
-const SERVICE_DETAIL_IMAGES: Record<ServiceKey, string> = {
+const SERVICE_DETAIL_IMAGES: Partial<Record<ServiceKey, string>> = {
     web: '/assets/services/details/desarrollo-web-rapido.webp',
     apps: '/assets/services/details/aplicaciones-a-medida.webp',
     ai: '/assets/services/details/automatizacion-con-ia.webp',
@@ -58,16 +64,6 @@ const SERVICE_DETAIL_IMAGES: Record<ServiceKey, string> = {
     integrations: '/assets/services/details/integraciones-digitales.webp',
     mvp: '/assets/services/details/mvps-y-prototipos.webp',
 };
-
-const PROCESS_STEPS: readonly {
-    key: 'understand' | 'scope' | 'build' | 'review' | 'deliver';
-}[] = [
-    { key: 'understand' },
-    { key: 'scope' },
-    { key: 'build' },
-    { key: 'review' },
-    { key: 'deliver' },
-] as const;
 
 function serviceSlug(service: PublicService, locale: Locale): string {
     const serviceKey = resolveServiceKey(service.slug);
@@ -121,7 +117,8 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
     const summary =
         localizedText(service.summary, locale) ||
         t(`${translationPath}.summary`);
-    const detailImageSrc = SERVICE_DETAIL_IMAGES[serviceKey ?? 'web'];
+    const legacyImageSrc = SERVICE_DETAIL_IMAGES[serviceKey ?? 'web'];
+    const detailImageSrc = service.image ?? legacyImageSrc ?? null;
     const slug = serviceSlug(service, locale);
     const contactUrl = contactShow.url({
         query: {
@@ -138,6 +135,9 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
             : CAPABILITY_INDEXES.map((index) =>
                   t(`${translationPath}.capabilities.${index}`),
               );
+    const approachSteps = APPROACH_INDEXES.map((index) =>
+        t(`${translationPath}.approach.${index}`),
+    );
 
     return (
         <PublicLayout>
@@ -225,18 +225,16 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
                             {t('serviceDetail.approach.title')}
                         </h2>
                         <ol className="mt-6 flex flex-col gap-3">
-                            {PROCESS_STEPS.map((step, index) => (
+                            {approachSteps.map((step, index) => (
                                 <li
-                                    key={step.key}
+                                    key={step}
                                     className="flex items-start gap-4"
                                 >
                                     <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-qd-teal-2/30 bg-qd-teal-2/10 text-xs font-bold text-qd-teal-2 dark:border-qd-teal/35 dark:bg-qd-teal/10 dark:text-qd-teal">
                                         {String(index + 1).padStart(2, '0')}
                                     </span>
                                     <p className="pt-1 text-sm leading-relaxed text-qd-text-high">
-                                        {t(
-                                            `serviceDetail.approach.steps.${step.key}.description`,
-                                        )}
+                                        {step}
                                     </p>
                                 </li>
                             ))}
@@ -250,12 +248,30 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
                         <figure
                             className="h-full overflow-hidden rounded-3xl border border-qd-ink/10 bg-qd-white shadow-[0_26px_90px_-48px_rgba(7,17,26,0.55)] dark:border-white/10 dark:bg-qd-surface"
                         >
-                            <img
-                                src={detailImageSrc}
-                                alt={title}
-                                loading="lazy"
-                                className="aspect-video h-full min-h-72 w-full object-cover lg:min-h-full"
-                            />
+                            {detailImageSrc ? (
+                                <img
+                                    src={detailImageSrc}
+                                    alt={title}
+                                    loading="eager"
+                                    fetchPriority="high"
+                                    className="aspect-video h-full min-h-72 w-full object-contain lg:min-h-full"
+                                />
+                            ) : (
+                                <div
+                                    aria-hidden="true"
+                                    className="flex aspect-video h-full min-h-72 w-full items-center justify-center bg-linear-to-br from-qd-mist to-qd-white p-6 lg:min-h-full dark:from-qd-surface dark:to-qd-ink"
+                                >
+                                    <ServiceMockup
+                                        variant={
+                                            serviceKey
+                                                ? SERVICE_PRESENTATION[
+                                                      serviceKey
+                                                  ].mockup
+                                                : 'web'
+                                        }
+                                    />
+                                </div>
+                            )}
                         </figure>
                     </section>
 

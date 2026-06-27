@@ -35,7 +35,7 @@ type ServiceRow = {
     readonly slug: LocalizedText | null;
     readonly status: ServiceStatus;
     readonly isActive: boolean;
-    readonly showOnHome: boolean;
+    readonly isFeatured: boolean;
     readonly isDetailEnabled: boolean;
     readonly sortOrder: number;
     readonly updatedAt: string | null;
@@ -235,7 +235,7 @@ export default function ServicesIndex({
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
-                        <table className="w-full min-w-235 text-sm">
+                        <table className="w-full min-w-275 text-sm">
                             <thead>
                                 <tr className="border-b border-qd-mist text-left text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:border-qd-white/10 dark:text-qd-white/50">
                                     <th className="px-4 py-3">
@@ -246,6 +246,9 @@ export default function ServicesIndex({
                                     </th>
                                     <th className="px-4 py-3 text-center">
                                         {t('admin.services.fields.isActive')}
+                                    </th>
+                                    <th className="px-4 py-3 text-center">
+                                        {t('admin.services.fields.isFeatured')}
                                     </th>
                                     <th className="px-4 py-3 text-center">
                                         {t(
@@ -295,8 +298,46 @@ export default function ServicesIndex({
                                         </td>
                                         <td className="px-4 py-3 text-center">
                                             <RowToggle
+                                                checked={service.isFeatured}
+                                                disabled={
+                                                    !service.isFeatured &&
+                                                    (!service.isActive ||
+                                                        !service.isDetailEnabled)
+                                                }
+                                                title={
+                                                    !service.isActive
+                                                        ? t(
+                                                              'admin.services.fields.isFeaturedRequiresActive',
+                                                          )
+                                                        : !service.isDetailEnabled
+                                                          ? t(
+                                                                'admin.services.fields.isFeaturedRequiresDetail',
+                                                            )
+                                                          : undefined
+                                                }
+                                                onClick={() =>
+                                                    patch(
+                                                        service.id,
+                                                        'toggle-featured',
+                                                    )
+                                                }
+                                            />
+                                        </td>
+                                        <td className="px-4 py-3 text-center">
+                                            <RowToggle
                                                 checked={
                                                     service.isDetailEnabled
+                                                }
+                                                disabled={
+                                                    !service.isActive &&
+                                                    !service.isDetailEnabled
+                                                }
+                                                title={
+                                                    !service.isActive
+                                                        ? t(
+                                                              'admin.services.fields.isDetailRequiresActive',
+                                                          )
+                                                        : undefined
                                                 }
                                                 onClick={() =>
                                                     patch(
@@ -335,7 +376,8 @@ export default function ServicesIndex({
                                                             'flex size-8 items-center justify-center rounded-lg border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2/40 hover:text-qd-teal-2 dark:border-qd-white/10 dark:text-qd-white/70',
                                                             (service.status !==
                                                                 'published' ||
-                                                                !service.isActive) &&
+                                                                !service.isActive ||
+                                                                !service.isDetailEnabled) &&
                                                                 'pointer-events-none opacity-40',
                                                         )}
                                                         aria-label={t(
@@ -403,9 +445,13 @@ function FilterSelect({
 
 function RowToggle({
     checked,
+    disabled = false,
+    title,
     onClick,
 }: {
     readonly checked: boolean;
+    readonly disabled?: boolean;
+    readonly title?: string;
     readonly onClick: () => void;
 }) {
     return (
@@ -413,12 +459,15 @@ function RowToggle({
             type="button"
             role="switch"
             aria-checked={checked}
+            disabled={disabled}
+            title={title}
             onClick={onClick}
             className={cn(
                 'relative inline-flex h-5 w-9 shrink-0 items-center rounded-full align-middle transition',
                 checked
                     ? 'bg-qd-teal-2 dark:bg-qd-teal'
                     : 'bg-qd-mist dark:bg-qd-white/15',
+                disabled && 'cursor-not-allowed opacity-45',
             )}
         >
             <span

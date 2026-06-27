@@ -6,7 +6,10 @@ use App\Enums\UserRole;
 use App\Models\AppointmentBooking;
 use App\Models\AppointmentDay;
 use App\Models\AppointmentSlot;
+use App\Models\BookingSetting;
+use App\Models\Setting;
 use App\Models\User;
+use App\Support\SiteSettings;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\DB;
 
@@ -43,6 +46,32 @@ test('an editor cannot access the booking calendar', function () {
     $this->actingAs(bookingAdmin(UserRole::Editor));
 
     $this->get(route('admin.booking.calendar.index'))->assertForbidden();
+});
+
+test('an admin can update the booking notification recipient used by email notifications', function () {
+    $this->actingAs(bookingAdmin());
+
+    $this->put(route('admin.booking.settings.update'), [
+        'provider' => 'cal.com',
+        'url' => null,
+        'is_enabled' => false,
+        'fallback_to_contact' => true,
+        'default_duration_minutes' => 60,
+        'default_capacity' => 1,
+        'min_advance_hours' => 0,
+        'max_advance_days' => null,
+        'notify_email' => 'info@abacoqd.com',
+    ])->assertRedirect(route('admin.booking.settings.edit'));
+
+    $setting = BookingSetting::query()->first();
+    $recipient = Setting::query()
+        ->where('group', 'site')
+        ->where('key', 'booking_recipient_email')
+        ->first();
+
+    expect($setting?->settings['notify_email'])->toBe('info@abacoqd.com')
+        ->and($recipient?->value)->toBe('info@abacoqd.com')
+        ->and(SiteSettings::bookingRecipient())->toBe('info@abacoqd.com');
 });
 
 test('an admin can generate availability slots in bulk', function () {

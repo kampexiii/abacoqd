@@ -16,7 +16,11 @@ class ConfirmedPartnersSeeder extends Seeder
 {
     public function run(): void
     {
-        /** @var array<int, array{name: string, slug: string, type: PartnerType, website: string|null}> $partners */
+        // Logos de partner colaborador (ruta pública versionable en
+        // `public/uploads/partners`, generada a partir de las entregas finales en
+        // WebP). Los clientes finales NO llevan logo en su ficha de partner: su
+        // logo se guarda en el proyecto (`projects.logo`/`logo_dark`).
+        /** @var array<int, array{name: string, slug: string, type: PartnerType, website: string|null, logo?: string, logo_dark?: string}> $partners */
         $partners = [
             ['name' => 'Meliá Hotels International', 'slug' => 'melia-hotels-international', 'type' => PartnerType::Client, 'website' => 'https://www.meliahotelsinternational.com/es'],
             ['name' => 'Leroy Merlin', 'slug' => 'leroy-merlin', 'type' => PartnerType::Client, 'website' => 'https://www.leroymerlin.es/'],
@@ -31,11 +35,11 @@ class ConfirmedPartnersSeeder extends Seeder
             ['name' => 'In Casa', 'slug' => 'in-casa', 'type' => PartnerType::Client, 'website' => null],
             ['name' => 'Control Cube', 'slug' => 'control-cube', 'type' => PartnerType::Client, 'website' => 'https://www.controlcube.com/'],
 
-            ['name' => 'Cognodata', 'slug' => 'cognodata', 'type' => PartnerType::Collaborator, 'website' => 'https://www.cognodata.com/'],
-            ['name' => 'Iksula', 'slug' => 'iksula', 'type' => PartnerType::Collaborator, 'website' => 'https://www.iksula.com/'],
-            ['name' => 'I Feel Web', 'slug' => 'i-feel-web', 'type' => PartnerType::Collaborator, 'website' => 'https://ifeelweb.net/'],
-            ['name' => 'YoSEO Marketing', 'slug' => 'yoseo-marketing', 'type' => PartnerType::Collaborator, 'website' => 'https://www.yoseomarketing.com/'],
-            ['name' => 'RB', 'slug' => 'rb', 'type' => PartnerType::Collaborator, 'website' => null],
+            ['name' => 'Cognodata', 'slug' => 'cognodata', 'type' => PartnerType::Collaborator, 'website' => 'https://www.cognodata.com/', 'logo' => '/uploads/partners/cognodata-logo.webp', 'logo_dark' => '/uploads/partners/cognodata-logo-dark.webp'],
+            ['name' => 'Iksula', 'slug' => 'iksula', 'type' => PartnerType::Collaborator, 'website' => 'https://www.iksula.com/', 'logo' => '/uploads/partners/iksula-logo.webp', 'logo_dark' => '/uploads/partners/iksula-logo-dark.webp'],
+            ['name' => 'I Feel Web', 'slug' => 'i-feel-web', 'type' => PartnerType::Collaborator, 'website' => 'https://ifeelweb.net/', 'logo' => '/uploads/partners/i-feel-web-logo.webp', 'logo_dark' => '/uploads/partners/i-feel-web-logo-dark.webp'],
+            ['name' => 'YoSEO Marketing', 'slug' => 'yoseo-marketing', 'type' => PartnerType::Collaborator, 'website' => 'https://www.yoseomarketing.com/', 'logo' => '/uploads/partners/yoseo-marketing-logo.webp', 'logo_dark' => '/uploads/partners/yoseo-marketing-logo-dark.webp'],
+            ['name' => 'RB', 'slug' => 'rb', 'type' => PartnerType::Collaborator, 'website' => null, 'logo' => '/uploads/partners/rb-logo.webp', 'logo_dark' => '/uploads/partners/rb-logo-dark.webp'],
         ];
 
         foreach ($partners as $index => $partner) {
@@ -44,6 +48,8 @@ class ConfirmedPartnersSeeder extends Seeder
                 [
                     'name' => $partner['name'],
                     'type' => $partner['type']->value,
+                    'logo' => $partner['logo'] ?? null,
+                    'logo_dark' => $partner['logo_dark'] ?? null,
                     'logo_alt' => 'Logotipo de '.$partner['name'],
                     'website' => $partner['website'],
                     'permission_status' => PermissionStatus::Approved->value,

@@ -8,6 +8,7 @@ import {
     Sheet,
     SheetClose,
     SheetContent,
+    SheetDescription,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
@@ -181,6 +182,9 @@ export default function FloatingHeader() {
                                 <SheetTitle className="text-qd-white">
                                     {t('navigation.menuTitle')}
                                 </SheetTitle>
+                                <SheetDescription className="sr-only">
+                                    {t('navigation.menuDescription')}
+                                </SheetDescription>
                             </SheetHeader>
                             <nav
                                 className="flex flex-col gap-1 px-4"
