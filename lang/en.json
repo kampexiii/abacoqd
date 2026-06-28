@@ -1179,14 +1179,10 @@
                                 "Tax ID (CIF): B-88229364.",
                                 "Address: Calle Núñez de Balboa 35 A, Floor 5, Office A1, 28001 Madrid, Spain.",
                                 "Registry details: Commercial Registry of Madrid, Volume 38273, Folio 65, Section GNE, Sheet No. 681002.",
-                                "Email: info@abacodev.com.",
+                                "Email: info@abacoqd.com.",
                                 "Phone: +34 91 020 00 89.",
                                 "Website: https://abacoqd.com/."
                             ]
-                        },
-                        {
-                            "type": "p",
-                            "text": "The official website of ABACO is https://abacoqd.com/."
                         }
                     ]
                 },
@@ -1200,7 +1196,11 @@
                         },
                         {
                             "type": "p",
-                            "text": "The site aims to present ABACO's activity in custom software development, digital solutions and related services, and to facilitate contact with interested parties."
+                            "text": "The site aims to present ABACO's activity in custom software development, digital solutions, automation, integrations, web applications and related services, and to facilitate contact with individuals, professionals or companies interested in its services."
+                        },
+                        {
+                            "type": "p",
+                            "text": "The information published on this site is informational and corporate in nature. Its content does not constitute a closed contractual offer and does not replace a specific commercial, technical or economic proposal for each project."
                         }
                     ]
                 },
@@ -1210,11 +1210,19 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "User status is acquired simply by accessing and browsing the site. The user undertakes to make diligent, correct and lawful use of the contents and services, in accordance with the law, this legal notice and good practice."
+                            "text": "User status is acquired simply by accessing, browsing or using the website."
                         },
                         {
                             "type": "p",
-                            "text": "Access to the site is generally free of charge, except for the cost of the connection through the telecommunications network contracted by the user."
+                            "text": "The user undertakes to make diligent, correct and lawful use of the site, its contents and its services, in accordance with the law, this legal notice, good faith and public order."
+                        },
+                        {
+                            "type": "p",
+                            "text": "Access to the site is, generally, free of charge, except for the cost of the connection through the telecommunications network contracted by the user."
+                        },
+                        {
+                            "type": "p",
+                            "text": "ABACO reserves the right to modify, suspend, update or remove content from the website, in whole or in part, whenever it considers it necessary for technical, legal, operational or commercial reasons."
                         }
                     ]
                 },
@@ -1224,16 +1232,27 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "It is prohibited to use the site for unlawful purposes or purposes harmful to ABACO or third parties, or that may in any way damage, disable or impair the site or its services. In particular, it is prohibited to:"
+                            "text": "It is prohibited to use the site for unlawful or harmful purposes, or purposes contrary to the law, good faith or this legal notice."
+                        },
+                        {
+                            "type": "p",
+                            "text": "In particular, it is prohibited to:"
                         },
                         {
                             "type": "ul",
                             "items": [
-                                "Introduce or distribute content that infringes the rights of third parties or applicable law.",
-                                "Introduce programs, viruses or any element capable of causing damage to systems.",
-                                "Attempt unauthorized access to restricted areas, accounts or systems of the site.",
-                                "Carry out actions that cause a disproportionate overload of the site's infrastructure."
+                                "Introduce, publish or disseminate content that infringes the rights of third parties or applicable law.",
+                                "Introduce programs, viruses, scripts, automated tools or any element capable of causing damage to the site's systems, infrastructure or services.",
+                                "Attempt unauthorized access to restricted areas, accounts, servers, databases or systems linked to the site.",
+                                "Carry out actions that cause a disproportionate or unnecessary overload of the site's infrastructure.",
+                                "Carry out scraping, mass data extraction, automated copying or systematic reuse of content without prior authorization.",
+                                "Tamper with forms, contact systems, bookings or the site's security mechanisms.",
+                                "Impersonate identities, falsify contact details or use the site to send unsolicited communications."
                             ]
+                        },
+                        {
+                            "type": "p",
+                            "text": "ABACO may adopt the technical, legal or organizational measures necessary to prevent, limit or block abusive, fraudulent or unauthorized use of the site."
                         }
                     ]
                 },
@@ -1248,6 +1267,28 @@
                         {
                             "type": "p",
                             "text": "Reproduction, distribution, public communication, transformation or any other form of exploitation of the contents is not permitted without prior written authorization from ABACO, except for legally permitted uses."
+                        },
+                        {
+                            "type": "p",
+                            "text": "Access to the site does not grant the user any intellectual or industrial property rights over the contents, trademarks, trade names, logos or elements appearing on it."
+                        }
+                    ]
+                },
+                {
+                    "id": "contenidos-proyectos-referencias",
+                    "heading": "Content, projects and references",
+                    "blocks": [
+                        {
+                            "type": "p",
+                            "text": "The content, services, projects, collaborations or references that may appear on the site are published for informational and corporate purposes."
+                        },
+                        {
+                            "type": "p",
+                            "text": "ABACO strives to ensure that the information published is clear, up to date and accurate, but does not guarantee that all content is permanently up to date, complete or free of material errors."
+                        },
+                        {
+                            "type": "p",
+                            "text": "Projects, trademarks, logos, clients, partners or third-party references will only be displayed when there is authorization or a sufficient basis for their publication. The appearance of a third party's trademark or reference does not necessarily imply a corporate relationship, sponsorship, certification or approval, unless expressly stated."
                         }
                     ]
                 },
@@ -1257,7 +1298,15 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "The site may contain links to third-party sites. ABACO assumes no responsibility for the contents, policies or practices of those sites, access to which is the user's responsibility."
+                            "text": "The site may contain links to pages, services or content belonging to third parties."
+                        },
+                        {
+                            "type": "p",
+                            "text": "ABACO does not control and assumes no responsibility for the contents, policies, operation, availability or practices of such external sites. Access to third-party pages is at the user's own responsibility."
+                        },
+                        {
+                            "type": "p",
+                            "text": "The inclusion of external links does not imply any relationship, recommendation, approval or supervision by ABACO, unless expressly stated."
                         }
                     ]
                 },
@@ -1267,7 +1316,19 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "Anyone wishing to set up a link to this site must link to the home page and not make false statements or statements that may mislead or harm ABACO's image. Setting up the link does not imply any relationship, sponsorship or approval by ABACO."
+                            "text": "Anyone wishing to set up a link to this site must do so in a lawful, respectful manner consistent with ABACO's image."
+                        },
+                        {
+                            "type": "p",
+                            "text": "No false or inaccurate statements may be made, nor statements that could mislead regarding ABACO, its services, its ownership or its relationship with the party setting up the link."
+                        },
+                        {
+                            "type": "p",
+                            "text": "Setting up a link to this site does not imply any relationship, authorization, sponsorship, collaboration or approval by ABACO."
+                        },
+                        {
+                            "type": "p",
+                            "text": "ABACO may request the removal of links it considers contrary to the law, good faith, its legitimate interests or the company's image."
                         }
                     ]
                 },
@@ -1277,11 +1338,62 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "ABACO works to keep the site available and up to date, but does not guarantee permanent availability and continuity of the site or the absence of errors in its contents."
+                            "text": "ABACO works to keep the site available, secure and up to date, but does not guarantee continuous, uninterrupted availability of the site or the total absence of technical errors."
                         },
                         {
                             "type": "p",
-                            "text": "To the extent permitted by law, ABACO shall not be liable for damages arising from use of the site, lack of technical availability, or misuse by third parties."
+                            "text": "To the extent permitted by law, ABACO shall not be liable for damages arising from:"
+                        },
+                        {
+                            "type": "ul",
+                            "items": [
+                                "Temporary unavailability of the site.",
+                                "Technical errors, interruptions or connection failures.",
+                                "Improper use of the site by third parties.",
+                                "The presence of viruses or other harmful elements introduced by third parties.",
+                                "Access to external links or third-party content.",
+                                "The interpretation or use of the published information without a specific professional or commercial assessment."
+                            ]
+                        },
+                        {
+                            "type": "p",
+                            "text": "ABACO may temporarily suspend access to the site for maintenance, security, update or improvement tasks."
+                        }
+                    ]
+                },
+                {
+                    "id": "proteccion-datos",
+                    "heading": "Personal data protection",
+                    "blocks": [
+                        {
+                            "type": "p",
+                            "text": "The processing of personal data carried out through the website is governed by the Privacy Policy."
+                        },
+                        {
+                            "type": "p",
+                            "text": "Contact forms, booking forms or any other means of collecting data will include the information and consents required under applicable regulations."
+                        },
+                        {
+                            "type": "p",
+                            "text": "You can find more information in the Privacy Policy."
+                        }
+                    ]
+                },
+                {
+                    "id": "cookies-tecnologias",
+                    "heading": "Cookies and similar technologies",
+                    "blocks": [
+                        {
+                            "type": "p",
+                            "text": "The use of technical cookies and similar storage technologies is governed by the Cookie Policy."
+                        },
+                        {
+                            "type": "p",
+                            "text": "The site currently uses only technical, first-party cookies necessary for operation, security and the retention of basic preferences, such as language, theme or accessibility."
+                        },
+                        {
+                            "type": "p",
+                            "text": "You can find more information in the Cookie Policy."
                         }
                     ]
                 },
@@ -1291,7 +1403,11 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "This legal notice is governed by Spanish law. For the resolution of any dispute, the parties shall submit to the courts and tribunals that are competent under the applicable regulations."
+                            "text": "This legal notice is governed by Spanish law."
+                        },
+                        {
+                            "type": "p",
+                            "text": "For the resolution of any dispute relating to access to or use of the website, the parties shall submit to the courts and tribunals with jurisdiction under applicable regulations."
                         }
                     ]
                 },
@@ -1301,12 +1417,11 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "For any query relating to this legal notice you can contact ABACO at info@abacodev.com or at the postal address indicated in the owner identification details."
+                            "text": "For any query relating to this legal notice you can contact ABACO at info@abacoqd.com or at the postal address indicated in the owner identification details."
                         }
                     ]
                 }
-            ]
-        },
+            ]        },
         "privacy": {
             "metaTitle": "Privacy policy · AbacoQD",
             "metaDescription": "Information on how Abaco Developments processes personal data received through the site, in accordance with the GDPR and the LOPDGDD.",
@@ -1321,30 +1436,45 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "The controller of the personal data collected through this site is ABACO DIGITAL DEVELOPMENTS, S.L. (ABACO), Tax ID B-88229364, with address at Calle Núñez de Balboa 35 A, Floor 5, Office A1, 28001 Madrid. Privacy contact email: info@abacodev.com."
-                        }
-                    ]
-                },
-                {
-                    "id": "datos-que-tratamos",
-                    "heading": "Data we may process",
-                    "blocks": [
-                        {
-                            "type": "p",
-                            "text": "Depending on the user's interaction, ABACO may process the following categories of data:"
+                            "text": "The controller of the personal data collected through this website is:"
                         },
                         {
                             "type": "ul",
                             "items": [
-                                "Identification and contact data: name, email, phone and company, when provided.",
-                                "Content of communications: the information the user includes in their messages or requests, including booking requests (name, email, phone, company, requested date and time, and any associated message).",
-                                "Consent data: acceptance date and time of the privacy policy and, where applicable, separate consent for commercial communications.",
-                                "Technical data necessary for security and operation: IP address, browser (user agent), device information, and date and time of access."
+                                "Controller: ABACO DIGITAL DEVELOPMENTS, S.L. (hereinafter, ABACO)",
+                                "Tax ID (CIF): B-88229364",
+                                "Address: Calle Núñez de Balboa 35 A, Floor 5, Office A1, 28001 Madrid, Spain",
+                                "Contact email: info@abacoqd.com",
+                                "Website: https://abacoqd.com/"
                             ]
                         },
                         {
                             "type": "p",
-                            "text": "Only the data the user voluntarily provides, or that is necessary to deliver the requested service, is processed."
+                            "text": "For any matter related to privacy or data protection, you can contact ABACO through the email address indicated above."
+                        }
+                    ]
+                },
+                {
+                    "id": "datos-personales",
+                    "heading": "Personal data we may process",
+                    "blocks": [
+                        {
+                            "type": "p",
+                            "text": "Depending on the user's interaction with the website, ABACO may process the following categories of data:"
+                        },
+                        {
+                            "type": "ul",
+                            "items": [
+                                "Identification and contact data: name, email, phone, company or other similar data provided by the user.",
+                                "Data related to the request: service of interest, message, query, need raised, project information or data voluntarily included in forms or communications.",
+                                "Booking or appointment data: name, email, phone, company, service of interest, selected date and time slot, message associated with the booking and status of the request.",
+                                "Consent data: acceptance of the privacy policy, date and time of acceptance and, where applicable, separate consent for commercial communications.",
+                                "Necessary technical data: IP address, technical identifiers, basic browser information, device, date and time of access, security logs and data necessary for the technical operation of the site."
+                            ]
+                        },
+                        {
+                            "type": "p",
+                            "text": "ABACO only processes data that the user voluntarily provides or that is necessary to deliver the requested service, maintain the security of the site or comply with legal obligations."
                         }
                     ]
                 },
@@ -1354,35 +1484,45 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "Data is processed for the following purposes:"
+                            "text": "Personal data may be processed for the following purposes:"
                         },
                         {
                             "type": "ul",
                             "items": [
                                 "Handling queries and requests sent through the contact form.",
-                                "Managing booking or appointment requests.",
-                                "Sending commercial communications only when the user has specifically consented.",
-                                "Maintaining the security and proper operation of the site."
+                                "Managing booking, appointment or first-meeting requests.",
+                                "Responding to communications received by email, form or other enabled channels.",
+                                "Assessing the request made and, where applicable, preparing a response, initial guidance or proposal related to ABACO's services.",
+                                "Sending commercial communications only when the user has expressly authorized it via a separate checkbox.",
+                                "Managing subscriptions to content or informational communications, if this feature is enabled on the site.",
+                                "Maintaining the security, integrity, availability and proper technical operation of the website.",
+                                "Complying with applicable legal obligations."
                             ]
                         }
                     ]
                 },
                 {
                     "id": "base-juridica",
-                    "heading": "Legal basis",
+                    "heading": "Legal basis for processing",
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "Processing is based, as applicable, on:"
+                            "text": "The legal basis for processing will depend on the specific purpose:"
                         },
                         {
                             "type": "ul",
                             "items": [
-                                "The consent of the data subject (for example, when submitting forms or subscribing to communications).",
-                                "The performance of pre-contractual measures or the requested relationship.",
-                                "ABACO's legitimate interest in responding to queries and ensuring the security of the site.",
-                                "Compliance with applicable legal obligations."
+                                "Handling queries and requests: performance of pre-contractual measures or handling of a request made by the data subject.",
+                                "Managing bookings or appointments: performance of pre-contractual measures or management of the request made by the data subject.",
+                                "Optional commercial communications: express consent of the data subject.",
+                                "Subscription to content, if enabled: express consent of the data subject.",
+                                "Security and technical operation of the site: ABACO's legitimate interest in keeping the site secure, operational and protected against misuse.",
+                                "Compliance with legal obligations: compliance with the obligations applicable to ABACO."
                             ]
+                        },
+                        {
+                            "type": "p",
+                            "text": "Acceptance of the privacy policy in the forms confirms that the user has been informed about the processing of their data. Commercial communications are always requested via a separate, optional and unticked checkbox."
                         }
                     ]
                 },
@@ -1392,7 +1532,15 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "The contact form collects the data necessary to handle the request. Acceptance of the privacy policy is mandatory to submit it; commercial communications are always optional and collected via a separate checkbox, never combined with the mandatory acceptance."
+                            "text": "The contact form collects the data necessary to handle the request sent by the user."
+                        },
+                        {
+                            "type": "p",
+                            "text": "Acceptance of the privacy policy is mandatory to submit the form. Commercial communications, if offered, are always optional and collected via a separate checkbox."
+                        },
+                        {
+                            "type": "p",
+                            "text": "ABACO will not use the contact form data to send commercial communications if the user has not given their specific consent for this."
                         }
                     ]
                 },
@@ -1402,7 +1550,11 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "When the user requests a meeting or appointment, the data necessary to manage and confirm the booking is processed. This data is used solely for that purpose."
+                            "text": "When the user requests a meeting or appointment, ABACO processes the data necessary to manage the booking, confirm the request, avoid duplicates and properly handle subsequent communication."
+                        },
+                        {
+                            "type": "p",
+                            "text": "This data is used solely to manage the appointment, respond to the request and keep a basic record of the handling carried out."
                         }
                     ]
                 },
@@ -1412,7 +1564,33 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "If the user expressly consents, ABACO may send communications about services, news or content. Consent may be withdrawn at any time, without retroactive effect, through the means indicated or the unsubscribe link included in the communications."
+                            "text": "ABACO will only send commercial communications, news, content or information about services when the user has expressly authorized it."
+                        },
+                        {
+                            "type": "p",
+                            "text": "Consent may be withdrawn at any time, without retroactive effect, by writing to info@abacoqd.com or using the unsubscribe mechanism included in the communications when available."
+                        },
+                        {
+                            "type": "p",
+                            "text": "Withdrawal of consent does not affect the lawfulness of processing carried out prior to it."
+                        }
+                    ]
+                },
+                {
+                    "id": "suscripcion-contenidos",
+                    "heading": "Subscription to content",
+                    "blocks": [
+                        {
+                            "type": "p",
+                            "text": "If the site enables a subscription to the blog, newsletter or informational content, the user's specific consent will be requested."
+                        },
+                        {
+                            "type": "p",
+                            "text": "Where applicable, ABACO may use a double opt-in confirmation system to verify that the email address belongs to the person requesting the subscription."
+                        },
+                        {
+                            "type": "p",
+                            "text": "The user may unsubscribe at any time."
                         }
                     ]
                 },
@@ -1422,7 +1600,25 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "Data will be kept for as long as it is necessary for the purpose for which it was collected and, thereafter, for the legally required periods. When it is no longer necessary, it will be deleted using appropriate security measures."
+                            "text": "Data will be kept for as long as necessary to fulfil the purpose for which it was collected."
+                        },
+                        {
+                            "type": "p",
+                            "text": "In particular:"
+                        },
+                        {
+                            "type": "ul",
+                            "items": [
+                                "Contact data will be kept for as long as necessary to handle the query and, thereafter, for the period necessary to address possible liabilities.",
+                                "Booking or appointment data will be kept for as long as necessary to manage the meeting and, thereafter, for the period necessary to address possible liabilities.",
+                                "Data associated with commercial communications will be kept for as long as consent remains valid or until the user requests to unsubscribe.",
+                                "Technical and security logs will be kept for as long as necessary to ensure the security of the site and prevent abuse or misuse.",
+                                "Where there is a legal retention obligation, data will be kept for the periods required by applicable regulations."
+                            ]
+                        },
+                        {
+                            "type": "p",
+                            "text": "Once the retention periods have ended, the data will be deleted or blocked as appropriate, applying suitable security measures."
                         }
                     ]
                 },
@@ -1432,11 +1628,71 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "In general, data is not shared with third parties except where legally required. To provide the service, technology providers necessary for hosting, maintenance or operation of the site may be involved, acting as data processors under the corresponding agreements where applicable."
+                            "text": "In general, ABACO does not share personal data with third parties, except where legally required or necessary to provide the requested service."
                         },
                         {
                             "type": "p",
-                            "text": "No international data transfers are planned; if they become necessary in the future, prior information will be given and appropriate safeguards will be adopted."
+                            "text": "Necessary technology providers may be involved in the operation of the website, such as hosting, maintenance, email, security, technical support or internal management tool services."
+                        },
+                        {
+                            "type": "p",
+                            "text": "When these providers access personal data on behalf of ABACO, they will act as data processors and must apply the corresponding safeguards in accordance with applicable regulations."
+                        },
+                        {
+                            "type": "p",
+                            "text": "ABACO does not sell personal data to third parties."
+                        }
+                    ]
+                },
+                {
+                    "id": "transferencias-internacionales",
+                    "heading": "International data transfers",
+                    "blocks": [
+                        {
+                            "type": "p",
+                            "text": "No international transfers of personal data are planned."
+                        },
+                        {
+                            "type": "p",
+                            "text": "If it becomes necessary in the future to use providers involving international transfers, ABACO will provide information when appropriate and adopt suitable safeguards in accordance with applicable regulations."
+                        }
+                    ]
+                },
+                {
+                    "id": "analitica-seguimiento",
+                    "heading": "Analytics, tracking and third-party providers",
+                    "blocks": [
+                        {
+                            "type": "p",
+                            "text": "The site currently does not use analytics, heatmaps, advertising, tracking pixels or third-party providers for measurement or tracking purposes."
+                        },
+                        {
+                            "type": "p",
+                            "text": "The use of technical cookies and similar technologies is governed by the Cookie Policy."
+                        }
+                    ]
+                },
+                {
+                    "id": "decisiones-automatizadas",
+                    "heading": "Automated decisions",
+                    "blocks": [
+                        {
+                            "type": "p",
+                            "text": "ABACO does not make automated decisions that produce legal effects on the user or similarly significantly affect them."
+                        }
+                    ]
+                },
+                {
+                    "id": "menores-edad",
+                    "heading": "Minors",
+                    "blocks": [
+                        {
+                            "type": "p",
+                            "text": "This website is not specifically aimed at minors."
+                        },
+                        {
+                            "type": "p",
+                            "text": "If a minor provides personal data through the site, they must have the authorization of their legal representatives where required under applicable regulations."
                         }
                     ]
                 },
@@ -1451,13 +1707,14 @@
                         {
                             "type": "ul",
                             "items": [
-                                "Access to their personal data.",
-                                "Rectification of inaccurate data.",
-                                "Erasure of the data.",
-                                "Objection to processing.",
-                                "Restriction of processing.",
-                                "Data portability.",
-                                "Withdrawal of consent given, where processing is based on it."
+                                "Right of access.",
+                                "Right of rectification.",
+                                "Right of erasure.",
+                                "Right to object.",
+                                "Right to restriction of processing.",
+                                "Right to data portability.",
+                                "Right to withdraw consent given, where processing is based on consent.",
+                                "Right not to be subject to automated decisions, where applicable."
                             ]
                         }
                     ]
@@ -1468,7 +1725,31 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "To exercise these rights you may send a request to info@abacodev.com or to the postal address Calle Núñez de Balboa 35 A, Floor 5, Office A1, 28001 Madrid, indicating the right you wish to exercise. ABACO may request proof of identity where necessary."
+                            "text": "To exercise their rights, the user may send a request to:"
+                        },
+                        {
+                            "type": "p",
+                            "text": "info@abacoqd.com"
+                        },
+                        {
+                            "type": "p",
+                            "text": "Or by postal mail to:"
+                        },
+                        {
+                            "type": "ul",
+                            "items": [
+                                "ABACO DIGITAL DEVELOPMENTS, S.L.",
+                                "Calle Núñez de Balboa 35 A, Floor 5, Office A1",
+                                "28001 Madrid, Spain"
+                            ]
+                        },
+                        {
+                            "type": "p",
+                            "text": "The request must indicate the right to be exercised and the data necessary to correctly identify the requester."
+                        },
+                        {
+                            "type": "p",
+                            "text": "ABACO may request additional information or proof of identity when necessary to verify the request and protect personal data against improper access."
                         }
                     ]
                 },
@@ -1478,7 +1759,7 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "If you consider that the processing of your data does not comply with the regulations, you have the right to file a complaint with the Spanish Data Protection Agency (AEPD)."
+                            "text": "If you consider that the processing of your personal data does not comply with applicable regulations, you have the right to file a complaint with the Spanish Data Protection Agency (AEPD)."
                         }
                     ]
                 },
@@ -1488,7 +1769,11 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "ABACO applies reasonable technical and organizational measures to protect personal data against unauthorized access, loss or alteration, in line with the state of the art."
+                            "text": "ABACO applies reasonable technical and organizational measures to protect personal data against unauthorized access, loss, alteration, disclosure or destruction."
+                        },
+                        {
+                            "type": "p",
+                            "text": "These measures are applied taking into account the state of the art, the nature of the data processed, the existing risks and the characteristics of the website."
                         }
                     ]
                 },
@@ -1498,7 +1783,11 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "This policy may be updated to adapt it to regulatory or operational changes of the site. We recommend reviewing it periodically; the last update date is shown at the top."
+                            "text": "ABACO may update this privacy policy to adapt it to regulatory, technical, operational or site-functioning changes."
+                        },
+                        {
+                            "type": "p",
+                            "text": "The date of the last update appears at the top of this page."
                         }
                     ]
                 },
@@ -1508,7 +1797,11 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "For any matter relating to privacy you can contact ABACO at info@abacodev.com."
+                            "text": "For any matter relating to privacy or data protection you can contact ABACO at:"
+                        },
+                        {
+                            "type": "p",
+                            "text": "info@abacoqd.com"
                         }
                     ]
                 }
@@ -1528,7 +1821,15 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "Cookies are small files that a website stores on the user's device. Alongside them there are other local storage technologies (such as localStorage) that perform similar functions to remember preferences."
+                            "text": "Cookies are small files that a website may store on the user's device to enable its operation, remember certain preferences or improve the browsing experience."
+                        },
+                        {
+                            "type": "p",
+                            "text": "Alongside cookies, there are other similar technologies, such as the browser's local storage, which make it possible to retain preferences chosen by the user, such as language, visual theme or certain accessibility settings."
+                        },
+                        {
+                            "type": "p",
+                            "text": "In this policy we use the term \"cookies\" broadly to also refer to these similar storage technologies when they perform an equivalent function."
                         }
                     ]
                 },
@@ -1543,21 +1844,21 @@
                         {
                             "type": "ul",
                             "items": [
-                                "Technical or necessary cookies: essential for the operation of the site.",
-                                "Preference cookies: remember the user's options, such as language or theme.",
-                                "Analytics cookies: this site does not use analytics cookies.",
-                                "Third-party cookies: this site does not use third-party cookies, heatmaps, advertising tools or external tracking."
+                                "Technical or necessary cookies: essential for the site to function correctly, enable navigation, maintain security or remember actions required during the session.",
+                                "Preference cookies: allow remembering options chosen by the user, such as language, light or dark mode, or accessibility settings.",
+                                "Analytics cookies: used to measure the use of a website. This site does not use analytics cookies.",
+                                "Third-party cookies: managed by external providers. This site does not use third-party cookies, heatmap tools, advertising or external tracking."
                             ]
                         }
                     ]
                 },
                 {
                     "id": "cookies-utilizadas",
-                    "heading": "Cookies used on this site",
+                    "heading": "Cookies and technologies used on this site",
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "This site currently uses only its own technical and preference storage. The following table summarizes the technologies used:"
+                            "text": "This site currently uses only its own technical cookies and storage technologies, necessary for the operation of the site, security and the retention of basic preferences."
                         },
                         {
                             "type": "table",
@@ -1572,28 +1873,28 @@
                                 [
                                     "Theme preference",
                                     "Preference / technical",
-                                    "Remember the selected light, dark or system mode.",
+                                    "Remember the light, dark or system mode selected by the user.",
                                     "Persistent until changed or the browser is cleared.",
                                     "Own"
                                 ],
                                 [
                                     "Language preference",
                                     "Preference / technical",
-                                    "Remember the selected language.",
+                                    "Remember the language selected by the user.",
                                     "Persistent until changed or the browser is cleared.",
                                     "Own"
                                 ],
                                 [
                                     "Accessibility preferences",
                                     "Preference / technical",
-                                    "Remember the selected accessibility settings.",
+                                    "Remember the accessibility settings selected by the user.",
                                     "Persistent until changed or the browser is cleared.",
                                     "Own"
                                 ],
                                 [
-                                    "Technical session/security cookies",
+                                    "Technical session and security cookies",
                                     "Necessary",
-                                    "Security, session and CSRF protection or technical operation of the site.",
+                                    "Enable the technical operation of the site, security, the session and protection against unauthorized requests.",
                                     "Session or the technically necessary period.",
                                     "Own"
                                 ]
@@ -1607,7 +1908,11 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "Technical or necessary cookies and technologies enable navigation and use of the basic functions of the site. As they are essential, they do not require prior consent."
+                            "text": "Technical or necessary cookies and technologies enable navigation and the use of the site's basic functions."
+                        },
+                        {
+                            "type": "p",
+                            "text": "As they are essential for the operation, security or provision of the service requested by the user, they do not require prior consent."
                         }
                     ]
                 },
@@ -1617,17 +1922,25 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "To remember the theme (light, dark or system), the language and accessibility settings, the site uses the browser's own local storage. This information stays on the device until it is changed or cleared."
+                            "text": "To remember the visual theme, language and accessibility settings, the site may use the browser's own local storage."
+                        },
+                        {
+                            "type": "p",
+                            "text": "These preferences are stored solely on the user's device and remain until they are changed, reset from the site itself, or deleted from the browser settings."
                         }
                     ]
                 },
                 {
                     "id": "analitica-terceros",
-                    "heading": "Analytics and third parties",
+                    "heading": "Analytics, heatmaps and third parties",
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "This site does not use analytics cookies, heatmaps, advertising tools, tracking pixels or external measurement providers."
+                            "text": "This site currently does not use analytics cookies, heatmaps, advertising tools, tracking pixels or external providers for measurement or tracking purposes."
+                        },
+                        {
+                            "type": "p",
+                            "text": "No non-necessary technologies or external measurement or tracking providers are loaded."
                         }
                     ]
                 },
@@ -1637,7 +1950,11 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "The user can configure or delete cookies and local storage from their browser options. Disabling some technical technologies may affect the operation of the site."
+                            "text": "The user can configure, block or delete cookies and local storage from their browser options."
+                        },
+                        {
+                            "type": "p",
+                            "text": "Disabling certain technical cookies or necessary technologies may affect the correct operation of the site."
                         }
                     ]
                 },
@@ -1647,7 +1964,11 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "This cookie policy may be updated when the technologies used or the applicable regulations change. The last update date is shown at the top."
+                            "text": "This cookie policy may be updated when the technologies used on the site or the applicable regulations change."
+                        },
+                        {
+                            "type": "p",
+                            "text": "The date of the last update appears at the top of this page."
                         }
                     ]
                 },
@@ -1657,7 +1978,7 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "For any questions about the use of cookies you can contact ABACO at info@abacodev.com."
+                            "text": "For any questions about the use of cookies you can contact ABACO at info@abacoqd.com."
                         }
                     ]
                 }

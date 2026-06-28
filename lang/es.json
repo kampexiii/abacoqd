@@ -1179,7 +1179,7 @@
                                 "CIF: B-88229364",
                                 "Domicilio: Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid, España",
                                 "Datos registrales: Registro Mercantil de Madrid, Tomo 38273, Folio 65, Sección GNE, Hoja Nº 681002",
-                                "Correo electrónico: info@abacodev.com",
+                                "Correo electrónico: info@abacoqd.com",
                                 "Teléfono: +34 91 020 00 89",
                                 "Sitio web: https://abacoqd.com/"
                             ]
@@ -1417,7 +1417,7 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "Para cualquier consulta relacionada con este aviso legal puede contactar con ABACO en info@abacodev.com o en la dirección postal indicada en los datos identificativos."
+                            "text": "Para cualquier consulta relacionada con este aviso legal puede contactar con ABACO en info@abacoqd.com o en la dirección postal indicada en los datos identificativos."
                         }
                     ]
                 }
@@ -1445,7 +1445,7 @@
                                 "Responsable: ABACO DIGITAL DEVELOPMENTS, S.L. (en adelante, ABACO)",
                                 "CIF: B-88229364",
                                 "Domicilio: Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid, España",
-                                "Correo electrónico de contacto: info@abacodev.com",
+                                "Correo electrónico de contacto: info@abacoqd.com",
                                 "Sitio web: https://abacoqd.com/"
                             ]
                         },
@@ -1569,7 +1569,7 @@
                         },
                         {
                             "type": "p",
-                            "text": "El consentimiento puede retirarse en cualquier momento, sin efectos retroactivos, escribiendo a info@abacodev.com o utilizando el mecanismo de baja incluido en las comunicaciones cuando esté disponible."
+                            "text": "El consentimiento puede retirarse en cualquier momento, sin efectos retroactivos, escribiendo a info@abacoqd.com o utilizando el mecanismo de baja incluido en las comunicaciones cuando esté disponible."
                         },
                         {
                             "type": "p",
@@ -1730,7 +1730,7 @@
                         },
                         {
                             "type": "p",
-                            "text": "info@abacodev.com"
+                            "text": "info@abacoqd.com"
                         },
                         {
                             "type": "p",
@@ -1802,7 +1802,7 @@
                         },
                         {
                             "type": "p",
-                            "text": "info@abacodev.com"
+                            "text": "info@abacoqd.com"
                         }
                     ]
                 }
@@ -1979,7 +1979,7 @@
                     "blocks": [
                         {
                             "type": "p",
-                            "text": "Para cualquier duda sobre el uso de cookies puede contactar con ABACO en info@abacodev.com."
+                            "text": "Para cualquier duda sobre el uso de cookies puede contactar con ABACO en info@abacoqd.com."
                         }
                     ]
                 }
