@@ -1337,8 +1337,9 @@
                             "type": "ul",
                             "items": [
                                 "Identification and contact data: name, email, phone and company, when provided.",
-                                "Content of communications: the information the user includes in their messages or requests.",
-                                "Technical browsing data strictly necessary for the operation of the site."
+                                "Content of communications: the information the user includes in their messages or requests, including booking requests (name, email, phone, company, requested date and time, and any associated message).",
+                                "Consent data: acceptance date and time of the privacy policy and, where applicable, separate consent for commercial communications.",
+                                "Technical data necessary for security and operation: IP address, browser (user agent), device information, and date and time of access."
                             ]
                         },
                         {
