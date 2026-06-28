@@ -2092,7 +2092,7 @@ html.a11y-reduce-motion *::after {
 .qd-collab__inner {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    grid-template-columns: minmax(0, 1.03fr) minmax(0, 1.18fr);
     gap: clamp(1.25rem, 2.5vw, 2.5rem);
     align-items: center;
     /* Red de seguridad: el solape de la noria cae sobre la card (dentro de este
@@ -2106,7 +2106,9 @@ html.a11y-reduce-motion *::after {
     /* Card por encima de la noria: la órbita asoma por detrás del borde
        derecho creando continuidad (trampantojo), sin tapar el texto. */
     z-index: 2;
-    padding: clamp(1.35rem, 3vw, 2rem);
+    /* +25% sobre el padding base (clamp(1.35rem, 3vw, 2rem)); el tamaño
+       original se restaura para tablet/móvil en el media query de abajo. */
+    padding: clamp(1.69rem, 3.75vw, 2.5rem);
     border: 1px solid rgba(15, 143, 149, 0.13);
     border-radius: 22px;
     background: rgba(255, 255, 255, 0.36);
@@ -2462,16 +2464,12 @@ html.a11y-reduce-motion *::after {
 
 .qd-collab-orbital {
     position: relative;
-    width: clamp(420px, 46vw, 660px);
-    height: clamp(420px, 46vw, 660px);
-    /* Ancla el borde izquierdo de la noria al inicio de su columna... */
-    margin-right: auto;
-    margin-left: 0;
-    /* ...y con -50% (siempre la mitad EXACTA del ancho) el centro/pivote queda
-       fijado al borde de la card en cualquier pantalla; el +1.5rem es el único
-       ajuste estético. No depende de un % arbitrario ni genera scroll, y el
-       pivote sigue perfectamente centrado dentro del círculo. */
-    transform: translateX(calc(-50% + 1.5rem));
+    /* +25% sobre el tamaño base (clamp(420px, 46vw, 660px)). */
+    width: clamp(525px, 57.5vw, 825px);
+    height: clamp(525px, 57.5vw, 825px);
+    /* Centrada dentro de su columna (en vez de anclada al borde izquierdo)
+       para quedar proporcionalmente colocada en cualquier pantalla. */
+    margin-inline: auto;
     isolation: isolate;
 }
 
@@ -4335,6 +4333,12 @@ html.reduce-motion .qd-error-ambient-lines span {
     .qd-collab__inner {
         grid-template-columns: 1fr;
         gap: 2.5rem;
+    }
+
+    /* Restaura el tamaño original del cuadro de copy (el +25% es solo
+       desktop, donde convive con la noria en el layout de dos columnas). */
+    .qd-collab__copy {
+        padding: clamp(1.35rem, 3vw, 2rem);
     }
 
     .qd-blog-layout {
