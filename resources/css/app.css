@@ -2464,9 +2464,15 @@ html.a11y-reduce-motion *::after {
 
 .qd-collab-orbital {
     position: relative;
-    /* +25% sobre el tamaño base (clamp(420px, 46vw, 660px)). */
-    width: clamp(525px, 57.5vw, 825px);
-    height: clamp(525px, 57.5vw, 825px);
+    /* Ancho relativo a su propia columna (no al viewport): la sección tiene
+       un contenedor con max-width fijo (1180px) y `overflow: hidden`, así
+       que un tamaño en vw puede ser más ancho que la columna disponible y
+       quedar recortado. Con 100% + max-width nunca desborda su columna.
+       Tope +25% sobre el máximo base (660px → 825px). */
+    width: 100%;
+    max-width: 825px;
+    aspect-ratio: 1 / 1;
+    height: auto;
     /* Centrada dentro de su columna (en vez de anclada al borde izquierdo)
        para quedar proporcionalmente colocada en cualquier pantalla. */
     margin-inline: auto;
