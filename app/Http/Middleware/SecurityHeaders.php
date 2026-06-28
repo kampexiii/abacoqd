@@ -24,6 +24,15 @@ class SecurityHeaders
 {
     public function handle(Request $request, Closure $next): Response
     {
+        // `X-Powered-By` la añade PHP por configuración (`expose_php`), no
+        // Laravel: no se puede asumir que el `php.ini` de producción tenga
+        // `expose_php = Off`, así que se quita aquí también. `header_remove`
+        // funciona porque en este punto del ciclo de vida no se ha enviado
+        // ninguna cabecera todavía.
+        if (function_exists('header_remove')) {
+            header_remove('X-Powered-By');
+        }
+
         $response = $next($request);
 
         $headers = [
