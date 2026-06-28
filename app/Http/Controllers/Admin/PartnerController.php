@@ -143,8 +143,9 @@ class PartnerController extends Controller
     private function syncLogos(StorePartnerRequest|UpdatePartnerRequest $request, Partner $partner): void
     {
         if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
             $previous = $partner->logo;
-            $path = $this->logos->storeFromPath($request->file('logo')->getRealPath(), $partner->slug, 'logo');
+            $path = $this->logos->storeFromPath($file->getRealPath(), $partner->slug, 'logo', $file->getClientOriginalExtension());
             $partner->update(['logo' => $path]);
 
             if ($previous !== null && $previous !== $path) {
@@ -156,8 +157,9 @@ class PartnerController extends Controller
         }
 
         if ($request->hasFile('logo_dark')) {
+            $file = $request->file('logo_dark');
             $previous = $partner->logo_dark;
-            $path = $this->logos->storeFromPath($request->file('logo_dark')->getRealPath(), $partner->slug, 'logo-dark');
+            $path = $this->logos->storeFromPath($file->getRealPath(), $partner->slug, 'logo-dark', $file->getClientOriginalExtension());
             $partner->update(['logo_dark' => $path]);
 
             if ($previous !== null && $previous !== $path) {

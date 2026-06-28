@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use App\Enums\PartnerType;
 use App\Enums\UserRole;
+use App\Rules\SafeSvgUpload;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -60,9 +61,9 @@ abstract class PartnerRequest extends FormRequest
             ],
             'type' => ['required', Rule::enum(PartnerType::class)],
 
-            'logo' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            'logo' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048', new SafeSvgUpload],
             'remove_logo' => ['boolean'],
-            'logo_dark' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            'logo_dark' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048', new SafeSvgUpload],
             'remove_logo_dark' => ['boolean'],
             'logo_alt' => ['nullable', 'string', 'max:255'],
 

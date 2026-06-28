@@ -233,8 +233,9 @@ class ProjectController extends Controller
         string $removeFlag,
     ): void {
         if ($request->hasFile($field)) {
+            $file = $request->file($field);
             $previous = $project->{$field};
-            $path = $this->images->storeFromPath($request->file($field)->getRealPath(), $slug, $variant);
+            $path = $this->images->storeFromPath($file->getRealPath(), $slug, $variant, $file->getClientOriginalExtension());
             $project->update([$field => $path]);
 
             $this->deleteReplaced($previous, $path);

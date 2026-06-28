@@ -2,8 +2,10 @@
 
 namespace App\Services\Media;
 
+use App\Support\SvgSafetyGuard;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 
 /**
  * Borrado del archivo físico anterior cuando una imagen/asset se sustituye o
@@ -47,5 +49,20 @@ trait InteractsWithPublicUploads
         }
 
         Storage::disk(self::PUBLIC_UPLOADS_DISK)->delete($relative);
+    }
+
+    /**
+     * Defensa en profundidad: el SVG ya pasa por `Rules\SafeSvgUpload` en la
+     * validación del FormRequest (antes de llegar aquí), pero este punto de
+     * guardado vuelve a comprobarlo por si se invoca desde otra vía (seeders,
+     * comandos futuros) que no pase por esa validación.
+     */
+    private function assertSvgIsSafe(string $contents, string $sourcePath): void
+    {
+        try {
+            SvgSafetyGuard::ensureSafe($contents);
+        } catch (InvalidArgumentException $exception) {
+            throw new InvalidArgumentException("{$exception->getMessage()} ({$sourcePath})", previous: $exception);
+        }
     }
 }

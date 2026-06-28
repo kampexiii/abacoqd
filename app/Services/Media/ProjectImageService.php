@@ -29,15 +29,24 @@ class ProjectImageService
     private const QUALITY = 88;
 
     /**
+     * @param  string|null  $extensionHint  Extensión original del archivo subido
+     *                                      (`UploadedFile::getClientOriginalExtension()`).
+     *                                      El `$sourcePath` real de una subida HTTP es el
+     *                                      fichero temporal de PHP (p. ej. `php9A1B.tmp`), que
+     *                                      no conserva la extensión original: sin esta pista,
+     *                                      un logo SVG subido desde el admin nunca se detecta
+     *                                      como SVG y se intenta procesar (mal) como raster.
+     *                                      Si no se pasa, se infiere de `$sourcePath` (caso de
+     *                                      los seeders, que sí usan rutas con extensión real).
      * @return string Ruta pública (`/uploads/projects/{slug}-{variant}.webp|svg`).
      */
-    public function storeFromPath(string $sourcePath, string $slug, string $variant): string
+    public function storeFromPath(string $sourcePath, string $slug, string $variant, ?string $extensionHint = null): string
     {
         if (! is_file($sourcePath)) {
             throw new InvalidArgumentException("Source image not found: {$sourcePath}");
         }
 
-        $extension = strtolower(pathinfo($sourcePath, PATHINFO_EXTENSION));
+        $extension = strtolower($extensionHint ?? pathinfo($sourcePath, PATHINFO_EXTENSION));
 
         if ($extension === 'svg') {
             return $this->storeSvg($sourcePath, $slug, $variant);
@@ -53,6 +62,8 @@ class ProjectImageService
         if ($contents === false || ! str_contains($contents, '<svg')) {
             throw new InvalidArgumentException("File is not a valid SVG: {$sourcePath}");
         }
+
+        $this->assertSvgIsSafe($contents, $sourcePath);
 
         $path = self::DIRECTORY.'/'."{$slug}-{$variant}.svg";
 

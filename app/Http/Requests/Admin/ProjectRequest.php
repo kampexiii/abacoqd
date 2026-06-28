@@ -4,6 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use App\Enums\ProjectStatus;
 use App\Enums\UserRole;
+use App\Rules\SafeSvgUpload;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -115,9 +116,9 @@ abstract class ProjectRequest extends FormRequest
 
             // Logo del cliente/empresa: color (modo claro) y monocromo (modo
             // oscuro). Admiten SVG (se conserva vectorial) además de raster.
-            'logo' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            'logo' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048', new SafeSvgUpload],
             'remove_logo' => ['boolean'],
-            'logo_dark' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048'],
+            'logo_dark' => ['nullable', 'file', 'mimes:png,jpg,jpeg,webp,svg', 'max:2048', new SafeSvgUpload],
             'remove_logo_dark' => ['boolean'],
             'logo_alt' => ['nullable', 'string', 'max:255'],
 
