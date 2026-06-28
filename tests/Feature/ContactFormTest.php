@@ -117,6 +117,26 @@ test('the contact notification falls back to config when settings has no recipie
     );
 });
 
+test('the contact notification carries the visitor email as Reply-To, not as From', function () {
+    Mail::fake();
+
+    $this->post('/contacto', [
+        'name' => 'Jane Doe',
+        'email' => 'jane@example.com',
+        'message' => 'Quiero un presupuesto.',
+        'privacy_consent' => '1',
+    ])->assertRedirect('/contacto');
+
+    // El mailable nunca define `from` en su envelope (usa el remitente
+    // corporativo por defecto del mailer); solo añade el email del visitante
+    // como Reply-To. `hasFrom()` no se usa aquí: revienta si `from` no está
+    // definido en el envelope, que es justo el estado correcto y esperado.
+    Mail::assertSent(
+        ContactMessageReceived::class,
+        fn (ContactMessageReceived $mail) => $mail->hasReplyTo('jane@example.com', 'Jane Doe'),
+    );
+});
+
 test('a failing mailer does not lose the lead nor break the response', function () {
     Mail::shouldReceive('to')->andThrow(new RuntimeException('SMTP down'));
 

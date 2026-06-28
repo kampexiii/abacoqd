@@ -284,6 +284,31 @@ test('no booking notification is sent when the slot is no longer available', fun
     Mail::assertSent(AppointmentBookingReceived::class, 1);
 });
 
+test('the booking notification carries the visitor email as Reply-To, not as From', function () {
+    Mail::fake();
+
+    $slot = AppointmentSlot::factory()->create([
+        'starts_at' => now()->addDays(2),
+        'ends_at' => now()->addDays(2)->addMinutes(120),
+    ]);
+
+    $this->post('/reserva', [
+        'appointment_slot_id' => $slot->id,
+        'name' => 'Jane Doe',
+        'email' => 'jane@example.com',
+        'privacy_consent' => '1',
+    ])->assertRedirect('/reserva');
+
+    // El mailable nunca define `from` en su envelope (usa el remitente
+    // corporativo por defecto del mailer); solo añade el email del visitante
+    // como Reply-To. `hasFrom()` no se usa aquí: revienta si `from` no está
+    // definido en el envelope, que es justo el estado correcto y esperado.
+    Mail::assertSent(
+        AppointmentBookingReceived::class,
+        fn (AppointmentBookingReceived $mail) => $mail->hasReplyTo('jane@example.com', 'Jane Doe'),
+    );
+});
+
 test('a failing mailer does not lose the booking nor break the response', function () {
     Mail::shouldReceive('to')->andThrow(new RuntimeException('SMTP down'));
 
