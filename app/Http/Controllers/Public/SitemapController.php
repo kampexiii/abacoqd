@@ -76,7 +76,7 @@ class SitemapController extends Controller
             ->detailEnabled()
             ->whereNotNull('slug_es')
             ->ordered()
-            ->get(['slug', 'updated_at', 'sort_order'])
+            ->get(['slug', 'updated_at'])
             ->map(fn (Service $service): ?array => $this->detailUrl(
                 '/servicios/',
                 $service,
@@ -102,7 +102,7 @@ class SitemapController extends Controller
             ->publiclyListable()
             ->whereNotNull('slug_es')
             ->ordered()
-            ->get(['slug', 'updated_at', 'permission_status', 'settings', 'sort_order', 'year'])
+            ->get(['slug', 'updated_at'])
             ->map(fn (Project $project): ?array => $this->detailUrl(
                 '/proyectos/',
                 $project,
@@ -127,7 +127,7 @@ class SitemapController extends Controller
             ->published()
             ->whereNotNull('slug_es')
             ->orderByDesc('published_at')
-            ->get(['slug', 'updated_at', 'published_at'])
+            ->get(['slug', 'updated_at'])
             ->map(fn (Post $post): ?array => $this->detailUrl(
                 '/blog/',
                 $post,
