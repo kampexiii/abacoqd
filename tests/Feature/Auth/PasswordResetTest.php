@@ -76,3 +76,17 @@ test('password cannot be reset with invalid token', function () {
 
     $response->assertSessionHasErrors('email');
 });
+
+test('forgot-password requests are throttled per IP, even across different emails', function () {
+    Notification::fake();
+
+    // Emails distintos en cada intento: el riesgo que cubre este throttle es
+    // pulverizar el endpoint con muchas cuentas para enumerarlas, no repetir
+    // la misma (eso ya lo throttla el password broker de Laravel, aparte).
+    for ($i = 0; $i < 6; $i++) {
+        $this->post(route('password.email'), ['email' => "guest{$i}@example.com"]);
+    }
+
+    $this->post(route('password.email'), ['email' => 'one-more@example.com'])
+        ->assertStatus(429);
+});
