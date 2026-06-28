@@ -1,5 +1,7 @@
 <?php
 
+use Laravel\Fortify\Features;
+
 test('robots.txt keeps the public site crawlable but blocks private areas', function () {
     $contents = file_get_contents(public_path('robots.txt'));
 
@@ -44,6 +46,8 @@ test('auth pages are served noindex,nofollow in the initial html and seo prop', 
 });
 
 test('register is also served noindex,nofollow', function () {
+    $this->skipUnlessFortifyHas(Features::registration());
+
     $this->get('/register')
         ->assertOk()
         ->assertInertia(fn ($page) => $page->where('seo.robots', 'noindex,nofollow'));

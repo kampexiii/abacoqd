@@ -67,9 +67,10 @@ class FortifyServiceProvider extends ServiceProvider
             'status' => $request->session()->get('status'),
         ]));
 
-        Fortify::registerView(fn () => Inertia::render('auth/register', [
-            'passwordRules' => Password::defaults()->toPasswordRulesString(),
-        ]));
+        // Sin Fortify::registerView(): el registro público está desactivado
+        // (config/fortify.php) y la página `auth/register.tsx` se eliminó al
+        // quedar inalcanzable; este callback nunca se invoca mientras el
+        // feature siga apagado.
 
         Fortify::twoFactorChallengeView(fn () => Inertia::render('auth/two-factor-challenge'));
 

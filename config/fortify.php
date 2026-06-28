@@ -161,7 +161,10 @@ return [
     */
 
     'features' => [
-        Features::registration(),
+        // Registro público desactivado: los usuarios del panel se crean
+        // únicamente desde /admin/users (solo super_admin). No reactivar
+        // sin revisar el rol por defecto en CreateNewUser.
+        // Features::registration(),
         Features::resetPasswords(),
         Features::emailVerification(),
         Features::twoFactorAuthentication([
