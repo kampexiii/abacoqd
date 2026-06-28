@@ -692,28 +692,19 @@ function MobileCollaborationCard({
         <article className="qd-collab-card">
             <div className="qd-collab-card__head">
                 {project.clientLogo ? (
+                    // Chip blanco fijo (igual que la noria de desktop): los
+                    // logos de cliente a color/oscuros eran ilegibles sobre el
+                    // fondo de la card en oscuro al no tener nada detrás. Con
+                    // chip blanco siempre se usa la variante clara, sin
+                    // invertir colores ni alternar con `clientLogoDark`.
                     <span className="qd-collab-card__logo">
                         <img
                             src={project.clientLogo}
                             alt={project.clientLogoAlt ?? clientLabel}
                             loading="lazy"
                             decoding="async"
-                            className={cn(
-                                'qd-collab-card__logo-img',
-                                project.clientLogoDark && 'dark:hidden',
-                                !project.clientLogoDark &&
-                                    'dark:brightness-0 dark:invert',
-                            )}
+                            className="qd-collab-card__logo-img"
                         />
-                        {project.clientLogoDark && (
-                            <img
-                                src={project.clientLogoDark}
-                                alt={project.clientLogoAlt ?? clientLabel}
-                                loading="lazy"
-                                decoding="async"
-                                className="qd-collab-card__logo-img hidden dark:block"
-                            />
-                        )}
                     </span>
                 ) : (
                     <span className="qd-collab-card__logo qd-collab-card__logo--placeholder">

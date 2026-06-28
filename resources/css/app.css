@@ -179,6 +179,16 @@
     }
 }
 
+/* Red de seguridad global: varios bloques de la landing usan transforms 3D
+   (cubo de metodología) o tamaños calculados en vw que, en móvil, pueden
+   desbordar unos px el ancho del viewport y generar scroll horizontal de
+   página (se percibe como contenido "cortado" a la derecha). Se aplica al
+   elemento raíz, no a `body`, para no convertirlo en su propio contenedor
+   de scroll (evita romper el header fijo del hero). */
+html {
+    overflow-x: clip;
+}
+
 .qd-hero {
     position: relative;
     isolation: isolate;
@@ -2070,6 +2080,12 @@ html.a11y-reduce-motion *::after {
     .qd-process-cube {
         max-width: 100%;
         min-height: 420px;
+        /* El efecto cubo de Swiper deja overflow:visible en su contenedor a
+           propósito (para que las caras laterales asomen durante el giro);
+           en pantallas estrechas eso desbordaba el viewport y la card se
+           veía "cortada" a la derecha. Se recorta al propio bloque, que ya
+           mide el 100% del ancho disponible. */
+        overflow: hidden;
     }
 
     .qd-process-cube__visual {
@@ -2349,23 +2365,42 @@ html.a11y-reduce-motion *::after {
 .qd-collab-card__logo {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     height: 2.25rem;
     max-width: 7rem;
+    padding: 0.3rem 0.55rem;
+    border-radius: 0.6rem;
+    /* Chip blanco fijo (igual en claro y oscuro, como la noria de desktop):
+       sin esto, los logos de cliente monocromos oscuros/negros quedaban
+       ilegibles sobre el fondo oscuro de la card en dark mode. */
+    background: linear-gradient(150deg, #ffffff, #eef3f4);
+    border: 1px solid rgba(15, 143, 149, 0.18);
+}
+
+.dark .qd-collab-card__logo {
+    background: linear-gradient(150deg, #ffffff, #e9eff0);
+    border-color: rgba(255, 255, 255, 0.5);
 }
 
 .qd-collab-card__logo-img {
-    max-height: 2rem;
+    max-height: 1.5rem;
     width: auto;
-    max-width: 7rem;
+    max-width: 6rem;
     object-fit: contain;
 }
 
 .qd-collab-card__logo--placeholder {
     width: 2.25rem;
+    padding: 0;
     justify-content: center;
+    background: none;
     border-radius: 0.6rem;
     border: 1px solid rgba(15, 143, 149, 0.22);
     color: var(--qd-teal-2);
+}
+
+.dark .qd-collab-card__logo--placeholder {
+    border-color: rgba(57, 198, 230, 0.3);
 }
 
 .qd-collab-card__client {
@@ -2747,8 +2782,11 @@ html.a11y-reduce-motion *::after {
 
 .qd-collab-mobile__item {
     display: flex;
-    flex: 0 0 min(82%, 19rem);
+    /* Una sola card visible por pantalla; el resto queda fuera del viewport
+       hasta que el scroll-snap les toque el turno (sin "peek" del siguiente). */
+    flex: 0 0 100%;
     scroll-snap-align: start;
+    scroll-snap-stop: always;
 }
 
 .qd-collab-mobile__item > .qd-collab-card {
@@ -4403,12 +4441,29 @@ html.reduce-motion .qd-error-ambient-lines span {
         margin-left: 0;
     }
 
+    /* La barra de actividad y el árbol de archivos son decorativos
+       (aria-hidden); en móvil sobran ancho al código real y eran la causa de
+       que las líneas se recortaran. Se ocultan y el código ocupa todo el
+       ancho del editor. */
+    .qd-cta-editor__activity,
+    .qd-cta-editor__sidebar {
+        display: none;
+    }
+
     .qd-cta-editor__body {
-        grid-template-columns: 32px 90px 1fr;
+        grid-template-columns: 1fr;
+        min-height: 0;
     }
 
     .qd-cta-editor__code {
         grid-template-columns: 1fr;
+        padding: 0.65rem 0.85rem;
+    }
+
+    .qd-cta-editor__code pre {
+        font-size: 0.66rem;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
     }
 
     .qd-cta-preview {
