@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim((string) env('APP_URL', 'http://localhost'), '/').'/storage',
+            'url' => rtrim((string) env('APP_URL', 'https://abacoqd.com'), '/').'/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -54,7 +54,7 @@ return [
         'public_uploads' => [
             'driver' => 'local',
             'root' => public_path('uploads'),
-            'url' => rtrim((string) env('APP_URL', 'http://localhost'), '/').'/uploads',
+            'url' => rtrim((string) env('APP_URL', 'https://abacoqd.com'), '/').'/uploads',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

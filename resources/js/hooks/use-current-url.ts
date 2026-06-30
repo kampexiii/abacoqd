@@ -32,7 +32,7 @@ export function useCurrentUrl(): UseCurrentUrlReturn {
         page.url,
         typeof window !== 'undefined'
             ? window.location.origin
-            : 'http://localhost',
+            : 'https://abacoqd.com',
     ).pathname;
 
     const isCurrentUrl: IsCurrentUrlFn = (
