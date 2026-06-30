@@ -28,7 +28,7 @@
                     </tr>
                     <tr>
                         <td style="padding:32px 40px 8px 40px;">
-                            <img src="{{ url('/assets/branding/marca/logos/abacoqd-logo-completo-transparente.png') }}" width="230" alt="AbacoQD — Abaco Quick Developments" style="display:block; width:230px; max-width:230px; height:auto; border:0; outline:none; text-decoration:none;">
+                            <img src="{{ $message->embed(public_path('assets/branding/marca/logos/abacoqd-logo-completo-transparente.png')) }}" width="230" alt="AbacoQD — Abaco Quick Developments" style="display:block; width:230px; max-width:230px; height:auto; border:0; outline:none; text-decoration:none;">
                         </td>
                     </tr>
                     <tr>
