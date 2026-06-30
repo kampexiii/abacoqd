@@ -142,6 +142,17 @@ BOOKING_NOTIFY_EMAIL=info@abacodev.com   # destinatario interno real (opcional; 
 
 **Qué mirar en `storage/logs/laravel.log`:** con `log`, el correo aparece con `To:`/`Subject:`; con SMTP, un fallo registra `No se pudo enviar...` (el lead/reserva igualmente queda guardado).
 
+### Bloque 3.1 — Correo Hostinger producción (SMTP real) — ✅ CERRADO (30/06/2026)
+
+SMTP corporativo real de Hostinger configurado y validado, sustituyendo la cuenta temporal de pruebas usada el 25/06. Commit técnico: `9b012c1 chore(mail): configure Hostinger SMTP for production emails`.
+
+- SMTP real (`smtp.hostinger.com:465`, `smtps`, `info@abacoqd.com`) validado con un envío de prueba directo.
+- Contacto y reserva llegan con plantilla visual HTML completa (layout corporativo).
+- Recuperación de contraseña probada con la cuenta real `andrescasanueva@abacoqd.com`: recibida en Hostinger Mail con plantilla visual HTML.
+- Remitente correcto: `AbacoQD <info@abacoqd.com>`. `Reply-To` correcto en contacto y reserva (email del usuario del formulario).
+- `.env` fuera de Git; `.env.example` sin contraseña real.
+- Pendiente: verificar MX/SPF/DKIM/DMARC del dominio en Hostinger; validar de nuevo en producción real con `APP_URL=https://abacoqd.com`.
+
 ### Bloque 4 — Cierre de WIP local — **CERRADO** (26/06)
 
 Cerrado por rutas explícitas, sin `git add .`/`-A`, sin push, sin tocar BD/seeders/migraciones. Detalle completo y auditoría de seeders en [auditoría §0 · Bloque 4](auditoria25Junio.md).

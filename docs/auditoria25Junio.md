@@ -129,6 +129,22 @@ WIP        = archivos sin commit o sin decisión de cierre
 
 **WIP restante tras el bloque:** ninguno en el árbol salvo los cambios de documentación de este cierre. Sin push.
 
+### Bloque 5 — Correo Hostinger (SMTP producción) — **CERRADO** (30/06/2026)
+
+**Estado real:** SMTP corporativo real de Hostinger configurado y validado, sustituyendo la cuenta temporal de pruebas del 25/06. Commit técnico: `9b012c1 chore(mail): configure Hostinger SMTP for production emails`.
+
+**Validado:**
+- SMTP real Hostinger (`smtp.hostinger.com:465`, `smtps`, `info@abacoqd.com`) operativo: envío de prueba directo entregado correctamente.
+- Contacto (`/contacto`) llega con plantilla visual HTML completa (layout corporativo, datos del lead).
+- Reserva (`/reserva`) llega con plantilla visual HTML completa (layout corporativo, datos de la reserva).
+- Recuperación de contraseña (`/forgot-password`) probada con la cuenta real `andrescasanueva@abacoqd.com`: correo recibido en Hostinger Mail con plantilla visual HTML.
+- Remitente correcto en los tres correos: `AbacoQD <info@abacoqd.com>`.
+- `Reply-To` correcto en contacto y reserva: apunta al email introducido por el usuario en el formulario, no al `From`.
+- `.env` permanece fuera de Git (gitignored, nunca commiteado); `.env.example` solo contiene placeholders (host/puerto/scheme reales, sin contraseña).
+- Sin contraseñas reales en archivos versionados (verificado con `git grep`).
+
+**Riesgos pendientes / siguiente paso:** verificar en Hostinger los registros **MX, SPF, DKIM y DMARC** del dominio `abacoqd.com`; repetir la validación de entrega real en producción una vez desplegado con `APP_URL=https://abacoqd.com`.
+
 ### Bloque 7 — Proyectos / Partners / Colaboraciones — **EN CURSO** (26/06)
 
 **Subfase 7.7A — Seeder de CIETE — CERRADA (26/06):** creado `database/seeders/ConfirmedProjectsSeeder.php` (proyectos reales confirmados, idempotente por `slug_es`, SEO por entidad como `ServiceSeeder`) y registrado en `DatabaseSeeder`. CIETE (`ERP CIETE — Gestión interna de trabajos, pedidos y facturación`, `CIETE Arquitectos S.L.`, 2026) entra **sin partner ni `partner_project`**, sin imágenes (pendientes de carga manual desde el CRUD). Commit `4769f18`.
