@@ -1,11 +1,17 @@
 import { Link, usePage } from '@inertiajs/react';
-import { ChevronRight, ChevronDown, ExternalLink, LogOut, Menu } from 'lucide-react';
-import { useEffect  } from 'react';
-import type {ReactNode} from 'react';
+import {
+    ChevronRight,
+    ChevronDown,
+    ExternalLink,
+    LogOut,
+    Menu,
+} from 'lucide-react';
+import { useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { toast as sonnerToast } from 'sonner';
 
-import { adminNavForRole  } from '@/components/admin/admin-nav';
-import type {AdminNavItem} from '@/components/admin/admin-nav';
+import { adminNavForRole } from '@/components/admin/admin-nav';
+import type { AdminNavItem } from '@/components/admin/admin-nav';
 import ThemeTogglerButton from '@/components/animate-ui/components/buttons/theme-toggler';
 import {
     DropdownMenu,
@@ -40,7 +46,9 @@ type AdminLayoutProps = {
 };
 
 type AdminPageProps = {
-    readonly auth: { readonly user: { readonly name: string; readonly role?: string } };
+    readonly auth: {
+        readonly user: { readonly name: string; readonly role?: string };
+    };
     readonly flash?: { readonly toast?: FlashToast | null };
 };
 
@@ -75,7 +83,8 @@ function NavList({
         const label = t(`admin.nav.${item.key}`);
         const isActive =
             item.href !== null &&
-            (currentUrl === item.href || currentUrl.startsWith(`${item.href}/`));
+            (currentUrl === item.href ||
+                currentUrl.startsWith(`${item.href}/`));
 
         if (!item.enabled || item.href === null) {
             return (
@@ -112,7 +121,11 @@ function NavList({
         );
     };
 
-    return <nav className="flex flex-col gap-1">{adminNavForRole(role).map(renderItem)}</nav>;
+    return (
+        <nav className="flex flex-col gap-1">
+            {adminNavForRole(role).map(renderItem)}
+        </nav>
+    );
 }
 
 export default function AdminLayout({
@@ -164,7 +177,10 @@ export default function AdminLayout({
                         >
                             <Menu aria-hidden="true" size={18} />
                         </SheetTrigger>
-                        <SheetContent side="left" className="w-72 bg-qd-white p-4 dark:bg-qd-surface">
+                        <SheetContent
+                            side="left"
+                            className="w-72 bg-qd-white p-4 dark:bg-qd-surface"
+                        >
                             <SheetHeader className="px-2">
                                 <SheetTitle asChild>
                                     <span>
@@ -188,7 +204,9 @@ export default function AdminLayout({
                             {locale.toUpperCase()}
                         </button>
 
-                        <ThemeTogglerButton modes={['light', 'dark', 'system']} />
+                        <ThemeTogglerButton
+                            modes={['light', 'dark', 'system']}
+                        />
 
                         <DropdownMenu>
                             <DropdownMenuTrigger className="flex items-center gap-2 border-l border-qd-mist pl-3 sm:gap-3 dark:border-qd-white/10">
@@ -220,8 +238,15 @@ export default function AdminLayout({
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem asChild>
-                                    <Link href={logout()} as="button" className="w-full">
-                                        <LogOut aria-hidden="true" className="mr-2" />
+                                    <Link
+                                        href={logout()}
+                                        as="button"
+                                        className="w-full"
+                                    >
+                                        <LogOut
+                                            aria-hidden="true"
+                                            className="mr-2"
+                                        />
                                         {t('admin.layout.logout')}
                                     </Link>
                                 </DropdownMenuItem>
@@ -243,9 +268,15 @@ export default function AdminLayout({
                                     className="mt-2 flex flex-wrap items-center gap-1.5 text-sm text-qd-text-medium dark:text-qd-white/50"
                                 >
                                     {breadcrumbs.map((crumb, index) => (
-                                        <span key={crumb.title} className="flex items-center gap-1.5">
+                                        <span
+                                            key={crumb.title}
+                                            className="flex items-center gap-1.5"
+                                        >
                                             {index > 0 && (
-                                                <ChevronRight aria-hidden="true" size={14} />
+                                                <ChevronRight
+                                                    aria-hidden="true"
+                                                    size={14}
+                                                />
                                             )}
                                             {crumb.href ? (
                                                 <Link
@@ -264,7 +295,11 @@ export default function AdminLayout({
                                 </nav>
                             )}
                         </div>
-                        {actions && <div className="flex items-center gap-3">{actions}</div>}
+                        {actions && (
+                            <div className="flex items-center gap-3">
+                                {actions}
+                            </div>
+                        )}
                     </div>
                 </div>
 

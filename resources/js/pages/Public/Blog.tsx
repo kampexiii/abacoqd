@@ -1,11 +1,4 @@
-import {
-    ArrowRight,
-    Calendar,
-    Clock,
-    FileText,
-    Search,
-    X,
-} from 'lucide-react';
+import { ArrowRight, Calendar, Clock, FileText, Search, X } from 'lucide-react';
 
 import PublicPageHero from '@/components/public/PublicPageHero';
 import SeoHead from '@/components/seo/SeoHead';
@@ -125,9 +118,7 @@ function PostMeta({
             {date && (
                 <span className="inline-flex items-center gap-1.5">
                     <Calendar aria-hidden="true" size={13} />
-                    <time dateTime={post.publishedAt ?? undefined}>
-                        {date}
-                    </time>
+                    <time dateTime={post.publishedAt ?? undefined}>{date}</time>
                 </span>
             )}
             {post.readingTime !== null && (
@@ -374,9 +365,7 @@ export default function Blog({
                                 type="search"
                                 name="buscar"
                                 defaultValue={filters.search}
-                                placeholder={t(
-                                    'blogPage.search.placeholder',
-                                )}
+                                placeholder={t('blogPage.search.placeholder')}
                                 className="w-full rounded-xl border border-qd-mist bg-qd-white py-2.5 pr-4 pl-10 text-sm text-qd-ink placeholder:text-qd-text-medium focus:border-qd-teal-2 focus:outline-none dark:border-white/10 dark:bg-white/5 dark:text-qd-white"
                             />
                             {hasCategory && (
@@ -410,9 +399,7 @@ export default function Blog({
                         <div className="mt-5 flex flex-wrap gap-2">
                             {categories.map((category) => {
                                 const slug =
-                                    category.slug.es ??
-                                    category.slug.en ??
-                                    '';
+                                    category.slug.es ?? category.slug.en ?? '';
                                 const isActive = filters.category === slug;
 
                                 return (
@@ -524,15 +511,13 @@ export default function Blog({
                                                     page: item,
                                                 })}
                                                 aria-current={
-                                                    item ===
-                                                    posts.current_page
+                                                    item === posts.current_page
                                                         ? 'page'
                                                         : undefined
                                                 }
                                                 className={cn(
                                                     'flex size-9 items-center justify-center rounded-lg border text-sm font-semibold transition',
-                                                    item ===
-                                                        posts.current_page
+                                                    item === posts.current_page
                                                         ? 'border-qd-teal-2 bg-qd-teal-2 text-white dark:border-qd-teal dark:bg-qd-teal dark:text-qd-ink'
                                                         : 'border-qd-mist text-qd-text-high hover:border-qd-teal-2 hover:text-qd-teal-2 dark:border-white/10 dark:text-qd-text-medium',
                                                 )}

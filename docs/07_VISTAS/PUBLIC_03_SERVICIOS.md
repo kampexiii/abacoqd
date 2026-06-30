@@ -9,9 +9,9 @@ Fuente de verdad de la página/listado de Servicios, del detalle preparado `/ser
 | Campo | Valor |
 |---|---|
 | Ruta listado ES | `/servicios` |
-| Ruta listado EN | `/en/services` |
+| Ruta listado EN | futura, no bloqueante |
 | Ruta detalle ES | `/servicios/{slug}` |
-| Ruta detalle EN | `/en/services/{slug}` |
+| Ruta detalle EN | futura, no bloqueante |
 | En landing | Sección 3, después de Metodología y antes de Colaboraciones |
 | Prioridad | Listado + sección landing P0; detalle preparado y publicable por `is_detail_enabled` |
 | Entidades | `services`, `seo_metadata`, `page_sections`, `settings`, `faqs` |
@@ -29,7 +29,7 @@ Explicar qué puede construir AbacoQD y llevar al usuario hacia contacto/reserva
 5. **Integraciones digitales**.
 6. **MVPs y prototipos**.
 
-Estos seis registros viven en `services` en ES/EN desde el inicio. Cada servicio tiene slug, descripción breve, descripción ampliada, icono, mockup/imagen, CTA, orden, estado, flag de destacado y SEO propio.
+Estos seis registros viven en `services`. El lanzamiento inicial se orienta al español; la estructura admite EN a futuro sin hacerlo requisito de cierre actual. Cada servicio tiene slug, descripción breve, descripción ampliada, icono, mockup/imagen, CTA, orden, estado, flag de destacado y SEO propio.
 
 ## Sección Servicios en landing
 
@@ -87,7 +87,7 @@ El detalle queda preparado como subpágina real y se publica servicio a servicio
 
 ## Contenido editable
 
-Hero del listado, textos de cada card, orden, visibilidad, detalle ampliado, CTA, mockup, chips, SEO y FAQ relacionada. Todo en ES/EN.
+Hero del listado, textos de cada card, orden, visibilidad, detalle ampliado, CTA, mockup, chips, SEO y FAQ relacionada.
 
 ## Entidades relacionadas
 
@@ -95,10 +95,10 @@ Hero del listado, textos de cada card, orden, visibilidad, detalle ampliado, CTA
 
 ## SEO y multilenguaje
 
-- Listado indexable: `/servicios` y `/en/services`.
+- Listado indexable: `/servicios`.
 - Detalles indexables solo si `is_detail_enabled=true`, estado `published`, contenido completo y SEO aprobado.
 - Slugs independientes por idioma.
-- `hreflang` solo cuando exista par ES/EN real.
+- Sin `hreflang` EN mientras el lanzamiento siga siendo Spanish-first.
 - JSON-LD `Service` solo con contenido real; sin precios si no están definidos.
 
 ## Estados vacíos
@@ -119,5 +119,5 @@ El asistente puede explicar cada servicio, sugerir el servicio más cercano a un
 ## Decisiones abiertas
 
 - Qué detalles de servicio entran publicados el 30/06 y cuáles quedan como cards con CTA a contacto.
-- Copy final ES/EN de cada servicio.
+- Copy final ES de cada servicio y, si se abre fase posterior, versión EN completa.
 - Mockups finales por servicio y permiso de uso de capturas.

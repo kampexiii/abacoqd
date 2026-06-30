@@ -41,7 +41,12 @@ export default function BookingBlockPeriodForm() {
     const errors = form.errors as Record<string, string>;
 
     const toggleWeekday = (iso: number) => {
-        setData('weekdays', data.weekdays.includes(iso) ? data.weekdays.filter((d) => d !== iso) : [...data.weekdays, iso].sort());
+        setData(
+            'weekdays',
+            data.weekdays.includes(iso)
+                ? data.weekdays.filter((d) => d !== iso)
+                : [...data.weekdays, iso].sort(),
+        );
     };
 
     const submit = (action: 'block' | 'unblock') => (event: SyntheticEvent) => {
@@ -53,24 +58,41 @@ export default function BookingBlockPeriodForm() {
     return (
         <form onSubmit={submit('block')} className="flex flex-col gap-4">
             <p className="text-xs text-qd-text-medium dark:text-qd-white/40">
-                Deja las horas en blanco para afectar el día/rango completo. Las franjas con reservas activas no se bloquean.
+                Deja las horas en blanco para afectar el día/rango completo. Las
+                franjas con reservas activas no se bloquean.
             </p>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field label="Desde" error={errors.date_from}>
-                    <Input type="date" value={data.date_from} onChange={(e) => setData('date_from', e.target.value)} />
+                    <Input
+                        type="date"
+                        value={data.date_from}
+                        onChange={(e) => setData('date_from', e.target.value)}
+                    />
                 </Field>
                 <Field label="Hasta" error={errors.date_to}>
-                    <Input type="date" value={data.date_to} onChange={(e) => setData('date_to', e.target.value)} />
+                    <Input
+                        type="date"
+                        value={data.date_to}
+                        onChange={(e) => setData('date_to', e.target.value)}
+                    />
                 </Field>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field label="Hora desde (opcional)" error={errors.time_from}>
-                    <Input type="time" value={data.time_from} onChange={(e) => setData('time_from', e.target.value)} />
+                    <Input
+                        type="time"
+                        value={data.time_from}
+                        onChange={(e) => setData('time_from', e.target.value)}
+                    />
                 </Field>
                 <Field label="Hora hasta (opcional)" error={errors.time_to}>
-                    <Input type="time" value={data.time_to} onChange={(e) => setData('time_to', e.target.value)} />
+                    <Input
+                        type="time"
+                        value={data.time_to}
+                        onChange={(e) => setData('time_to', e.target.value)}
+                    />
                 </Field>
             </div>
 
@@ -100,7 +122,11 @@ export default function BookingBlockPeriodForm() {
             </Field>
 
             <Field label="Motivo interno (opcional)" error={errors.reason}>
-                <Input value={data.reason} onChange={(e) => setData('reason', e.target.value)} placeholder="Vacaciones, evento, etc." />
+                <Input
+                    value={data.reason}
+                    onChange={(e) => setData('reason', e.target.value)}
+                    placeholder="Vacaciones, evento, etc."
+                />
             </Field>
 
             <div className="flex flex-wrap items-center gap-3">
@@ -109,7 +135,15 @@ export default function BookingBlockPeriodForm() {
                     disabled={processing}
                     className="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-5 py-2.5 text-sm font-bold text-white transition hover:brightness-95 disabled:opacity-60"
                 >
-                    {processing ? <Loader2 aria-hidden="true" size={16} className="animate-spin" /> : <Ban aria-hidden="true" size={16} />}
+                    {processing ? (
+                        <Loader2
+                            aria-hidden="true"
+                            size={16}
+                            className="animate-spin"
+                        />
+                    ) : (
+                        <Ban aria-hidden="true" size={16} />
+                    )}
                     Bloquear periodo
                 </button>
                 <button
@@ -126,7 +160,15 @@ export default function BookingBlockPeriodForm() {
     );
 }
 
-function Field({ label, error, children }: { readonly label: string; readonly error?: string; readonly children: ReactNode }) {
+function Field({
+    label,
+    error,
+    children,
+}: {
+    readonly label: string;
+    readonly error?: string;
+    readonly children: ReactNode;
+}) {
     return (
         <div className="flex flex-col gap-1.5">
             <Label>{label}</Label>

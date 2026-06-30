@@ -85,11 +85,19 @@ export default function Login({ status, canResetPassword }: Props) {
 
                     <div className="mt-6 flex items-center gap-5 text-xs font-semibold text-qd-text-medium dark:text-qd-white/50">
                         <span className="flex items-center gap-1.5">
-                            <ShieldCheck aria-hidden="true" size={15} className="text-qd-teal-2 dark:text-qd-teal" />
+                            <ShieldCheck
+                                aria-hidden="true"
+                                size={15}
+                                className="text-qd-teal-2 dark:text-qd-teal"
+                            />
                             {t('adminLogin.points.secure')}
                         </span>
                         <span className="flex items-center gap-1.5">
-                            <Users aria-hidden="true" size={15} className="text-qd-teal-2 dark:text-qd-teal" />
+                            <Users
+                                aria-hidden="true"
+                                size={15}
+                                className="text-qd-teal-2 dark:text-qd-teal"
+                            />
                             {t('adminLogin.points.centralized')}
                         </span>
                     </div>
@@ -121,7 +129,9 @@ export default function Login({ status, canResetPassword }: Props) {
                         {({ processing, errors }) => (
                             <>
                                 <div className="flex flex-col gap-1.5">
-                                    <Label htmlFor="email">{t('adminLogin.email')}</Label>
+                                    <Label htmlFor="email">
+                                        {t('adminLogin.email')}
+                                    </Label>
                                     <Input
                                         id="email"
                                         type="email"
@@ -130,7 +140,9 @@ export default function Login({ status, canResetPassword }: Props) {
                                         autoFocus
                                         tabIndex={1}
                                         autoComplete="email"
-                                        placeholder={t('adminLogin.emailPlaceholder')}
+                                        placeholder={t(
+                                            'adminLogin.emailPlaceholder',
+                                        )}
                                     />
                                     <InputError message={errors.email} />
                                 </div>
@@ -156,14 +168,23 @@ export default function Login({ status, canResetPassword }: Props) {
                                         required
                                         tabIndex={2}
                                         autoComplete="current-password"
-                                        placeholder={t('adminLogin.passwordPlaceholder')}
+                                        placeholder={t(
+                                            'adminLogin.passwordPlaceholder',
+                                        )}
                                     />
                                     <InputError message={errors.password} />
                                 </div>
 
                                 <div className="flex items-center gap-3">
-                                    <Checkbox id="remember" name="remember" tabIndex={3} />
-                                    <Label htmlFor="remember" className="font-normal">
+                                    <Checkbox
+                                        id="remember"
+                                        name="remember"
+                                        tabIndex={3}
+                                    />
+                                    <Label
+                                        htmlFor="remember"
+                                        className="font-normal"
+                                    >
                                         {t('adminLogin.remember')}
                                     </Label>
                                 </div>
@@ -180,7 +201,10 @@ export default function Login({ status, canResetPassword }: Props) {
                                     ) : (
                                         <>
                                             {t('adminLogin.submit')}
-                                            <ArrowRight aria-hidden="true" size={16} />
+                                            <ArrowRight
+                                                aria-hidden="true"
+                                                size={16}
+                                            />
                                         </>
                                     )}
                                 </button>
@@ -197,7 +221,11 @@ export default function Login({ status, canResetPassword }: Props) {
                             <ArrowRight aria-hidden="true" size={15} />
                         </a>
                         <p className="mt-5 flex items-center justify-center gap-2 text-xs text-qd-text-medium dark:text-qd-white/40">
-                            <ShieldCheck aria-hidden="true" size={14} className="shrink-0" />
+                            <ShieldCheck
+                                aria-hidden="true"
+                                size={14}
+                                className="shrink-0"
+                            />
                             {t('adminLogin.restricted')}
                         </p>
                     </div>

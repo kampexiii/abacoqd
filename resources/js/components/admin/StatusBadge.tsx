@@ -26,7 +26,11 @@ const STATUS_META: Record<
     },
 };
 
-export default function StatusBadge({ status }: { readonly status: ServiceStatus }) {
+export default function StatusBadge({
+    status,
+}: {
+    readonly status: ServiceStatus;
+}) {
     const { t } = useLanguage();
     const meta = STATUS_META[status];
     const Icon = meta.icon;

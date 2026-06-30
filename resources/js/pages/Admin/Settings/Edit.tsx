@@ -60,7 +60,8 @@ export default function SettingsEdit({ settings }: EditProps) {
 
     const field = (key: keyof SettingsForm) => ({
         value: data[key],
-        onChange: (e: ChangeEvent<HTMLInputElement>) => setData(key, e.target.value),
+        onChange: (e: ChangeEvent<HTMLInputElement>) =>
+            setData(key, e.target.value),
     });
 
     return (
@@ -79,22 +80,41 @@ export default function SettingsEdit({ settings }: EditProps) {
                     description="Se muestran en el footer, la página de contacto y el asistente."
                 >
                     <div className="grid gap-4 sm:grid-cols-2">
-                        <Field label="Email principal" error={errors.contact_email}>
+                        <Field
+                            label="Email principal"
+                            error={errors.contact_email}
+                        >
                             <Input type="email" {...field('contact_email')} />
                         </Field>
-                        <Field label="Email receptor de formularios" hint="Adónde llegan los contactos enviados desde la web." error={errors.form_recipient_email}>
-                            <Input type="email" {...field('form_recipient_email')} />
+                        <Field
+                            label="Email receptor de formularios"
+                            hint="Adónde llegan los contactos enviados desde la web."
+                            error={errors.form_recipient_email}
+                        >
+                            <Input
+                                type="email"
+                                {...field('form_recipient_email')}
+                            />
                         </Field>
-                        <Field label="Teléfono fijo" error={errors.contact_phone}>
+                        <Field
+                            label="Teléfono fijo"
+                            error={errors.contact_phone}
+                        >
                             <Input {...field('contact_phone')} />
                         </Field>
                         <Field label="WhatsApp" error={errors.contact_whatsapp}>
                             <Input {...field('contact_whatsapp')} />
                         </Field>
-                        <Field label="Dirección visible" error={errors.contact_address}>
+                        <Field
+                            label="Dirección visible"
+                            error={errors.contact_address}
+                        >
                             <Input {...field('contact_address')} />
                         </Field>
-                        <Field label="Ciudad / país" error={errors.contact_city_country}>
+                        <Field
+                            label="Ciudad / país"
+                            error={errors.contact_city_country}
+                        >
                             <Input {...field('contact_city_country')} />
                         </Field>
                     </div>
@@ -102,40 +122,91 @@ export default function SettingsEdit({ settings }: EditProps) {
 
                 <FormSection title="Redes y prueba social">
                     <div className="grid gap-4 sm:grid-cols-2">
-                        <Field label="LinkedIn (URL)" error={errors.social_linkedin}>
-                            <Input {...field('social_linkedin')} placeholder="https://..." />
+                        <Field
+                            label="LinkedIn (URL)"
+                            error={errors.social_linkedin}
+                        >
+                            <Input
+                                {...field('social_linkedin')}
+                                placeholder="https://..."
+                            />
                         </Field>
-                        <Field label="Facebook (URL)" error={errors.social_facebook}>
-                            <Input {...field('social_facebook')} placeholder="https://..." />
+                        <Field
+                            label="Facebook (URL)"
+                            error={errors.social_facebook}
+                        >
+                            <Input
+                                {...field('social_facebook')}
+                                placeholder="https://..."
+                            />
                         </Field>
-                        <Field label="Google Reviews (URL)" hint="Sin URL, el bloque del footer se oculta." error={errors.google_reviews_url}>
-                            <Input {...field('google_reviews_url')} placeholder="https://..." />
+                        <Field
+                            label="Google Reviews (URL)"
+                            hint="Sin URL, el bloque del footer se oculta."
+                            error={errors.google_reviews_url}
+                        >
+                            <Input
+                                {...field('google_reviews_url')}
+                                placeholder="https://..."
+                            />
                         </Field>
                         <div className="grid grid-cols-2 gap-4">
-                            <Field label="Rating (0–5)" error={errors.google_reviews_rating}>
-                                <Input type="number" step="0.1" min={0} max={5} {...field('google_reviews_rating')} />
+                            <Field
+                                label="Rating (0–5)"
+                                error={errors.google_reviews_rating}
+                            >
+                                <Input
+                                    type="number"
+                                    step="0.1"
+                                    min={0}
+                                    max={5}
+                                    {...field('google_reviews_rating')}
+                                />
                             </Field>
-                            <Field label="Nº reseñas" error={errors.google_reviews_count}>
-                                <Input type="number" min={0} {...field('google_reviews_count')} />
+                            <Field
+                                label="Nº reseñas"
+                                error={errors.google_reviews_count}
+                            >
+                                <Input
+                                    type="number"
+                                    min={0}
+                                    {...field('google_reviews_count')}
+                                />
                             </Field>
                         </div>
                     </div>
                     <p className="mt-2 text-xs text-qd-text-medium dark:text-qd-white/40">
-                        Sin rating/recuento se muestra solo el enlace, sin inventar cifras.
+                        Sin rating/recuento se muestra solo el enlace, sin
+                        inventar cifras.
                     </p>
                 </FormSection>
 
                 <FormSection title="Sitio">
                     <div className="grid gap-4 sm:grid-cols-2">
-                        <Field label="Texto corto del footer" error={errors.footer_text}>
+                        <Field
+                            label="Texto corto del footer"
+                            error={errors.footer_text}
+                        >
                             <Input {...field('footer_text')} />
                         </Field>
                         <div />
-                        <Field label="Dominio canónico" error={errors.canonical_domain}>
-                            <Input {...field('canonical_domain')} placeholder="https://..." />
+                        <Field
+                            label="Dominio canónico"
+                            error={errors.canonical_domain}
+                        >
+                            <Input
+                                {...field('canonical_domain')}
+                                placeholder="https://..."
+                            />
                         </Field>
-                        <Field label="Dominio histórico" error={errors.previous_domain}>
-                            <Input {...field('previous_domain')} placeholder="https://..." />
+                        <Field
+                            label="Dominio histórico"
+                            error={errors.previous_domain}
+                        >
+                            <Input
+                                {...field('previous_domain')}
+                                placeholder="https://..."
+                            />
                         </Field>
                     </div>
                 </FormSection>
@@ -146,7 +217,13 @@ export default function SettingsEdit({ settings }: EditProps) {
                         disabled={processing}
                         className="inline-flex items-center gap-2 rounded-lg bg-qd-teal-2 px-5 py-2.5 text-sm font-bold text-white transition hover:brightness-95 disabled:opacity-60 dark:bg-qd-teal dark:text-qd-ink"
                     >
-                        {processing && <Loader2 aria-hidden="true" size={16} className="animate-spin" />}
+                        {processing && (
+                            <Loader2
+                                aria-hidden="true"
+                                size={16}
+                                className="animate-spin"
+                            />
+                        )}
                         Guardar ajustes
                     </button>
                 </div>
@@ -171,7 +248,9 @@ function Field({
             <Label>{label}</Label>
             {children}
             {hint && !error && (
-                <p className="text-xs text-qd-text-medium dark:text-qd-white/40">{hint}</p>
+                <p className="text-xs text-qd-text-medium dark:text-qd-white/40">
+                    {hint}
+                </p>
             )}
             {error && <p className="text-sm text-red-600">{error}</p>}
         </div>

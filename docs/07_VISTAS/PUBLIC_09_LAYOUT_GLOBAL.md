@@ -1,6 +1,6 @@
 # Layout global — header, footer y transversales
 
-Última revisión: 14 de junio de 2026. Layout global de todas las vistas públicas. Alineado con el mockup final (`mockups/abacoqd-web.pen`).
+Última revisión: 28 de junio de 2026. Layout global de todas las vistas públicas. Alineado con el mockup final (`mockups/abacoqd-web.pen`).
 
 ## Identificación
 
@@ -14,7 +14,7 @@ Paleta y componentes en `04_IDENTIDAD_UI_COMPONENTES.md`; modelo de datos en `02
 
 ## Objetivo
 
-Marco común a todas las vistas públicas: header flotante, footer, idioma ES/EN, tema claro/oscuro/sistema, y los dos botones flotantes transversales (accesibilidad a la izquierda, chatbot a la derecha). Es **base** del producto definitivo, no futuro.
+Marco común a todas las vistas públicas: header flotante, footer, selector de idioma UI, tema claro/oscuro/sistema, y los dos botones flotantes transversales (accesibilidad a la izquierda, chatbot a la derecha). Es **base** del producto definitivo, no futuro.
 
 ---
 
@@ -25,9 +25,9 @@ Se conserva la estructura de `FloatingHeader` (pastilla flotante con marca, nav,
 **Reutilización obligatoria:** todas las vistas públicas (incluidas las de error 404/500/503) usan esta misma topbar canónica, con la misma composición, espaciado y proporciones que en la landing. Prohibido cualquier topbar genérica o alternativa.
 
 ### Marca
-- Marca pública visible: **Abaco Developments**. La razón social completa queda reservada para textos legales. Si se conserva un tratamiento visual `AbacoQD`, debe validarse como evolución gráfica antes de publicarlo.
+- Marca pública visible: **AbacoQD**. La razón social completa queda reservada para textos legales. `Abaco Developments` puede aparecer como contexto empresarial cuando proceda, pero no sustituye la marca principal.
 - Logo/wordmark horizontal de marca pública, con variantes claro/oscuro según tema.
-- Click → Inicio (`/` o `/en`). **No hay ítem `Inicio`**: lo cubre el logo.
+- Click → Inicio (`/`). **No hay ítem `Inicio`**: lo cubre el logo.
 
 ### Navegación (final)
 Orden definitivo (6 ítems; el logo cubre Inicio):
@@ -45,7 +45,7 @@ Orden definitivo (6 ítems; el logo cubre Inicio):
 
 ### Acciones (derecha)
 - **Sin CTA de reserva en la topbar.** Los botones de reserva viven en hero, CTA final y bloques contextuales (ver `PUBLIC_06_CONTACTO_RESERVA.md`).
-- Selector de idioma `ES` (toggle ES/EN): navega a la ruta equivalente del otro idioma; si no hay traducción, al índice de su tipo.
+- Selector de idioma `ES` (toggle UI): no se documenta como routing SEO EN activo mientras el lanzamiento siga siendo Spanish-first.
 - Toggle de tema claro/oscuro/sistema (sol/luna; componente animate-ui existente).
 
 ### Mobile (<1024)
@@ -66,12 +66,12 @@ Alineado con el footer del mockup (`Footer - Dark` / `Footer - Light`). Fondo `q
 
 **Reutilización obligatoria:** todas las vistas públicas (incluidas las de error 404/500/503) usan este mismo footer canónico completo (logo, columnas, franja institucional UE/FSE+ y barra legal). Prohibido cualquier footer genérico (p. ej. columnas "Producto / Empresa / Legal") o logo cuadrado genérico.
 
-1. **Marca**: logo de Abaco Developments + descripción `Desarrollos a medida potenciados por IA.` / `Iniciativa de Abaco Developments.` + `Construimos con estrategia, diseño y tecnología.` (columna más ancha).
+1. **Marca**: logo de AbacoQD + descripción `Desarrollos a medida potenciados por IA.` + `Construimos con estrategia, diseño y tecnología.` (columna más ancha).
 2. **Explorar**: Inicio, Metodología, Servicios, Proyectos, Quiénes somos, Blog, Contacto.
 3. **Servicios**: Desarrollo web, Aplicaciones a medida, Automatización, Diseño UX/UI, Consultoría digital.
-4. **Contacto**: Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid; info@abacodev.com; +34 91 020 00 89; WhatsApp +34 647 51 81 00 si se muestra como contacto rápido. Redes sociales solo si se confirman perfiles reales.
+4. **Contacto**: Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid; info@abacoqd.com; +34 91 020 00 89; WhatsApp +34 647 51 81 00 si se muestra como contacto rápido. Redes sociales solo si se confirman perfiles reales.
 
-- Barra legal inferior con hairline: `© 2026 Abaco Developments. Todos los derechos reservados.` a la izquierda; `Privacidad / Cookies / Aviso legal` a la derecha (ver `PUBLIC_07_LEGAL_COOKIES_PRIVACIDAD.md`).
+- Barra legal inferior con hairline: `© 2026 AbacoQD. Todos los derechos reservados.` a la izquierda; `Privacidad / Cookies / Aviso legal` a la derecha (ver `PUBLIC_07_LEGAL_COOKIES_PRIVACIDAD.md`).
 - Bloque institucional opcional/discreto: be now Partner, Cofinanciado por la Unión Europea, Fondos Europeos y texto FSE+ si la obligación de visibilidad lo requiere. Debe ser una franja o grupo sobrio, no una sección comercial ni un sustituto de Colaboraciones.
 - Decoración sutil: hairline superior, glow radial teal tenue, algunos nodos. Títulos de columna `qd-ink`/blanco según tema; enlaces en gris medio con hover teal.
 - Datos de marca/contacto desde `settings`. Contacto confirmado: dirección, teléfono fijo, WhatsApp directo de Andrés, email principal y emails secundarios. Teléfono principal único pendiente de confirmación.
@@ -113,9 +113,9 @@ Dos botones flotantes persistentes en todas las vistas públicas, simétricos y 
 - Radios y sombras consistentes según el design system (`04_IDENTIDAD_UI_COMPONENTES.md`).
 
 ### Idioma y rutas
-- ES sin prefijo, EN bajo `/en` (según `03_SEO_MULTILENGUAJE_LEGAL.md`).
+- ES sin prefijo. EN solo se documentará aquí cuando exista como fase real de producto.
 - Dominio canónico final: `https://abacoqd.com/`. `https://abacodev.com/` queda como dominio histórico/investigado y `https://www.abacodev.com/` como URL legal histórica; la redirección o convivencia está pendiente de confirmar.
-- `lang` correcto en `<html>`; `hreflang` por vista según su documento.
+- `lang` correcto en `<html>`; sin exigir `hreflang` EN mientras el lanzamiento siga siendo Spanish-first.
 - El estado de idioma persiste entre navegaciones (mecanismo actual evoluciona a rutas en su fase).
 
 ### Tema claro/oscuro/sistema

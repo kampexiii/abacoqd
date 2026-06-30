@@ -2210,5 +2210,35 @@
         "restricted": "Acceso restringido a usuarios autorizados.",
         "switchLanguage": "Cambiar idioma de la interfaz",
         "rights": "Todos los derechos reservados."
+    },
+    "adminPasswordRecovery": {
+        "metaTitle": "Recuperar acceso · AbacoQD",
+        "eyebrow": "RECUPERAR ACCESO",
+        "panelTitle": "Recupera el acceso al panel",
+        "panelSubtitle": "Te enviaremos un enlace seguro al correo asociado a tu usuario para que puedas definir una nueva contraseña.",
+        "title": "¿Has olvidado tu contraseña?",
+        "subtitle": "Introduce el correo asignado a tu usuario de AbacoQD.",
+        "email": "Correo electrónico",
+        "emailPlaceholder": "usuario@abacoqd.com",
+        "submit": "Enviar enlace de recuperación",
+        "status": "Si existe una cuenta con ese correo, te hemos enviado un enlace para restablecer la contraseña.",
+        "backToLogin": "Volver al acceso",
+        "backToSite": "Volver al sitio web"
+    },
+    "adminPasswordReset": {
+        "metaTitle": "Nueva contraseña · AbacoQD",
+        "eyebrow": "NUEVA CONTRASEÑA",
+        "panelTitle": "Define una nueva contraseña",
+        "panelSubtitle": "El enlace es personal y temporal. Cuando guardes la nueva contraseña podrás volver a entrar al panel.",
+        "title": "Restablece tu contraseña",
+        "subtitle": "Crea una nueva contraseña para tu cuenta de AbacoQD.",
+        "email": "Correo electrónico",
+        "password": "Nueva contraseña",
+        "passwordPlaceholder": "Nueva contraseña",
+        "passwordConfirmation": "Confirmar contraseña",
+        "passwordConfirmationPlaceholder": "Repite la nueva contraseña",
+        "submit": "Guardar nueva contraseña",
+        "backToLogin": "Volver al acceso",
+        "backToSite": "Volver al sitio web"
     }
 }

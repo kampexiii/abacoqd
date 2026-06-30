@@ -220,7 +220,10 @@ export default function Booking({
                         <div className="mx-auto flex w-full max-w-3xl flex-col gap-8">
                             <div>
                                 <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-qd-ink dark:text-qd-white">
-                                    <CalendarDays aria-hidden="true" size={16} />
+                                    <CalendarDays
+                                        aria-hidden="true"
+                                        size={16}
+                                    />
                                     {t('booking.dayLabel')}
                                 </h2>
                                 <BookingCalendarPicker
@@ -247,14 +250,18 @@ export default function Booking({
                                                     key={slot.id}
                                                     type="button"
                                                     onClick={() =>
-                                                        setSelectedSlotId(slot.id)
+                                                        setSelectedSlotId(
+                                                            slot.id,
+                                                        )
                                                     }
                                                     aria-pressed={
-                                                        slot.id === selectedSlotId
+                                                        slot.id ===
+                                                        selectedSlotId
                                                     }
                                                     className={cn(
                                                         'rounded-xl border px-4 py-2.5 text-sm font-semibold transition',
-                                                        slot.id === selectedSlotId
+                                                        slot.id ===
+                                                            selectedSlotId
                                                             ? 'border-qd-teal-2 bg-qd-teal-2/10 text-qd-ink dark:border-qd-teal dark:text-qd-white'
                                                             : 'border-qd-mist text-qd-text-high hover:border-qd-teal-2 dark:border-white/10',
                                                     )}

@@ -11,7 +11,12 @@ type EditProps = {
     readonly tags: readonly Option[];
 };
 
-export default function PostsEdit({ post, statuses, categories, tags }: EditProps) {
+export default function PostsEdit({
+    post,
+    statuses,
+    categories,
+    tags,
+}: EditProps) {
     const name = post.title?.es ?? post.title?.en ?? 'Editar post';
 
     return (
@@ -24,7 +29,13 @@ export default function PostsEdit({ post, statuses, categories, tags }: EditProp
             ]}
         >
             <Head title={`Editar · ${name} · Admin AbacoQD`} />
-            <PostForm mode="edit" statuses={statuses} categories={categories} tags={tags} post={post} />
+            <PostForm
+                mode="edit"
+                statuses={statuses}
+                categories={categories}
+                tags={tags}
+                post={post}
+            />
         </AdminLayout>
     );
 }

@@ -52,7 +52,7 @@ class FaqSeeder extends Seeder
                 'contact',
                 'contact_channels',
                 ['es' => '¿Cómo puedo contactar?', 'en' => 'How can I get in touch?'],
-                ['es' => 'Puedes escribir a info@abacodev.com, llamar al +34 91 020 00 89 o usar WhatsApp en el +34 647 51 81 00. También desde la página de contacto.', 'en' => 'You can email info@abacodev.com, call +34 91 020 00 89 or use WhatsApp at +34 647 51 81 00. You can also use the contact page.'],
+                ['es' => 'Puedes escribir a info@abacoqd.com, llamar al +34 91 020 00 89 o usar WhatsApp en el +34 647 51 81 00. También desde la página de contacto.', 'en' => 'You can email info@abacoqd.com, call +34 91 020 00 89 or use WhatsApp at +34 647 51 81 00. You can also use the contact page.'],
                 '/contacto',
             ],
         ];

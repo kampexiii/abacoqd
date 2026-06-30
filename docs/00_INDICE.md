@@ -48,7 +48,7 @@ Datos reales para publicar y cargar como valores iniciales de `settings`:
 - URL legal histórica aportada: https://www.abacodev.com/.
 - Teléfono fijo: +34 91 020 00 89.
 - WhatsApp / contacto directo Andrés: +34 647 51 81 00.
-- Email principal: info@abacodev.com.
+- Email principal: info@abacoqd.com.
 - Email secundario/general: abacodevelopments@gmail.com.
 - Email contacto Andrés: andrescasanueva@abacodev.com.
 - Bloque institucional: be now Partner, Cofinanciado por la Unión Europea, Fondos Europeos y texto FSE+.

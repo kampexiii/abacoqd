@@ -1,7 +1,10 @@
 import { Head } from '@inertiajs/react';
 
 import PartnerForm from '@/components/admin/PartnerForm';
-import type { AdminPartnerRecord, Option } from '@/components/admin/PartnerForm';
+import type {
+    AdminPartnerRecord,
+    Option,
+} from '@/components/admin/PartnerForm';
 import AdminLayout from '@/layouts/admin-layout';
 
 type EditProps = {

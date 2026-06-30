@@ -1,8 +1,15 @@
 # Backlog y roadmap de implementación — AbacoQD
 
-Última revisión: 18 de junio de 2026.
+Última revisión: 28 de junio de 2026.
 
-Roadmap orientado al producto completo del 30/06. **Fase 2 (modelo de datos y migraciones) cerrada** el 18/06/2026: existen migraciones, modelos, factories, seeders y tests validados con `composer test` y `migrate:fresh --seed`. La Fase 1 (base pública y layout global) tiene avance de código en curso sobre la landing aprobada (topbar, hero, secciones de Colaboraciones/CTA final, páginas de error). El resto del roadmap se trabaja fase a fase con checkpoint de validación antes de avanzar a la siguiente.
+Roadmap orientado al producto completo del 30/06. Este documento conserva el histórico por fases, pero la **lectura vigente de cierre** es:
+
+- marca pública final: **AbacoQD**;
+- lanzamiento inicial **Spanish-first**;
+- portfolio real actual autorizado;
+- equipo con CVs dentro de alcance;
+- admin ajustado a su alcance funcional actual;
+- pendientes reales: foto de Mohamed, datos SMTP/correo, QA final y preparación de producción.
 
 ## Fase 0 — Documentación final y auditoría
 
@@ -35,7 +42,7 @@ Roadmap orientado al producto completo del 30/06. **Fase 2 (modelo de datos y mi
 
 **Alcance.**
 
-- Topbar: Metodología, Servicios, Proyectos, Quiénes somos, Blog, Contacto, idioma, tema sistema.
+- Topbar: Metodología, Servicios, Proyectos, Quiénes somos, Blog, Contacto, selector de idioma UI y tema sistema.
 - Sin botón Reservar en topbar.
 - Footer con legales y datos de contacto confirmados desde settings.
 - Settings con datos legales/corporativos confirmados y bloque institucional UE/FSE+ documentado.
@@ -71,7 +78,7 @@ Roadmap orientado al producto completo del 30/06. **Fase 2 (modelo de datos y mi
 - `services` sin entidad duplicada. ✅
 - `partners` sin tabla paralela de empresas. ✅
 - Proyectos (página) y sección Colaboraciones basados en `projects` + `partners`. ✅
-- ES/EN desde creación (JSON por fila). ✅
+- Base preparada para ES/EN en datos, sin hacer de EN un bloqueo actual de lanzamiento. ✅
 - Estados/visibilidad y SEO listos. ✅
 - `team_members` preparado para Quiénes somos sin obligar a publicar equipo. ✅
 
@@ -98,7 +105,7 @@ Roadmap orientado al producto completo del 30/06. **Fase 2 (modelo de datos y mi
 
 **Criterios.**
 
-- Cada vista responde a ES/EN.
+- El lanzamiento inicial responde en español; EN queda como evolución futura no bloqueante.
 - Estados vacíos honestos.
 - Sin datos inventados.
 - SEO básico por vista.
@@ -112,20 +119,21 @@ Roadmap orientado al producto completo del 30/06. **Fase 2 (modelo de datos y mi
 
 - Dashboard.
 - Settings/marca/datos corporativos.
-- Distintivos institucionales y financiación en `settings.institutional`.
-- Secciones y bloques.
-- Metodología.
 - Servicios.
 - Partners.
 - Proyectos.
-- Reviews.
-- Legal/cookies.
+- Equipo.
+- Blog.
+- Mensajes.
+- Reserva/citas.
+- FAQs.
+- Usuarios.
 
 **Criterios.**
 
-- CRUDs con ES/EN.
-- Estados, visibilidad, orden, SEO.
-- Validación de permisos de logos/proyectos.
+- Cobertura real del admin actual.
+- Estados, visibilidad, orden y mantenimiento ordinario del sitio.
+- Sin reabrir módulos descartados como bloqueo documental.
 - No publicar placeholders legales.
 
 ## Fase 5 — Blog, mensajes, reserva, SEO y chatbot
@@ -134,11 +142,11 @@ Roadmap orientado al producto completo del 30/06. **Fase 2 (modelo de datos y mi
 
 **Alcance.**
 
-- Blog bilingüe, categorías, tags y destacados.
+- Blog, categorías, tags y destacados.
 - Suscriptores con double opt-in.
 - Mensajes de contacto.
 - Reserva propia (`appointment_days`/`appointment_slots`/`appointment_bookings`) con fallback a contacto; sin doble reserva (transacción + bloqueo de fila).
-- SEO metadata, sitemap, robots, canonical, `hreflang`.
+- SEO metadata, sitemap, robots y canonical.
 - FAQs/chatbot.
 - Usuarios/roles.
 
@@ -147,7 +155,7 @@ Roadmap orientado al producto completo del 30/06. **Fase 2 (modelo de datos y mi
 - Blog no publica contenido falso.
 - Mensajes protegidos con consentimiento.
 - Reserva nunca queda rota; slots bloqueados/llenos/pasados nunca se muestran como disponibles.
-- SEO por idioma completo.
+- SEO principal en español completado.
 - Chatbot redirige sin prometer datos no definidos.
 
 ## Fase 6 — QA final 30/06
@@ -171,17 +179,16 @@ Roadmap orientado al producto completo del 30/06. **Fase 2 (modelo de datos y mi
 - enlaces internos;
 - búsqueda de contradicciones documentales.
 
-## Pendientes que bloquean producción
+## Pendientes reales de cierre y producción
 
-- Confirmar teléfono legal visible principal.
-- Stack definitivo de analítica/cookies y CMP.
-- Revisión jurídica final de aviso legal, privacidad y cookies.
-- Ubicación obligatoria de logos UE/FSE+/Fondos Europeos y rutas finales de assets.
-- Política del estudio inicial.
-- Proyectos/logos/capturas/reseñas con permiso.
-- Copy final ES/EN de servicios, proyectos, blog, contacto y legales.
-- Redes sociales reales.
-- Horarios.
+- Recibir foto de Mohamed.
+- Recibir datos SMTP corporativos para avisos a `info@abacoqd.com`.
+- Configurar SMTP y verificar envío real de contacto y reserva.
+- Ejecutar `npm run types:check`, `npm run lint:check`, `npm run build` y `composer test`.
+- Revisar responsive y QA visual final en navegador real.
+- Barrido final de textos/restos internos.
+- Preparar commits limpios por bloques.
+- Producción: dominio final, `.env` real, `APP_ENV=production`, `APP_DEBUG=false`, cookies seguras, SPF/DKIM/DMARC y revisión legal final si procede.
 
 ## No hacer
 

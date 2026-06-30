@@ -29,7 +29,13 @@ export type SiteSettings = {
 };
 
 const EMPTY_SITE_SETTINGS: SiteSettings = {
-    contact: { email: null, phone: null, whatsapp: null, address: null, cityCountry: null },
+    contact: {
+        email: null,
+        phone: null,
+        whatsapp: null,
+        address: null,
+        cityCountry: null,
+    },
     social: { linkedin: null, facebook: null },
     googleReviews: { url: null, rating: null, count: null, location: null },
     footer: { text: null },

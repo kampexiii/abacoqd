@@ -17,11 +17,7 @@ import PublicPageHero from '@/components/public/PublicPageHero';
 import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
-import type {
-    BlogPostSummary,
-    BlogTocItem,
-    LocalizedText,
-} from '@/lib/blog';
+import type { BlogPostSummary, BlogTocItem, LocalizedText } from '@/lib/blog';
 import { formatPostDate, localizedText, postHref } from '@/lib/blog';
 import { cn } from '@/lib/utils';
 import { show as bookingShow } from '@/routes/booking';
@@ -119,7 +115,9 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
                             {date && (
                                 <span className="inline-flex items-center gap-1.5">
                                     <Calendar aria-hidden="true" size={14} />
-                                    <time dateTime={post.publishedAt ?? undefined}>
+                                    <time
+                                        dateTime={post.publishedAt ?? undefined}
+                                    >
                                         {date}
                                     </time>
                                 </span>
@@ -161,7 +159,9 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
                                 // Seguro: ver nota de seguridad en la cabecera
                                 // del archivo (CommonMark escapa el HTML crudo
                                 // del Markdown origen).
-                                dangerouslySetInnerHTML={{ __html: contentHtml }}
+                                dangerouslySetInnerHTML={{
+                                    __html: contentHtml,
+                                }}
                             />
                         ) : (
                             <p className="mt-8 text-sm text-qd-text-high">
@@ -173,7 +173,10 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
                         <div className="mt-10 flex flex-col gap-4 rounded-2xl border border-qd-teal-2/20 bg-qd-teal-2/5 p-6 sm:flex-row sm:items-center sm:justify-between dark:border-qd-teal/20 dark:bg-qd-teal/5">
                             <div className="flex items-start gap-3">
                                 <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-qd-teal-2/10 text-qd-teal-2 dark:bg-qd-teal/10 dark:text-qd-teal">
-                                    <MessageSquare aria-hidden="true" size={20} />
+                                    <MessageSquare
+                                        aria-hidden="true"
+                                        size={20}
+                                    />
                                 </span>
                                 <p className="max-w-md text-sm font-medium text-qd-ink dark:text-qd-white">
                                     {t('blogDetailPage.inlineCta.text')}
@@ -221,7 +224,9 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
                                             `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl())}`,
                                         )
                                     }
-                                    aria-label={t('blogDetailPage.share.linkedin')}
+                                    aria-label={t(
+                                        'blogDetailPage.share.linkedin',
+                                    )}
                                     className="flex size-9 items-center justify-center rounded-full border border-qd-mist text-qd-text-high transition hover:border-qd-teal-2 hover:text-qd-teal-2 dark:border-white/15 dark:text-qd-text-medium dark:hover:border-qd-teal dark:hover:text-qd-teal"
                                 >
                                     <Linkedin aria-hidden="true" size={16} />

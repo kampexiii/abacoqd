@@ -19,7 +19,10 @@ type GenerateFormData = {
 };
 
 type Props = {
-    readonly defaults: { readonly durationMinutes: number; readonly capacity: number };
+    readonly defaults: {
+        readonly durationMinutes: number;
+        readonly capacity: number;
+    };
 };
 
 const WEEKDAYS = [
@@ -48,7 +51,12 @@ export default function BookingBulkAvailabilityForm({ defaults }: Props) {
     const errors = form.errors as Record<string, string>;
 
     const toggleWeekday = (iso: number) => {
-        setData('weekdays', data.weekdays.includes(iso) ? data.weekdays.filter((d) => d !== iso) : [...data.weekdays, iso].sort());
+        setData(
+            'weekdays',
+            data.weekdays.includes(iso)
+                ? data.weekdays.filter((d) => d !== iso)
+                : [...data.weekdays, iso].sort(),
+        );
     };
 
     const submit = (event: FormEvent) => {
@@ -60,10 +68,18 @@ export default function BookingBulkAvailabilityForm({ defaults }: Props) {
         <form onSubmit={submit} className="flex flex-col gap-4">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field label="Desde" error={errors.date_from}>
-                    <Input type="date" value={data.date_from} onChange={(e) => setData('date_from', e.target.value)} />
+                    <Input
+                        type="date"
+                        value={data.date_from}
+                        onChange={(e) => setData('date_from', e.target.value)}
+                    />
                 </Field>
                 <Field label="Hasta" error={errors.date_to}>
-                    <Input type="date" value={data.date_to} onChange={(e) => setData('date_to', e.target.value)} />
+                    <Input
+                        type="date"
+                        value={data.date_to}
+                        onChange={(e) => setData('date_to', e.target.value)}
+                    />
                 </Field>
             </div>
 
@@ -94,16 +110,29 @@ export default function BookingBulkAvailabilityForm({ defaults }: Props) {
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field label="Hora inicio" error={errors.start_time}>
-                    <Input type="time" value={data.start_time} onChange={(e) => setData('start_time', e.target.value)} />
+                    <Input
+                        type="time"
+                        value={data.start_time}
+                        onChange={(e) => setData('start_time', e.target.value)}
+                    />
                 </Field>
                 <Field label="Hora fin" error={errors.end_time}>
-                    <Input type="time" value={data.end_time} onChange={(e) => setData('end_time', e.target.value)} />
+                    <Input
+                        type="time"
+                        value={data.end_time}
+                        onChange={(e) => setData('end_time', e.target.value)}
+                    />
                 </Field>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <Field label="Duración" error={errors.duration_minutes}>
-                    <AdminSelect value={data.duration_minutes} onChange={(e) => setData('duration_minutes', Number(e.target.value))}>
+                    <AdminSelect
+                        value={data.duration_minutes}
+                        onChange={(e) =>
+                            setData('duration_minutes', Number(e.target.value))
+                        }
+                    >
                         {[30, 45, 60, 90, 120].map((m) => (
                             <option key={m} value={m}>
                                 {m} min
@@ -112,7 +141,12 @@ export default function BookingBulkAvailabilityForm({ defaults }: Props) {
                     </AdminSelect>
                 </Field>
                 <Field label="Descanso" error={errors.break_minutes}>
-                    <AdminSelect value={data.break_minutes} onChange={(e) => setData('break_minutes', Number(e.target.value))}>
+                    <AdminSelect
+                        value={data.break_minutes}
+                        onChange={(e) =>
+                            setData('break_minutes', Number(e.target.value))
+                        }
+                    >
                         {[0, 15, 30].map((m) => (
                             <option key={m} value={m}>
                                 {m} min
@@ -121,7 +155,15 @@ export default function BookingBulkAvailabilityForm({ defaults }: Props) {
                     </AdminSelect>
                 </Field>
                 <Field label="Capacidad" error={errors.capacity}>
-                    <Input type="number" min={1} max={100} value={data.capacity} onChange={(e) => setData('capacity', Number(e.target.value))} />
+                    <Input
+                        type="number"
+                        min={1}
+                        max={100}
+                        value={data.capacity}
+                        onChange={(e) =>
+                            setData('capacity', Number(e.target.value))
+                        }
+                    />
                 </Field>
             </div>
 
@@ -131,7 +173,15 @@ export default function BookingBulkAvailabilityForm({ defaults }: Props) {
                     disabled={processing}
                     className="inline-flex items-center gap-2 rounded-lg bg-qd-teal-2 px-5 py-2.5 text-sm font-bold text-white transition hover:brightness-95 disabled:opacity-60 dark:bg-qd-teal dark:text-qd-ink"
                 >
-                    {processing ? <Loader2 aria-hidden="true" size={16} className="animate-spin" /> : <CalendarPlus aria-hidden="true" size={16} />}
+                    {processing ? (
+                        <Loader2
+                            aria-hidden="true"
+                            size={16}
+                            className="animate-spin"
+                        />
+                    ) : (
+                        <CalendarPlus aria-hidden="true" size={16} />
+                    )}
                     Generar franjas
                 </button>
             </div>
@@ -139,7 +189,15 @@ export default function BookingBulkAvailabilityForm({ defaults }: Props) {
     );
 }
 
-function Field({ label, error, children }: { readonly label: string; readonly error?: string; readonly children: ReactNode }) {
+function Field({
+    label,
+    error,
+    children,
+}: {
+    readonly label: string;
+    readonly error?: string;
+    readonly children: ReactNode;
+}) {
     return (
         <div className="flex flex-col gap-1.5">
             <Label>{label}</Label>

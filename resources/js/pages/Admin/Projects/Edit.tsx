@@ -16,7 +16,12 @@ type EditProps = {
     readonly services: readonly ServiceOption[];
 };
 
-export default function ProjectsEdit({ project, statuses, partners, services }: EditProps) {
+export default function ProjectsEdit({
+    project,
+    statuses,
+    partners,
+    services,
+}: EditProps) {
     const name = project.title?.es ?? project.title?.en ?? 'Editar proyecto';
 
     return (
@@ -29,7 +34,13 @@ export default function ProjectsEdit({ project, statuses, partners, services }: 
             ]}
         >
             <Head title={`Editar · ${name} · Admin AbacoQD`} />
-            <ProjectForm mode="edit" statuses={statuses} partners={partners} services={services} project={project} />
+            <ProjectForm
+                mode="edit"
+                statuses={statuses}
+                partners={partners}
+                services={services}
+                project={project}
+            />
         </AdminLayout>
     );
 }

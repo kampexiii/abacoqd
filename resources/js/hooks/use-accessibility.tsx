@@ -58,7 +58,10 @@ const read = (): AccessibilitySettings => {
             return DEFAULTS;
         }
 
-        return { ...DEFAULTS, ...(JSON.parse(raw) as Partial<AccessibilitySettings>) };
+        return {
+            ...DEFAULTS,
+            ...(JSON.parse(raw) as Partial<AccessibilitySettings>),
+        };
     } catch {
         return DEFAULTS;
     }

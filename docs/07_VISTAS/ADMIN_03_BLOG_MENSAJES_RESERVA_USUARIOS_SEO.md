@@ -1,8 +1,8 @@
 # ADMIN_03 — Blog, mensajes, reserva, usuarios y SEO
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 28 de junio de 2026.
 
-Gestión de blog bilingüe, categorías, tags, suscriptores, mensajes, reserva, usuarios/roles, SEO técnico y FAQs del chatbot. Patrones comunes en `ADMIN_01_LAYOUT_DASHBOARD_PATRONES.md`.
+Gestión de blog, categorías, tags, suscriptores, mensajes, reserva, usuarios/roles, SEO técnico y FAQs del chatbot. Patrones comunes en `ADMIN_01_LAYOUT_DASHBOARD_PATRONES.md`.
 
 ## 1. Blog
 
@@ -11,7 +11,7 @@ CRUD de `posts`:
 - título, slug, extracto, portada;
 - contenido estructurado (`content_json`);
 - categoría, tags;
-- idioma y traducción relacionada;
+- idioma y traducción relacionada si en una fase posterior se publica EN real;
 - estado (`draft`, `scheduled`, `published`, `hidden`);
 - fecha de publicación;
 - lectura estimada calculada;
@@ -21,13 +21,12 @@ CRUD de `posts`:
 Reglas:
 
 - No publicar artículos inventados como reales.
-- Slug y SEO independientes por idioma.
-- `hreflang` solo si existe traducción real.
-- Posts sin traducción pueden existir, pero el selector de idioma no inventa equivalente.
+- El lanzamiento inicial puede operar solo en español.
+- Si en el futuro existe EN real, el slug y el SEO serán independientes por idioma.
 
 ## 2. Categorías y tags
 
-CRUD ES/EN de `post_categories` y `tags`, con slug, descripción, visibilidad y relación de traducción.
+CRUD de `post_categories` y `tags`, con slug, descripción y visibilidad. Las relaciones de traducción solo aplican si en una fase posterior se publica EN real.
 
 Estados vacíos:
 
@@ -60,23 +59,23 @@ Gestión de `contact_messages`:
 
 Estados: nuevo, en revisión, respondido, descartado/spam.
 
-Datos de respuesta/contacto disponibles desde `settings`: teléfono `+34 91 020 00 89`, WhatsApp directo Andrés `+34 647 51 81 00`, email principal `info@abacodev.com`, email secundario `abacodevelopments@gmail.com` y email Andrés `andrescasanueva@abacodev.com`. El admin puede usarlos en plantillas internas, sin exponer emails secundarios en chatbot salvo decisión explícita.
+Datos de respuesta/contacto disponibles desde `settings`: teléfono `+34 91 020 00 89`, WhatsApp de atención comercial `+34 647 51 81 00`, email principal `info@abacoqd.com`, email secundario `abacodevelopments@gmail.com` y email comercial adicional `andrescasanueva@abacodev.com`. El admin puede usarlos en plantillas internas, sin exponer emails secundarios en chatbot salvo decisión explícita.
 
 El detalle del mensaje registra consentimiento obligatorio de privacidad y consentimiento comercial opcional por separado. Exportaciones y plantillas no pueden tratar el consentimiento de privacidad como autorización comercial.
 
 ## 5. Reserva
 
-Gestión de `booking_settings`:
+Gestión del sistema propio de citas:
 
-- proveedor;
-- URL;
-- activo/inactivo;
-- copy ES/EN;
-- variante embed/enlace;
-- fallback a contacto;
-- aviso de cookies si el proveedor usa scripts o cookies no técnicas.
+- `appointment_days`;
+- `appointment_slots`;
+- `appointment_bookings`;
+- ajustes operativos de disponibilidad;
+- fallback a contacto cuando no haya citas abiertas.
 
-Sin proveedor válido, la vista pública muestra fallback a contacto/WhatsApp con los datos confirmados. No se promete disponibilidad ni precio.
+Sin disponibilidad, la vista pública muestra fallback a contacto/WhatsApp con los datos confirmados. No se promete disponibilidad ni precio.
+
+El correo receptor definitivo de avisos es `info@abacoqd.com`. El envío real queda pendiente de recibir y configurar `SMTP host`, `SMTP port`, `SMTP username`, `SMTP password` o app password, cifrado, `From`, `From name` y, si aplica, `Reply-To`.
 
 Proveedor recomendado: `Cal.com` si no hay WordPress; alternativa rápida `Calendly`; `Amelia` solo si el stack final fuera WordPress.
 
@@ -106,7 +105,7 @@ Gestión de `seo_metadata` y SEO global:
 
 Cobertura: home, metodología, servicios, proyectos, quiénes somos, blog, posts, contacto, reserva y legales.
 
-Los datos estructurados de `Organization`/`ContactPage` usan los datos confirmados de ABACO DIGITAL DEVELOPMENTS, S.L. y el dominio canónico final `https://abacoqd.com/`. `https://abacodev.com/` queda como dominio histórico/investigado y `https://www.abacodev.com/` como URL legal histórica aportada. La política de redirección/convivencia queda pendiente. El teléfono legal visible principal queda pendiente de decisión.
+Los datos estructurados de `Organization`/`ContactPage` usan los datos confirmados de ABACO DIGITAL DEVELOPMENTS, S.L. y el dominio canónico final `https://abacoqd.com/`. `https://abacodev.com/` se conserva como dominio histórico y `https://www.abacodev.com/` como URL legal histórica. La política de redirección o convivencia queda por definir. El teléfono legal visible principal queda por definir.
 
 Analítica recomendada: `GTM + GA4 + Search Console`; CMP recomendada: `CookieYes`. `Clarity` solo si se aprueba y queda bloqueado hasta consentimiento.
 
@@ -122,7 +121,7 @@ CRUD de `faqs`:
 - activo/inactivo;
 - orden.
 
-El chatbot debe tener fallback a contacto y WhatsApp `+34 647 51 81 00`, y puede mostrar el email principal `info@abacodev.com`. No debe exponer emails secundarios salvo decisión explícita, dar asesoramiento legal, prometer precios/plazos no definidos ni inventar miembros del equipo.
+El chatbot debe tener fallback a contacto y WhatsApp `+34 647 51 81 00`, y puede mostrar el email principal `info@abacoqd.com`. No debe exponer emails secundarios salvo decisión explícita, dar asesoramiento legal, prometer precios/plazos no definidos ni inventar miembros del equipo.
 
 En privacidad/cookies, el chatbot solo enlaza a las páginas legales y puede resumir la ubicación de contacto; no interpreta el texto base como asesoramiento jurídico ni sustituye el consentimiento del formulario.
 
@@ -132,10 +131,10 @@ Este módulo puede exponer defaults de accesibilidad si se decide desde settings
 
 ## 10. Criterios de cierre
 
-- Blog usable en ES/EN.
+- Blog usable en español para el lanzamiento inicial.
 - Mensajes protegidos y exportables con control.
 - Reserva con fallback.
 - SEO por idioma editable.
 - Usuarios con roles mínimos.
 - FAQs activas y redirecciones revisadas.
-- Sin datos demo publicados como reales.
+- Sin datos de muestra publicados como reales.

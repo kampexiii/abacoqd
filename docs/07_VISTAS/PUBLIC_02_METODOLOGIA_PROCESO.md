@@ -1,6 +1,6 @@
 # PUBLIC_02 — Metodología / Proceso
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 28 de junio de 2026.
 
 Fuente de verdad de la metodología: la **sección de landing** (resumida en `PUBLIC_01_HOME_LANDING.md` §2) y la página interna `/metodologia`. `/como-trabajamos` puede conservarse como redirección si se usa en copy o campañas. Paleta, tipografía, componentes y animaciones en `04_IDENTIDAD_UI_COMPONENTES.md`; modelo de datos en `02_MODELO_DATOS.md`.
 
@@ -10,14 +10,14 @@ Fuente de verdad de la metodología: la **sección de landing** (resumida en `PU
 |---|---|
 | En landing | Sección 2 de `/` (después de Hero, antes de Servicios) |
 | Ruta página ES | `/metodologia` |
-| Ruta página EN | `/en/methodology` |
+| Ruta página EN | futura, no bloqueante |
 | Prioridad | Sección landing P0; página interna P0 documentada para 30/06 |
 | Componente previsto | `resources/js/pages/Public/Methodology.tsx` (futuro) |
 | Entidades | `methodology_steps`, `page_sections`, `settings` |
 
 ## Objetivo
 
-Demostrar que la rapidez de Abaco Developments es **proceso, no improvisación**: análisis, estudio inicial, desarrollo con IA supervisada, revisión y entrega segura. Responde a la objeción "rápido = descontrolado" y empuja a reservar.
+Demostrar que la rapidez de AbacoQD es **proceso, no improvisación**: análisis, estudio inicial, desarrollo con IA supervisada, revisión y entrega segura. Responde a la objeción "rápido = descontrolado" y empuja a reservar.
 
 ## Secuencia canónica de pasos
 
@@ -143,10 +143,10 @@ El asistente puede responder preguntas sobre el proceso, límites del estudio in
 
 ## SEO
 
-- Title ES: `Metodología de trabajo | Abaco Developments`.
+- Title ES: `Metodología de trabajo | AbacoQD`.
 - Description: proceso en 6 pasos con estudio inicial, IA supervisada y entrega segura.
 - JSON-LD: `BreadcrumbList`; `HowTo` solo si en implementación se valida que aplica sin forzar.
-- `hreflang` con `/en/methodology`.
+- Sin `hreflang` EN mientras no exista una versión inglesa completa con ruta propia.
 
 ## Decisiones abiertas
 

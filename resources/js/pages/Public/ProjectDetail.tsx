@@ -190,7 +190,10 @@ function PartnerLogo({ partner }: { readonly partner: ProjectPartner }) {
     );
 }
 
-export default function ProjectDetail({ project, related }: ProjectDetailProps) {
+export default function ProjectDetail({
+    project,
+    related,
+}: ProjectDetailProps) {
     const { t, locale } = useLanguage();
     const title = localizedText(project.title, locale);
     const summary = localizedText(project.summary, locale);
@@ -208,7 +211,8 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
         localizedText(service.name, locale),
     );
     const isCooperative =
-        project.developmentMode === 'cooperative' && project.partners.length > 0;
+        project.developmentMode === 'cooperative' &&
+        project.partners.length > 0;
     const developmentLabel = isCooperative
         ? t('projectDetail.development.cooperativeLabel')
         : t('projectDetail.development.soloLabel');
@@ -503,7 +507,10 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
 
             {/* Relacionados */}
             {relatedItems.length > 0 && (
-                <section id="relacionados" className="bg-qd-white dark:bg-qd-ink">
+                <section
+                    id="relacionados"
+                    className="bg-qd-white dark:bg-qd-ink"
+                >
                     <div className="mx-auto max-w-310 px-5 py-12 sm:px-8">
                         <h2 className="text-2xl font-bold text-qd-ink dark:text-qd-white">
                             {t('projectDetail.related.title')}
@@ -546,7 +553,7 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                                             )}
                                         </a>
                                         <div className="min-w-0 py-1 pr-1">
-                                            <h3 className="text-sm font-bold leading-snug text-qd-ink dark:text-qd-white">
+                                            <h3 className="text-sm leading-snug font-bold text-qd-ink dark:text-qd-white">
                                                 <a
                                                     href={projectUrl(
                                                         item,
@@ -564,7 +571,9 @@ export default function ProjectDetail({ project, related }: ProjectDetailProps) 
                                                 href={projectUrl(item, locale)}
                                                 className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-qd-teal-2 transition hover:text-qd-teal"
                                             >
-                                                {t('projectDetail.related.view')}
+                                                {t(
+                                                    'projectDetail.related.view',
+                                                )}
                                                 <ArrowRight
                                                     aria-hidden="true"
                                                     size={13}

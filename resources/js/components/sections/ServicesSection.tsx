@@ -19,19 +19,19 @@ import { show as contactShow } from '@/routes/contact';
 
 function VisualWeb() {
     return (
-        <div className="w-36 rounded-xl border border-[rgba(8,127,140,0.18)] dark:border-[rgba(122,191,191,0.14)] bg-white/80 dark:bg-[rgba(8,27,38,0.8)] overflow-hidden">
-            <div className="flex items-center gap-1 px-2 py-1.5 bg-[rgba(8,127,140,0.06)] dark:bg-[rgba(8,127,140,0.1)]">
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-[rgba(8,127,140,0.3)]" />
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-[rgba(8,127,140,0.18)]" />
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-[rgba(8,127,140,0.1)]" />
-                <span className="flex-1 ml-1 h-1.5 rounded-sm bg-[rgba(8,127,140,0.08)]" />
+        <div className="w-36 overflow-hidden rounded-xl border border-[rgba(8,127,140,0.18)] bg-white/80 dark:border-[rgba(122,191,191,0.14)] dark:bg-[rgba(8,27,38,0.8)]">
+            <div className="flex items-center gap-1 bg-[rgba(8,127,140,0.06)] px-2 py-1.5 dark:bg-[rgba(8,127,140,0.1)]">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[rgba(8,127,140,0.3)]" />
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[rgba(8,127,140,0.18)]" />
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-[rgba(8,127,140,0.1)]" />
+                <span className="ml-1 h-1.5 flex-1 rounded-sm bg-[rgba(8,127,140,0.08)]" />
             </div>
             <div className="h-1.5 bg-[rgba(8,127,140,0.14)]" />
-            <div className="p-2.5 space-y-1.5">
+            <div className="space-y-1.5 p-2.5">
                 <span className="block h-2.5 w-[70%] rounded-sm bg-[rgba(8,127,140,0.2)]" />
                 <span className="block h-1.5 w-[45%] rounded-sm bg-[rgba(8,127,140,0.1)]" />
                 <span className="block h-1.5 w-[60%] rounded-sm bg-[rgba(8,127,140,0.08)]" />
-                <span className="block mt-2 h-5 w-[44%] rounded-full bg-[rgba(8,127,140,0.22)]" />
+                <span className="mt-2 block h-5 w-[44%] rounded-full bg-[rgba(8,127,140,0.22)]" />
             </div>
         </div>
     );
@@ -39,22 +39,33 @@ function VisualWeb() {
 
 function VisualApps() {
     return (
-        <div className="w-36 h-[6.5rem] rounded-xl border border-[rgba(8,127,140,0.18)] dark:border-[rgba(122,191,191,0.14)] bg-white/80 dark:bg-[rgba(8,27,38,0.8)] overflow-hidden flex">
-            <div className="w-8 shrink-0 bg-[rgba(8,127,140,0.07)] dark:bg-[rgba(8,127,140,0.12)] p-1.5 space-y-1.5 pt-2">
+        <div className="flex h-[6.5rem] w-36 overflow-hidden rounded-xl border border-[rgba(8,127,140,0.18)] bg-white/80 dark:border-[rgba(122,191,191,0.14)] dark:bg-[rgba(8,27,38,0.8)]">
+            <div className="w-8 shrink-0 space-y-1.5 bg-[rgba(8,127,140,0.07)] p-1.5 pt-2 dark:bg-[rgba(8,127,140,0.12)]">
                 <span className="block h-1.5 w-full rounded-sm bg-[rgba(8,127,140,0.35)]" />
                 {[1, 2, 3, 4].map((i) => (
-                    <span key={i} className="block h-1.5 w-[80%] rounded-sm bg-[rgba(8,127,140,0.12)]" />
+                    <span
+                        key={i}
+                        className="block h-1.5 w-[80%] rounded-sm bg-[rgba(8,127,140,0.12)]"
+                    />
                 ))}
             </div>
             <div className="flex-1 p-2">
-                <div className="flex gap-1 mb-2">
+                <div className="mb-2 flex gap-1">
                     {[0.18, 0.12, 0.08].map((op, i) => (
-                        <span key={i} className="flex-1 h-5 rounded-md" style={{ background: `rgba(8,127,140,${op})` }} />
+                        <span
+                            key={i}
+                            className="h-5 flex-1 rounded-md"
+                            style={{ background: `rgba(8,127,140,${op})` }}
+                        />
                     ))}
                 </div>
-                <div className="flex items-end gap-0.5 h-9">
+                <div className="flex h-9 items-end gap-0.5">
                     {[55, 70, 45, 80, 60, 90, 72].map((h, i) => (
-                        <span key={i} className="flex-1 rounded-sm bg-[rgba(8,127,140,0.22)]" style={{ height: `${h}%` }} />
+                        <span
+                            key={i}
+                            className="flex-1 rounded-sm bg-[rgba(8,127,140,0.22)]"
+                            style={{ height: `${h}%` }}
+                        />
                     ))}
                 </div>
             </div>
@@ -64,14 +75,20 @@ function VisualApps() {
 
 function VisualTools() {
     return (
-        <div className="w-36 space-y-1.5 rounded-xl border border-[rgba(8,127,140,0.18)] dark:border-[rgba(122,191,191,0.14)] bg-white/80 dark:bg-[rgba(8,27,38,0.8)] p-2.5">
+        <div className="w-36 space-y-1.5 rounded-xl border border-[rgba(8,127,140,0.18)] bg-white/80 p-2.5 dark:border-[rgba(122,191,191,0.14)] dark:bg-[rgba(8,27,38,0.8)]">
             {[
                 { w: '70%', on: true },
                 { w: '55%', on: false },
                 { w: '82%', on: true },
             ].map(({ w, on }, i) => (
-                <div key={i} className="flex items-center justify-between gap-2 rounded-lg bg-[rgba(8,127,140,0.05)] dark:bg-[rgba(8,127,140,0.1)] px-2 py-1.5">
-                    <span className="h-1.5 rounded-sm bg-[rgba(8,127,140,0.18)]" style={{ width: w }} />
+                <div
+                    key={i}
+                    className="flex items-center justify-between gap-2 rounded-lg bg-[rgba(8,127,140,0.05)] px-2 py-1.5 dark:bg-[rgba(8,127,140,0.1)]"
+                >
+                    <span
+                        className="h-1.5 rounded-sm bg-[rgba(8,127,140,0.18)]"
+                        style={{ width: w }}
+                    />
                     <span
                         className={cn(
                             'inline-flex h-3 w-5.5 shrink-0 items-center rounded-full px-0.5',
@@ -102,16 +119,16 @@ function VisualAI() {
                 <div key={i} className="flex flex-col items-center">
                     <span
                         className={cn(
-                            'inline-flex items-center justify-center w-9 h-9 rounded-full text-[0.6rem] font-extrabold tracking-wide border',
+                            'inline-flex h-9 w-9 items-center justify-center rounded-full border text-[0.6rem] font-extrabold tracking-wide',
                             hl
-                                ? 'bg-[rgba(8,127,140,0.22)] text-[#087f8c] dark:text-[#7abfbf] border-[rgba(8,127,140,0.45)]'
-                                : 'bg-[rgba(8,127,140,0.07)] text-[rgba(8,127,140,0.65)] dark:text-[rgba(122,191,191,0.65)] border-[rgba(8,127,140,0.18)]',
+                                ? 'border-[rgba(8,127,140,0.45)] bg-[rgba(8,127,140,0.22)] text-[#087f8c] dark:text-[#7abfbf]'
+                                : 'border-[rgba(8,127,140,0.18)] bg-[rgba(8,127,140,0.07)] text-[rgba(8,127,140,0.65)] dark:text-[rgba(122,191,191,0.65)]',
                         )}
                     >
                         {label}
                     </span>
                     {i < nodes.length - 1 && (
-                        <span className="block w-px h-2.5 bg-[rgba(8,127,140,0.22)]" />
+                        <span className="block h-2.5 w-px bg-[rgba(8,127,140,0.22)]" />
                     )}
                 </div>
             ))}
@@ -127,15 +144,25 @@ function VisualCRM() {
                     { w: '80%', op: 0.35 },
                     { w: '65%', op: 0.25 },
                 ].map(({ w, op }, i) => (
-                    <div key={i} className="flex-1 rounded-lg p-1.5 border border-[rgba(8,127,140,0.15)] bg-white/60 dark:bg-[rgba(8,27,38,0.7)] space-y-1">
+                    <div
+                        key={i}
+                        className="flex-1 space-y-1 rounded-lg border border-[rgba(8,127,140,0.15)] bg-white/60 p-1.5 dark:bg-[rgba(8,27,38,0.7)]"
+                    >
                         <span className="block h-1 w-[60%] rounded-sm bg-[rgba(8,127,140,0.15)]" />
-                        <span className="block h-2 rounded-sm bg-[rgba(8,127,140,0.35)]" style={{ width: w, opacity: op / 0.35 }} />
+                        <span
+                            className="block h-2 rounded-sm bg-[rgba(8,127,140,0.35)]"
+                            style={{ width: w, opacity: op / 0.35 }}
+                        />
                     </div>
                 ))}
             </div>
-            <div className="flex items-end gap-0.5 h-9 rounded-lg border border-[rgba(8,127,140,0.12)] p-1.5 bg-white/40 dark:bg-[rgba(8,27,38,0.4)]">
+            <div className="flex h-9 items-end gap-0.5 rounded-lg border border-[rgba(8,127,140,0.12)] bg-white/40 p-1.5 dark:bg-[rgba(8,27,38,0.4)]">
                 {[40, 65, 50, 82, 58, 76].map((h, i) => (
-                    <span key={i} className="flex-1 rounded-sm bg-[rgba(8,127,140,0.24)]" style={{ height: `${h}%` }} />
+                    <span
+                        key={i}
+                        className="flex-1 rounded-sm bg-[rgba(8,127,140,0.24)]"
+                        style={{ height: `${h}%` }}
+                    />
                 ))}
             </div>
         </div>
@@ -144,16 +171,18 @@ function VisualCRM() {
 
 function VisualIntegrations() {
     return (
-        <div className="relative w-28 h-28 flex items-center justify-center">
-            <svg className="absolute inset-0 w-full h-full" aria-hidden>
+        <div className="relative flex h-28 w-28 items-center justify-center">
+            <svg className="absolute inset-0 h-full w-full" aria-hidden>
                 {['50% 16%', '84% 50%', '50% 84%', '16% 50%'].map((pos, i) => {
                     const [x2, y2] = pos.split(' ');
 
                     return (
                         <line
                             key={i}
-                            x1="50%" y1="50%"
-                            x2={x2} y2={y2}
+                            x1="50%"
+                            y1="50%"
+                            x2={x2}
+                            y2={y2}
                             stroke="rgba(8,127,140,0.25)"
                             strokeWidth="1"
                             strokeDasharray="3 2"
@@ -161,7 +190,7 @@ function VisualIntegrations() {
                     );
                 })}
             </svg>
-            <span className="relative z-10 inline-flex items-center justify-center w-11 h-11 rounded-full border border-[rgba(8,127,140,0.42)] bg-[rgba(8,127,140,0.14)] text-[0.6rem] font-extrabold text-[#087f8c] dark:text-[#7abfbf]">
+            <span className="relative z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(8,127,140,0.42)] bg-[rgba(8,127,140,0.14)] text-[0.6rem] font-extrabold text-[#087f8c] dark:text-[#7abfbf]">
                 API
             </span>
             {[
@@ -172,10 +201,10 @@ function VisualIntegrations() {
             ].map((s, i) => (
                 <span
                     key={i}
-                    className="absolute inline-flex w-7 h-7 items-center justify-center rounded-lg border border-[rgba(8,127,140,0.22)] bg-white/70 dark:bg-[rgba(8,27,38,0.75)]"
+                    className="absolute inline-flex h-7 w-7 items-center justify-center rounded-lg border border-[rgba(8,127,140,0.22)] bg-white/70 dark:bg-[rgba(8,27,38,0.75)]"
                     style={s as React.CSSProperties}
                 >
-                    <span className="block w-2.5 h-2.5 rounded-sm bg-[rgba(8,127,140,0.2)]" />
+                    <span className="block h-2.5 w-2.5 rounded-sm bg-[rgba(8,127,140,0.2)]" />
                 </span>
             ))}
         </div>
@@ -184,24 +213,24 @@ function VisualIntegrations() {
 
 function VisualMVP() {
     return (
-        <div className="w-16 rounded-2xl border-2 border-[rgba(8,127,140,0.32)] bg-white/80 dark:bg-[rgba(8,27,38,0.85)] overflow-hidden">
-            <div className="flex justify-center items-center h-2.5 bg-[rgba(8,127,140,0.08)]">
-                <span className="w-4 h-1 rounded-full bg-[rgba(8,127,140,0.22)]" />
+        <div className="w-16 overflow-hidden rounded-2xl border-2 border-[rgba(8,127,140,0.32)] bg-white/80 dark:bg-[rgba(8,27,38,0.85)]">
+            <div className="flex h-2.5 items-center justify-center bg-[rgba(8,127,140,0.08)]">
+                <span className="h-1 w-4 rounded-full bg-[rgba(8,127,140,0.22)]" />
             </div>
-            <div className="p-1.5 space-y-1">
+            <div className="space-y-1 p-1.5">
                 <span className="block h-8 w-full rounded-md bg-[rgba(8,127,140,0.16)]" />
                 <span className="block h-1.5 w-[80%] rounded-sm bg-[rgba(8,127,140,0.14)]" />
                 <span className="block h-1.5 w-[58%] rounded-sm bg-[rgba(8,127,140,0.09)]" />
                 <span
-                    className="inline-block rounded-full bg-[rgba(183,243,74,0.28)] text-[#4d7011] font-bold px-1.5 py-0.5"
+                    className="inline-block rounded-full bg-[rgba(183,243,74,0.28)] px-1.5 py-0.5 font-bold text-[#4d7011]"
                     style={{ fontSize: '0.48rem' }}
                 >
                     ✓ Lista
                 </span>
-                <span className="block h-4 w-full rounded-full bg-[rgba(8,127,140,0.2)] mt-1" />
+                <span className="mt-1 block h-4 w-full rounded-full bg-[rgba(8,127,140,0.2)]" />
             </div>
             <div className="flex justify-center py-1.5">
-                <span className="block w-6 h-0.5 rounded-full bg-[rgba(8,127,140,0.2)]" />
+                <span className="block h-0.5 w-6 rounded-full bg-[rgba(8,127,140,0.2)]" />
             </div>
         </div>
     );
@@ -212,7 +241,11 @@ function VisualEvolution() {
         <div className="flex items-end gap-3">
             <div className="flex h-16 items-end gap-1">
                 {[20, 30, 18, 26].map((h, i) => (
-                    <span key={i} className="w-2.5 rounded-t-sm bg-[rgba(8,127,140,0.14)]" style={{ height: h }} />
+                    <span
+                        key={i}
+                        className="w-2.5 rounded-t-sm bg-[rgba(8,127,140,0.14)]"
+                        style={{ height: h }}
+                    />
                 ))}
             </div>
             <ArrowRight
@@ -222,7 +255,11 @@ function VisualEvolution() {
             />
             <div className="flex h-20 items-end gap-1">
                 {[30, 46, 58, 74].map((h, i) => (
-                    <span key={i} className="w-2.5 rounded-t-sm bg-[rgba(8,127,140,0.32)]" style={{ height: h }} />
+                    <span
+                        key={i}
+                        className="w-2.5 rounded-t-sm bg-[rgba(8,127,140,0.32)]"
+                        style={{ height: h }}
+                    />
                 ))}
             </div>
         </div>
@@ -260,25 +297,38 @@ export default function ServicesSection({
         <section id="servicios" className="abaco-section">
             <div className="abaco-section__inner">
                 {/* Heading */}
-                <div ref={ref} className={cn('abaco-reveal', inView && 'is-visible')}>
-                    <p className="abaco-section-eyebrow">{t('home.services.eyebrow')}</p>
+                <div
+                    ref={ref}
+                    className={cn('abaco-reveal', inView && 'is-visible')}
+                >
+                    <p className="abaco-section-eyebrow">
+                        {t('home.services.eyebrow')}
+                    </p>
                     <h2 className="abaco-section-title">
                         {t('home.services.titlePrefix')}
                         <span style={{ color: 'var(--qd-teal)' }}>
                             {t('home.services.titleHighlight')}
                         </span>
                     </h2>
-                    <p className="abaco-section-lead">{t('home.services.lead')}</p>
+                    <p className="abaco-section-lead">
+                        {t('home.services.lead')}
+                    </p>
                 </div>
 
                 {hasServices ? (
                     <>
                         {/* Grid */}
-                        <div className={cn('qd-srv-grid abaco-stagger', inView && 'is-visible')}>
+                        <div
+                            className={cn(
+                                'qd-srv-grid abaco-stagger',
+                                inView && 'is-visible',
+                            )}
+                        >
                             {visibleServices.map((service) => {
                                 const serviceKey =
                                     resolveServiceKey(service.slug) ?? 'web';
-                                const presentation = SERVICE_PRESENTATION[serviceKey];
+                                const presentation =
+                                    SERVICE_PRESENTATION[serviceKey];
                                 const Visual = VISUALS[serviceKey];
                                 const servicePath = `home.services.items.${serviceKey}`;
                                 const chips = CHIP_INDEXES.map((chip) =>
@@ -295,7 +345,9 @@ export default function ServicesSection({
                                     t(`${servicePath}.description`);
                                 const href = service.isDetailEnabled
                                     ? `/servicios/${slug}`
-                                    : contactShow.url({ query: { servicio: slug } });
+                                    : contactShow.url({
+                                          query: { servicio: slug },
+                                      });
                                 const ctaLabel = service.isDetailEnabled
                                     ? t('home.services.cardView')
                                     : t('home.services.cardConsult');
@@ -316,11 +368,17 @@ export default function ServicesSection({
                                                     className="qd-srv-card__image"
                                                 />
                                             ) : (
-                                                <div className="qd-srv-card__fallback" aria-hidden>
+                                                <div
+                                                    className="qd-srv-card__fallback"
+                                                    aria-hidden
+                                                >
                                                     <Visual />
                                                 </div>
                                             )}
-                                            <span className="qd-srv-card__wash" aria-hidden />
+                                            <span
+                                                className="qd-srv-card__wash"
+                                                aria-hidden
+                                            />
 
                                             <div className="qd-srv-card__front">
                                                 <span className="qd-srv-card__kicker">
@@ -331,7 +389,10 @@ export default function ServicesSection({
                                                 </h3>
                                                 <span className="qd-srv-card__front-cta">
                                                     {ctaLabel}
-                                                    <ArrowRight size={15} aria-hidden />
+                                                    <ArrowRight
+                                                        size={15}
+                                                        aria-hidden
+                                                    />
                                                 </span>
                                             </div>
                                         </div>
@@ -342,14 +403,20 @@ export default function ServicesSection({
                                             </p>
                                             <div className="qd-srv-card__chips">
                                                 {chips.map((chip) => (
-                                                    <span key={chip} className="qd-srv-chip">
+                                                    <span
+                                                        key={chip}
+                                                        className="qd-srv-chip"
+                                                    >
                                                         {chip}
                                                     </span>
                                                 ))}
                                             </div>
                                             <span className="qd-srv-card__cta">
                                                 {ctaLabel}
-                                                <ArrowRight size={14} aria-hidden />
+                                                <ArrowRight
+                                                    size={14}
+                                                    aria-hidden
+                                                />
                                             </span>
                                         </div>
                                     </a>
@@ -358,10 +425,19 @@ export default function ServicesSection({
                         </div>
 
                         {/* Bottom CTA */}
-                        <div className={cn('qd-srv-bottom abaco-reveal', inView && 'is-visible')}>
+                        <div
+                            className={cn(
+                                'qd-srv-bottom abaco-reveal',
+                                inView && 'is-visible',
+                            )}
+                        >
                             <div className="qd-srv-bottom__text">
-                                <p className="qd-srv-bottom__q">{t('home.services.ctaQuestion')}</p>
-                                <p className="qd-srv-bottom__p">{t('home.services.ctaSupport')}</p>
+                                <p className="qd-srv-bottom__q">
+                                    {t('home.services.ctaQuestion')}
+                                </p>
+                                <p className="qd-srv-bottom__p">
+                                    {t('home.services.ctaSupport')}
+                                </p>
                             </div>
                             <a href="/servicios" className="qd-srv-bottom__btn">
                                 {t('home.services.ctaBtn')}
@@ -370,7 +446,12 @@ export default function ServicesSection({
                         </div>
                     </>
                 ) : (
-                    <div className={cn('qd-srv-empty abaco-reveal', inView && 'is-visible')}>
+                    <div
+                        className={cn(
+                            'qd-srv-empty abaco-reveal',
+                            inView && 'is-visible',
+                        )}
+                    >
                         <h3 className="qd-srv-empty__title">
                             {t('home.services.empty.title')}
                         </h3>

@@ -407,7 +407,8 @@ export default function ProjectForm({
                 >
                     {services.length === 0 ? (
                         <p className="text-sm text-qd-text-medium dark:text-qd-white/50">
-                            No hay servicios disponibles. Crea servicios primero.
+                            No hay servicios disponibles. Crea servicios
+                            primero.
                         </p>
                     ) : (
                         <div className="flex flex-col gap-2">
@@ -471,7 +472,8 @@ export default function ProjectForm({
                         error={errors.cover_image}
                     />
                     <p className="mt-3 text-xs text-qd-text-medium dark:text-qd-white/40">
-                        La miniatura se genera automáticamente desde esta imagen.
+                        La miniatura se genera automáticamente desde esta
+                        imagen.
                     </p>
                 </FormSection>
 

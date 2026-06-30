@@ -7,8 +7,8 @@ import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import { cn } from '@/lib/utils';
 
-// Texto bilingüe definido localmente para no acoplar este componente a una
-// página de Inertia (importar desde `pages/**` rompe el chunking del manifest).
+// El texto localizado se mantiene en este módulo para evitar dependencias con
+// páginas que alteren el chunking del bundle.
 type LocalizedText = {
     readonly es?: string | null;
     readonly en?: string | null;
@@ -49,10 +49,8 @@ const ABACO_LOGO_LIGHT =
     '/assets/branding/marca/logos/abacoqd-lockup-mono-ink.svg';
 const ABACO_LOGO_DARK =
     '/assets/branding/marca/logos/abacoqd-lockup-mono-white.svg';
-// Isotipo a color (paleta turquesa) para el centro de la noria: se ve igual en
-// claro y oscuro sobre el pivote blanco.
-const ABACO_ISOTIPO_COLOR =
-    '/assets/branding/marca/logos/abacoqd-isotipo.svg';
+// El isotipo a color se usa sobre un pivote blanco en ambos modos.
+const ABACO_ISOTIPO_COLOR = '/assets/branding/marca/logos/abacoqd-isotipo.svg';
 
 const isReadyItem = (item: CollaborationItem): boolean =>
     !!(item.title && (item.detailUrl || item.slug));
@@ -60,12 +58,8 @@ const isReadyItem = (item: CollaborationItem): boolean =>
 const itemHref = (item: CollaborationItem): string =>
     item.detailUrl ?? (item.slug ? `/proyectos/${item.slug}` : '/proyectos');
 
-// ----------------------------------------------------------------------------
-// Noria orbital (desktop). Lógica recuperada de `9e3d695` y adaptada al payload
-// actual de proyectos: cada burbuja es un proyecto/caso con su CLIENTE como
-// protagonista (logo + nombre). El partner no aparece en la noria; acompaña en
-// la lista móvil y en el detalle. Sin datos hardcodeados: todo viene de props.
-// ----------------------------------------------------------------------------
+// Noria orbital de desktop basada en los logos de cliente suministrados por el
+// payload de proyectos.
 
 const FULL_ROTATION_MS = 56_000;
 const ORBIT_RADIUS_PERCENT = 35.5;
@@ -102,8 +96,7 @@ const lerp = (from: number, to: number, progress: number): number =>
 const distanceFromThree = (angle: number): number =>
     Math.min(angle, 360 - angle);
 
-// Arco visible: entra por las 12 (270°), máximo a las 3 (0°), sale por las 6
-// (90°). Entre 7 y 11 (90°–270°) la burbuja sigue girando oculta.
+// Arco visible de la órbita: de las 12 a las 6 pasando por las 3.
 const getClockProgress = (angle: number): number | null => {
     if (angle >= 270) {
         return (angle - 270) / 180;
@@ -218,9 +211,7 @@ const toOrbitItem = (
     item: CollaborationItem,
     locale: Locale,
 ): OrbitItem | null => {
-    // La noria es logo-céntrica: si el cliente no tiene logo, el item no entra
-    // en la órbita (rompería la estética). Sí aparece en la lista móvil con una
-    // marca textual sobria.
+    // La órbita solo monta proyectos con logo de cliente disponible.
     if (!item.clientLogo) {
         return null;
     }
@@ -240,10 +231,7 @@ export default function CollaborationsSection({
     items,
 }: CollaborationsSectionProps) {
     const { t, locale } = useLanguage();
-    const projects = useMemo(
-        () => (items ?? []).filter(isReadyItem),
-        [items],
-    );
+    const projects = useMemo(() => (items ?? []).filter(isReadyItem), [items]);
     const orbitItems = useMemo(
         () =>
             projects
@@ -461,8 +449,8 @@ function DesktopCollaborationsOrbit({
             startTime = 0;
             pausedAt = 0;
 
-            // Solo animamos en desktop (la noria está oculta por CSS por debajo
-            // de `lg`). Con reduced-motion mostramos un fotograma estático.
+            // En móvil o con reducción de movimiento se muestra un estado
+            // estático.
             if (!desktopQuery.matches || isMotionPaused(motionQuery)) {
                 orbit.dataset.motion = 'reduced';
                 applyFrame(0);
@@ -552,8 +540,6 @@ function DesktopCollaborationsOrbit({
                         style={getInitialBubbleStyle(index, itemCount)}
                         tabIndex={initialState.visible ? 0 : -1}
                     >
-                        {/* Logo de cliente a color sobre burbuja blanca: se ve
-                            igual en claro y oscuro (sin variante monocroma). */}
                         <img
                             src={item.logoLight}
                             alt={item.alt}
@@ -583,9 +569,7 @@ function MobileCollaborationsList({
 }) {
     const scrollerRef = useRef<HTMLUListElement>(null);
 
-    // Carrusel automático: avanza una card cada pocos segundos y reinicia al
-    // final. Se pausa al interactuar (touch/hover/teclado) y respeta
-    // reduced-motion. Solo en móvil (la lista está oculta en desktop).
+    // Carrusel automático exclusivo de móvil, pausado durante interacción.
     useEffect(() => {
         const scroller = scrollerRef.current;
 
@@ -692,11 +676,6 @@ function MobileCollaborationCard({
         <article className="qd-collab-card">
             <div className="qd-collab-card__head">
                 {project.clientLogo ? (
-                    // Chip blanco fijo (igual que la noria de desktop): los
-                    // logos de cliente a color/oscuros eran ilegibles sobre el
-                    // fondo de la card en oscuro al no tener nada detrás. Con
-                    // chip blanco siempre se usa la variante clara, sin
-                    // invertir colores ni alternar con `clientLogoDark`.
                     <span className="qd-collab-card__logo">
                         <img
                             src={project.clientLogo}

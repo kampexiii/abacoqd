@@ -1,13 +1,13 @@
 # Vista pública — Blog (índice + post)
 
-Última revisión: 14 de junio de 2026. Documento consolidado (índice + post del blog).
+Última revisión: 28 de junio de 2026. Documento consolidado (índice + post del blog).
 
 ## Identificación
 
 | Campo | Índice | Post |
 |---|---|---|
 | Ruta ES | `/blog` | `/blog/{slug}` |
-| Ruta EN | `/en/blog` | `/en/blog/{slug}` |
+| Ruta EN | futura, no bloqueante | futura, no bloqueante |
 | Prioridad | Base (producto definitivo 30/06) | Base |
 | Componente previsto | `resources/js/pages/Public/BlogIndex.tsx` | `resources/js/pages/Public/BlogPost.tsx` |
 | Entidades | `posts`, `post_categories`, `tags` | `posts`, `post_categories`, `tags`, `seo_metadata` |
@@ -16,7 +16,7 @@ Modelo de datos en `docs/02_MODELO_DATOS.md` (no se redefine aquí). Paleta y co
 
 ## Objetivo
 
-Sostener el SEO editorial del proyecto con contenido técnico bilingüe. El blog es **bilingüe por diseño**: cada post vive en un idioma con slug y SEO propios, y se empareja con su traducción ES↔EN cuando existe (`translation_post_id`). El índice muestra **solo posts del idioma activo**; destacados, categorías y SEO son por idioma.
+Sostener el SEO editorial del proyecto con contenido técnico de AbacoQD. El lanzamiento inicial es **Spanish-first**: el blog puede operar solo en español y una futura versión EN solo se considerará activa si se publica completa, con rutas y SEO propios.
 
 ---
 
@@ -55,7 +55,7 @@ Orden de bandas: `mist (cabecera) → white (destacado + grid) → ink (CTA)`. C
 ## Interacción
 
 - Filtro de categoría reflejado en URL (`/blog?categoria=` o ruta propia; se decide en implementación por SEO).
-- Cambio de idioma global: lleva al índice del otro idioma (`/blog` ↔ `/en/blog`), no a una traducción post a post.
+- Cambio de idioma global: mientras no exista EN real, no se trata como requisito SEO/editorial activo.
 - Tiempo de lectura calculado del contenido real (sin inventar).
 
 ## Componentes usados
@@ -70,12 +70,12 @@ Cards, chips de filtro, paginación numérica, breadcrumb y banda CTA del sistem
 
 ## Entidades relacionadas
 
-`posts`, `post_categories`, `tags`. Autor único v1: marca **Abaco Developments**.
+`posts`, `post_categories`, `tags`. Autor único v1: marca **AbacoQD**.
 
 ## SEO
 
-- Title ES: `Blog de CRM, datos e IA aplicada | Abaco Developments` (equivalente EN por idioma).
-- `hreflang` entre `/blog` y `/en/blog` (índices, no posts).
+- Title ES: `Blog de CRM, datos e IA aplicada | AbacoQD`.
+- Sin `hreflang` EN mientras el lanzamiento siga siendo Spanish-first.
 - JSON-LD: `Blog`/`CollectionPage` + `BreadcrumbList`.
 - Paginación con enlaces normales indexables.
 - Reglas de slug/idioma en `03_SEO_MULTILENGUAJE_LEGAL.md`.
@@ -112,10 +112,10 @@ Lectura técnica cómoda y SEO por artículo, tratando bien texto largo, código
 
 Vista predominantemente clara (blanco) para lectura; código en `qd-ink`; acentos teal. Lime solo en la barra de progreso y el enlace del CTA.
 
-1. **Cabecera de artículo** — fondo `qd-white`; breadcrumb `Inicio / Blog / {categoría}`; chip de categoría; H1; extracto como standfirst gris; meta: fecha (`<time>`), tiempo de lectura calculado, autor (v1 `Abaco Developments`). **Selector de idioma del artículo**: si existe traducción, enlace visible `Read this post in English →` / `Leer en español →`; si no existe, no se muestra.
+1. **Cabecera de artículo** — fondo `qd-white`; breadcrumb `Inicio / Blog / {categoría}`; chip de categoría; H1; extracto como standfirst gris; meta: fecha (`<time>`), tiempo de lectura calculado, autor (v1 `AbacoQD`). Si en una fase posterior existe traducción real, puede mostrarse un enlace al artículo equivalente.
 2. **Imagen de portada** — 16:9 hasta ~1100 px, radio suave; opcional según post.
 3. **Cuerpo del artículo** (núcleo) — columna de lectura máx. ~70ch centrada; cuerpo 17–18 px, line-height 1.7. Render desde contenido estructurado (`content_json`, no HTML libre): H2/H3, párrafos, listas, citas, imágenes con pie, tablas simples y **bloques de código** con resaltado de sintaxis, fondo `qd-ink`, fuente mono y botón copiar. Enlaces en teal oscurecido con subrayado.
-4. **Pie de artículo** — fila de tags (chips suaves, enlazan a listados de tag cuando existan); bloque compartir sobrio (copiar enlace + LinkedIn + X con iconos lucide, sin SDKs de terceros); caja de autor de marca Abaco Developments con una línea y enlace a quiénes somos.
+4. **Pie de artículo** — fila de tags (chips suaves, enlazan a listados de tag cuando existan); bloque compartir sobrio (copiar enlace + LinkedIn + X con iconos lucide, sin SDKs de terceros); caja de autor de marca AbacoQD con una línea y enlace a quiénes somos.
 5. **Posts relacionados** — 3 cards (misma categoría/idioma, más recientes). Vacío → oculto.
 6. **CTA contextual** — banda `qd-mist` ligera: `¿Quieres aplicar esto en tu negocio?` + enlace al contacto/reserva (ver `PUBLIC_06_CONTACTO_RESERVA.md`). Discreto.
 7. **Footer global**.
@@ -152,7 +152,7 @@ Prose de lectura, bloque de código con resaltado, TOC `nav`, chips de tag, boto
 ## Contenido editable
 
 - Título, extracto, portada, cuerpo (`content_json`), categoría, tags y SEO por post e idioma.
-- Caja de autor v1 fija (marca Abaco Developments).
+- Caja de autor v1 fija (marca AbacoQD).
 
 ## Entidades relacionadas
 
@@ -161,7 +161,7 @@ Prose de lectura, bloque de código con resaltado, TOC `nav`, chips de tag, boto
 ## SEO
 
 - Title/description por post e idioma; canonical propio; OG con portada.
-- `hreflang` por par de traducción real (es/en/x-default).
+- Sin `hreflang` EN mientras no exista una versión inglesa real.
 - JSON-LD: `Article` (headline, datePublished, dateModified, image, author Organization) + `BreadcrumbList`.
 - Slugs según `03_SEO_MULTILENGUAJE_LEGAL.md` (independientes por idioma, estables, con redirección si cambian).
 

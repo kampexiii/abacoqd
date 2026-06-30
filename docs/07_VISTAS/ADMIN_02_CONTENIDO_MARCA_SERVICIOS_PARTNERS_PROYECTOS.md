@@ -42,15 +42,15 @@ Valores confirmados para carga inicial:
 - `company.website`: https://abacoqd.com/.
 - `contact.phone`: +34 91 020 00 89.
 - `contact.whatsapp`: +34 647 51 81 00.
-- `contact.email_primary`: info@abacodev.com.
+- `contact.email_primary`: info@abacoqd.com.
 - `contact.email_secondary`: abacodevelopments@gmail.com.
 - `contact.email_andres`: andrescasanueva@abacodev.com.
 - `legal.owner`: ABACO DIGITAL DEVELOPMENTS, S.L.
 - `legal.cif`: B-88229364.
 - `legal.registry`: Registro Mercantil de Madrid, Tomo 38273, Folio 65, Sección GNE, Hoja Nº 681002.
-- `legal.privacy_contact_email`: info@abacodev.com.
+- `legal.privacy_contact_email`: info@abacoqd.com.
 - `seo.canonical_domain`: https://abacoqd.com/.
-- `seo.public_brand_name`: Abaco Developments.
+- `seo.public_brand_name`: AbacoQD.
 - `legacy.previous_domain`: https://abacodev.com/.
 - `legacy.previous_legal_url`: https://www.abacodev.com/.
 - `legacy.redirect_policy`: pendiente de confirmar.
@@ -80,7 +80,7 @@ Campos comunes: idioma, título, subtítulo, cuerpo, CTA, media, icono, orden, v
 
 ## 3. Metodología
 
-CRUD de `methodology_steps` en ES/EN. Permite ordenar pasos, editar descripción, entregable, icono, visibilidad y destacado.
+CRUD de `methodology_steps` previsto solo si vuelve a activarse esa edición en el alcance funcional. El cierre actual no convierte su ausencia en fallo del admin.
 
 El bloque "Estudio inicial" tiene control editorial específico. La palabra `Gratuito` solo se publica si la política comercial está confirmada.
 
@@ -111,7 +111,7 @@ Campos: título, slug, resumen, descripción/cuerpo, partner principal opcional,
 
 Validaciones:
 
-- Proyecto publicado requiere título, slug, resumen, estado, idioma, SEO mínimo y permisos de publicación.
+- Proyecto publicado requiere título, slug, resumen, estado y SEO mínimo.
 - Cover/capturas deben tener alt y no exponer datos sensibles.
 - Si hay partner principal, debe existir y tener rol claro.
 
@@ -119,7 +119,7 @@ Validaciones:
 
 Campos: nombre, slug, tipo, logo claro/oscuro, alt, web, descripción, redes, visible, destacado, mostrar en Proyectos/Colaboraciones (`show_in_projects`), orden, idioma y traducción.
 
-Solo se muestran logos/nombres con permiso. `partners` cubre empresas, marcas, clientes y colaboradores; no hay tabla separada para empresas.
+`partners` cubre empresas, marcas, clientes y colaboradores; no hay tabla separada para empresas. El portfolio actual se considera autorizado salvo indicación expresa en contra.
 
 ### Relación `partner_project`
 
@@ -140,7 +140,7 @@ Gestión de la vista `PUBLIC_10_QUIENES_SOMOS.md`:
 - miembros publicables vía `team_members`;
 - links sociales y CV solo con datos reales;
 - SEO por idioma;
-- bloque de partners/confianza solo con permisos.
+- bloque de partners/confianza según la selección editorial y visibilidad activa.
 - bloque institucional desde `settings.institutional` si se confirma ubicación pública u obligación de visibilidad.
 
 Sin miembros visibles, el admin debe mostrar aviso y la vista pública usa bloque corporativo.

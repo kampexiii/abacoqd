@@ -98,11 +98,17 @@ class UserController extends Controller
             ]);
         }
 
-        $user->update([
+        $attributes = [
             'name' => $request->validated('name'),
             'email' => $request->validated('email'),
             'role' => $newRole,
-        ]);
+        ];
+
+        if ($request->filled('password')) {
+            $attributes['password'] = $request->validated('password');
+        }
+
+        $user->update($attributes);
 
         return to_route('admin.users.index')
             ->with('toast', ['type' => 'success', 'message' => 'Usuario actualizado.']);

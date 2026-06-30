@@ -109,7 +109,10 @@ export default function ErrorShow({ status }: ErrorPageProps) {
                         </div>
                     </div>
 
-                    <p className="qd-error-code" aria-label={`${normalizedStatus}`}>
+                    <p
+                        className="qd-error-code"
+                        aria-label={`${normalizedStatus}`}
+                    >
                         {normalizedStatus}
                     </p>
 
@@ -129,7 +132,9 @@ export default function ErrorShow({ status }: ErrorPageProps) {
                                     href={link.href}
                                     className="qd-error-recovery__link"
                                 >
-                                    <span>{t(`errors.404.links.${link.key}`)}</span>
+                                    <span>
+                                        {t(`errors.404.links.${link.key}`)}
+                                    </span>
                                     <ArrowRight size={15} aria-hidden="true" />
                                 </a>
                             ))}

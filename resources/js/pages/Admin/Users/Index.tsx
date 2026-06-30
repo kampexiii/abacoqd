@@ -194,7 +194,8 @@ export default function UsersIndex({ users, roles, filters }: IndexProps) {
                                                                 }
                                                             }}
                                                         >
-                                                            Resetear contraseña
+                                                            Generar contraseña
+                                                            temporal
                                                         </DropdownMenuItem>
                                                         <DropdownMenuSeparator />
                                                         <DropdownMenuItem

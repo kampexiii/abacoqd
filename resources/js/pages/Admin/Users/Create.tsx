@@ -10,7 +10,11 @@ export default function UsersCreate({ roles }: CreateProps) {
     return (
         <AdminLayout
             title="Nuevo usuario"
-            breadcrumbs={[{ title: 'Dashboard', href: '/admin/dashboard' }, { title: 'Usuarios', href: '/admin/users' }, { title: 'Nuevo' }]}
+            breadcrumbs={[
+                { title: 'Dashboard', href: '/admin/dashboard' },
+                { title: 'Usuarios', href: '/admin/users' },
+                { title: 'Nuevo' },
+            ]}
         >
             <Head title="Nuevo usuario · Admin AbacoQD" />
             <UserForm mode="create" roles={roles} />

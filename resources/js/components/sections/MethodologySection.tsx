@@ -78,7 +78,11 @@ export default function MethodologySection() {
             <div className="mx-auto mt-12 w-full max-w-[1240px] px-4 sm:px-6">
                 <div className="qd-glass flex flex-col gap-4 rounded-2xl border-qd-teal/30 p-6 sm:flex-row sm:items-center sm:gap-6 sm:p-7">
                     <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-qd-teal/30 bg-qd-teal/10 text-qd-teal-2 dark:text-qd-teal">
-                        <PenTool aria-hidden="true" size={22} strokeWidth={1.8} />
+                        <PenTool
+                            aria-hidden="true"
+                            size={22}
+                            strokeWidth={1.8}
+                        />
                     </span>
                     <div>
                         <p className="text-xs font-semibold tracking-[0.16em] text-qd-teal-2 uppercase dark:text-qd-teal">

@@ -1,37 +1,27 @@
 # Assets de empresas
 
-Esta carpeta separa claramente la marca propia del proyecto de los logos de empresas externas.
+Inventario público de logos de empresas externas usados por el sitio.
 
 ## Estructura
 
-- `colaboraciones/originales/`: archivo oficial descargado sin alterar, preferiblemente desde media kit, press kit o web corporativa.
-- `colaboraciones/optimizados/`: versión final para web del mismo logo, preferiblemente SVG y con nombre en `kebab-case`.
-- `clientes-directos/originales/`: originales de empresas para las que Treecore Studio ejecutó el trabajo directamente.
-- `clientes-directos/optimizados/`: versiones optimizadas para hero, landings y carruseles.
+- `colaboraciones/originales/`: archivos fuente conservados para referencia interna de trabajo.
+- `colaboraciones/optimizados/`: variantes listas para uso web.
+- `clientes-directos/originales/`: archivos fuente asociados a clientes directos.
+- `clientes-directos/optimizados/`: variantes listas para uso web.
 
-## Criterio de clasificación
+## Clasificación
 
-- `colaboraciones`: proyectos ejecutados junto a otra empresa, consultora, partner o equipo externo.
-- `clientes-directos`: trabajo contratado y ejecutado directamente por Treecore Studio.
+- `colaboraciones`: marcas asociadas a colaboraciones o proyectos compartidos.
+- `clientes-directos`: marcas asociadas a trabajo contratado directamente.
 
 ## Normas de nombres
 
 - Usar `kebab-case`.
-- No usar espacios, tildes, mayúsculas ni sufijos sucios.
-- Ejemplos válidos: `repsol.svg`, `moeve-dark.svg`, `control-cube.png`.
-- Ejemplos inválidos: `Logo final.png`, `empresa-final-final.svg`, `captura 3.png`.
+- No usar espacios, tildes ni mayúsculas.
+- Mantener una variante por archivo.
 
-## Formatos y tamaños recomendados
+## Formatos
 
-- Priorizar `SVG` siempre que exista versión oficial.
-- Si solo existe `PNG` o `JPG`, conservar el original descargado y exportar una versión `WEBP` ligera para uso web.
-- Mantener una altura visual homogénea en los logos del hero.
-- No deformar proporciones; usar siempre integración con `object-contain`.
-- Si una marca solo publica una variante monocroma para fondo oscuro, documentar en `logos-manifest.json` cualquier variante de contraste generada para la UI.
-
-## Publicación y marca
-
-- No usar hotlinks externos.
-- Documentar la fuente en `logos-manifest.json`.
-- Revisar derechos de uso, licencia y política de marca antes de publicar logos externos.
-- No recolorear logos corporativos salvo que exista una variante monocroma permitida.
+- Priorizar `SVG` cuando exista.
+- Usar `WEBP` para variantes raster optimizadas.
+- Mantener proporciones originales y uso con `object-contain`.

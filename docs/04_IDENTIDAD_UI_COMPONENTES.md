@@ -1,6 +1,6 @@
 # Identidad, UI, componentes y animaciones — AbacoQD
 
-Última revisión: 15 de junio de 2026. Fuente de verdad única de **identidad de marca + paleta + tipografía + tema + componentes reutilizables + UI de accesibilidad y chatbot + animaciones globales**.
+Última revisión: 28 de junio de 2026. Fuente de verdad única de **identidad de marca + paleta + tipografía + tema + componentes reutilizables + UI de accesibilidad y chatbot + animaciones globales**.
 
 Regla de alcance: las animaciones **específicas de una vista** (hero, metodología, servicios, colaboraciones, blog, CTA final, footer) viven en su doc de vista. Aquí solo lo **global**: identidad, tokens, tema, componentes y principios de animación.
 
@@ -8,9 +8,9 @@ Regla de alcance: las animaciones **específicas de una vista** (hero, metodolog
 
 ## 1. Dirección de marca (resumen)
 
-AbacoQD nace de **Ábaco Developments** sin romper con el pasado: conserva señales de precisión, cálculo y confianza, pero evoluciona hacia una marca más rápida, técnica, moderna, dinámica y personalizada.
+AbacoQD es la marca pública final de la web y significa **Ábaco Quick Developments**. Conserva señales de precisión, cálculo y confianza, pero las expresa con una identidad más rápida, técnica, moderna y personalizada.
 
-Decisión de cierre: la **marca pública visible del sitio es Abaco Developments**. La razón social completa se reserva para textos legales. `AbacoQD` queda como nombre interno/documental o propuesta de evolución visual hasta que se ratifique expresamente como marca pública.
+Decisión de cierre: la **marca pública visible del sitio es AbacoQD**. La razón social completa se reserva para textos legales. `Abaco Developments` puede aparecer como contexto empresarial o histórico cuando proceda, pero no sustituye la marca principal.
 
 **Atributos visuales:** rapidez, código, sistemas, flujo de trabajo, IA aplicada, vibe coding supervisado, herramientas internas, precisión, modernidad, accesibilidad, confianza.
 
@@ -29,7 +29,7 @@ Decisión de cierre: la **marca pública visible del sitio es Abaco Developments
 
 ### Logo
 
-Parte del logo anterior de Ábaco Developments, lo simplifica y acelera, refuerza la lectura técnica y añade la idea de rapidez. Variantes previstas en la propuesta: completa `AbacoQD`, extendida `Ábaco Quick Developments` e isotipo (favicon/avatar). No sustituye la marca pública `Abaco Developments` sin validación final.
+Parte del legado visual anterior, lo simplifica y acelera, refuerza la lectura técnica y añade la idea de rapidez. Variantes previstas en la propuesta: completa `AbacoQD`, extendida `Ábaco Quick Developments` e isotipo (favicon/avatar).
 
 **Prediseño del 12 de junio (casi definitivo, pendiente de ratificar el 16/06).** Fuente: `branding/marca/originales/logos/PREDISEÑO.png`.
 
@@ -113,7 +113,7 @@ Inventario observado en los mockups finales (`mockups/abacoqd-web.pen`). Poppins
 
 - Pastilla flotante centrada (~1240 px), `cornerRadius ~20`, borde fino, sombra suave. Fondo blanco (light) / `qd-surface` (dark).
 - La estructura de `FloatingHeader` se conserva protegida: arriba del todo (`scrollY <= 8`) la pastilla visual es transparente para integrarse con el Hero; al hacer scroll (`scrollY > 8`) recupera fondo translúcido, borde, blur y sombra suave.
-- **Izquierda:** logo real de marca pública (`Abaco Developments`); si se ratifica la evolución `AbacoQD`, usar isotipo `A` + wordmark validado. Click → Inicio.
+- **Izquierda:** logo real de marca pública (`AbacoQD`) e isotipo/wordmark validados. Click → Inicio.
 - **Centro:** nav `Metodología / Servicios / Proyectos / Quiénes somos / Blog / Contacto` (~15 px, gris medio; activo en teal).
 - **Derecha:** `ES` + chevron (idioma) y toggle de tema (sol/luna).
 - **Sin CTA de reserva** en la topbar. Comportamiento completo en `07_VISTAS/PUBLIC_09_LAYOUT_GLOBAL.md`.
@@ -121,7 +121,7 @@ Inventario observado en los mockups finales (`mockups/abacoqd-web.pen`). Poppins
 ### Footer
 
 - 4 columnas (Marca con logo / Explorar / Servicios / Contacto), **sin tarjetas**, mucho aire. Títulos de columna semibold; enlaces gris medio con hover teal; contacto con iconos teal.
-- La columna Contacto usa datos confirmados: `info@abacodev.com`, `+34 91 020 00 89`, `Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid` y WhatsApp rápido `+34 647 51 81 00` si se decide mostrarlo.
+- La columna Contacto usa datos confirmados: `info@abacoqd.com`, `+34 91 020 00 89`, `Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid` y WhatsApp rápido `+34 647 51 81 00` si se decide mostrarlo.
 - Puede incluir una franja institucional discreta para `be now Partner`, `Cofinanciado por la Unión Europea`, `Fondos Europeos` y el texto FSE+ si la obligación de visibilidad lo exige. No se tratan como clientes, proyectos ni decoración de landing; su ubicación final queda pendiente de confirmación.
 - Barra legal inferior con hairline. Decoración: glow teal tenue + nodos.
 
@@ -153,7 +153,7 @@ Inventario observado en los mockups finales (`mockups/abacoqd-web.pen`). Poppins
 - **Card de blog principal**: ~800×360, estado destacado (borde teal luminoso, sombra honda + glow). Izquierda texto (chip, título, extracto, `X min de lectura`, botón `Leer artículo`); derecha visual (editor de código + flujo IA + caja cerebro). Dots de carrusel + línea de progreso de lectura.
 - **Card de blog secundaria**: ~510×170, chip + título (2 líneas) + `X min de lectura` + `Leer artículo →` + mini visual.
 - **Bloque "Estudio inicial gratuito"** (metodología): banda horizontal `01 · Análisis → [icono pen-tool + ESTUDIO INICIAL + chip Gratuito + mensaje + apoyo] → 02 · Propuesta`. Card elevada con borde teal/cian y glow.
-- **CTA final aprobado**: bloque centrado con logo AbacoQD/Abaco Developments según marca validada, eyebrow `EMPECEMOS`, titular `El 40% del tiempo de un desarrollador se pierde manteniendo código.`, apoyo, badges `Desarrollo a medida` y `Respuesta estratégica < 24h`, mockup tipo editor/código con sidebar, archivo `app.js`, panel `Vista previa`, estado `Sistema optimizado`, CTA principal lime `Empieza a ahorrar tiempo` y secundario `Ver cómo trabajamos`. El diseño claro/oscuro, el mockup, el titular y la intención de menos mantenimiento y más tiempo para crecer están aprobados.
+- **CTA final aprobado**: bloque centrado con logo AbacoQD, eyebrow `EMPECEMOS`, titular `El 40% del tiempo de un desarrollador se pierde manteniendo código.`, apoyo, badges `Desarrollo a medida` y `Respuesta estratégica < 24h`, mockup tipo editor/código con sidebar, archivo `app.js`, panel `Vista previa`, estado `Sistema optimizado`, CTA principal lime `Empieza a ahorrar tiempo` y secundario `Ver cómo trabajamos`. El diseño claro/oscuro, el mockup, el titular y la intención de menos mantenimiento y más tiempo para crecer están aprobados.
 
 ### Noria orbital / cards de Colaboraciones
 
@@ -219,7 +219,7 @@ Botón flotante **fijo en la esquina inferior derecha** (burbuja con icono de ch
 - **Burbuja/launcher:** círculo `qd-surface`/`qd-teal` con icono; badge opcional. Glow teal sutil.
 - **Panel de conversación:** se despliega desde la burbuja; cabecera (avatar/logo + título + cerrar), área de mensajes (burbujas del asistente a la izquierda, del usuario a la derecha en teal sobre el que el texto va en `qd-ink`), input inferior con botón enviar.
 - **Sugerencias rápidas (chips):** preguntas frecuentes alimentadas por `faqs` (`¿Qué servicios ofrecéis?`, `¿Cuánto tarda un proyecto?`, etc.).
-- **Enlaces de acción:** accesos directos a **Contacto**, email principal `info@abacodev.com` y WhatsApp directo `+34 647 51 81 00` dentro del panel. No exponer emails secundarios salvo decisión explícita.
+- **Enlaces de acción:** accesos directos a **Contacto**, email principal `info@abacoqd.com` y WhatsApp directo `+34 647 51 81 00` dentro del panel. No exponer emails secundarios salvo decisión explícita.
 
 **UI/comportamiento:** mismos tokens/tema; accesible por teclado y lector de pantalla (`aria-live` en mensajes nuevos, `Esc` cierra). Respeta reduced-motion (sin animación de burbujas más allá del fade). No solapa el widget de accesibilidad (lados opuestos). En móvil, el panel puede ocupar casi pantalla completa.
 

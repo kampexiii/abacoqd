@@ -1,6 +1,6 @@
 # PUBLIC_07 — Legal, cookies y privacidad
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 28 de junio de 2026.
 
 Fuente de verdad de la maquetación y funcionamiento de las páginas legales públicas: Aviso legal, Política de privacidad, Política de cookies y banner/gestión de consentimiento si aplica. El contenido jurídico y las reglas RGPD/LSSI viven en `03_SEO_MULTILENGUAJE_LEGAL.md`.
 
@@ -8,9 +8,9 @@ Fuente de verdad de la maquetación y funcionamiento de las páginas legales pú
 
 | Página | Ruta ES | Ruta EN | Prioridad |
 |---|---|---|---|
-| Aviso legal | `/aviso-legal` | `/en/legal-notice` | P0 |
-| Política de privacidad | `/privacidad` | `/en/privacy` | P0 |
-| Política de cookies | `/cookies` | `/en/cookies` | P0 |
+| Aviso legal | `/aviso-legal` | futura, no bloqueante | P0 |
+| Política de privacidad | `/privacidad` | futura, no bloqueante | P0 |
+| Política de cookies | `/cookies` | futura, no bloqueante | P0 |
 | Banner/gestión cookies | global, condicional | global, condicional | P0 si hay cookies no técnicas |
 
 | Campo | Valor |
@@ -21,7 +21,7 @@ Fuente de verdad de la maquetación y funcionamiento de las páginas legales pú
 
 ## Objetivo
 
-Ofrecer páginas legales claras, localizadas ES/EN y accesibles, sin convertirlas en una pieza comercial. El usuario debe poder consultar titularidad, privacidad, cookies y consentimiento desde footer y desde cualquier flujo que recoja datos.
+Ofrecer páginas legales claras, accesibles y orientadas al lanzamiento inicial en español, sin convertirlas en una pieza comercial. El usuario debe poder consultar titularidad, privacidad, cookies y consentimiento desde footer y desde cualquier flujo que recoja datos.
 
 ## Estructura común de las tres páginas
 
@@ -48,7 +48,7 @@ La versión final debe revisarse contra RGPD, LOPDGDD 3/2018, LSSI-CE y criterio
 - CIF: B-88229364.
 - Domicilio: Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid, España.
 - Registro Mercantil: Registro Mercantil de Madrid, Tomo 38273, Folio 65, Sección GNE, Hoja Nº 681002.
-- Email: info@abacodev.com.
+- Email: info@abacoqd.com.
 - Web canónica final: https://abacoqd.com/.
 - URL legal histórica aportada: https://www.abacodev.com/.
 - Dominio histórico/investigado: https://abacodev.com/.
@@ -58,13 +58,13 @@ La versión final debe revisarse contra RGPD, LOPDGDD 3/2018, LSSI-CE y criterio
 
 El aviso legal antiguo menciona `https://www.abacodev.com/`; el aviso legal final debe adaptarse al dominio `https://abacoqd.com/`. Queda pendiente confirmar si `abacodev.com` redirigirá, convivirá temporalmente o quedará como dominio anterior.
 
-**SEO.** Indexable, baja prioridad en sitemap, title simple por idioma, `hreflang` ES/EN.
+**SEO.** Indexable, baja prioridad en sitemap, title simple en español. Una versión EN solo se publica si existe traducción jurídica completa.
 
 ## Política de privacidad
 
 **Objetivo.** Explicar qué datos se recogen y con qué base legal: contacto, reserva, suscripción al blog y posibles comunicaciones.
 
-**Datos confirmados.** Responsable: ABACO DIGITAL DEVELOPMENTS, S.L.; email de privacidad: info@abacodev.com; dirección postal: Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid.
+**Datos confirmados.** Responsable: ABACO DIGITAL DEVELOPMENTS, S.L.; email de privacidad: info@abacoqd.com; dirección postal: Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid.
 
 **Contenido editable.** Responsable, finalidades, base jurídica, plazos de conservación, encargados/proveedores, derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad, canal de ejercicio y reclamación ante AEPD.
 
@@ -80,7 +80,7 @@ El aviso legal antiguo menciona `https://www.abacodev.com/`; el aviso legal fina
 
 **Contenido editable.** Tabla de cookies con nombre, proveedor, finalidad, duración y tipo. Mientras solo existan cookies técnicas de sesión/tema/idioma/accesibilidad, la página lo declara de forma simple. Si se activa analítica, la tabla debe separar cookies técnicas/necesarias y cookies analíticas, y las analíticas quedan bloqueadas hasta consentimiento.
 
-**SEO.** Indexable, baja prioridad; `hreflang` ES/EN.
+**SEO.** Indexable, baja prioridad en español.
 
 ## Banner y gestión de cookies
 
@@ -123,7 +123,7 @@ Sin animaciones decorativas. Solo fade inicial opcional y transición de apertur
 
 ## Contenido editable
 
-H1, fecha de actualización, cuerpo legal de cada página, datos del titular, tabla de cookies, categorías de consentimiento y textos del banner/panel. Todo en ES/EN y sin placeholders públicos. Los datos legales confirmados se cargan desde `settings.legal` y `settings.company`.
+H1, fecha de actualización, cuerpo legal de cada página, datos del titular, tabla de cookies, categorías de consentimiento y textos del banner/panel. Todo sin placeholders públicos. Los datos legales confirmados se cargan desde `settings.legal` y `settings.company`.
 
 ## Entidades relacionadas
 
@@ -131,14 +131,14 @@ H1, fecha de actualización, cuerpo legal de cada página, datos del titular, ta
 
 ## SEO y multilenguaje
 
-Aviso legal, privacidad y cookies tienen title/description simples por idioma, canonical propio, `hreflang` cuando exista par ES/EN y prioridad baja en sitemap. Sin datos estructurados especiales.
+Aviso legal, privacidad y cookies tienen title/description simples, canonical propio y prioridad baja en sitemap. Sin datos estructurados especiales. Si en el futuro se publica EN real, se añadirá su `hreflang` correspondiente.
 
 ## Estados vacíos
 
 - Texto legal sin revisión jurídica final: la página no se publica como definitiva; puede quedar como borrador interno.
 - Teléfono legal visible principal sin decidir: mostrar solo contacto general si se aprueba o bloquear el aviso legal final hasta decidir.
 - Sin cookies no técnicas: sin banner, pero `/cookies` existe y explica las técnicas.
-- Sin traducción aprobada: no se emite `hreflang` para esa página hasta tener par real.
+- Sin traducción jurídica completa: no se publica EN ni se emite `hreflang`.
 
 ## Accesibilidad
 

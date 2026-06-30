@@ -57,7 +57,10 @@ function ToggleRow({
             className="flex w-full items-center justify-between gap-3 rounded-xl border border-qd-ink/10 bg-qd-white px-3.5 py-3 text-left text-sm font-medium text-qd-ink transition-colors hover:border-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:border-white/10 dark:bg-qd-surface dark:text-qd-white dark:focus-visible:outline-qd-lime"
         >
             <span className="flex items-center gap-2.5">
-                <span className="text-qd-teal-2 dark:text-qd-teal" aria-hidden="true">
+                <span
+                    className="text-qd-teal-2 dark:text-qd-teal"
+                    aria-hidden="true"
+                >
                     {icon}
                 </span>
                 {label}
@@ -102,7 +105,11 @@ export default function AccessibilityFab() {
             >
                 <SheetHeader className="px-5 pt-6 pb-2">
                     <SheetTitle className="flex items-center gap-2 text-qd-ink dark:text-qd-white">
-                        <Accessibility aria-hidden="true" size={20} className="text-qd-teal-2 dark:text-qd-teal" />
+                        <Accessibility
+                            aria-hidden="true"
+                            size={20}
+                            className="text-qd-teal-2 dark:text-qd-teal"
+                        />
                         {t('a11y.title')}
                     </SheetTitle>
                     <SheetDescription className="text-qd-text-high">
@@ -114,10 +121,18 @@ export default function AccessibilityFab() {
                     {/* Tamaño de texto */}
                     <div className="rounded-xl border border-qd-ink/10 bg-qd-white p-3.5 dark:border-white/10 dark:bg-qd-surface">
                         <p className="mb-2.5 flex items-center gap-2.5 text-sm font-medium text-qd-ink dark:text-qd-white">
-                            <Type aria-hidden="true" size={18} className="text-qd-teal-2 dark:text-qd-teal" />
+                            <Type
+                                aria-hidden="true"
+                                size={18}
+                                className="text-qd-teal-2 dark:text-qd-teal"
+                            />
                             {t('a11y.textSize.label')}
                         </p>
-                        <div className="grid grid-cols-3 gap-2" role="group" aria-label={t('a11y.textSize.label')}>
+                        <div
+                            className="grid grid-cols-3 gap-2"
+                            role="group"
+                            aria-label={t('a11y.textSize.label')}
+                        >
                             {TEXT_SIZES.map((size) => (
                                 <button
                                     key={size}

@@ -28,7 +28,12 @@ function startOfMonth(date: Date): Date {
     return new Date(date.getFullYear(), date.getMonth(), 1);
 }
 
-export default function BookingCalendarPicker({ days, selectedDate, onSelect, locale }: Props) {
+export default function BookingCalendarPicker({
+    days,
+    selectedDate,
+    onSelect,
+    locale,
+}: Props) {
     const intlLocale = locale === 'es' ? 'es-ES' : 'en-GB';
 
     const availability = useMemo(() => {
@@ -41,7 +46,9 @@ export default function BookingCalendarPicker({ days, selectedDate, onSelect, lo
     const initialMonth = useMemo(() => {
         const base = selectedDate ?? days[0]?.date ?? null;
 
-        return base ? startOfMonth(new Date(`${base}T00:00:00`)) : startOfMonth(new Date());
+        return base
+            ? startOfMonth(new Date(`${base}T00:00:00`))
+            : startOfMonth(new Date());
     }, [days, selectedDate]);
 
     const [viewMonth, setViewMonth] = useState<Date>(initialMonth);
@@ -54,7 +61,9 @@ export default function BookingCalendarPicker({ days, selectedDate, onSelect, lo
             const d = new Date(ref);
             d.setDate(ref.getDate() + i);
 
-            return new Intl.DateTimeFormat(intlLocale, { weekday: 'short' }).format(d);
+            return new Intl.DateTimeFormat(intlLocale, {
+                weekday: 'short',
+            }).format(d);
         });
     }, [intlLocale]);
 
@@ -82,10 +91,15 @@ export default function BookingCalendarPicker({ days, selectedDate, onSelect, lo
         });
     }, [viewMonth, availability]);
 
-    const monthLabel = new Intl.DateTimeFormat(intlLocale, { month: 'long', year: 'numeric' }).format(viewMonth);
+    const monthLabel = new Intl.DateTimeFormat(intlLocale, {
+        month: 'long',
+        year: 'numeric',
+    }).format(viewMonth);
 
     const goMonth = (delta: number) => {
-        setViewMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() + delta, 1));
+        setViewMonth(
+            (prev) => new Date(prev.getFullYear(), prev.getMonth() + delta, 1),
+        );
     };
 
     return (
@@ -99,7 +113,9 @@ export default function BookingCalendarPicker({ days, selectedDate, onSelect, lo
                 >
                     <ChevronLeft aria-hidden="true" size={16} />
                 </button>
-                <span className="text-sm font-semibold text-qd-ink capitalize dark:text-qd-white">{monthLabel}</span>
+                <span className="text-sm font-semibold text-qd-ink capitalize dark:text-qd-white">
+                    {monthLabel}
+                </span>
                 <button
                     type="button"
                     onClick={() => goMonth(1)}
@@ -112,7 +128,10 @@ export default function BookingCalendarPicker({ days, selectedDate, onSelect, lo
 
             <div className="grid grid-cols-7 gap-1 text-center">
                 {weekdayLabels.map((label) => (
-                    <div key={label} className="py-1 text-[11px] font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/40">
+                    <div
+                        key={label}
+                        className="py-1 text-[11px] font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/40"
+                    >
                         {label}
                     </div>
                 ))}
@@ -126,21 +145,34 @@ export default function BookingCalendarPicker({ days, selectedDate, onSelect, lo
                             key={cell.ymd}
                             type="button"
                             disabled={!available}
-                            onClick={() => available && cell.dayId !== null && onSelect(cell.ymd, cell.dayId)}
+                            onClick={() =>
+                                available &&
+                                cell.dayId !== null &&
+                                onSelect(cell.ymd, cell.dayId)
+                            }
                             aria-pressed={selected}
                             aria-label={cell.ymd}
                             className={cn(
                                 'relative flex aspect-square items-center justify-center rounded-lg text-sm transition',
                                 !cell.inMonth && 'opacity-40',
-                                selected && 'bg-qd-teal-2 font-bold text-white dark:bg-qd-teal dark:text-qd-ink',
-                                !selected && available && 'bg-emerald-100 font-semibold text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:hover:bg-emerald-500/25',
-                                !available && 'cursor-default text-qd-text-medium dark:text-qd-white/30',
-                                cell.isToday && !selected && 'ring-1 ring-qd-teal-2/50 dark:ring-qd-teal/40',
+                                selected &&
+                                    'bg-qd-teal-2 font-bold text-white dark:bg-qd-teal dark:text-qd-ink',
+                                !selected &&
+                                    available &&
+                                    'bg-emerald-100 font-semibold text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:hover:bg-emerald-500/25',
+                                !available &&
+                                    'cursor-default text-qd-text-medium dark:text-qd-white/30',
+                                cell.isToday &&
+                                    !selected &&
+                                    'ring-1 ring-qd-teal-2/50 dark:ring-qd-teal/40',
                             )}
                         >
                             {cell.day}
                             {available && !selected && (
-                                <span className="absolute bottom-1 size-1 rounded-full bg-emerald-500 dark:bg-emerald-400" aria-hidden="true" />
+                                <span
+                                    className="absolute bottom-1 size-1 rounded-full bg-emerald-500 dark:bg-emerald-400"
+                                    aria-hidden="true"
+                                />
                             )}
                         </button>
                     );
@@ -148,7 +180,10 @@ export default function BookingCalendarPicker({ days, selectedDate, onSelect, lo
             </div>
 
             <p className="mt-3 flex items-center gap-1.5 text-xs text-qd-text-medium dark:text-qd-white/40">
-                <span className="inline-block size-2.5 rounded-full bg-emerald-400" aria-hidden="true" />
+                <span
+                    className="inline-block size-2.5 rounded-full bg-emerald-400"
+                    aria-hidden="true"
+                />
                 Días con citas disponibles
             </p>
         </div>

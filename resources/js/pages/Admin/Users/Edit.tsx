@@ -14,7 +14,11 @@ export default function UsersEdit({ user, roles, isSelf }: EditProps) {
     return (
         <AdminLayout
             title="Editar usuario"
-            breadcrumbs={[{ title: 'Dashboard', href: '/admin/dashboard' }, { title: 'Usuarios', href: '/admin/users' }, { title: 'Editar' }]}
+            breadcrumbs={[
+                { title: 'Dashboard', href: '/admin/dashboard' },
+                { title: 'Usuarios', href: '/admin/users' },
+                { title: 'Editar' },
+            ]}
         >
             <Head title="Editar usuario · Admin AbacoQD" />
             <UserForm mode="edit" user={user} roles={roles} isSelf={isSelf} />

@@ -19,7 +19,9 @@ export default function AdminEmptyState({
             <span className="flex size-14 items-center justify-center rounded-2xl bg-qd-teal-2/10 text-qd-teal-2 dark:bg-qd-teal/10 dark:text-qd-teal">
                 <Icon aria-hidden="true" size={26} strokeWidth={1.7} />
             </span>
-            <h3 className="mt-5 text-lg font-bold text-qd-ink dark:text-qd-white">{title}</h3>
+            <h3 className="mt-5 text-lg font-bold text-qd-ink dark:text-qd-white">
+                {title}
+            </h3>
             {description && (
                 <p className="mt-1.5 max-w-sm text-sm text-qd-text-medium dark:text-qd-white/50">
                     {description}

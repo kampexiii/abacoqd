@@ -2209,5 +2209,35 @@
         "restricted": "Restricted access for authorized users only.",
         "switchLanguage": "Switch interface language",
         "rights": "All rights reserved."
+    },
+    "adminPasswordRecovery": {
+        "metaTitle": "Recover access · AbacoQD",
+        "eyebrow": "RECOVER ACCESS",
+        "panelTitle": "Recover panel access",
+        "panelSubtitle": "We will send a secure link to the email assigned to your user so you can define a new password.",
+        "title": "Forgot your password?",
+        "subtitle": "Enter the email assigned to your AbacoQD user.",
+        "email": "Email",
+        "emailPlaceholder": "user@abacoqd.com",
+        "submit": "Send recovery link",
+        "status": "If an account exists for that email, we have sent a link to reset the password.",
+        "backToLogin": "Back to sign in",
+        "backToSite": "Back to website"
+    },
+    "adminPasswordReset": {
+        "metaTitle": "New password · AbacoQD",
+        "eyebrow": "NEW PASSWORD",
+        "panelTitle": "Set a new password",
+        "panelSubtitle": "The link is personal and temporary. Once you save the new password you can sign back into the panel.",
+        "title": "Reset your password",
+        "subtitle": "Create a new password for your AbacoQD account.",
+        "email": "Email",
+        "password": "New password",
+        "passwordPlaceholder": "New password",
+        "passwordConfirmation": "Confirm password",
+        "passwordConfirmationPlaceholder": "Repeat the new password",
+        "submit": "Save new password",
+        "backToLogin": "Back to sign in",
+        "backToSite": "Back to website"
     }
 }

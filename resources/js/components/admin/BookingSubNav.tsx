@@ -9,7 +9,11 @@ const ITEMS = [
     { href: '/admin/booking/settings', label: 'Configuración' },
 ] as const;
 
-export default function BookingSubNav({ currentUrl }: { readonly currentUrl: string }) {
+export default function BookingSubNav({
+    currentUrl,
+}: {
+    readonly currentUrl: string;
+}) {
     return (
         <div className="mb-6 flex flex-wrap gap-2 border-b border-qd-mist pb-4 dark:border-qd-white/10">
             {ITEMS.map((item) => {

@@ -1,6 +1,6 @@
 # PUBLIC_08 — Errores
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 28 de junio de 2026.
 
 Fuente de verdad de las vistas de error públicas: 404, 500 y mantenimiento/503. Son páginas ligeras, autocontenidas y con marca, sin depender de contenido dinámico.
 
@@ -16,7 +16,7 @@ Fuente de verdad de las vistas de error públicas: 404, 500 y mantenimiento/503.
 |---|---|
 | Entidades | ninguna |
 | SEO | `noindex`, fuera de sitemap |
-| Idiomas | ES/EN según idioma de la ruta o fallback |
+| Idiomas | ES actual; EN solo si en una fase posterior existe versión real del sitio |
 
 ## Objetivo
 
@@ -82,11 +82,11 @@ Layout de error, botón primario lime, botón ghost, isotipo AbacoQD (elemento d
 
 ## Contenido editable
 
-Copy ES/EN cerrado con el resto de textos. No depende de `settings` para no fallar en cascada.
+Copy de lanzamiento en español cerrado con el resto de textos. No depende de `settings` para no fallar en cascada.
 
 ## SEO y multilenguaje
 
-Todas las páginas de error son `noindex` y quedan fuera del sitemap. El idioma se elige por ruta activa o fallback del sitio; el copy existe en ES/EN.
+Todas las páginas de error son `noindex` y quedan fuera del sitemap. El lanzamiento inicial trabaja en español; si en el futuro existe EN real, el copy podrá desdoblarse por ruta.
 
 ## Estados vacíos
 

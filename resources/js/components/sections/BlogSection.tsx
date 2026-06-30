@@ -19,9 +19,7 @@ import { cn } from '@/lib/utils';
 
 function CoverVisual({ src }: { readonly src: string | null }) {
     if (src) {
-        return (
-            <img src={src} alt="" className="h-full w-full object-cover" />
-        );
+        return <img src={src} alt="" className="h-full w-full object-cover" />;
     }
 
     return (
@@ -29,11 +27,7 @@ function CoverVisual({ src }: { readonly src: string | null }) {
             aria-hidden="true"
             className="qd-blog-code-visual items-center justify-center"
         >
-            <FileText
-                size={28}
-                strokeWidth={1.5}
-                className="text-white/15"
-            />
+            <FileText size={28} strokeWidth={1.5} className="text-white/15" />
         </div>
     );
 }
@@ -144,7 +138,10 @@ export default function BlogSection({
                         </article>
 
                         {latestPosts.map((post) => (
-                            <article key={post.id} className="qd-blog-secondary">
+                            <article
+                                key={post.id}
+                                className="qd-blog-secondary"
+                            >
                                 <div className="qd-blog-card__visual">
                                     <CoverVisual src={post.coverImage} />
                                 </div>

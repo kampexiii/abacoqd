@@ -151,7 +151,10 @@ export default function ChatbotFab() {
                                         className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-qd-teal-2 transition-colors hover:text-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:text-qd-teal dark:focus-visible:outline-qd-lime"
                                     >
                                         {t('chatbot.moreInfo')}
-                                        <ArrowRight aria-hidden="true" size={14} />
+                                        <ArrowRight
+                                            aria-hidden="true"
+                                            size={14}
+                                        />
                                     </a>
                                 ) : null}
                             </div>
@@ -203,23 +206,37 @@ export default function ChatbotFab() {
                                 href="/contacto"
                                 className="inline-flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm text-qd-text-high transition-colors hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime"
                             >
-                                <MessageCircle aria-hidden="true" size={16} className="text-qd-teal" />
+                                <MessageCircle
+                                    aria-hidden="true"
+                                    size={16}
+                                    className="text-qd-teal"
+                                />
                                 {t('chatbot.goToContact')}
                             </a>
                             <a
                                 href={`mailto:${contact.email ?? ''}`}
                                 className="inline-flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm text-qd-text-high transition-colors hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime"
                             >
-                                <Mail aria-hidden="true" size={16} className="text-qd-teal" />
+                                <Mail
+                                    aria-hidden="true"
+                                    size={16}
+                                    className="text-qd-teal"
+                                />
                                 {contact.email}
                             </a>
                             <a
-                                href={whatsappHref(contact.whatsapp) ?? undefined}
+                                href={
+                                    whatsappHref(contact.whatsapp) ?? undefined
+                                }
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center gap-2.5 rounded-lg px-2 py-2 text-sm text-qd-text-high transition-colors hover:text-qd-teal-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-teal-2 dark:hover:text-qd-teal dark:focus-visible:outline-qd-lime"
                             >
-                                <Phone aria-hidden="true" size={16} className="text-qd-teal" />
+                                <Phone
+                                    aria-hidden="true"
+                                    size={16}
+                                    className="text-qd-teal"
+                                />
                                 {t('chatbot.whatsapp')} {contact.whatsapp}
                             </a>
                         </div>

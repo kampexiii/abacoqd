@@ -1,13 +1,13 @@
 # Vista pública — Contacto y Reserva
 
-Última revisión: 18 de junio de 2026. Documento consolidado (contacto + reserva). **Fase 3 (contacto + reserva) cerrada e implementada.**
+Última revisión: 28 de junio de 2026. Documento consolidado (contacto + reserva). **Fase 3 (contacto + reserva) cerrada e implementada.**
 
 ## Identificación
 
 | Campo | Contacto | Reserva |
 |---|---|---|
 | Ruta ES | `/contacto` | `/reserva` |
-| Ruta EN | pendiente (sin enrutado por idioma todavía, ver nota) | pendiente (idem) |
+| Ruta EN | futura, no bloqueante | futura, no bloqueante |
 | Prioridad | Base (producto definitivo 30/06) | Base |
 | Componente | `resources/js/pages/Public/Contact.tsx` | `resources/js/pages/Public/Booking.tsx` |
 | Controlador | `App\Http\Controllers\Public\ContactController` | `App\Http\Controllers\Public\BookingController` |
@@ -17,18 +17,34 @@ Modelo de datos en `docs/02_MODELO_DATOS.md` (no se redefine). Paleta y componen
 
 > **Decisión cerrada 18/06/2026**: la reserva usa un **sistema propio de citas** (`appointment_days`/`appointment_slots`/`appointment_bookings`), no un proveedor externo (Cal.com/Calendly/Amelia) ni un embed de terceros. `booking_settings` queda transicional sin uso real. **No hay ítem `Reserva`/`Reservar` en la topbar** (ver `PUBLIC_09_LAYOUT_GLOBAL.md`): los CTA de reserva viven en hero, CTA final y bloques contextuales.
 >
-> **Nota de enrutado**: el sitio todavía no tiene rutas localizadas por idioma (tampoco `/` las tiene); el idioma es un toggle cliente (`useLanguage`/`lang/*.json`) sobre una única URL. Las rutas `/en/contact` y `/en/book` documentadas son el objetivo de la Fase 6 (SEO/multilenguaje) y no existen aún; no se documentan como implementadas.
+> **Nota de enrutado**: el sitio se lanza en modo **Spanish-first**. El idioma actual puede resolverse a nivel de UI, pero `/en/contact` y `/en/book` no forman parte del alcance vigente. Si en una fase posterior se publica EN real, deberá hacerse con rutas propias y SEO completo.
 
 ## Datos de contacto confirmados
 
 - Teléfono fijo disponible: +34 91 020 00 89.
-- WhatsApp / contacto directo Andrés: +34 647 51 81 00.
-- Email principal: info@abacodev.com.
+- WhatsApp de atención comercial: +34 647 51 81 00.
+- Email principal: info@abacoqd.com.
 - Email secundario/general: abacodevelopments@gmail.com.
-- Email contacto Andrés: andrescasanueva@abacodev.com.
+- Email de contacto comercial adicional: andrescasanueva@abacodev.com.
 - Dirección: Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid, España.
 
-El WhatsApp de Andrés es canal comercial/directo y no dato legal. El email principal es el contacto público preferente. El teléfono principal único queda pendiente de confirmación: no se debe presentar el fijo y el móvil como equivalentes si la empresa decide priorizar solo uno.
+El WhatsApp de atención comercial no se trata como dato legal. El email principal es el contacto público preferente. El teléfono principal único queda por definir: no se debe presentar el fijo y el móvil como equivalentes si la empresa decide priorizar solo uno.
+
+## Avisos por correo
+
+El correo receptor definitivo para avisos de contacto y reserva es `info@abacoqd.com`.
+
+Pendientes técnicos reales para dejar operativo el envío:
+
+- `SMTP host`
+- `SMTP port`
+- `SMTP username`
+- `SMTP password` o app password
+- `SMTP encryption`
+- `From address`
+- `From name`
+- `Reply-To` si aplica
+- revisión SPF/DKIM/DMARC en producción
 
 ---
 
@@ -44,7 +60,7 @@ Bandas: `mist (cabecera) → white (formulario) → ink (footer)`. Inputs con bo
 
 1. **Cabecera compacta** — fondo `qd-mist`; H1 `Cuéntanos tu proyecto`; subcopy de una línea (`Escríbenos y te respondemos lo antes posible.`).
 2. **Layout principal** — 2 columnas (desktop) / apilado (mobile):
-   - **Izquierda (40%) — contexto:** qué pasa al escribir (lo leemos, lo valoramos, te contestamos con un primer enfoque); bloque alternativo de reserva (`¿Prefieres hablar directamente?` + botón lime `Reserva hora →`); datos confirmados: email principal, teléfono fijo, WhatsApp directo de Andrés y dirección completa; microconfianza (respuesta humana, sin spam, datos tratados según privacidad con enlace).
+   - **Izquierda (40%) — contexto:** qué pasa al escribir (lo leemos, lo valoramos, te contestamos con un primer enfoque); bloque alternativo de reserva (`¿Prefieres hablar directamente?` + botón lime `Reserva hora →`); datos confirmados: email principal, teléfono fijo, WhatsApp de atención comercial y dirección completa; microconfianza (respuesta humana, sin spam, datos tratados según privacidad con enlace).
    - **Derecha (60%) — formulario** → escribe en `contact_messages`.
    - **Mapa/dirección si aplica:** solo si hay dirección pública confirmada en `settings.company`. Por defecto se muestra dirección textual; mapa embebido solo con consentimiento si implica terceros/cookies.
 3. **Footer global**.
@@ -69,7 +85,7 @@ Bandas: `mist (cabecera) → white (formulario) → ink (footer)`. Inputs con bo
 
 ### WhatsApp
 
-- Acceso directo a WhatsApp con el número confirmado `+34 647 51 81 00`, etiquetado como **WhatsApp / contacto directo Andrés** o **WhatsApp de atención comercial**. Aparece como enlace/botón secundario en la columna de contexto y, si procede, como botón flotante coordinado con el layout global. No se trata como dato legal.
+- Acceso directo a WhatsApp con el número confirmado `+34 647 51 81 00`, etiquetado como **WhatsApp de atención comercial**. Aparece como enlace/botón secundario en la columna de contexto y, si procede, como botón flotante coordinado con el layout global. No se trata como dato legal.
 
 ## Desktop
 
@@ -99,7 +115,7 @@ Inputs/select/textarea, checkbox, botón primario lime, panel de confirmación, 
 
 - H1, subcopy y textos de contexto.
 - Lista de servicios del select (desde Servicios).
-- Datos de contacto directos desde `settings`: `info@abacodev.com`, `+34 91 020 00 89`, `+34 647 51 81 00`, dirección completa y emails secundarios si se decide mostrarlos.
+- Datos de contacto directos desde `settings`: `info@abacoqd.com`, `+34 91 020 00 89`, `+34 647 51 81 00`, dirección completa y emails secundarios si se decide mostrarlos.
 
 ## Entidades relacionadas
 
@@ -107,9 +123,9 @@ Inputs/select/textarea, checkbox, botón primario lime, panel de confirmación, 
 
 ## SEO
 
-- Title ES: `Contacto | Abaco Developments`. Indexable.
+- Title ES: `Contacto | AbacoQD`. Indexable.
 - Canonical sobre `https://abacoqd.com/contacto`.
-- JSON-LD: `ContactPage`. `hreflang` con `/en/contact`.
+- JSON-LD: `ContactPage`. Sin `hreflang` EN mientras no exista una versión inglesa real.
 
 ## Estados vacíos
 
@@ -125,7 +141,7 @@ Inputs/select/textarea, checkbox, botón primario lime, panel de confirmación, 
 
 ## Relación con chatbot
 
-El chatbot puede abrir esta vista como fallback, pasar al usuario a WhatsApp `+34 647 51 81 00`, mostrar `info@abacodev.com` o sugerir servicios relacionados. No expone emails secundarios salvo decisión explícita, no envía formularios por el usuario ni recoge consentimiento en nombre del formulario.
+El chatbot puede abrir esta vista como fallback, pasar al usuario a WhatsApp `+34 647 51 81 00`, mostrar `info@abacoqd.com` o sugerir servicios relacionados. No expone emails secundarios salvo decisión explícita, no envía formularios por el usuario ni recoge consentimiento en nombre del formulario.
 
 ## Modo claro/oscuro
 
@@ -183,10 +199,10 @@ Pasos numerados (estilo metodología), listas de selección de día/hora, formul
 
 ## SEO
 
-- Title ES: `Reserva hora | Abaco Developments`. Indexable.
+- Title ES: `Reserva hora | AbacoQD`. Indexable.
 - Canonical sobre `https://abacoqd.com/reserva`.
-- JSON-LD: `BreadcrumbList`; **sin** `Offer`/precios (pago pendiente de definir).
-- `hreflang` con `/en/book`: pendiente de Fase 6 (enrutado por idioma no implementado todavía, ver nota de cabecera).
+- JSON-LD: `BreadcrumbList`; **sin** `Offer`/precios mientras la política comercial no esté definida.
+- Sin `hreflang` EN mientras no exista una versión inglesa real.
 
 ## Estados vacíos
 
@@ -207,11 +223,11 @@ El asistente puede explicar cómo reservar, enlazar a `/reserva` o sugerir `/con
 
 - Cabecera `ink` fija; banda de pasos (`white`) y selector/confirmación (`mist`) definen variante dark; el lime del botón se mantiene como acento.
 
-## Pendiente (no bloqueante para el flujo actual)
+## Ajustes no bloqueantes para el flujo actual
 
-- Página de cancelación pública vía `cancellation_token` (el modelo ya genera el token; falta la ruta/vista).
+- Página de cancelación pública vía `cancellation_token` (el modelo ya genera el token; resta exponer la ruta y la vista).
 - Email de confirmación al reservar (requiere stack de mail configurado).
 - Generador de franjas automático y bloqueo manual desde el admin (Fase 5).
 - Notificación interna de mensajes (email al equipo / panel).
-- Texto legal definitivo del consentimiento (con la página de privacidad), pendiente de revisión jurídica final.
-- Enrutado `/en/contact` y `/en/book` (Fase 6, multilenguaje por URL).
+- Texto legal definitivo del consentimiento (con la página de privacidad), sujeto a revisión jurídica final.
+- Enrutado EN por URL solo si en una fase posterior se decide publicar inglés real.

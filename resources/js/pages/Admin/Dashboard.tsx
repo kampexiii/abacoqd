@@ -61,71 +61,77 @@ export default function AdminDashboard({ serviceStats }: DashboardProps) {
                     {t('admin.dashboard.quickAccess')}
                 </h2>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {adminNavForRole(role).filter((item) => item.key !== 'dashboard').map((item) => {
-                        const Icon = item.icon;
-                        const label = t(`admin.nav.${item.key}`);
+                    {adminNavForRole(role)
+                        .filter((item) => item.key !== 'dashboard')
+                        .map((item) => {
+                            const Icon = item.icon;
+                            const label = t(`admin.nav.${item.key}`);
 
-                        const inner = (
-                            <>
-                                <span
-                                    className={cn(
-                                        'flex size-11 items-center justify-center rounded-xl',
-                                        item.enabled
-                                            ? 'bg-qd-teal-2/10 text-qd-teal-2 dark:bg-qd-teal/10 dark:text-qd-teal'
-                                            : 'bg-qd-mist text-qd-text-medium/60 dark:bg-qd-white/5 dark:text-qd-white/30',
-                                    )}
-                                >
-                                    <Icon aria-hidden="true" size={22} strokeWidth={1.7} />
-                                </span>
-                                <div className="flex-1">
-                                    <p
+                            const inner = (
+                                <>
+                                    <span
                                         className={cn(
-                                            'font-bold',
+                                            'flex size-11 items-center justify-center rounded-xl',
                                             item.enabled
-                                                ? 'text-qd-ink dark:text-qd-white'
-                                                : 'text-qd-text-medium/70 dark:text-qd-white/40',
+                                                ? 'bg-qd-teal-2/10 text-qd-teal-2 dark:bg-qd-teal/10 dark:text-qd-teal'
+                                                : 'bg-qd-mist text-qd-text-medium/60 dark:bg-qd-white/5 dark:text-qd-white/30',
                                         )}
                                     >
-                                        {label}
-                                    </p>
-                                    {!item.enabled && (
-                                        <p className="text-xs text-qd-text-medium/60 dark:text-qd-white/30">
-                                            {t('admin.nav.pending')}
+                                        <Icon
+                                            aria-hidden="true"
+                                            size={22}
+                                            strokeWidth={1.7}
+                                        />
+                                    </span>
+                                    <div className="flex-1">
+                                        <p
+                                            className={cn(
+                                                'font-bold',
+                                                item.enabled
+                                                    ? 'text-qd-ink dark:text-qd-white'
+                                                    : 'text-qd-text-medium/70 dark:text-qd-white/40',
+                                            )}
+                                        >
+                                            {label}
                                         </p>
+                                        {!item.enabled && (
+                                            <p className="text-xs text-qd-text-medium/60 dark:text-qd-white/30">
+                                                {t('admin.nav.pending')}
+                                            </p>
+                                        )}
+                                    </div>
+                                    {item.enabled && (
+                                        <ArrowRight
+                                            aria-hidden="true"
+                                            size={18}
+                                            className="text-qd-teal-2 dark:text-qd-teal"
+                                        />
                                     )}
-                                </div>
-                                {item.enabled && (
-                                    <ArrowRight
-                                        aria-hidden="true"
-                                        size={18}
-                                        className="text-qd-teal-2 dark:text-qd-teal"
-                                    />
-                                )}
-                            </>
-                        );
+                                </>
+                            );
 
-                        if (item.enabled && item.href !== null) {
+                            if (item.enabled && item.href !== null) {
+                                return (
+                                    <Link
+                                        key={item.key}
+                                        href={item.href}
+                                        className="flex items-center gap-4 rounded-2xl border border-qd-mist bg-qd-white p-5 transition hover:border-qd-teal-2/40 hover:shadow-sm dark:border-qd-white/10 dark:bg-qd-surface"
+                                    >
+                                        {inner}
+                                    </Link>
+                                );
+                            }
+
                             return (
-                                <Link
+                                <div
                                     key={item.key}
-                                    href={item.href}
-                                    className="flex items-center gap-4 rounded-2xl border border-qd-mist bg-qd-white p-5 transition hover:border-qd-teal-2/40 hover:shadow-sm dark:border-qd-white/10 dark:bg-qd-surface"
+                                    aria-disabled="true"
+                                    className="flex items-center gap-4 rounded-2xl border border-dashed border-qd-mist bg-qd-white/60 p-5 dark:border-qd-white/10 dark:bg-qd-surface/60"
                                 >
                                     {inner}
-                                </Link>
+                                </div>
                             );
-                        }
-
-                        return (
-                            <div
-                                key={item.key}
-                                aria-disabled="true"
-                                className="flex items-center gap-4 rounded-2xl border border-dashed border-qd-mist bg-qd-white/60 p-5 dark:border-qd-white/10 dark:bg-qd-surface/60"
-                            >
-                                {inner}
-                            </div>
-                        );
-                    })}
+                        })}
                 </div>
             </section>
         </AdminLayout>

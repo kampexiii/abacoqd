@@ -1,8 +1,8 @@
 # Modelo de datos — AbacoQD
 
-Última revisión: 26 de junio de 2026.
+Última revisión: 28 de junio de 2026.
 
-> **Actualización Bloque 7 (26/06):** la gestión visible de **`permission_status`** se retiró del panel. La columna **se conserva** en `partners`, `projects` y `reviews` (sin migración: no se elimina todavía), pero el contenido creado/editado desde el CRUD o desde seeders se persiste como **`approved`** por compatibilidad. El enum `PermissionStatus` y los scopes `permitted()`/`publiclyListable()` siguen existiendo; al quedar todo `approved`, no bloquean. La publicación se controla por **estado + visibilidad** (`status`, `is_active`, `show_on_home`, `show_in_projects`, `show_in_collaborations`, `is_featured`, orden). El seeder legacy `AbacoHistoricalProjectsSeeder` se eliminó; el contenido confirmado vive en `ConfirmedProjectsSeeder` (hoy solo **CIETE**).
+> **Actualización de cierre (28/06):** el portfolio actualmente cargado se considera **contenido real autorizado** para la web inicial, salvo indicación expresa en contra. `permission_status` se conserva solo como compatibilidad interna de datos/admin y no debe reabrirse como falso bloqueante documental.
 >
 > **Media de proyecto (subfase 7.3, 26/06):** `projects` añade `logo`, `logo_dark` y `logo_alt` (migración aditiva `2026_06_26_000000_add_logos_to_projects_table`), espejo de `partners`: `logo` color (modo claro), `logo_dark` monocromo (modo oscuro), `logo_alt` texto alternativo. La **imagen del proyecto es una sola subida**: `cover_image` y `thumbnail_image` guardan la misma ruta (no hay miniatura separada). Solo se guardan rutas (`/uploads/projects/...`), nunca binarios; raster→WebP, SVG conservado.
 >
@@ -12,12 +12,13 @@ Fuente de verdad única del modelo de datos de AbacoQD. **Fase 2 (modelo de dato
 
 ## Reglas duras
 
-- Producto completo y definitivo del 30/06: ES/EN, landing, metodología, servicios, proyectos, quiénes somos, blog, contacto, reserva, legal/cookies, chatbot, accesibilidad y admin.
+- Producto final del 30/06: landing, metodología, servicios, proyectos, quiénes somos, blog, contacto, reserva, legal/cookies, chatbot, accesibilidad y admin.
+- El lanzamiento inicial es **Spanish-first**: el modelo conserva capacidad para contenido EN, pero el SEO/routing EN no es requisito bloqueante actual.
 - `services` es la única entidad de servicios. No existe entidad activa `project_types`.
 - `partners` es la entidad unificada para empresas, marcas, clientes, colaboradores y socios. No existe entidad activa `companies`.
 - La página pública **Proyectos** y la sección de landing **Colaboraciones** se alimentan de `projects`, `partners` y `partner_project`. No existe tabla `portfolios`.
 - Todo contenido publicable tiene estado, visibilidad, idioma y SEO cuando aplica.
-- No se inventan clientes, proyectos, reseñas, métricas, logos ni precios. Los datos demo se marcan como demo y no se publican como reales.
+- No se inventan clientes, proyectos, reseñas, métricas, logos ni precios.
 - Datos corporativos, contacto, legal, tema, accesibilidad, navegación y CTAs viven en `settings`.
 
 ## Decisión cerrada: arquitectura de contenido bilingüe
@@ -30,7 +31,7 @@ Reglas de esta arquitectura:
 - Los slugs viven dentro del JSON (`slug->es`, `slug->en`). Toda entidad con ruta pública por slug tiene además columnas generadas `slug_es`/`slug_en` (`virtualAs` sobre el JSON) con **índice único de base de datos**: no pueden existir dos filas con el mismo slug en el mismo idioma. Aplica a `methodology_steps`, `services`, `projects`, `posts`, `post_categories`, `tags`.
 - Si un idioma no tiene contenido completo, su slug/título puede quedar `null`; no se inventa traducción. Publicar o no un idioma incompleto se resuelve con `status`/`is_active`, nunca fabricando texto ni emitiendo `hreflang` falso.
 - Aplica JSON por campo a: `methodology_steps`, `services`, `projects`, `posts`, `post_categories`, `tags`, `faqs`, `reviews`, `page_sections`, `section_blocks`, y a `role`/`bio` de `team_members`.
-- `partners` (nombre/slug) y `team_members` (nombre/slug/contacto) quedan en texto plano sin JSON: un nombre propio de persona o empresa no cambia entre idiomas.
+- `partners` (nombre/slug) y `team_members` (nombre/slug/contacto) quedan en texto plano sin JSON: un nombre propio de persona o empresa no cambia entre idiomas. `team_members` puede incluir CV público cuando esa descarga forme parte del alcance confirmado.
 
 ## Decisión cerrada: SEO único en `seo_metadata`
 
@@ -50,7 +51,7 @@ Donde se necesita un CTA local a una entidad (`page_sections`, `section_blocks`,
 
 | Tema | Decisión |
 |---|---|
-| Idiomas | ES/EN desde el inicio; contenido traducible en JSON `{es, en}` por campo; slugs públicos con columnas generadas `slug_es`/`slug_en` únicas por idioma |
+| Idiomas | Contenido traducible preparado en JSON `{es, en}` por campo; lanzamiento inicial Spanish-first; `slug_en` y SEO EN quedan disponibles para una fase posterior |
 | Servicios | `services` para las seis líneas de servicio; estado `draft`/`published`/`hidden` vía enum `ServiceStatus` |
 | Proyectos / Colaboraciones | Página pública `Proyectos` y sección de landing `Colaboraciones`; datos internos en `projects`, `partners`, `partner_project` |
 | Blog | Bilingüe, slug por idioma con unicidad de BD, `featured_order` para fijar el orden de los 3 destacados de landing |
@@ -76,7 +77,7 @@ Valores iniciales confirmados (sembrados por `SettingsSeeder`): datos de `ABACO 
 
 `page`, `key`, `name`, `title` (json), `subtitle` (json), `content` (json), `cta` (json, ver convención de CTA), `media_path`, `icon`, `sort_order`, `is_active`, `show_on_home`, `settings` (json libre), timestamps. Único (`page`, `key`).
 
-Uso: hero, metodología, servicios, proyectos, contacto, reserva, legales y CTAs.
+Uso: hero, metodología, servicios, proyectos, contacto, reserva, legales y CTAs. No todos los grupos de `settings` tienen por qué estar expuestos en el admin actual.
 
 ### `section_blocks`
 
@@ -211,13 +212,13 @@ Si se exige auditoría server-side de consentimientos, se documentará antes de 
 
 | Vista | Ruta | Doc | Entidades |
 |---|---|---|---|
-| Home / Landing | `/` · `/en` | `07_VISTAS/PUBLIC_01_HOME_LANDING.md` | `page_sections`, `section_blocks`, `methodology_steps`, `services`, `partners`, `projects`, `posts`, `settings` |
-| Metodología | `/metodologia` · `/en/methodology` | `07_VISTAS/PUBLIC_02_METODOLOGIA_PROCESO.md` | `methodology_steps`, `page_sections`, `settings`, `seo_metadata` |
-| Servicios | `/servicios` · `/servicios/{slug}` · `/en/services` | `07_VISTAS/PUBLIC_03_SERVICIOS.md` | `services`, `seo_metadata`, `faqs` |
-| Proyectos | `/proyectos` · `/proyectos/{slug}` · `/en/projects` | `07_VISTAS/PUBLIC_04_PROYECTOS.md` | `projects`, `partners`, `partner_project`, `reviews`, `seo_metadata` |
-| Quiénes somos | `/quienes-somos` · `/en/about` | `07_VISTAS/PUBLIC_10_QUIENES_SOMOS.md` | `page_sections`, `section_blocks`, `team_members`, `partners`, `settings`, `seo_metadata` |
-| Blog | `/blog` · `/blog/{slug}` · `/en/blog` | `07_VISTAS/PUBLIC_05_BLOG.md` | `posts`, `post_categories`, `tags`, `post_tag`, `seo_metadata`, `blog_subscribers` |
-| Contacto / Reserva | `/contacto` · `/reserva` · `/en/contact` · `/en/book` | `07_VISTAS/PUBLIC_06_CONTACTO_RESERVA.md` | `contact_messages`, `appointment_days`, `appointment_slots`, `appointment_bookings`, `settings`, `services` |
+| Home / Landing | `/` | `07_VISTAS/PUBLIC_01_HOME_LANDING.md` | `page_sections`, `section_blocks`, `methodology_steps`, `services`, `partners`, `projects`, `posts`, `settings` |
+| Metodología | `/metodologia` | `07_VISTAS/PUBLIC_02_METODOLOGIA_PROCESO.md` | `methodology_steps`, `page_sections`, `settings`, `seo_metadata` |
+| Servicios | `/servicios` · `/servicios/{slug}` | `07_VISTAS/PUBLIC_03_SERVICIOS.md` | `services`, `seo_metadata`, `faqs` |
+| Proyectos | `/proyectos` · `/proyectos/{slug}` | `07_VISTAS/PUBLIC_04_PROYECTOS.md` | `projects`, `partners`, `partner_project`, `reviews`, `seo_metadata` |
+| Quiénes somos | `/quienes-somos` | `07_VISTAS/PUBLIC_10_QUIENES_SOMOS.md` | `page_sections`, `section_blocks`, `team_members`, `partners`, `settings`, `seo_metadata` |
+| Blog | `/blog` · `/blog/{slug}` | `07_VISTAS/PUBLIC_05_BLOG.md` | `posts`, `post_categories`, `tags`, `post_tag`, `seo_metadata`, `blog_subscribers` |
+| Contacto / Reserva | `/contacto` · `/reserva` | `07_VISTAS/PUBLIC_06_CONTACTO_RESERVA.md` | `contact_messages`, `appointment_days`, `appointment_slots`, `appointment_bookings`, `settings`, `services` |
 | Legal / Cookies / Privacidad | `/aviso-legal`, `/privacidad`, `/cookies` | `07_VISTAS/PUBLIC_07_LEGAL_COOKIES_PRIVACIDAD.md` | `settings.legal`, `settings.cookies`, `page_sections`, `seo_metadata` |
 | Errores | 404 · 500 · 503 | `07_VISTAS/PUBLIC_08_ERRORES.md` | ninguna |
 | Layout global | todas | `07_VISTAS/PUBLIC_09_LAYOUT_GLOBAL.md` | `settings`, `faqs` |
@@ -250,6 +251,6 @@ Completado en Fase 2 (18/06/2026), en este orden:
 - [ ] Confirmar revisión jurídica final de aviso legal, privacidad y cookies.
 - [ ] Confirmar stack definitivo de analítica/cookies y CMP.
 - [ ] Confirmar ubicación obligatoria de logos UE/FSE+/Fondos Europeos y rutas finales de assets.
-- [ ] Confirmar permisos de partners, logos, proyectos, capturas y reseñas.
+- [ ] Confirmar la selección editorial final de portfolio destacado si se quiere recortar o reordenar el contenido visible.
 - [ ] Confirmar política del estudio inicial y textos de CTA.
-- [ ] Confirmar copy ES/EN mínimo de servicios, proyectos, blog, contacto y legales.
+- [ ] Confirmar copy final en español de servicios, proyectos, blog, contacto y legales. EN solo aplica si se abre fase posterior.

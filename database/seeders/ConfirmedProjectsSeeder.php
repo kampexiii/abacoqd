@@ -11,10 +11,10 @@ use App\Models\Service;
 use Illuminate\Database\Seeder;
 
 /**
- * Proyectos del portfolio AbacoQD. Idempotente: localiza por `slug_es` y
- * actualiza/crea sin duplicar. La media se carga desde el CRUD; el cliente final
- * va en `client_name`/`client_partner_id` y el colaborador técnico en
- * `partner_project` (role = collaborator).
+ * Catálogo inicial de proyectos del portfolio.
+ *
+ * El seeder localiza por `slug_es`, actualiza sin duplicar y mantiene las
+ * relaciones de cliente, servicios y colaboradores.
  */
 class ConfirmedProjectsSeeder extends Seeder
 {
@@ -53,20 +53,16 @@ class ConfirmedProjectsSeeder extends Seeder
                 'settings' => $data['settings'],
             ];
 
-            // Media versionable ya convertida a WebP en `public/uploads/projects`
-            // (la portada se reutiliza como miniatura). Las rutas se derivan del
-            // slug ES —la misma convención usada al generar los ficheros— y se
-            // aplican también en re-seed para que una BD reconstruida cargue la
-            // media sin subir nada a mano desde el panel.
+            // La portada y la miniatura se resuelven con la convención pública
+            // de assets versionados en `public/uploads/projects`.
             $slugEs = $data['slug']['es'];
             $coverPath = "/uploads/projects/{$slugEs}-cover.webp";
 
             $attributes['cover_image'] = $coverPath;
             $attributes['thumbnail_image'] = $coverPath;
 
-            // El logo de cliente/empresa solo se asigna en proyectos con logo
-            // entregado. Los proyectos propios/demo sin logo de cliente conservan el
-            // suyo (no se pisa) y se crean con logo nulo.
+            // El logo solo se asigna cuando el proyecto dispone de asset
+            // específico para cliente o marca asociada.
             if ($data['has_client_logo'] ?? true) {
                 $attributes['logo'] = "/uploads/projects/{$slugEs}-logo.webp";
                 $attributes['logo_dark'] = "/uploads/projects/{$slugEs}-logo-dark.webp";
@@ -75,12 +71,10 @@ class ConfirmedProjectsSeeder extends Seeder
             $project = Project::query()->where('slug_es', $slugEs)->first();
 
             if ($project) {
-                // En re-seed no se toca `show_in_collaborations`: es un flag de
-                // curación que se gestiona desde /admin/projects ("Mostrar en
-                // Colaboraciones") y debe sobrevivir a futuras siembras.
+                // `show_in_collaborations` se conserva para respetar la curación
+                // realizada desde el panel.
                 $project->update($attributes);
             } else {
-                // Al crear, el proyecto entra visible en la noria por defecto.
                 $project = Project::create($attributes + [
                     'gallery' => [],
                     'show_in_collaborations' => true,
@@ -101,7 +95,7 @@ class ConfirmedProjectsSeeder extends Seeder
                 );
             }
 
-            // Servicios por slug (no IDs); solo se asocian los que existen.
+            // Las asociaciones de servicios se resuelven por slug.
             $services = [];
             $order = 0;
 
@@ -115,7 +109,7 @@ class ConfirmedProjectsSeeder extends Seeder
 
             $project->services()->sync($services);
 
-            // Colaboradores técnicos → partner_project. En solitario no se toca.
+            // Los colaboradores técnicos se sincronizan sobre `partner_project`.
             $partnerSync = [];
             $partnerOrder = 0;
 
@@ -139,7 +133,6 @@ class ConfirmedProjectsSeeder extends Seeder
     private function projects(): array
     {
         return [
-            // CIETE — proyecto existente. Se conserva; SEO con marca AbacoQD.
             [
                 'slug' => [
                     'es' => 'erp-ciete-gestion-interna-trabajos-pedidos-facturacion',
@@ -205,7 +198,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // Control Cube — ERP + CRM a medida.
             [
                 'slug' => [
                     'es' => 'erp-crm-control-cube',
@@ -270,7 +262,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // ERP Modular Genérico — producto propio de AbacoQD.
             [
                 'slug' => [
                     'es' => 'erp-modular-generico',
@@ -325,7 +316,6 @@ class ConfirmedProjectsSeeder extends Seeder
                     'integraciones-digitales',
                     'mvps-prototipos-funcionales',
                 ],
-                // Producto propio/demo: sin logo de cliente entregado.
                 'has_client_logo' => false,
                 'sort_order' => 3,
                 'settings' => [
@@ -343,7 +333,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // Meliá Hotels International — Maestro de Clientes Centralizado.
             [
                 'slug' => [
                     'es' => 'maestro-clientes-centralizado-melia',
@@ -405,7 +394,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // Iberia — Reporting Corporativo en Power BI.
             [
                 'slug' => [
                     'es' => 'reporting-corporativo-power-bi-iberia',
@@ -465,7 +453,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // Leroy Merlin — CRM Analítica y Marketing Automation (con Cognodata).
             [
                 'slug' => [
                     'es' => 'plataforma-crm-analitica-marketing-automation-leroy-merlin',
@@ -528,7 +515,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // Jack & Jones — Transformación Digital eCommerce Magento (con Iksula).
             [
                 'slug' => [
                     'es' => 'transformacion-digital-ecommerce-magento-jack-and-jones',
@@ -590,7 +576,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // Jornada Perfecta — Sistema de IA para recomendaciones automáticas.
             [
                 'slug' => [
                     'es' => 'sistema-ia-recomendaciones-automaticas-jornada-perfecta',
@@ -652,7 +637,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // Devtia — Plataforma de Gestión, CRM y LMS a medida.
             [
                 'slug' => [
                     'es' => 'plataforma-gestion-crm-lms-medida-devtia',
@@ -713,7 +697,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // Inspira — CRM con Reporting y Automatización de Anuncios (con RB).
             [
                 'slug' => [
                     'es' => 'crm-reporting-automatizacion-anuncios-inspira',
@@ -776,7 +759,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // Malababa — Estrategia SEM y Medición Digital (con I Feel Web).
             [
                 'slug' => [
                     'es' => 'estrategia-sem-medicion-digital-malababa',
@@ -838,7 +820,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // WiBLE — Estrategia SEO y Desarrollo Web (con YoSEO Marketing).
             [
                 'slug' => [
                     'es' => 'estrategia-seo-desarrollo-web-wible',
@@ -900,7 +881,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // Urban Fisio — Estrategia CRM e Implantación Operativa.
             [
                 'slug' => [
                     'es' => 'estrategia-crm-implantacion-operativa-urban-fisio',
@@ -961,7 +941,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // In Casa — Inteligencia Artificial e IoT para hogares de personas mayores.
             [
                 'slug' => [
                     'es' => 'inteligencia-artificial-iot-hogares-personas-mayores-in-casa',
@@ -1023,7 +1002,6 @@ class ConfirmedProjectsSeeder extends Seeder
                 ],
             ],
 
-            // ERP Genérico (Node.js) — base de gestión de obras, producto propio de AbacoQD.
             [
                 'slug' => [
                     'es' => 'erp-generico-gestion-obras-rentabilidad',
@@ -1070,7 +1048,6 @@ class ConfirmedProjectsSeeder extends Seeder
                     'crm-datos-reporting',
                     'integraciones-digitales',
                 ],
-                // Producto propio/demo: sin logo de cliente entregado.
                 'has_client_logo' => false,
                 'sort_order' => 15,
                 'settings' => [

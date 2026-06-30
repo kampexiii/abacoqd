@@ -1,6 +1,6 @@
 # Brief y alcance — AbacoQD
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 28 de junio de 2026.
 
 Fuente de verdad de producto, marca, alcance y decisiones comerciales. Si un documento anterior contradice este brief, prevalece este brief.
 
@@ -10,20 +10,20 @@ Fuente de verdad de producto, marca, alcance y decisiones comerciales. Si un doc
 |---|---|
 | Nombre | AbacoQD |
 | Nombre extendido | Ábaco Quick Developments |
-| Marca pública del sitio | Abaco Developments |
+| Marca pública del sitio | AbacoQD |
 | Razón social | ABACO DIGITAL DEVELOPMENTS, S.L. solo en legales |
 | Dominio canónico final | `https://abacoqd.com/` |
 | Dominio histórico / investigado | `https://abacodev.com/` |
 | URL legal histórica aportada | `https://www.abacodev.com/` |
-| Política de redirección | pendiente de confirmar |
-| Origen | Iniciativa de Ábaco Developments |
+| Política de redirección | por confirmar |
+| Origen | Iniciativa empresarial bajo ABACO DIGITAL DEVELOPMENTS, S.L. |
 | Claim base | Desarrollo a medida rápido y seguro |
 
-AbacoQD desarrolla soluciones digitales rápidas y a medida: webs, aplicaciones, automatizaciones, integraciones, CRM/procesos, MVPs y herramientas internas. La propuesta se apoya en IA, vibe coding supervisado, herramientas internas propias y criterio técnico senior.
+AbacoQD desarrolla soluciones digitales rápidas y a medida: webs, aplicaciones, automatizaciones, integraciones, CRM/procesos, MVPs y herramientas internas. La propuesta se apoya en herramientas modernas, procesos propios y criterio técnico senior.
 
 La web debe comunicar rapidez sin improvisación: procesos claros, control técnico, seguridad, accesibilidad, SEO y entrega cuidada.
 
-Decisión de cierre: aunque la documentación interna conserva el nombre AbacoQD para el proyecto, la **marca visible del sitio público debe ser Abaco Developments** salvo decisión posterior explícita. No usar `ABACO DIGITAL DEVELOPMENTS, S.L.` como marca comercial fuera de textos legales.
+Decisión de cierre: la **marca pública final del sitio es AbacoQD**. `ABACO DIGITAL DEVELOPMENTS, S.L.` queda reservada para textos legales y contexto societario. `Abaco Developments` puede aparecer como contexto empresarial o histórico cuando proceda, pero no sustituye la marca visible principal.
 
 ### Datos corporativos y de contacto confirmados
 
@@ -38,16 +38,16 @@ Decisión de cierre: aunque la documentación interna conserva el nombre AbacoQD
 | Dominio histórico / investigado | https://abacodev.com/ |
 | URL legal histórica aportada | https://www.abacodev.com/ |
 | Teléfono fijo público | +34 91 020 00 89 |
-| WhatsApp / contacto directo Andrés | +34 647 51 81 00 |
-| Email principal | info@abacodev.com |
+| WhatsApp de atención comercial | +34 647 51 81 00 |
+| Email principal | info@abacoqd.com |
 | Email secundario/general | abacodevelopments@gmail.com |
-| Email contacto Andrés | andrescasanueva@abacodev.com |
+| Email de contacto comercial adicional | andrescasanueva@abacodev.com |
 
-El teléfono antiguo `647 518 100` del aviso legal aportado se normaliza como `+34 647 51 81 00`. Queda pendiente decidir si el teléfono legal visible principal será el fijo `+34 91 020 00 89` o el WhatsApp/contacto directo `+34 647 51 81 00`.
+El teléfono antiguo `647 518 100` del aviso legal aportado se normaliza como `+34 647 51 81 00`. Queda por definir si el teléfono legal visible principal será el fijo `+34 91 020 00 89` o el canal de atención comercial `+34 647 51 81 00`.
 
 ### Datos institucionales aportados
 
-No se tratan como clientes ni proyectos. Se documentan como distintivos institucionales/financiación en `settings.institutional` o `settings.branding`, con ubicación final pendiente:
+No se tratan como clientes ni proyectos. Se documentan como distintivos institucionales/financiación en `settings.institutional` o `settings.branding`, con ubicación final por definir:
 
 - be now Partner.
 - Cofinanciado por la Unión Europea.
@@ -70,13 +70,19 @@ El entregable del 30/06 no es una versión mínima. El producto base incluye:
 - Política de privacidad.
 - Política de cookies.
 - Errores 404/500/503.
-- Panel admin completo.
-- ES/EN.
-- SEO por idioma.
+- Panel admin ajustado al alcance funcional actual.
+- SEO principal en español orientado a España.
 - Chatbot/asistente.
 - Widget de accesibilidad.
 - Tema claro/oscuro/sistema.
 - Datos corporativos editables.
+
+Decisión de lanzamiento:
+
+- El lanzamiento inicial es **Spanish-first**.
+- No se considera bloqueo actual no tener `/en` real.
+- El inglés queda como evolución futura no bloqueante.
+- Solo se considerará una versión EN como SEO real si tiene rutas propias, traducción completa, canonical, `hreflang` y sitemap coherentes.
 
 ## 3. Landing y navegación pública
 
@@ -100,7 +106,7 @@ No hay botón `Reservar` en topbar. La reserva aparece en Hero, CTA final y bloq
 
 ### Metodología
 
-Sección en landing y página `/metodologia` (`/en/methodology`). Debe explicar el proceso, pasos, animación, bloque de estudio inicial y relación con `methodology_steps`.
+Sección en landing y página `/metodologia`. Debe explicar el proceso, pasos, animación, bloque de estudio inicial y relación con `methodology_steps`. Una ruta EN solo entra si se publica una versión inglesa completa en una fase posterior.
 
 ### Servicios
 
@@ -125,27 +131,37 @@ Internamente se alimenta de:
 - `projects`: proyectos/trabajos;
 - `partner_project`: relación y rol.
 
-Solo se publican proyectos, logos y reseñas con permiso. Si no hay contenido real, se muestra estado vacío honesto.
+El portfolio cargado se considera **contenido real autorizado** para la web inicial. Los proyectos, marcas, logos y referencias visibles forman parte del portfolio que se va a mostrar. Solo se marcarán como pendientes aquellos elementos que se indiquen expresamente.
 
 ### Blog
 
-Blog bilingüe con índice, detalle de post, categorías, tags, destacados en landing, slug y SEO por idioma. No se publican artículos inventados como reales.
+Blog con índice, detalle de post, categorías, tags y destacados en landing. El lanzamiento inicial se orienta al contenido en español; el soporte EN queda como evolución futura no bloqueante. No se publican artículos inventados como reales.
 
 ### Quiénes somos
 
-Vista propia `/quienes-somos` (`/en/about`) y elemento de topbar. Cuenta el origen de AbacoQD, su relación con Ábaco Developments, el modo de trabajo y el equipo si hay miembros publicables. No inventa equipo, fechas, clientes ni cifras.
+Vista propia `/quienes-somos` y elemento de topbar. Cuenta el origen de AbacoQD, su modo de trabajo y el equipo real. La sección de equipo puede incluir foto, cargo, biografía breve, LinkedIn, GitHub/repositorio y CV cuando se haya solicitado dentro del alcance. Pendiente real actual: falta la foto de Mohamed.
 
 ### Contacto y reserva
 
-Contacto recoge mensajes en `contact_messages`. Reserva usa `booking_settings` y fallback a contacto/WhatsApp. El contacto público usa email principal y dirección confirmada. El teléfono público principal queda pendiente entre el fijo y el WhatsApp/contacto directo.
+Contacto recoge mensajes en `contact_messages`. Reserva usa el sistema propio de citas del proyecto y fallback a contacto/WhatsApp cuando proceda. El correo receptor definitivo de avisos es `info@abacoqd.com`.
 
-Proveedor de reserva: no asumir integración heredada. Recomendación documental: `Cal.com` si el sitio no depende de WordPress; `Calendly` si prima salida rápida; `Amelia` solo si el stack final fuera WordPress.
+Pendiente técnico real para avisos:
+
+- `SMTP host`
+- `SMTP port`
+- `SMTP username`
+- `SMTP password` o app password
+- `SMTP encryption`
+- `From address`
+- `From name`
+- `Reply-To` si aplica
+- revisión SPF/DKIM/DMARC en producción
 
 ### Legal y cookies
 
 Aviso legal, privacidad y cookies son páginas reales. El texto base legal aportado por cliente queda como fuente histórica y borrador técnico, no como texto definitivo: menciona normativa antigua (`Ley Orgánica 15/1999` y ficheros inscritos en AEPD) y debe adaptarse a RGPD, LOPDGDD 3/2018, LSSI-CE y criterios actuales de cookies de AEPD antes de publicación final.
 
-El aviso legal antiguo menciona `https://www.abacodev.com/`. El nuevo sitio AbacoQD usa como dominio final `https://abacoqd.com/`. Pendiente: adaptar el aviso legal final al dominio definitivo y confirmar si `abacodev.com` redirigirá, convivirá temporalmente o quedará como dominio anterior.
+El aviso legal antiguo menciona `https://www.abacodev.com/`. El nuevo sitio AbacoQD usa como dominio final `https://abacoqd.com/`. Falta adaptar el aviso legal final al dominio definitivo y confirmar la política de `abacodev.com`.
 
 Analítica/cookies: no asumir stack heredado. Recomendación documental: `GTM + GA4 + Search Console + CookieYes`; añadir `Clarity` solo si se aprueba internamente y queda bloqueado hasta consentimiento. El banner debe permitir aceptar, rechazar, configurar, guardar preferencias y revocar consentimiento.
 
@@ -153,7 +169,7 @@ Los formularios separan dos consentimientos: checkbox obligatorio de política d
 
 ### Copy base recomendado
 
-Pendiente de aprobación final ES/EN, pero el cierre documental permite usar esta base sin prometer datos no verificados:
+Pendiente de aprobación final del copy base en español. La columna EN queda como referencia de una posible fase futura, no como requisito de lanzamiento actual:
 
 | Bloque | ES | EN |
 |---|---|---|
@@ -165,7 +181,7 @@ Pendiente de aprobación final ES/EN, pero el cierre documental permite usar est
 
 ### Admin
 
-El panel admin cubre dashboard, CRUDs, ES/EN, marca/settings, servicios, proyectos, partners, blog, suscriptores, mensajes, reserva, SEO, legal/cookies, chatbot/FAQ, usuarios/roles y accesibilidad/settings si procede.
+El panel admin final se considera válido en su **alcance funcional actual**. No se toma como fallo que no existan módulos antiguos descartados. La documentación de detalle del admin debe reflejar lo que hoy permite gestionar realmente y mover el resto a mejora futura.
 
 ## 5. Reglas duras
 
@@ -176,31 +192,27 @@ El panel admin cubre dashboard, CRUDs, ES/EN, marca/settings, servicios, proyect
 - `partners` es la entidad unificada para empresas/marcas/clientes/colaboradores.
 - Proyectos (página) y la sección Colaboraciones no quedan archivados ni como futuro: son producto activo.
 - Quiénes somos forma parte del producto 30/06 y de la topbar.
-- Pago/condiciones: pendiente de definir.
+- Pago/condiciones: por definir.
 - Estudio inicial: publicar solo si se delimita como sesión inicial gratuita de 45-60 minutos para diagnóstico y encaje, sin auditoría profunda ni presupuesto cerrado salvo fase posterior.
 - CTA final de landing: diseño, estructura, mockup de editor/código, botones, badges, composición claro/oscuro y titular `El 40% del tiempo de un desarrollador se pierde manteniendo código.` aprobados por cliente.
 
 ## 6. Estado real del proyecto
 
-Existe en código: Laravel 13, Inertia, React 19, TypeScript, Tailwind 4, Vite, auth/settings del starter, ruta `/`, hero avanzado, i18n básico de interfaz y dashboard base.
+Existe en código: Laravel 13, Inertia, React 19, TypeScript, Tailwind 4, Vite, páginas públicas principales, formularios de contacto y reserva, base SEO, panel admin y CRUDs de contenido ya integrados en la aplicación.
 
-No existe todavía en código: modelo de negocio AbacoQD, migraciones de contenido, admin editorial, CRUDs de negocio, blog real, proyectos reales, contacto persistido, reserva real, SEO dinámico ni páginas legales finales.
+Quedan sujetos a cierre funcional o documental: la actualización de la propia documentación activa, la revisión jurídica final de los textos legales si procede, la configuración SMTP real y la QA final técnico/visual/responsive.
 
-## 7. Pendientes comerciales
+## 7. Pendientes reales de cierre
 
 | Tema | Estado |
 |---|---|
-| Teléfono legal visible principal | pendiente |
-| Redirección/convivencia de `abacodev.com` | pendiente |
-| Proveedor de reserva | pendiente |
-| Herramienta de analítica/cookies y CMP definitiva | pendiente |
-| Revisión jurídica final de aviso legal, privacidad y cookies | pendiente |
-| Ubicación obligatoria de logos UE/FSE+/Fondos Europeos | pendiente |
-| Política final del estudio inicial gratuito | pendiente |
-| Proyectos/logos publicables | pendiente |
-| Copy final ES/EN restante | pendiente |
-| Redes sociales reales | LinkedIn publicable cuando se cargue URL validada; Facebook/resto pendientes |
-| Horarios | pendiente |
+| Foto de Mohamed | pendiente de Andrés |
+| Datos SMTP para avisos a `info@abacoqd.com` | pendiente de Andrés |
+| Configuración SMTP / `.env` real | pendiente técnico cuando lleguen los datos |
+| QA final técnico, visual y responsive | pendiente técnico |
+| `npm run types:check`, `npm run lint:check`, `npm run build`, `composer test` | pendiente de ejecución final |
+| Dominio/env de producción (`APP_ENV=production`, `APP_DEBUG=false`, cookies seguras) | pendiente de producción |
+| SPF/DKIM/DMARC y revisión legal final si procede | pendiente de producción/legal |
 
 ## 8. Gobernanza documental
 

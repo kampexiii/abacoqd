@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
  * (`formFieldSelectClass`).
  */
 export const adminSelectClass = cn(
-    'h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-xs outline-none transition',
+    'h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm shadow-xs transition outline-none',
     'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
     '[color-scheme:light] dark:[color-scheme:dark]',
     '[&>option]:bg-qd-white [&>option]:text-qd-ink dark:[&>option]:bg-qd-surface dark:[&>option]:text-qd-white',

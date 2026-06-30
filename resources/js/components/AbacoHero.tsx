@@ -14,17 +14,13 @@ import HeroParticleField from '@/components/HeroParticleField';
 import { useLanguage } from '@/hooks/use-language';
 
 /**
- * Hero definitivo de la landing AbacoQD.
- * docs/07_VISTAS/PUBLIC_01_HOME_LANDING.md §1.
+ * Hero principal de la landing pública.
  *
- * Mantiene la estructura ORIGINAL centrada del hero (`.qd-hero__*`): el cubo
- * protegido conserva su tamaño y su reparto de fragmentos por toda la sección
- * (canvas a pantalla completa del hero). Respecto al original solo cambian copy,
- * CTAs, paleta qd-* y el fondo: el hero es transparente para dejar ver el
- * WaveBackground global compartido. La topbar la monta PublicLayout.
+ * Conserva la estructura visual del hero y reutiliza el cubo como elemento
+ * central dentro del sistema de estilos `qd-hero__*`.
  */
 
-// Destino del CTA de reserva: sistema propio de citas (FASE 3).
+// Ruta del CTA de reserva.
 const RESERVA_HREF = '/reserva';
 const SERVICIOS_HREF = '/servicios';
 
@@ -52,7 +48,9 @@ export default function AbacoHero() {
                             {t('home.hero.titleHighlight')}
                         </strong>
                     </h1>
-                    <p className="qd-hero__subtitle">{t('home.hero.subtitle')}</p>
+                    <p className="qd-hero__subtitle">
+                        {t('home.hero.subtitle')}
+                    </p>
                     <div
                         className="qd-hero__actions"
                         aria-label={t('home.hero.actionsAriaLabel')}
@@ -68,14 +66,12 @@ export default function AbacoHero() {
                     </div>
                 </div>
 
-                {/* Recurso visual: cubo protegido. El canvas escapa de este wrap
-                    (mount absolute inset:0) y cubre toda la sección hero para
-                    repartir los fragmentos. No tocar AbacoCrystalCube. */}
+                {/* La estructura del cubo se mantiene estable para preservar la
+                    animación principal del hero. */}
                 <div className="qd-hero__cube-wrap">
                     <AbacoCrystalCube />
                 </div>
 
-                {/* Franja de beneficios (5 ítems, glass) */}
                 <ul
                     className="qd-hero__benefits"
                     aria-label={t('home.hero.benefitsAria')}

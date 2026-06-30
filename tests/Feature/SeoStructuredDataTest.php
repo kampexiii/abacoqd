@@ -53,7 +53,7 @@ test('the home page serves valid Organization and WebSite json-ld in the initial
     // Datos confirmados desde config/site.php (nada inventado).
     expect($org['name'])->toBe('Abaco Developments')
         ->and($org['url'])->toBe('https://abacoqd.com/')
-        ->and($org['email'])->toBe('info@abacodev.com')
+        ->and($org['email'])->toBe('info@abacoqd.com')
         ->and($org['legalName'])->toBe('ABACO DIGITAL DEVELOPMENTS, S.L.');
 });
 

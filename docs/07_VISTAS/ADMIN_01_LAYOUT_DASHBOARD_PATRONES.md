@@ -1,12 +1,12 @@
 # ADMIN_01 — Layout, dashboard y patrones
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 28 de junio de 2026.
 
 Fuente de verdad del layout admin, dashboard y patrones comunes. Entidades en `../02_MODELO_DATOS.md`; arquitectura general en `../05_ARQUITECTURA_ADMIN.md`.
 
 ## Objetivo
 
-Definir un panel sobrio, rápido y consistente para editar AbacoQD en ES/EN sin tocar código, con control de estados, permisos, SEO, accesibilidad y auditoría.
+Definir un panel sobrio, rápido y consistente para editar AbacoQD sin tocar código, con control de estados, visibilidad, mantenimiento editorial, accesibilidad y auditoría.
 
 ## Layout admin
 
@@ -19,20 +19,16 @@ Definir un panel sobrio, rápido y consistente para editar AbacoQD en ES/EN sin 
 ## Navegación admin
 
 1. Dashboard.
-2. Contenido / Home.
-3. Metodología.
-4. Servicios.
-5. Proyectos.
-6. Quiénes somos.
-7. Partners.
-8. Blog.
-9. Mensajes.
-10. Reserva.
-11. SEO.
-12. Legal y cookies.
-13. Chatbot / FAQs.
-14. Settings.
-15. Usuarios.
+2. Servicios.
+3. Proyectos.
+4. Partners.
+5. Equipo.
+6. Blog.
+7. Mensajes.
+8. Reserva.
+9. Chatbot / FAQs.
+10. Settings.
+11. Usuarios.
 
 Los módulos se agrupan visualmente, pero no se fragmenta la documentación en más archivos.
 
@@ -41,13 +37,11 @@ Los módulos se agrupan visualmente, pero no se fragmenta la documentación en m
 Widgets:
 
 - Mensajes nuevos y pendientes.
-- Reserva activa/inactiva y proveedor.
+- Reserva/citas abiertas y próximas.
 - Posts programados y borradores.
 - Servicios sin traducción o SEO.
-- Proyectos pendientes de permisos.
-- Partners sin logo/alt o sin permiso marcado.
-- Legales pendientes de validación.
-- Cookies no técnicas detectadas sin banner configurado.
+- Proyectos/partners sin visibilidad correcta o sin media suficiente.
+- Equipo visible y pendientes editoriales.
 - FAQs activas por idioma.
 - Cambios recientes / auditoría.
 
@@ -61,7 +55,7 @@ Tabla densa pero legible, filtros persistentes, búsqueda, estado, idioma, fecha
 
 ### Formularios
 
-Tabs ES/EN, indicador de traducción faltante, bloque SEO por idioma, estado (`draft`, `published`, `hidden`), visibilidad, destacado, orden, preview y guardado.
+Bloques por estado (`draft`, `published`, `hidden`), visibilidad, destacado, orden, preview y guardado. Si en una fase posterior se publica EN real, se añadirá su tratamiento editorial correspondiente.
 
 ### Estados
 
@@ -72,7 +66,7 @@ Tabs ES/EN, indicador de traducción faltante, bloque SEO por idioma, estado (`d
 
 ### Multilenguaje
 
-Cada contenido traducible muestra ES y EN. No se publica contenido clave sin avisar si falta traducción. El admin permite guardar borrador por idioma, pero la publicación pública exige criterio por módulo.
+El lanzamiento actual es Spanish-first. La preparación de contenido EN no se considera requisito de cierre del admin actual.
 
 ### SEO
 

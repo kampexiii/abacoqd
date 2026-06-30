@@ -10,7 +10,11 @@ type CreateProps = {
     readonly tags: readonly Option[];
 };
 
-export default function PostsCreate({ statuses, categories, tags }: CreateProps) {
+export default function PostsCreate({
+    statuses,
+    categories,
+    tags,
+}: CreateProps) {
     return (
         <AdminLayout
             title="Nuevo post"
@@ -21,7 +25,12 @@ export default function PostsCreate({ statuses, categories, tags }: CreateProps)
             ]}
         >
             <Head title="Nuevo post · Admin AbacoQD" />
-            <PostForm mode="create" statuses={statuses} categories={categories} tags={tags} />
+            <PostForm
+                mode="create"
+                statuses={statuses}
+                categories={categories}
+                tags={tags}
+            />
         </AdminLayout>
     );
 }

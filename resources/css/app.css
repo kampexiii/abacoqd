@@ -11,11 +11,8 @@
 
 @theme {
     /*
-     * Tipografía final AbacoQD = Poppins (docs/04_IDENTIDAD_UI_COMPONENTES.md §3).
-     * PENDIENTE TÉCNICO: self-host de Poppins (subset latin, font-display: swap).
-     * No hay archivos locales de Poppins en el repo y no se descargan binarios sin
-     * autorización; mientras tanto se declara la familia con fallback de sistema.
-     * Instrument Sans queda descartada como fuente final.
+     * Tipografía base del sitio.
+     * Poppins se declara con fallback de sistema hasta disponer de assets locales.
      */
     --font-sans:
         'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
@@ -647,7 +644,7 @@ html {
     );
 }
 
-/* Sistema de animaciones ligeras para las secciones bajo el hero (FASE 1). */
+/* Animaciones de entrada compartidas para las secciones bajo el hero. */
 
 .abaco-reveal {
     opacity: 0;
@@ -732,7 +729,7 @@ html {
         linear-gradient(90deg, rgba(122, 191, 191, 0.08) 1px, transparent 1px);
 }
 
-/* Estructura compartida de secciones bajo el hero (FASE 1). */
+/* Estructura compartida de secciones bajo el hero. */
 
 .abaco-section {
     position: relative;
@@ -866,7 +863,7 @@ html {
     color: rgba(242, 242, 242, 0.64);
 }
 
-/* Servicios AbacoQD — grid y cards (Bloque 3). */
+/* Grid de servicios y tarjetas principales. */
 
 .qd-srv-grid {
     display: grid;
@@ -916,7 +913,11 @@ html {
     flex: 1;
     overflow: hidden;
     background:
-        linear-gradient(135deg, rgba(8, 127, 140, 0.18), rgba(122, 191, 191, 0.08)),
+        linear-gradient(
+            135deg,
+            rgba(8, 127, 140, 0.18),
+            rgba(122, 191, 191, 0.08)
+        ),
         #081b26;
 }
 
@@ -952,7 +953,12 @@ html {
     position: absolute;
     inset: 0;
     background:
-        linear-gradient(180deg, rgba(6, 25, 35, 0.08), rgba(6, 25, 35, 0.34) 42%, rgba(6, 25, 35, 0.92)),
+        linear-gradient(
+            180deg,
+            rgba(6, 25, 35, 0.08),
+            rgba(6, 25, 35, 0.34) 42%,
+            rgba(6, 25, 35, 0.92)
+        ),
         linear-gradient(135deg, rgba(8, 127, 140, 0.45), transparent 44%);
 }
 
@@ -1060,7 +1066,7 @@ html {
     line-height: 1.2;
 }
 
-/* Bottom CTA strip */
+/* Banda CTA inferior de servicios. */
 .qd-srv-bottom {
     display: flex;
     align-items: center;
@@ -1179,7 +1185,7 @@ html {
     }
 }
 
-/* Estado vacío honesto (sin servicios destacados en BD) */
+/* Estado vacío de servicios. */
 .qd-srv-empty {
     display: flex;
     flex-direction: column;
@@ -1615,7 +1621,7 @@ html {
 }
 
 /* ==========================================================================
-   Sistema público AbacoQD — layout global (FASE 1)
+   Sistema público AbacoQD — layout global
    docs/07_VISTAS/PUBLIC_09_LAYOUT_GLOBAL.md · docs/04_IDENTIDAD_UI_COMPONENTES.md
    ========================================================================== */
 
@@ -2103,7 +2109,7 @@ html.a11y-reduce-motion *::after {
     }
 }
 
-/* Colaboraciones — split layout con orbital de logos (Bloque 4). */
+/* Layout de colaboraciones. */
 
 .qd-collab__inner {
     position: relative;
@@ -2111,19 +2117,17 @@ html.a11y-reduce-motion *::after {
     grid-template-columns: minmax(0, 1.03fr) minmax(0, 1.18fr);
     gap: clamp(1.25rem, 2.5vw, 2.5rem);
     align-items: center;
-    /* Red de seguridad: el solape de la noria cae sobre la card (dentro de este
-       contenedor), nunca debe asomar un scroll horizontal de página. Solo eje X
-       para no recortar la noria en vertical. */
+    /* Limita el desbordamiento horizontal del bloque sin recortar la órbita en
+       el eje vertical. */
     overflow-x: clip;
 }
 
 .qd-collab__copy {
     position: relative;
-    /* Card por encima de la noria: la órbita asoma por detrás del borde
-       derecho creando continuidad (trampantojo), sin tapar el texto. */
+    /* La tarjeta queda por encima de la órbita para preservar la legibilidad. */
     z-index: 2;
-    /* +25% sobre el padding base (clamp(1.35rem, 3vw, 2rem)); el tamaño
-       original se restaura para tablet/móvil en el media query de abajo. */
+    /* Incremento de padding en desktop para equilibrar el bloque con la
+       composición visual lateral. */
     padding: clamp(1.69rem, 3.75vw, 2.5rem);
     border: 1px solid rgba(15, 143, 149, 0.13);
     border-radius: 22px;
@@ -2197,7 +2201,7 @@ html.a11y-reduce-motion *::after {
     border-radius: 4px;
 }
 
-/* Estado vacío honesto (sin logos reales en BD) */
+/* Estado vacío de colaboraciones. */
 .qd-collab-empty {
     display: flex;
     flex-direction: column;
@@ -2370,9 +2374,7 @@ html.a11y-reduce-motion *::after {
     max-width: 7rem;
     padding: 0.3rem 0.55rem;
     border-radius: 0.6rem;
-    /* Chip blanco fijo (igual en claro y oscuro, como la noria de desktop):
-       sin esto, los logos de cliente monocromos oscuros/negros quedaban
-       ilegibles sobre el fondo oscuro de la card en dark mode. */
+    /* El soporte blanco mantiene la legibilidad del logo en ambos modos. */
     background: linear-gradient(150deg, #ffffff, #eef3f4);
     border: 1px solid rgba(15, 143, 149, 0.18);
 }
@@ -2495,21 +2497,17 @@ html.a11y-reduce-motion *::after {
     gap: 0.55rem;
 }
 
-/* Orbital */
+/* Órbita de colaboraciones. */
 
 .qd-collab-orbital {
     position: relative;
-    /* Ancho relativo a su propia columna (no al viewport): la sección tiene
-       un contenedor con max-width fijo (1180px) y `overflow: hidden`, así
-       que un tamaño en vw puede ser más ancho que la columna disponible y
-       quedar recortado. Con 100% + max-width nunca desborda su columna.
-       Tope +25% sobre el máximo base (660px → 825px). */
+    /* El tamaño se calcula respecto a su columna para evitar recortes del
+       contenedor principal. */
     width: 100%;
     max-width: 825px;
     aspect-ratio: 1 / 1;
     height: auto;
-    /* Centrada dentro de su columna (en vez de anclada al borde izquierdo)
-       para quedar proporcionalmente colocada en cualquier pantalla. */
+    /* Centrada dentro de su columna. */
     margin-inline: auto;
     isolation: isolate;
 }
@@ -2612,7 +2610,7 @@ html.a11y-reduce-motion *::after {
     width: 124px;
     height: 124px;
     border-radius: 50%;
-    /* Fondo blanco en claro y oscuro para que el isotipo a color se vea bien. */
+    /* Fondo claro estable para el isotipo central. */
     background: linear-gradient(150deg, #ffffff, #eef3f4);
     border: 1px solid rgba(15, 143, 149, 0.28);
     backdrop-filter: blur(18px) saturate(1.15);
@@ -2678,15 +2676,11 @@ html.a11y-reduce-motion *::after {
     width: clamp(4.5rem, 6vw, 5.4rem);
     height: clamp(4.5rem, 6vw, 5.4rem);
     border-radius: 50%;
-    /* Fondo blanco en claro y oscuro para que el logo de color se vea bien. */
+    /* Fondo claro estable para los logos orbitales. */
     background: linear-gradient(150deg, #ffffff, #eef3f4);
     border: 1px solid rgba(15, 143, 149, 0.28);
     opacity: var(--qd-collab-opacity, 0);
-    transform: translate3d(
-            var(--qd-collab-x, 0),
-            var(--qd-collab-y, 0),
-            0
-        )
+    transform: translate3d(var(--qd-collab-x, 0), var(--qd-collab-y, 0), 0)
         translate(-50%, -50%) scale(var(--qd-collab-scale, 1));
     backdrop-filter: blur(18px) saturate(1.12);
     -webkit-backdrop-filter: blur(18px) saturate(1.12);
@@ -2703,8 +2697,7 @@ html.a11y-reduce-motion *::after {
 }
 
 .dark .qd-collab-logo-bubble {
-    /* También blanco en oscuro: los logos monocromos oscuros eran ilegibles
-       sobre burbuja oscura; sobre blanco se ven a color en ambos modos. */
+    /* El fondo claro se mantiene también en modo oscuro. */
     background: linear-gradient(150deg, #ffffff, #e9eff0);
     border-color: rgba(255, 255, 255, 0.6);
     box-shadow:
@@ -2752,9 +2745,7 @@ html.a11y-reduce-motion *::after {
     transition: none;
 }
 
-/* Colaboraciones — conmutación noria (desktop) / lista de casos (móvil).
-   La noria es logo-céntrica y solo se monta visualmente en `lg` hacia arriba;
-   por debajo se sustituye por un carrusel de casos accesible. */
+/* Conmutación entre órbita en desktop y lista de casos en móvil. */
 
 .qd-collab__visual {
     position: relative;
@@ -2782,8 +2773,7 @@ html.a11y-reduce-motion *::after {
 
 .qd-collab-mobile__item {
     display: flex;
-    /* Una sola card visible por pantalla; el resto queda fuera del viewport
-       hasta que el scroll-snap les toque el turno (sin "peek" del siguiente). */
+    /* Una sola tarjeta visible por pantalla con scroll-snap. */
     flex: 0 0 100%;
     scroll-snap-align: start;
     scroll-snap-stop: always;
@@ -2817,8 +2807,7 @@ html.a11y-reduce-motion *::after {
         display: none;
     }
 
-    /* Fallback honesto: si ningún proyecto trae logo de cliente, en desktop no
-       hay noria y los casos se muestran en cuadrícula (sin inventar logos). */
+    /* Fallback en cuadrícula cuando no hay logos de cliente disponibles. */
     .qd-collab-mobile--always {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2830,7 +2819,7 @@ html.a11y-reduce-motion *::after {
     }
 }
 
-/* Blog — layout asimétrico 1 + 2 (Bloque 4). */
+/* Layout editorial del blog. */
 
 .qd-blog__head {
     display: flex;
@@ -3100,7 +3089,11 @@ html.a11y-reduce-motion *::after {
     flex-direction: column;
     gap: 0.75rem;
     background:
-        radial-gradient(circle at 66% 58%, rgba(24, 183, 176, 0.18), transparent 34%),
+        radial-gradient(
+            circle at 66% 58%,
+            rgba(24, 183, 176, 0.18),
+            transparent 34%
+        ),
         linear-gradient(rgba(57, 198, 230, 0.055) 1px, transparent 1px),
         linear-gradient(90deg, rgba(57, 198, 230, 0.055) 1px, transparent 1px),
         #0b1f27;
@@ -3166,7 +3159,7 @@ html.a11y-reduce-motion *::after {
     font-style: italic;
 }
 
-/* AI flow */
+/* Flujo visual del editor */
 .qd-blog-ai-flow {
     display: flex;
     align-items: center;
@@ -3411,7 +3404,7 @@ html.a11y-reduce-motion *::after {
     border-radius: 14px;
 }
 
-/* CTA Final — editor de código + conversión (Bloque 4). */
+/* Sección final con editor visual y llamadas a la acción. */
 
 .qd-cta-section {
     padding-bottom: 2rem;
@@ -4065,11 +4058,7 @@ html.a11y-reduce-motion *::after {
     content: '';
     pointer-events: none;
     background:
-        linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.34),
-            transparent 34%
-        ),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.34), transparent 34%),
         radial-gradient(
             circle at 86% 18%,
             rgba(24, 183, 176, 0.14),
@@ -4079,11 +4068,7 @@ html.a11y-reduce-motion *::after {
 
 .dark .qd-error-card::before {
     background:
-        linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.07),
-            transparent 36%
-        ),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.07), transparent 36%),
         radial-gradient(
             circle at 86% 18%,
             rgba(57, 198, 230, 0.12),
@@ -4337,8 +4322,8 @@ html.a11y-reduce-motion *::after {
     }
 }
 
-/* Cubo decorativo ligero del hero de /metodologia (CSS puro, sin Three.js;
-   no reutiliza ni toca AbacoCrystalCube, que queda protegido). */
+/* Cubo decorativo ligero del hero de `/metodologia`, implementado de forma
+   independiente al cubo principal. */
 @keyframes qd-mini-cube-spin {
     from {
         transform: rotateX(-18deg) rotateY(0deg);
@@ -4371,7 +4356,7 @@ html.reduce-motion .qd-error-ambient-lines span {
     animation: none;
 }
 
-/* Bloque 4 — responsive */
+/* Ajustes responsive. */
 
 @media (max-width: 1024px) {
     .qd-collab__inner {
@@ -4379,8 +4364,8 @@ html.reduce-motion .qd-error-ambient-lines span {
         gap: 2.5rem;
     }
 
-    /* Restaura el tamaño original del cuadro de copy (el +25% es solo
-       desktop, donde convive con la noria en el layout de dos columnas). */
+    /* Ajuste responsive para equilibrar el copy con la composición visual
+       lateral en desktop. */
     .qd-collab__copy {
         padding: clamp(1.35rem, 3vw, 2rem);
     }
@@ -4441,10 +4426,8 @@ html.reduce-motion .qd-error-ambient-lines span {
         margin-left: 0;
     }
 
-    /* La barra de actividad y el árbol de archivos son decorativos
-       (aria-hidden); en móvil sobran ancho al código real y eran la causa de
-       que las líneas se recortaran. Se ocultan y el código ocupa todo el
-       ancho del editor. */
+    /* Los paneles laterales se ocultan en móvil para priorizar el área de
+       código útil. */
     .qd-cta-editor__activity,
     .qd-cta-editor__sidebar {
         display: none;

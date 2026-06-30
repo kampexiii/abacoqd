@@ -167,8 +167,8 @@ export default function ThemeTogglerButton({
                 {resolvedModes.map((mode, index) => {
                     const Icon = themeModeMeta[mode].icon;
                     const cycleDistance =
-                        ((index - activeIndex + resolvedModes.length) %
-                            resolvedModes.length) || 0;
+                        (index - activeIndex + resolvedModes.length) %
+                            resolvedModes.length || 0;
                     const offset =
                         cycleDistance === 0
                             ? 0
@@ -191,7 +191,7 @@ export default function ThemeTogglerButton({
                                 className={cn(
                                     'flex items-center justify-center transition-all duration-300 ease-out motion-reduce:transition-none',
                                     isActive
-                                        ? 'translate-x-[var(--theme-icon-shift)] scale-100 opacity-100 rotate-0'
+                                        ? 'translate-x-[var(--theme-icon-shift)] scale-100 rotate-0 opacity-100'
                                         : cn(
                                               'translate-x-[var(--theme-icon-shift)] scale-75 opacity-0',
                                               direction === 'rtl'

@@ -121,9 +121,7 @@ const paintLogoTexture = (texture: THREE.CanvasTexture, path: string) => {
             // grandes preservando la proporción del viewBox. Los atributos
             // width/height originales del SVG se retiran antes: dejarlos
             // duplicados invalida el XML y el <img> nunca llega a cargar.
-            const viewBox = markup.match(
-                /viewBox="0 0 ([\d.]+) ([\d.]+)"/,
-            );
+            const viewBox = markup.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/);
             const svgRatio = viewBox
                 ? Number(viewBox[1]) / Number(viewBox[2])
                 : canvasW / canvasH;
@@ -771,9 +769,7 @@ export default function AbacoCrystalCube() {
             energyMaterial.needsUpdate = true;
             (['far', 'macro', 'near'] as const).forEach((tier) => {
                 fragmentMaterials[tier].color.set(
-                    dark
-                        ? CUBE_FRAGMENT_GLASS_DARK
-                        : CUBE_FRAGMENT_GLASS_LIGHT,
+                    dark ? CUBE_FRAGMENT_GLASS_DARK : CUBE_FRAGMENT_GLASS_LIGHT,
                 );
                 fragmentEdgeMaterials[tier].blending = dark
                     ? THREE.AdditiveBlending

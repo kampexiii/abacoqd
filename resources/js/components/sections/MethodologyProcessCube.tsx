@@ -10,7 +10,13 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { A11y, Autoplay, EffectCube, Navigation, Pagination } from 'swiper/modules';
+import {
+    A11y,
+    Autoplay,
+    EffectCube,
+    Navigation,
+    Pagination,
+} from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperClass } from 'swiper/types';
 
@@ -80,7 +86,11 @@ function FaceVisual({ face }: { face: ProcessFaceKey }) {
     switch (face) {
         case 'analysis':
             return (
-                <svg viewBox="0 0 200 110" aria-hidden="true" className="qd-process-cube__art">
+                <svg
+                    viewBox="0 0 200 110"
+                    aria-hidden="true"
+                    className="qd-process-cube__art"
+                >
                     <g
                         fill="none"
                         stroke="currentColor"
@@ -110,7 +120,11 @@ function FaceVisual({ face }: { face: ProcessFaceKey }) {
             );
         case 'study':
             return (
-                <svg viewBox="0 0 200 110" aria-hidden="true" className="qd-process-cube__art">
+                <svg
+                    viewBox="0 0 200 110"
+                    aria-hidden="true"
+                    className="qd-process-cube__art"
+                >
                     <rect
                         x="28"
                         y="18"
@@ -122,10 +136,42 @@ function FaceVisual({ face }: { face: ProcessFaceKey }) {
                         strokeWidth="2"
                         opacity=".5"
                     />
-                    <line x1="28" y1="36" x2="172" y2="36" stroke="currentColor" strokeWidth="2" opacity=".4" />
-                    <rect x="40" y="48" width="58" height="10" rx="2" fill="currentColor" opacity=".35" />
-                    <rect x="40" y="64" width="86" height="10" rx="2" fill="currentColor" opacity=".25" />
-                    <rect x="136" y="48" width="24" height="26" rx="2" fill="currentColor" opacity=".2" />
+                    <line
+                        x1="28"
+                        y1="36"
+                        x2="172"
+                        y2="36"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        opacity=".4"
+                    />
+                    <rect
+                        x="40"
+                        y="48"
+                        width="58"
+                        height="10"
+                        rx="2"
+                        fill="currentColor"
+                        opacity=".35"
+                    />
+                    <rect
+                        x="40"
+                        y="64"
+                        width="86"
+                        height="10"
+                        rx="2"
+                        fill="currentColor"
+                        opacity=".25"
+                    />
+                    <rect
+                        x="136"
+                        y="48"
+                        width="24"
+                        height="26"
+                        rx="2"
+                        fill="currentColor"
+                        opacity=".2"
+                    />
                     <path
                         d="M150 78 168 60"
                         stroke="currentColor"
@@ -138,9 +184,16 @@ function FaceVisual({ face }: { face: ProcessFaceKey }) {
             );
         case 'proposal':
             return (
-                <svg viewBox="0 0 200 110" aria-hidden="true" className="qd-process-cube__art">
+                <svg
+                    viewBox="0 0 200 110"
+                    aria-hidden="true"
+                    className="qd-process-cube__art"
+                >
                     {[0, 1, 2, 3].map((row) => (
-                        <g key={row} transform={`translate(0 ${18 + row * 21})`}>
+                        <g
+                            key={row}
+                            transform={`translate(0 ${18 + row * 21})`}
+                        >
                             <rect
                                 x="34"
                                 y="0"
@@ -177,7 +230,11 @@ function FaceVisual({ face }: { face: ProcessFaceKey }) {
             );
         case 'development':
             return (
-                <svg viewBox="0 0 200 110" aria-hidden="true" className="qd-process-cube__art">
+                <svg
+                    viewBox="0 0 200 110"
+                    aria-hidden="true"
+                    className="qd-process-cube__art"
+                >
                     <rect
                         x="24"
                         y="14"
@@ -189,10 +246,36 @@ function FaceVisual({ face }: { face: ProcessFaceKey }) {
                         strokeWidth="2"
                         opacity=".45"
                     />
-                    <line x1="24" y1="32" x2="176" y2="32" stroke="currentColor" strokeWidth="2" opacity=".35" />
-                    <circle cx="36" cy="23" r="2.5" fill="currentColor" opacity=".5" />
-                    <circle cx="46" cy="23" r="2.5" fill="currentColor" opacity=".4" />
-                    <circle cx="56" cy="23" r="2.5" fill="currentColor" opacity=".3" />
+                    <line
+                        x1="24"
+                        y1="32"
+                        x2="176"
+                        y2="32"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        opacity=".35"
+                    />
+                    <circle
+                        cx="36"
+                        cy="23"
+                        r="2.5"
+                        fill="currentColor"
+                        opacity=".5"
+                    />
+                    <circle
+                        cx="46"
+                        cy="23"
+                        r="2.5"
+                        fill="currentColor"
+                        opacity=".4"
+                    />
+                    <circle
+                        cx="56"
+                        cy="23"
+                        r="2.5"
+                        fill="currentColor"
+                        opacity=".3"
+                    />
                     <path
                         d="M44 48 32 60 44 72"
                         fill="none"
@@ -211,16 +294,47 @@ function FaceVisual({ face }: { face: ProcessFaceKey }) {
                         strokeLinejoin="round"
                         opacity=".55"
                     />
-                    <rect x="100" y="46" width="64" height="8" rx="2" fill="currentColor" opacity=".25" />
-                    <rect x="100" y="62" width="44" height="8" rx="2" fill="currentColor" opacity=".35" />
-                    <rect x="100" y="78" width="54" height="8" rx="2" fill="currentColor" opacity=".2" />
+                    <rect
+                        x="100"
+                        y="46"
+                        width="64"
+                        height="8"
+                        rx="2"
+                        fill="currentColor"
+                        opacity=".25"
+                    />
+                    <rect
+                        x="100"
+                        y="62"
+                        width="44"
+                        height="8"
+                        rx="2"
+                        fill="currentColor"
+                        opacity=".35"
+                    />
+                    <rect
+                        x="100"
+                        y="78"
+                        width="54"
+                        height="8"
+                        rx="2"
+                        fill="currentColor"
+                        opacity=".2"
+                    />
                 </svg>
             );
         case 'review':
             return (
-                <svg viewBox="0 0 200 110" aria-hidden="true" className="qd-process-cube__art">
+                <svg
+                    viewBox="0 0 200 110"
+                    aria-hidden="true"
+                    className="qd-process-cube__art"
+                >
                     {[0, 1, 2].map((row) => (
-                        <g key={row} transform={`translate(0 ${18 + row * 26})`}>
+                        <g
+                            key={row}
+                            transform={`translate(0 ${18 + row * 26})`}
+                        >
                             <rect
                                 x="34"
                                 y="0"
@@ -242,7 +356,13 @@ function FaceVisual({ face }: { face: ProcessFaceKey }) {
                                     strokeLinejoin="round"
                                 />
                             ) : (
-                                <circle cx="45" cy="11" r="3" fill="currentColor" opacity=".5" />
+                                <circle
+                                    cx="45"
+                                    cy="11"
+                                    r="3"
+                                    fill="currentColor"
+                                    opacity=".5"
+                                />
                             )}
                             <rect
                                 x="70"
@@ -259,7 +379,11 @@ function FaceVisual({ face }: { face: ProcessFaceKey }) {
             );
         case 'delivery':
             return (
-                <svg viewBox="0 0 200 110" aria-hidden="true" className="qd-process-cube__art">
+                <svg
+                    viewBox="0 0 200 110"
+                    aria-hidden="true"
+                    className="qd-process-cube__art"
+                >
                     <path
                         d="M58 70a22 22 0 0 1-4-43 28 28 0 0 1 54-10 24 24 0 0 1 32 23 20 20 0 0 1-4 30Z"
                         fill="none"
@@ -276,8 +400,20 @@ function FaceVisual({ face }: { face: ProcessFaceKey }) {
                         strokeLinejoin="round"
                         opacity=".85"
                     />
-                    <circle cx="148" cy="32" r="4" fill="currentColor" opacity=".6" />
-                    <circle cx="160" cy="46" r="3" fill="currentColor" opacity=".4" />
+                    <circle
+                        cx="148"
+                        cy="32"
+                        r="4"
+                        fill="currentColor"
+                        opacity=".6"
+                    />
+                    <circle
+                        cx="160"
+                        cy="46"
+                        r="3"
+                        fill="currentColor"
+                        opacity=".4"
+                    />
                 </svg>
             );
         default:
@@ -297,7 +433,11 @@ export default function MethodologyProcessCube() {
     // tapar el contenido) con la instancia de Swiper.
     const wireControls = useCallback(
         (swiper: SwiperClass) => {
-            if (!prevRef.current || !nextRef.current || !paginationRef.current) {
+            if (
+                !prevRef.current ||
+                !nextRef.current ||
+                !paginationRef.current
+            ) {
                 return;
             }
 
@@ -402,7 +542,10 @@ export default function MethodologyProcessCube() {
                     const number = String(index + 1).padStart(2, '0');
 
                     return (
-                        <SwiperSlide key={key} className="qd-process-cube__slide">
+                        <SwiperSlide
+                            key={key}
+                            className="qd-process-cube__slide"
+                        >
                             <article className="qd-process-cube__card">
                                 <div className="qd-process-cube__visual">
                                     <FaceVisual face={key} />
@@ -416,18 +559,29 @@ export default function MethodologyProcessCube() {
                                             {number}
                                         </span>
                                         <span className="qd-process-cube__icon">
-                                            <Icon aria-hidden="true" size={20} strokeWidth={1.8} />
+                                            <Icon
+                                                aria-hidden="true"
+                                                size={20}
+                                                strokeWidth={1.8}
+                                            />
                                         </span>
                                     </div>
                                     <h3 className="qd-process-cube__title">
-                                        {t(`home.methodology.steps.${key}.title`)}
+                                        {t(
+                                            `home.methodology.steps.${key}.title`,
+                                        )}
                                     </h3>
                                     <p className="qd-process-cube__description">
-                                        {t(`home.methodology.steps.${key}.description`)}
+                                        {t(
+                                            `home.methodology.steps.${key}.description`,
+                                        )}
                                     </p>
                                     <span className="qd-process-cube__deliverable">
-                                        {t('home.methodology.deliverableLabel')}:{' '}
-                                        {t(`home.methodology.steps.${key}.deliverable`)}
+                                        {t('home.methodology.deliverableLabel')}
+                                        :{' '}
+                                        {t(
+                                            `home.methodology.steps.${key}.deliverable`,
+                                        )}
                                     </span>
                                 </div>
                             </article>
@@ -458,7 +612,11 @@ export default function MethodologyProcessCube() {
                     className="qd-process-cube__nav qd-process-cube__nav--next"
                     aria-label={t('home.methodology.cube.next')}
                 >
-                    <ChevronRight aria-hidden="true" size={20} strokeWidth={2} />
+                    <ChevronRight
+                        aria-hidden="true"
+                        size={20}
+                        strokeWidth={2}
+                    />
                 </button>
             </div>
         </div>

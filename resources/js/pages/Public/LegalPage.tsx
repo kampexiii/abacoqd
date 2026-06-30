@@ -44,7 +44,10 @@ type LegalContent = {
     readonly sections: readonly LegalSection[];
 };
 
-type LegalTree = Record<Locale, { legalPages: Record<LegalPageKind, LegalContent> }>;
+type LegalTree = Record<
+    Locale,
+    { legalPages: Record<LegalPageKind, LegalContent> }
+>;
 
 const LEGAL_TREE = { es: esLang, en: enLang } as unknown as LegalTree;
 
@@ -56,7 +59,7 @@ const COMPANY = {
         'Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid, España',
     registry:
         'Registro Mercantil de Madrid, Tomo 38273, Folio 65, Sección GNE, Hoja Nº 681002',
-    email: 'info@abacodev.com',
+    email: 'info@abacoqd.com',
     phone: '+34 91 020 00 89',
     phoneHref: '+34910200089',
     domain: 'https://abacoqd.com/',
@@ -71,7 +74,10 @@ const CROSS_LINKS: readonly {
     { kind: 'cookies', href: '/cookies' },
 ];
 
-function sectionsFor(locale: Locale, kind: LegalPageKind): readonly LegalSection[] {
+function sectionsFor(
+    locale: Locale,
+    kind: LegalPageKind,
+): readonly LegalSection[] {
     const tree = LEGAL_TREE[locale] ?? LEGAL_TREE.es;
 
     return (tree.legalPages[kind] ?? LEGAL_TREE.es.legalPages[kind]).sections;
@@ -320,7 +326,9 @@ export default function LegalPage({ kind }: { readonly kind: LegalPageKind }) {
                                         href={link.href}
                                         className="inline-flex items-center gap-1.5 rounded-full border border-qd-mist px-4 py-1.5 text-sm font-semibold text-qd-text-high transition hover:border-qd-teal-2 hover:text-qd-teal-2 dark:border-white/15 dark:text-qd-text-medium dark:hover:border-qd-teal dark:hover:text-qd-teal"
                                     >
-                                        {t(`legalPages.common.links.${link.kind}`)}
+                                        {t(
+                                            `legalPages.common.links.${link.kind}`,
+                                        )}
                                     </a>
                                 ))}
                                 <a

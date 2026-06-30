@@ -1,7 +1,7 @@
 import { useForm } from '@inertiajs/react';
 import { Loader2, Upload, X } from 'lucide-react';
-import { useMemo, useState   } from 'react';
-import type {FormEvent, ReactNode} from 'react';
+import { useMemo, useState } from 'react';
+import type { FormEvent, ReactNode } from 'react';
 
 import { adminSelectClass as selectClass } from '@/components/admin/AdminSelect';
 import FormSection from '@/components/admin/FormSection';
@@ -57,7 +57,9 @@ type ServiceFormProps = {
     readonly defaultSortOrder?: number;
 };
 
-function localized(value: Partial<LocalizedInput> | null | undefined): LocalizedInput {
+function localized(
+    value: Partial<LocalizedInput> | null | undefined,
+): LocalizedInput {
     return { es: value?.es ?? '', en: value?.en ?? '' };
 }
 
@@ -73,7 +75,9 @@ export default function ServiceForm({
     const initialIsDetailEnabled =
         initialIsActive && (service?.isDetailEnabled ?? false);
     const initialIsFeatured =
-        initialIsActive && initialIsDetailEnabled && (service?.isFeatured ?? false);
+        initialIsActive &&
+        initialIsDetailEnabled &&
+        (service?.isFeatured ?? false);
 
     const form = useForm<ServiceFormData>({
         title: localized(service?.title),
@@ -175,7 +179,10 @@ export default function ServiceForm({
                     title={t('admin.services.form.contentTitle')}
                     description={t('admin.services.form.contentHint')}
                 >
-                    <LocaleTabs activeLocale={activeLocale} onChange={setActiveLocale} />
+                    <LocaleTabs
+                        activeLocale={activeLocale}
+                        onChange={setActiveLocale}
+                    />
 
                     <div className="mt-5 flex flex-col gap-4">
                         <Field
@@ -184,7 +191,13 @@ export default function ServiceForm({
                         >
                             <Input
                                 value={data.title[activeLocale]}
-                                onChange={(e) => setLocalized('title', activeLocale, e.target.value)}
+                                onChange={(e) =>
+                                    setLocalized(
+                                        'title',
+                                        activeLocale,
+                                        e.target.value,
+                                    )
+                                }
                             />
                         </Field>
 
@@ -195,7 +208,13 @@ export default function ServiceForm({
                         >
                             <Input
                                 value={data.slug[activeLocale]}
-                                onChange={(e) => setLocalized('slug', activeLocale, e.target.value)}
+                                onChange={(e) =>
+                                    setLocalized(
+                                        'slug',
+                                        activeLocale,
+                                        e.target.value,
+                                    )
+                                }
                             />
                         </Field>
 
@@ -206,7 +225,11 @@ export default function ServiceForm({
                             <textarea
                                 value={data.summary[activeLocale]}
                                 onChange={(e) =>
-                                    setLocalized('summary', activeLocale, e.target.value)
+                                    setLocalized(
+                                        'summary',
+                                        activeLocale,
+                                        e.target.value,
+                                    )
                                 }
                                 rows={3}
                                 className={textareaClass}
@@ -221,7 +244,11 @@ export default function ServiceForm({
                             <textarea
                                 value={data.description[activeLocale]}
                                 onChange={(e) =>
-                                    setLocalized('description', activeLocale, e.target.value)
+                                    setLocalized(
+                                        'description',
+                                        activeLocale,
+                                        e.target.value,
+                                    )
                                 }
                                 rows={6}
                                 className={textareaClass}
@@ -238,7 +265,13 @@ export default function ServiceForm({
                         >
                             <Input
                                 value={data.cta.label[activeLocale]}
-                                onChange={(e) => setCta('label', activeLocale, e.target.value)}
+                                onChange={(e) =>
+                                    setCta(
+                                        'label',
+                                        activeLocale,
+                                        e.target.value,
+                                    )
+                                }
                             />
                         </Field>
                         <Field
@@ -247,7 +280,9 @@ export default function ServiceForm({
                         >
                             <Input
                                 value={data.cta.url[activeLocale]}
-                                onChange={(e) => setCta('url', activeLocale, e.target.value)}
+                                onChange={(e) =>
+                                    setCta('url', activeLocale, e.target.value)
+                                }
                             />
                         </Field>
                     </div>
@@ -280,7 +315,10 @@ export default function ServiceForm({
                                     accept="image/png,image/jpeg,image/webp"
                                     className="hidden"
                                     onChange={(e) => {
-                                        setData('image', e.target.files?.[0] ?? null);
+                                        setData(
+                                            'image',
+                                            e.target.files?.[0] ?? null,
+                                        );
                                         setData('remove_image', false);
                                     }}
                                 />
@@ -299,7 +337,9 @@ export default function ServiceForm({
                                 </button>
                             )}
                             {errors.image && (
-                                <p className="text-sm text-red-600">{errors.image}</p>
+                                <p className="text-sm text-red-600">
+                                    {errors.image}
+                                </p>
                             )}
                         </div>
                     </div>
@@ -309,14 +349,22 @@ export default function ServiceForm({
             <div className="flex flex-col gap-6">
                 <FormSection title={t('admin.services.form.publishTitle')}>
                     <div className="flex flex-col gap-4">
-                        <Field label={t('admin.services.fields.status')} error={errors.status}>
+                        <Field
+                            label={t('admin.services.fields.status')}
+                            error={errors.status}
+                        >
                             <select
                                 value={data.status}
-                                onChange={(e) => setData('status', e.target.value)}
+                                onChange={(e) =>
+                                    setData('status', e.target.value)
+                                }
                                 className={selectClass}
                             >
                                 {statuses.map((option) => (
-                                    <option key={option.value} value={option.value}>
+                                    <option
+                                        key={option.value}
+                                        value={option.value}
+                                    >
                                         {option.label}
                                     </option>
                                 ))}
@@ -332,7 +380,10 @@ export default function ServiceForm({
                                 min={0}
                                 value={data.sort_order}
                                 onChange={(e) =>
-                                    setData('sort_order', Number(e.target.value))
+                                    setData(
+                                        'sort_order',
+                                        Number(e.target.value),
+                                    )
                                 }
                             />
                         </Field>
@@ -343,21 +394,29 @@ export default function ServiceForm({
                     <div className="flex flex-col divide-y divide-qd-mist dark:divide-qd-white/10">
                         <ToggleRow
                             label={t('admin.services.fields.isActive')}
-                            description={t('admin.services.fields.isActiveHint')}
+                            description={t(
+                                'admin.services.fields.isActiveHint',
+                            )}
                             checked={data.is_active}
                             onChange={setActive}
                         />
                         <ToggleRow
                             label={t('admin.services.fields.isDetailEnabled')}
-                            description={t('admin.services.fields.isDetailEnabledHint')}
+                            description={t(
+                                'admin.services.fields.isDetailEnabledHint',
+                            )}
                             checked={data.is_detail_enabled}
-                            disabled={!data.is_active && !data.is_detail_enabled}
+                            disabled={
+                                !data.is_active && !data.is_detail_enabled
+                            }
                             error={errors.is_detail_enabled}
                             onChange={setDetailEnabled}
                         />
                         <ToggleRow
                             label={t('admin.services.fields.isFeatured')}
-                            description={t('admin.services.fields.isFeaturedHint')}
+                            description={t(
+                                'admin.services.fields.isFeaturedHint',
+                            )}
                             error={errors.is_featured}
                             checked={data.is_featured}
                             disabled={
@@ -375,7 +434,13 @@ export default function ServiceForm({
                         disabled={processing}
                         className="inline-flex items-center gap-2 rounded-lg bg-qd-teal-2 px-5 py-2.5 text-sm font-bold text-white transition hover:brightness-95 disabled:opacity-60 dark:bg-qd-teal dark:text-qd-ink"
                     >
-                        {processing && <Loader2 aria-hidden="true" size={16} className="animate-spin" />}
+                        {processing && (
+                            <Loader2
+                                aria-hidden="true"
+                                size={16}
+                                className="animate-spin"
+                            />
+                        )}
                         {t('admin.services.form.save')}
                     </button>
                     <a
@@ -439,7 +504,9 @@ function Field({
             <Label>{label}</Label>
             {children}
             {hint && !error && (
-                <p className="text-xs text-qd-text-medium dark:text-qd-white/40">{hint}</p>
+                <p className="text-xs text-qd-text-medium dark:text-qd-white/40">
+                    {hint}
+                </p>
             )}
             {error && <p className="text-sm text-red-600">{error}</p>}
         </div>
@@ -464,7 +531,9 @@ function ToggleRow({
     return (
         <div className="flex items-start justify-between gap-4 py-3 first:pt-0 last:pb-0">
             <div>
-                <p className="text-sm font-medium text-qd-ink dark:text-qd-white">{label}</p>
+                <p className="text-sm font-medium text-qd-ink dark:text-qd-white">
+                    {label}
+                </p>
                 {description && (
                     <p className="mt-0.5 text-xs text-qd-text-medium dark:text-qd-white/40">
                         {description}
@@ -481,7 +550,9 @@ function ToggleRow({
                 onClick={() => onChange(!checked)}
                 className={cn(
                     'relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition',
-                    checked ? 'bg-qd-teal-2 dark:bg-qd-teal' : 'bg-qd-mist dark:bg-qd-white/15',
+                    checked
+                        ? 'bg-qd-teal-2 dark:bg-qd-teal'
+                        : 'bg-qd-mist dark:bg-qd-white/15',
                     disabled && 'cursor-not-allowed opacity-45',
                 )}
             >

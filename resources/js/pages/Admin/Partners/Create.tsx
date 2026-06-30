@@ -20,7 +20,11 @@ export default function PartnersCreate({ types, nextSortOrder }: CreateProps) {
             ]}
         >
             <Head title="Nuevo partner · Admin AbacoQD" />
-            <PartnerForm mode="create" types={types} defaultSortOrder={nextSortOrder} />
+            <PartnerForm
+                mode="create"
+                types={types}
+                defaultSortOrder={nextSortOrder}
+            />
         </AdminLayout>
     );
 }

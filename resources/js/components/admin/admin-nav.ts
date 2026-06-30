@@ -34,39 +34,103 @@ export type AdminNavItem = {
 };
 
 /**
- * Navegación canónica del panel admin. Alcance real del proyecto: Legal, SEO y
- * Reseñas NO son módulos admin (Legal/SEO son código/documentación; Reseñas es
- * integración externa de Google, no un CRUD manual). Todas las entradas están
- * implementadas; no hay módulos "pendiente".
+ * Navegación principal del panel administrativo.
+ *
+ * Incluye únicamente módulos gestionados desde el propio panel.
  */
 export const ADMIN_NAV: readonly AdminNavItem[] = [
-    { key: 'dashboard', href: '/admin/dashboard', icon: LayoutDashboard, enabled: true },
+    {
+        key: 'dashboard',
+        href: '/admin/dashboard',
+        icon: LayoutDashboard,
+        enabled: true,
+    },
     { key: 'services', href: '/admin/services', icon: Wrench, enabled: true },
     { key: 'blog', href: '/admin/posts', icon: FileText, enabled: true },
-    { key: 'projects', href: '/admin/projects', icon: FolderKanban, enabled: true },
-    { key: 'partners', href: '/admin/partners', icon: Handshake, enabled: true },
-    { key: 'team', href: '/admin/team-members', icon: UsersRound, enabled: true },
+    {
+        key: 'projects',
+        href: '/admin/projects',
+        icon: FolderKanban,
+        enabled: true,
+    },
+    {
+        key: 'partners',
+        href: '/admin/partners',
+        icon: Handshake,
+        enabled: true,
+    },
+    {
+        key: 'team',
+        href: '/admin/team-members',
+        icon: UsersRound,
+        enabled: true,
+    },
     { key: 'contacts', href: '/admin/contacts', icon: Mail, enabled: true },
-    { key: 'booking', href: '/admin/booking/calendar', icon: CalendarClock, enabled: true },
+    {
+        key: 'booking',
+        href: '/admin/booking/calendar',
+        icon: CalendarClock,
+        enabled: true,
+    },
     { key: 'faqs', href: '/admin/faqs', icon: HelpCircle, enabled: true },
     { key: 'users', href: '/admin/users', icon: Users, enabled: true },
     { key: 'settings', href: '/admin/settings', icon: Settings, enabled: true },
 ] as const;
 
 /**
- * Claves visibles por rol. Es solo UX (oculta enlaces); la autorización real
- * vive en el backend (middleware `role` + FormRequests). super_admin ve todo;
- * admin no ve "users"; editor/viewer no ven "users", "contacts", "booking" ni
- * "settings" (PII, reservas y ajustes son gestión exclusiva de super_admin/admin).
+ * Claves visibles por rol en la capa de navegación.
+ *
+ * La autorización efectiva se aplica en backend.
  */
 const ROLE_NAV_KEYS: Record<string, readonly AdminNavKey[]> = {
-    super_admin: ['dashboard', 'services', 'blog', 'projects', 'partners', 'team', 'contacts', 'booking', 'faqs', 'users', 'settings'],
-    admin: ['dashboard', 'services', 'blog', 'projects', 'partners', 'team', 'contacts', 'booking', 'faqs', 'settings'],
-    editor: ['dashboard', 'services', 'blog', 'projects', 'partners', 'team', 'faqs'],
-    viewer: ['dashboard', 'services', 'blog', 'projects', 'partners', 'team', 'faqs'],
+    super_admin: [
+        'dashboard',
+        'services',
+        'blog',
+        'projects',
+        'partners',
+        'team',
+        'contacts',
+        'booking',
+        'faqs',
+        'users',
+        'settings',
+    ],
+    admin: [
+        'dashboard',
+        'services',
+        'blog',
+        'projects',
+        'partners',
+        'team',
+        'contacts',
+        'booking',
+        'faqs',
+        'settings',
+    ],
+    editor: [
+        'dashboard',
+        'services',
+        'blog',
+        'projects',
+        'partners',
+        'team',
+        'faqs',
+    ],
+    viewer: [
+        'dashboard',
+        'services',
+        'blog',
+        'projects',
+        'partners',
+        'team',
+        'faqs',
+    ],
 };
 
-export function adminNavForRole(role: string | undefined): readonly AdminNavItem[] {
+export function adminNavForRole(
+    role: string | undefined,
+): readonly AdminNavItem[] {
     const allowedKeys = ROLE_NAV_KEYS[role ?? ''] ?? ROLE_NAV_KEYS.editor;
 
     return ADMIN_NAV.filter((item) => allowedKeys.includes(item.key));

@@ -72,7 +72,9 @@ function serviceSlug(service: PublicService, locale: Locale): string {
         service.slug[locale] ??
         service.slug.es ??
         service.slug.en ??
-        (serviceKey ? SERVICE_PRESENTATION[serviceKey].fallbackSlug[locale] : '')
+        (serviceKey
+            ? SERVICE_PRESENTATION[serviceKey].fallbackSlug[locale]
+            : '')
     );
 }
 
@@ -177,104 +179,103 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
                 <div className="mx-auto max-w-384 px-5 py-12 sm:px-8 sm:py-16 xl:px-10">
                     {/* Fila 1: Qué resolvemos (25%) · Cómo lo abordamos (25%) · Imagen (50%) */}
                     <div className="grid gap-8 lg:grid-cols-[1fr_1fr_2fr] lg:gap-0">
-                    <section
-                        aria-labelledby="service-solves-title"
-                        className="border-b border-qd-ink/10 pb-8 lg:border-r lg:border-b-0 lg:pr-8 lg:pb-0 dark:border-white/10"
-                    >
-                        <h2
-                            id="service-solves-title"
-                            className="flex items-center gap-3 text-lg font-bold text-qd-ink dark:text-qd-white"
+                        <section
+                            aria-labelledby="service-solves-title"
+                            className="border-b border-qd-ink/10 pb-8 lg:border-r lg:border-b-0 lg:pr-8 lg:pb-0 dark:border-white/10"
                         >
-                            <Target
-                                aria-hidden="true"
-                                size={21}
-                                className="text-qd-teal-2 dark:text-qd-teal"
-                            />
-                            {t('serviceDetail.solves.title')}
-                        </h2>
-                        <ul className="mt-6 flex flex-col gap-4">
-                            {PROBLEM_INDEXES.map((index) => (
-                                <li
-                                    key={index}
-                                    className="flex gap-3 text-sm leading-relaxed text-qd-text-high"
-                                >
-                                    <CheckCircle2
-                                        aria-hidden="true"
-                                        size={17}
-                                        className="mt-0.5 shrink-0 text-qd-teal-2 dark:text-qd-teal"
-                                    />
-                                    {t(`${translationPath}.problems.${index}`)}
-                                </li>
-                            ))}
-                        </ul>
-                    </section>
-
-                    <section
-                        aria-labelledby="service-approach-title"
-                        className="border-b border-qd-ink/10 py-8 lg:border-r lg:border-b-0 lg:px-8 lg:py-0 dark:border-white/10"
-                    >
-                        <h2
-                            id="service-approach-title"
-                            className="flex items-center gap-3 text-lg font-bold text-qd-ink dark:text-qd-white"
-                        >
-                            <Compass
-                                aria-hidden="true"
-                                size={21}
-                                className="text-qd-teal-2 dark:text-qd-teal"
-                            />
-                            {t('serviceDetail.approach.title')}
-                        </h2>
-                        <ol className="mt-6 flex flex-col gap-3">
-                            {approachSteps.map((step, index) => (
-                                <li
-                                    key={step}
-                                    className="flex items-start gap-4"
-                                >
-                                    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-qd-teal-2/30 bg-qd-teal-2/10 text-xs font-bold text-qd-teal-2 dark:border-qd-teal/35 dark:bg-qd-teal/10 dark:text-qd-teal">
-                                        {String(index + 1).padStart(2, '0')}
-                                    </span>
-                                    <p className="pt-1 text-sm leading-relaxed text-qd-text-high">
-                                        {step}
-                                    </p>
-                                </li>
-                            ))}
-                        </ol>
-                    </section>
-
-                    <section
-                        aria-label={title}
-                        className="py-8 lg:min-h-107.5 lg:py-0 lg:pl-8"
-                    >
-                        <figure
-                            className="h-full overflow-hidden rounded-3xl border border-qd-ink/10 bg-qd-white shadow-[0_26px_90px_-48px_rgba(7,17,26,0.55)] dark:border-white/10 dark:bg-qd-surface"
-                        >
-                            {detailImageSrc ? (
-                                <img
-                                    src={detailImageSrc}
-                                    alt={title}
-                                    loading="eager"
-                                    fetchPriority="high"
-                                    className="aspect-video h-full min-h-72 w-full object-contain lg:min-h-full"
-                                />
-                            ) : (
-                                <div
+                            <h2
+                                id="service-solves-title"
+                                className="flex items-center gap-3 text-lg font-bold text-qd-ink dark:text-qd-white"
+                            >
+                                <Target
                                     aria-hidden="true"
-                                    className="flex aspect-video h-full min-h-72 w-full items-center justify-center bg-linear-to-br from-qd-mist to-qd-white p-6 lg:min-h-full dark:from-qd-surface dark:to-qd-ink"
-                                >
-                                    <ServiceMockup
-                                        variant={
-                                            serviceKey
-                                                ? SERVICE_PRESENTATION[
-                                                      serviceKey
-                                                  ].mockup
-                                                : 'web'
-                                        }
-                                    />
-                                </div>
-                            )}
-                        </figure>
-                    </section>
+                                    size={21}
+                                    className="text-qd-teal-2 dark:text-qd-teal"
+                                />
+                                {t('serviceDetail.solves.title')}
+                            </h2>
+                            <ul className="mt-6 flex flex-col gap-4">
+                                {PROBLEM_INDEXES.map((index) => (
+                                    <li
+                                        key={index}
+                                        className="flex gap-3 text-sm leading-relaxed text-qd-text-high"
+                                    >
+                                        <CheckCircle2
+                                            aria-hidden="true"
+                                            size={17}
+                                            className="mt-0.5 shrink-0 text-qd-teal-2 dark:text-qd-teal"
+                                        />
+                                        {t(
+                                            `${translationPath}.problems.${index}`,
+                                        )}
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
 
+                        <section
+                            aria-labelledby="service-approach-title"
+                            className="border-b border-qd-ink/10 py-8 lg:border-r lg:border-b-0 lg:px-8 lg:py-0 dark:border-white/10"
+                        >
+                            <h2
+                                id="service-approach-title"
+                                className="flex items-center gap-3 text-lg font-bold text-qd-ink dark:text-qd-white"
+                            >
+                                <Compass
+                                    aria-hidden="true"
+                                    size={21}
+                                    className="text-qd-teal-2 dark:text-qd-teal"
+                                />
+                                {t('serviceDetail.approach.title')}
+                            </h2>
+                            <ol className="mt-6 flex flex-col gap-3">
+                                {approachSteps.map((step, index) => (
+                                    <li
+                                        key={step}
+                                        className="flex items-start gap-4"
+                                    >
+                                        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-qd-teal-2/30 bg-qd-teal-2/10 text-xs font-bold text-qd-teal-2 dark:border-qd-teal/35 dark:bg-qd-teal/10 dark:text-qd-teal">
+                                            {String(index + 1).padStart(2, '0')}
+                                        </span>
+                                        <p className="pt-1 text-sm leading-relaxed text-qd-text-high">
+                                            {step}
+                                        </p>
+                                    </li>
+                                ))}
+                            </ol>
+                        </section>
+
+                        <section
+                            aria-label={title}
+                            className="py-8 lg:min-h-107.5 lg:py-0 lg:pl-8"
+                        >
+                            <figure className="h-full overflow-hidden rounded-3xl border border-qd-ink/10 bg-qd-white shadow-[0_26px_90px_-48px_rgba(7,17,26,0.55)] dark:border-white/10 dark:bg-qd-surface">
+                                {detailImageSrc ? (
+                                    <img
+                                        src={detailImageSrc}
+                                        alt={title}
+                                        loading="eager"
+                                        fetchPriority="high"
+                                        className="aspect-video h-full min-h-72 w-full object-contain lg:min-h-full"
+                                    />
+                                ) : (
+                                    <div
+                                        aria-hidden="true"
+                                        className="flex aspect-video h-full min-h-72 w-full items-center justify-center bg-linear-to-br from-qd-mist to-qd-white p-6 lg:min-h-full dark:from-qd-surface dark:to-qd-ink"
+                                    >
+                                        <ServiceMockup
+                                            variant={
+                                                serviceKey
+                                                    ? SERVICE_PRESENTATION[
+                                                          serviceKey
+                                                      ].mockup
+                                                    : 'web'
+                                            }
+                                        />
+                                    </div>
+                                )}
+                            </figure>
+                        </section>
                     </div>
 
                     {/* Fila 2: Capacidades a ancho completo, chips en horizontal */}

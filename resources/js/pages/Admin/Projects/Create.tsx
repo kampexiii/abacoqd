@@ -15,7 +15,12 @@ type CreateProps = {
     readonly nextSortOrder: number;
 };
 
-export default function ProjectsCreate({ statuses, partners, services, nextSortOrder }: CreateProps) {
+export default function ProjectsCreate({
+    statuses,
+    partners,
+    services,
+    nextSortOrder,
+}: CreateProps) {
     return (
         <AdminLayout
             title="Nuevo proyecto"

@@ -10,7 +10,11 @@ export default function FaqsEdit({ faq }: EditProps) {
     return (
         <AdminLayout
             title="Editar FAQ"
-            breadcrumbs={[{ title: 'Dashboard', href: '/admin/dashboard' }, { title: 'FAQs', href: '/admin/faqs' }, { title: 'Editar' }]}
+            breadcrumbs={[
+                { title: 'Dashboard', href: '/admin/dashboard' },
+                { title: 'FAQs', href: '/admin/faqs' },
+                { title: 'Editar' },
+            ]}
         >
             <Head title="Editar FAQ · Admin AbacoQD" />
             <FaqForm mode="edit" faq={faq} />

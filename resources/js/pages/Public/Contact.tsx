@@ -122,7 +122,10 @@ export default function Contact({
                                     className="shrink-0 text-qd-teal-2 dark:text-qd-teal"
                                 />
                                 <a
-                                    href={whatsappHref(contact.whatsapp) ?? undefined}
+                                    href={
+                                        whatsappHref(contact.whatsapp) ??
+                                        undefined
+                                    }
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="hover:text-qd-teal-2 dark:hover:text-qd-teal"

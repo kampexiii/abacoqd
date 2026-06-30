@@ -1,10 +1,10 @@
 # PUBLIC_04 — Proyectos
 
-Última revisión: 26 de junio de 2026.
+Última revisión: 28 de junio de 2026.
 
 Fuente de verdad de la página pública **Proyectos**: listado, detalle de proyecto y de la **sección Colaboraciones** dentro de la landing (bloque de logos, marcas y trabajos). Recupera y sustituye los antiguos borradores de portafolio y detalle de portafolio (ya retirados del archivo).
 
-> **Actualización Bloque 7 (26/06):** se eliminó el contenido legacy (11 proyectos + 17 partners de terceros) de la BD y su seeder. Queda **solo CIETE** como proyecto real confirmado, visible en `/proyectos`. La **sección Colaboraciones ya no tiene fallback estático de marcas reales** (`company-logos.ts` borrado): se alimenta solo de partners publicables desde BD y, si no hay, muestra un **estado vacío honesto** (sin logos de terceros, sin copy de «permiso»). La visibilidad pública se controla por estado + visibilidad; `permission_status` queda como compatibilidad interna (`approved`).
+> **Actualización de cierre (28/06):** el portfolio actualmente cargado se considera **contenido real autorizado** para la web inicial. La sección Colaboraciones y la página Proyectos trabajan sobre ese portfolio real; `permission_status` queda solo como compatibilidad interna y no debe reabrirse como bloqueo documental general.
 >
 > **Media de proyecto (subfase 7.3, 26/06):** la tarjeta y el detalle usan `cover_image`; `thumbnail_image` apunta a la misma ruta que la portada (una sola imagen), por lo que `coverImage ?? thumbnailImage` sigue funcionando sin cambios. El proyecto puede tener logo de cliente color/monocromo (`logo`/`logo_dark`/`logo_alt`); su uso público se implementa en la subfase 7.4.
 >
@@ -21,11 +21,11 @@ Fuente de verdad de la página pública **Proyectos**: listado, detalle de proye
 | Nombre público (topbar y página) | Proyectos |
 | Sección equivalente en landing | Colaboraciones |
 | Ruta listado ES | `/proyectos` |
-| Ruta listado EN | `/en/projects` |
+| Ruta listado EN | futura, no bloqueante |
 | Ruta detalle ES | `/proyectos/{slug}` |
-| Ruta detalle EN | `/en/projects/{slug}` |
+| Ruta detalle EN | futura, no bloqueante |
 | En landing | Sección 4 (Colaboraciones), después de Servicios y antes de Blog |
-| Prioridad | P0 como vista documentada; contenido real solo con permisos |
+| Prioridad | P0 como vista documentada; portfolio real autorizado |
 | Entidades | `partners`, `projects`, `partner_project`, `seo_metadata`, `reviews`, `settings`, `faqs` |
 
 ## Criterio de nombre
@@ -42,11 +42,11 @@ Los logos institucionales aportados (be now Partner, Cofinanciado por la Unión 
 
 ## Objetivo
 
-Demostrar experiencia y confianza con proyectos reales o, si todavía no hay permisos, con un estado vacío honesto. La vista no inventa clientes, logos, métricas ni casos.
+Demostrar experiencia y confianza con proyectos reales. La vista no inventa clientes, logos, métricas ni casos.
 
 ## Sección Colaboraciones en landing
 
-**Estructura visual.** Layout split: izquierda eyebrow `COLABORACIONES`, H2 `Proyectos y colaboraciones que conectan experiencia, tecnología y negocio`, subtítulo `Trabajamos sobre proyectos propios, colaborativos o desarrollados junto a partners, siempre adaptando la solución al contexto real de cada cliente.`; derecha composición orbital amplia tipo noria/reloj con botón-pivote. Las burbujas de marcas son glass/translúcidas y de tamaño suficiente para leer el logo. Cuando haya proyectos destacados, la pieza activa muestra nombre de proyecto, partner visible y CTA `Ver proyecto`. Si los permisos no están confirmados, los logos se muestran solo con tratamiento `DEMO` / pendiente de confirmación.
+**Estructura visual.** Layout split: izquierda eyebrow `COLABORACIONES`, H2 `Proyectos y colaboraciones que conectan experiencia, tecnología y negocio`, subtítulo `Trabajamos sobre proyectos propios, colaborativos o desarrollados junto a partners, siempre adaptando la solución al contexto real de cada cliente.`; derecha composición orbital amplia tipo noria/reloj con botón-pivote. Las burbujas de marcas son glass/translúcidas y de tamaño suficiente para leer el logo. Cuando haya proyectos destacados, la pieza activa muestra nombre de proyecto, partner visible y CTA `Ver proyecto`.
 
 **Desktop.** Texto a la izquierda y órbita a la derecha. La noria gira en sentido horario: las marcas empiezan a aparecer en las 12, alcanzan máximo tamaño/opacidad/nitidez en las 3, desaparecen en las 6 y continúan ocultas de 7 a 11 hasta reaparecer en las 12. La pieza activa puede alternar entre logo de partner y card de proyecto. El botón-pivote lleva al proyecto o al listado público de Proyectos (`/proyectos`).
 
@@ -63,7 +63,7 @@ Demostrar experiencia y confianza con proyectos reales o, si todavía no hay per
 1. **Hero compacto.** Fondo `qd-mist`; breadcrumb; H1 `Proyectos`; subcopy: `Proyectos construidos a medida. Publicamos solo lo que podemos enseñar.`
 2. **Filtros.** Chips por servicio/sector/partner si hay volumen suficiente. Si hay menos de 6 proyectos, no se muestran filtros.
 3. **Grid de proyectos.** Cards 3 columnas desktop / 2 tablet / 1 móvil. Destacados primero.
-4. **Bloque de partners/marcas.** Logos permitidos, con roles claros. Se oculta si no hay permisos.
+4. **Bloque de partners/marcas.** Logos autorizados, con roles claros. Se oculta si no hay contenido visible.
 5. **Estado vacío honesto.** Sustituye grid y logos si no hay contenido publicable.
 6. **CTA final.** `Tu proyecto puede ser el siguiente.` + reserva/contacto.
 7. **Footer global.**
@@ -82,7 +82,7 @@ Filtros en scroll horizontal accesible; grid 1 columna; texto de partner visible
 
 ### Modos claro, oscuro y sistema
 
-Claro: `qd-bg`/blanco, cards claras, logos a color cuando tengan permiso. Oscuro: `qd-ink`/`qd-surface`, logos en versión clara/monocroma si existe; si no, se usa contenedor con contraste y alt textual.
+Claro: `qd-bg`/blanco, cards claras, logos a color. Oscuro: `qd-ink`/`qd-surface`, logos en versión clara/monocroma si existe; si no, se usa contenedor con contraste y alt textual.
 
 ## Detalle `/proyectos/{slug}`
 
@@ -104,7 +104,7 @@ Reveal de cover con fade + scale leve; secciones con fade-up; galería/lightbox 
 
 ## Contenido editable
 
-Listado: hero, subtítulo, filtros, orden y CTA. Proyecto: título, slug, resumen, cuerpo, cover, galería, tecnologías, partner principal, partners relacionados, URLs públicas, estado, destacado, SEO y traducción ES/EN.
+Listado: hero, subtítulo, filtros, orden y CTA. Proyecto: título, slug, resumen, cuerpo, cover, galería, tecnologías, partner principal, partners relacionados, URLs públicas, estado, destacado y SEO.
 
 ## Entidades relacionadas
 
@@ -113,19 +113,19 @@ Listado: hero, subtítulo, filtros, orden y CTA. Proyecto: título, slug, resume
 - `partner_project`: relación N:M y rol.
 - `reviews`: reseñas reales opcionales.
 - `seo_metadata`: SEO por proyecto e idioma.
-- `faqs`: respuestas del chatbot sobre proyectos, permisos, plazos o forma de trabajo.
+- `faqs`: respuestas del chatbot sobre proyectos, plazos o forma de trabajo.
 
 ## SEO y multilenguaje
 
 - Listado indexable cuando haya contenido suficiente. Si se lanza vacío, puede ir `noindex` temporal sin ocultar la ruta.
-- Detalle indexable solo si `status=published`, `is_visible=true`, contenido completo y permisos cerrados.
-- Slugs por idioma; `hreflang` solo entre proyectos traducidos reales.
+- Detalle indexable solo si `status=published`, `is_visible=true` y contenido completo.
+- Slugs preparados para una posible fase EN futura; sin `hreflang` mientras el lanzamiento siga siendo Spanish-first.
 - OG usa cover autorizado; si no existe, patrón de marca.
 - JSON-LD `BreadcrumbList` y `CreativeWork` opcional. `Review` solo con reseña real.
 
 ## Estados vacíos
 
-- Sin proyectos: bloque `Primeros casos en preparación`, explicación de validación de permisos y CTAs a Servicios/Contacto.
+- Sin proyectos: bloque `Primeros casos en preparación` y CTAs a Servicios/Contacto.
 - Filtro sin resultados: mensaje `Aún no hay proyectos publicados de este tipo` + reset.
 - Proyecto borrador/oculto: 404 público.
 - Sin partner publicable: se oculta partner; nunca se sugiere autoría no confirmada.
@@ -137,11 +137,10 @@ Cards con enlace único, filtros como botones con `aria-pressed`, alt editable e
 
 ## Relación con chatbot
 
-El asistente puede sugerir `Ver proyectos`, explicar por qué algunos casos no son públicos y redirigir a servicios o contacto si no hay un proyecto equivalente.
+El asistente puede sugerir `Ver proyectos` y redirigir a servicios o contacto si no hay un proyecto equivalente.
 
 ## Decisiones abiertas
 
-- Lista de proyectos históricos que pueden publicarse y rol exacto de AbacoQD/Ábaco.
-- Permisos de logos, covers, capturas y reseñas.
+- Selección editorial final del portfolio destacado para landing y listado.
 - Confirmar si los distintivos institucionales deben aparecer también aquí o solo en footer/Quiénes somos.
 - Si el listado vacío va `noindex` temporal hasta tener 2-3 casos reales.

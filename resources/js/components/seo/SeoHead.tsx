@@ -56,20 +56,40 @@ export default function SeoHead({ title }: SeoHeadProps) {
                 href={seo.canonical}
                 {...headKey('seo-canonical')}
             />
-            <meta name="robots" content={seo.robots} {...headKey('seo-robots')} />
+            <meta
+                name="robots"
+                content={seo.robots}
+                {...headKey('seo-robots')}
+            />
 
             {/* Open Graph: og:url = canonical; og:image solo si el backend
                 resuelve una imagen social segura. */}
-            <meta property="og:title" content={ogTitle} {...headKey('seo-og-title')} />
+            <meta
+                property="og:title"
+                content={ogTitle}
+                {...headKey('seo-og-title')}
+            />
             <meta
                 property="og:description"
                 content={seo.ogDescription}
                 {...headKey('seo-og-description')}
             />
-            <meta property="og:url" content={seo.canonical} {...headKey('seo-og-url')} />
-            <meta property="og:type" content={seo.ogType} {...headKey('seo-og-type')} />
+            <meta
+                property="og:url"
+                content={seo.canonical}
+                {...headKey('seo-og-url')}
+            />
+            <meta
+                property="og:type"
+                content={seo.ogType}
+                {...headKey('seo-og-type')}
+            />
             {seo.ogImage ? (
-                <meta property="og:image" content={seo.ogImage} {...headKey('seo-og-image')} />
+                <meta
+                    property="og:image"
+                    content={seo.ogImage}
+                    {...headKey('seo-og-image')}
+                />
             ) : null}
 
             {/* Twitter Cards: reflejan los valores OG. */}
@@ -78,7 +98,11 @@ export default function SeoHead({ title }: SeoHeadProps) {
                 content="summary_large_image"
                 {...headKey('seo-twitter-card')}
             />
-            <meta name="twitter:title" content={ogTitle} {...headKey('seo-twitter-title')} />
+            <meta
+                name="twitter:title"
+                content={ogTitle}
+                {...headKey('seo-twitter-title')}
+            />
             <meta
                 name="twitter:description"
                 content={seo.ogDescription}

@@ -293,7 +293,9 @@ export default function SiteFooter() {
                                 className="shrink-0 text-qd-teal"
                             />
                             <a
-                                href={whatsappHref(contact.whatsapp) ?? undefined}
+                                href={
+                                    whatsappHref(contact.whatsapp) ?? undefined
+                                }
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="transition-colors hover:text-qd-teal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-qd-lime"

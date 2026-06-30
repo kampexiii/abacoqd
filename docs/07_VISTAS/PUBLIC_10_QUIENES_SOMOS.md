@@ -1,6 +1,6 @@
 # PUBLIC_10 — Quiénes somos
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 28 de junio de 2026.
 
 Fuente de verdad de la vista pública **Quiénes somos**. Es vista activa del producto 30/06 y aparece en la topbar. No es sección de la landing; es una página interna real.
 
@@ -9,14 +9,14 @@ Fuente de verdad de la vista pública **Quiénes somos**. Es vista activa del pr
 | Campo | Valor |
 |---|---|
 | Ruta ES | `/quienes-somos` |
-| Ruta EN | `/en/about` |
+| Ruta EN | futura, no bloqueante |
 | Topbar | Sí, entre Proyectos y Blog |
 | Prioridad | P0 — producto 30/06 |
 | Entidades | `page_sections`, `section_blocks`, `team_members`, `partners`, `settings`, `seo_metadata`, `faqs` |
 
 ## Objetivo
 
-Contar el origen y la solvencia de Abaco Developments sin inventar equipo, clientes, años, cifras ni logros. Debe explicar la evolución documental hacia AbacoQD solo si se aprueba como línea de producto o marca secundaria; la marca pública principal sigue siendo Abaco Developments.
+Contar el origen y la solvencia de AbacoQD sin inventar equipo, clientes, años, cifras ni logros. Puede mencionar el contexto societario o histórico cuando haga falta, pero la marca pública principal es AbacoQD.
 
 ## Texto aprobado (AbacoQD)
 
@@ -26,7 +26,7 @@ Texto exacto, cerrado y sin reescribir, usado como bloque destacado o párrafo p
 
 ## Estructura visual
 
-1. **Hero compacto.** Fondo `qd-mist`; eyebrow `QUIÉNES SOMOS`; H1 `Abaco Developments`; subcopy sobre consultoría tecnológica, CRM, datos, desarrollo digital e IA aplicada; visual lateral con marca pública.
+1. **Hero compacto.** Fondo `qd-mist`; eyebrow `QUIÉNES SOMOS`; H1 `AbacoQD`; subcopy sobre consultoría tecnológica, CRM, datos, desarrollo digital e IA aplicada; visual lateral con marca pública.
 2. **La historia.** Narrativa en 3 bloques: origen, especialización y evolución del enfoque digital. Timeline vertical con hitos solo si son validados.
 3. **Cómo trabajamos.** Banda `qd-ink` con 3 columnas: IA con supervisión técnica, herramientas internas, prototipo/estudio antes de construir.
 4. **Valores.** Cinco conceptos en cards compactas: a medida, rapidez, criterio, accesibilidad, tecnología moderna.
@@ -54,7 +54,7 @@ Timeline con línea que crece en scroll, reveal suave de bloques y hover leve de
 ## Interacción
 
 - Enlaces a Metodología, Servicios, Proyectos y Contacto.
-- Tarjetas de equipo con enlaces sociales y CV solo si existen datos reales.
+- Tarjetas de equipo con enlaces sociales y CV cuando existan datos reales confirmados. Pendiente real actual: incorporar la foto de Mohamed.
 - Logos/partners enlazan solo si están autorizados.
 
 ## Componentes usados
@@ -63,7 +63,7 @@ Hero compacto, breadcrumb, timeline, cards de valores, cards de equipo, banda `q
 
 ## Contenido editable
 
-Hero, historia, hitos, valores, bloque de estudio, miembros de equipo, CTAs, partners visibles, SEO y traducciones ES/EN.
+Hero, historia, hitos, valores, bloque de estudio, miembros de equipo, CTAs, partners visibles y SEO.
 
 ## Entidades relacionadas
 
@@ -76,11 +76,11 @@ Hero, historia, hitos, valores, bloque de estudio, miembros de equipo, CTAs, par
 
 ## SEO y multilenguaje
 
-- Title ES: `Quiénes somos | Abaco Developments`.
-- Title EN: `About us | Abaco Developments`.
+- Title ES: `Quiénes somos | AbacoQD`.
+- Title EN: reservado para una futura fase EN completa.
 - Description por idioma sobre origen, especialización y desarrollo a medida.
 - JSON-LD: `AboutPage` + `Organization`; `parentOrganization` solo si la relación jurídica se confirma.
-- `hreflang` entre `/quienes-somos` y `/en/about`.
+- Sin `hreflang` EN mientras no exista una versión inglesa real.
 
 ## Estados vacíos
 
@@ -95,11 +95,11 @@ Timeline como lista ordenada, línea decorativa con `aria-hidden`, enlaces socia
 
 ## Relación con chatbot
 
-El chatbot puede explicar quién es Abaco Developments, cómo trabaja el equipo y redirigir a Metodología, Servicios o Contacto. No inventa miembros, experiencia, clientes ni fechas.
+El chatbot puede explicar quién es AbacoQD, cómo trabaja el equipo y redirigir a Metodología, Servicios o Contacto. No inventa miembros, experiencia, clientes ni fechas.
 
 ## Decisiones abiertas
 
 - Texto exacto de la relación jurídica/comercial entre Ábaco Developments y AbacoQD.
 - Ubicación pública obligatoria de logos UE/FSE+/Fondos Europeos y be now Partner.
-- Si se publican miembros de equipo el 30/06.
+- Foto de Mohamed.
 - Hitos concretos y fechas, solo si el cliente los valida.

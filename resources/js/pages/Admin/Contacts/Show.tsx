@@ -46,7 +46,11 @@ export default function ContactsShow({ contact }: ShowProps) {
     }
 
     function destroy() {
-        if (window.confirm('¿Eliminar este contacto? Esta acción no se puede deshacer.')) {
+        if (
+            window.confirm(
+                '¿Eliminar este contacto? Esta acción no se puede deshacer.',
+            )
+        ) {
             router.delete(`/admin/contacts/${contact.id}`);
         }
     }
@@ -54,7 +58,11 @@ export default function ContactsShow({ contact }: ShowProps) {
     return (
         <AdminLayout
             title={`Contacto · ${contact.name}`}
-            breadcrumbs={[{ title: 'Dashboard', href: '/admin/dashboard' }, { title: 'Contactos', href: '/admin/contacts' }, { title: contact.name }]}
+            breadcrumbs={[
+                { title: 'Dashboard', href: '/admin/dashboard' },
+                { title: 'Contactos', href: '/admin/contacts' },
+                { title: contact.name },
+            ]}
             actions={
                 <button
                     type="button"
@@ -72,27 +80,45 @@ export default function ContactsShow({ contact }: ShowProps) {
                 <div className="space-y-4 rounded-2xl border border-qd-mist bg-qd-white p-6 lg:col-span-2 dark:border-qd-white/10 dark:bg-qd-surface">
                     <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
-                            <dt className="text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/50">Nombre</dt>
-                            <dd className="text-sm text-qd-ink dark:text-qd-white">{contact.name}</dd>
+                            <dt className="text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/50">
+                                Nombre
+                            </dt>
+                            <dd className="text-sm text-qd-ink dark:text-qd-white">
+                                {contact.name}
+                            </dd>
                         </div>
                         <div>
-                            <dt className="text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/50">Email</dt>
-                            <dd className="text-sm text-qd-ink dark:text-qd-white">{contact.email}</dd>
+                            <dt className="text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/50">
+                                Email
+                            </dt>
+                            <dd className="text-sm text-qd-ink dark:text-qd-white">
+                                {contact.email}
+                            </dd>
                         </div>
                         <div>
-                            <dt className="text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/50">Teléfono</dt>
-                            <dd className="text-sm text-qd-ink dark:text-qd-white">{contact.phone ?? '—'}</dd>
+                            <dt className="text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/50">
+                                Teléfono
+                            </dt>
+                            <dd className="text-sm text-qd-ink dark:text-qd-white">
+                                {contact.phone ?? '—'}
+                            </dd>
                         </div>
                         <div>
-                            <dt className="text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/50">Empresa</dt>
-                            <dd className="text-sm text-qd-ink dark:text-qd-white">{contact.company ?? '—'}</dd>
+                            <dt className="text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/50">
+                                Empresa
+                            </dt>
+                            <dd className="text-sm text-qd-ink dark:text-qd-white">
+                                {contact.company ?? '—'}
+                            </dd>
                         </div>
                         <div>
                             <dt className="text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/50">
                                 Servicio de interés
                             </dt>
                             <dd className="text-sm text-qd-ink dark:text-qd-white">
-                                {contact.serviceTitle?.es ?? contact.serviceTitle?.en ?? '—'}
+                                {contact.serviceTitle?.es ??
+                                    contact.serviceTitle?.en ??
+                                    '—'}
                             </dd>
                         </div>
                         <div>
@@ -100,34 +126,49 @@ export default function ContactsShow({ contact }: ShowProps) {
                                 Fecha de envío
                             </dt>
                             <dd className="text-sm text-qd-ink dark:text-qd-white">
-                                {contact.createdAt ? new Date(contact.createdAt).toLocaleString('es-ES') : '—'}
+                                {contact.createdAt
+                                    ? new Date(
+                                          contact.createdAt,
+                                      ).toLocaleString('es-ES')
+                                    : '—'}
                             </dd>
                         </div>
                     </dl>
 
                     <div>
-                        <dt className="text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/50">Mensaje</dt>
-                        <dd className="mt-1 whitespace-pre-wrap rounded-lg border border-qd-mist bg-qd-mist/20 p-3 text-sm text-qd-ink dark:border-qd-white/10 dark:bg-qd-white/5 dark:text-qd-white">
+                        <dt className="text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/50">
+                            Mensaje
+                        </dt>
+                        <dd className="mt-1 rounded-lg border border-qd-mist bg-qd-mist/20 p-3 text-sm whitespace-pre-wrap text-qd-ink dark:border-qd-white/10 dark:bg-qd-white/5 dark:text-qd-white">
                             {contact.message}
                         </dd>
                     </div>
 
                     {(contact.ipAddress || contact.userAgent) && (
                         <div className="text-xs text-qd-text-medium dark:text-qd-white/40">
-                            {contact.ipAddress && <div>IP: {contact.ipAddress}</div>}
-                            {contact.userAgent && <div>User agent: {contact.userAgent}</div>}
+                            {contact.ipAddress && (
+                                <div>IP: {contact.ipAddress}</div>
+                            )}
+                            {contact.userAgent && (
+                                <div>User agent: {contact.userAgent}</div>
+                            )}
                         </div>
                     )}
                 </div>
 
-                <form onSubmit={submit} className="space-y-4 rounded-2xl border border-qd-mist bg-qd-white p-6 dark:border-qd-white/10 dark:bg-qd-surface">
+                <form
+                    onSubmit={submit}
+                    className="space-y-4 rounded-2xl border border-qd-mist bg-qd-white p-6 dark:border-qd-white/10 dark:bg-qd-surface"
+                >
                     <div>
                         <label className="mb-1 block text-xs font-semibold tracking-wide text-qd-text-medium uppercase dark:text-qd-white/50">
                             Estado
                         </label>
                         <AdminSelect
                             value={form.data.status}
-                            onChange={(e) => form.setData('status', e.target.value)}
+                            onChange={(e) =>
+                                form.setData('status', e.target.value)
+                            }
                             className="h-10"
                         >
                             {STATUS_OPTIONS.map((option) => (
@@ -144,7 +185,9 @@ export default function ContactsShow({ contact }: ShowProps) {
                         </label>
                         <textarea
                             value={form.data.internal_notes}
-                            onChange={(e) => form.setData('internal_notes', e.target.value)}
+                            onChange={(e) =>
+                                form.setData('internal_notes', e.target.value)
+                            }
                             rows={6}
                             className="w-full rounded-lg border border-qd-mist bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-qd-teal-2/50 dark:border-qd-white/10"
                         />

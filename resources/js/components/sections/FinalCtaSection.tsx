@@ -103,8 +103,7 @@ export default function FinalCtaSection() {
                                         key={file.name}
                                         className={cn(
                                             'qd-cta-editor__file',
-                                            file.type === 'js' &&
-                                                'is-active',
+                                            file.type === 'js' && 'is-active',
                                         )}
                                     >
                                         {file.type === 'folder' ? (
@@ -158,9 +157,8 @@ export default function FinalCtaSection() {
                                             </span>
                                             ;{'\n'}
                                             <span className="qd-cta-cm">
-                                                // Tu traes la idea.
-                                                Nosotros, el código que
-                                                dura.
+                                                // Tu traes la idea. Nosotros,
+                                                el código que dura.
                                             </span>
                                             {'\n'}
                                             <span className="qd-cta-kw">
@@ -170,7 +168,7 @@ export default function FinalCtaSection() {
                                                 lanzarProyecto
                                             </span>
                                             (idea) {'{'}
-                                            {'\n'} {' '}
+                                            {'\n'}{' '}
                                             <span className="qd-cta-kw">
                                                 const
                                             </span>{' '}
@@ -182,7 +180,7 @@ export default function FinalCtaSection() {
                                             <span className="qd-cta-fn">
                                                 construir
                                             </span>
-                                            (idea);{'\n'} {' '}
+                                            (idea);{'\n'}{' '}
                                             <span className="qd-cta-kw">
                                                 return
                                             </span>{' '}

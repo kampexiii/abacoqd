@@ -1,35 +1,35 @@
 # SEO, multilenguaje y legal — AbacoQD
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 28 de junio de 2026.
 
-Fuente de verdad de SEO, rutas ES/EN, slugs, `hreflang`, sitemap, robots, canonical, blog bilingüe y reglas legales/RGPD/cookies. La UX de las páginas legales vive en `07_VISTAS/PUBLIC_07_LEGAL_COOKIES_PRIVACIDAD.md`.
+Fuente de verdad de SEO, rutas públicas, slugs, sitemap, robots, canonical y reglas legales/RGPD/cookies. La UX de las páginas legales vive en `07_VISTAS/PUBLIC_07_LEGAL_COOKIES_PRIVACIDAD.md`.
 
-## 1. Multilenguaje ES/EN
+## 1. Idioma, lanzamiento y evolución EN
 
 ### Idiomas
 
-Solo español (`es`) e inglés (`en`). No se preparan otros idiomas.
+El lanzamiento inicial queda orientado a SEO en español para clientes en España. No se considera bloqueo actual no tener `/en` real. El soporte EN queda como evolución futura no bloqueante, salvo decisión comercial posterior. No se publicarán versiones EN parciales como SEO real.
 
 ### URLs públicas
 
-| Vista | ES | EN |
-|---|---|---|
-| Home | `/` | `/en` |
-| Metodología | `/metodologia` | `/en/methodology` |
-| Servicios | `/servicios` | `/en/services` |
-| Detalle servicio | `/servicios/{slug}` | `/en/services/{slug}` |
-| Proyectos | `/proyectos` | `/en/projects` |
-| Detalle proyecto | `/proyectos/{slug}` | `/en/projects/{slug}` |
-| Quiénes somos | `/quienes-somos` | `/en/about` |
-| Blog índice | `/blog` | `/en/blog` |
-| Post | `/blog/{slug}` | `/en/blog/{slug}` |
-| Contacto | `/contacto` | `/en/contact` |
-| Reserva | `/reserva` | `/en/book` |
-| Aviso legal | `/aviso-legal` | `/en/legal-notice` |
-| Privacidad | `/privacidad` | `/en/privacy` |
-| Cookies | `/cookies` | `/en/cookies` |
+| Vista | Ruta actual |
+|---|---|
+| Home | `/` |
+| Metodología | `/metodologia` |
+| Servicios | `/servicios` |
+| Detalle servicio | `/servicios/{slug}` |
+| Proyectos | `/proyectos` |
+| Detalle proyecto | `/proyectos/{slug}` |
+| Quiénes somos | `/quienes-somos` |
+| Blog índice | `/blog` |
+| Post | `/blog/{slug}` |
+| Contacto | `/contacto` |
+| Reserva | `/reserva` |
+| Aviso legal | `/aviso-legal` |
+| Privacidad | `/privacidad` |
+| Cookies | `/cookies` |
 
-ES no lleva prefijo. EN usa `/en`. No se crean rutas alternativas públicas sin redirección documentada.
+Si se activa EN en una fase posterior, deberá publicarse con URLs propias, traducciones completas, canonical y `hreflang` coherentes. Hasta entonces, no se documenta `/en` como alcance actual de lanzamiento.
 
 ### Slugs
 
@@ -41,17 +41,11 @@ ES no lleva prefijo. EN usa `/en`. No se crean rutas alternativas públicas sin 
 
 ### `hreflang`
 
-Cada par traducido real emite:
-
-- `hreflang="es"`;
-- `hreflang="en"`;
-- `hreflang="x-default"`.
-
-No se emite `hreflang` a páginas inexistentes, borradores o traducciones incompletas.
+En el lanzamiento Spanish-first no se considera obligatorio emitir `hreflang` EN. Si se publica una versión inglesa real, cada par traducido completo deberá emitir `hreflang="es"`, `hreflang="en"` y `x-default`. Nunca se emite `hreflang` a páginas inexistentes, parciales o incompletas.
 
 ### Selector de idioma
 
-El selector conserva contexto si existe traducción equivalente. Si no existe, lleva al índice del tipo en el idioma destino (por ejemplo, de un proyecto sin EN a `/en/projects`).
+Mientras no exista routing EN real, el cambio de idioma no se trata como requisito SEO. Si en el futuro se publica EN con URLs propias, el selector deberá conservar contexto cuando exista traducción equivalente y degradar de forma honesta cuando no exista.
 
 ## 2. SEO por tipo
 
@@ -59,7 +53,7 @@ El selector conserva contexto si existe traducción equivalente. Si no existe, l
 
 - Cada página indexable tiene `title`, `description`, canonical, OG y `no_index` por idioma.
 - El canonical apunta a la URL final del idioma actual.
-- No se publican OG de proyectos, reseñas o logos sin permiso.
+- No se publican datos estructurados ni OG con información falsa o incompleta.
 - Datos estructurados solo con información real.
 
 ### Home
@@ -72,23 +66,15 @@ Listado indexable. Detalles indexables solo si `is_detail_enabled=true`, estado 
 
 ### Proyectos
 
-Listado indexable si hay contenido publicable suficiente. Si se lanza sin proyectos, puede usarse `noindex` temporal aunque la ruta exista. Detalles indexables solo con proyecto publicado, permisos cerrados y SEO completo. JSON-LD `CreativeWork` opcional; `Review` solo con reseña real.
+Listado indexable con el portfolio actual autorizado. Detalles indexables con proyecto publicado, contenido completo y SEO suficiente. JSON-LD `CreativeWork` opcional; `Review` solo con reseña real.
 
-### Blog bilingüe
+### Blog
 
-Flujo previsto:
-
-1. Crear post original.
-2. Crear traducción ES/EN.
-3. Relacionar con `translation_post_id`.
-4. Definir slug, excerpt, contenido y SEO por idioma.
-5. Publicar solo cuando el idioma activo esté completo.
-
-El índice muestra posts del idioma activo. Los destacados de landing son por idioma. Sin posts publicados, blog puede ocultarse de topbar y quedar `noindex` temporal.
+El lanzamiento inicial puede operar solo en español. Si en el futuro se crea EN, deberá publicarse con traducción completa y SEO propio por URL. Sin posts publicados, blog puede ocultarse de topbar y quedar `noindex` temporal.
 
 ### Quiénes somos
 
-Indexable en ES/EN. JSON-LD `AboutPage` + `Organization`; `parentOrganization` solo si la relación jurídica con Ábaco Developments se confirma. No se publican miembros, fechas, clientes ni cifras no validadas.
+Indexable en español. JSON-LD `AboutPage` + `Organization`. El equipo puede incluir CV público cuando forme parte del alcance confirmado. No se inventan miembros, fechas, clientes ni cifras.
 
 ### Contacto y reserva
 
@@ -104,14 +90,14 @@ Datos reales para `ContactPage`/`Organization` cuando se generen datos estructur
 - Dominio histórico/investigado: https://abacodev.com/.
 - URL legal histórica aportada: https://www.abacodev.com/.
 - Teléfono: +34 91 020 00 89.
-- Email principal: info@abacodev.com.
+- Email principal: info@abacoqd.com.
 - WhatsApp/contacto directo Andrés: +34 647 51 81 00, como canal comercial/directo.
 
 El teléfono `647 518 100` del aviso legal aportado se normaliza como `+34 647 51 81 00`. Está pendiente decidir si el teléfono legal visible principal será el fijo `+34 91 020 00 89` o `+34 647 51 81 00`.
 
 ### Legales
 
-Aviso legal, privacidad y cookies son indexables de baja prioridad. Sin JSON-LD específico. `hreflang` cuando el par ES/EN esté validado.
+Aviso legal, privacidad y cookies son indexables de baja prioridad en español. Sin JSON-LD específico. Una versión EN solo se publica si existe traducción jurídica completa y validada.
 
 ### Errores
 
@@ -129,7 +115,7 @@ Estructura recomendada:
 - `sitemap-projects.xml`: proyectos publicados.
 - `sitemap-posts.xml`: posts publicados.
 
-Excluye borradores, ocultos, demo no publicable, `noindex`, errores, admin, auth, dashboard y settings.
+Excluye borradores, ocultos, `noindex`, errores, admin, auth, dashboard y settings.
 
 ### Robots
 
@@ -147,6 +133,20 @@ Permitir rutas públicas indexables. Revisar antes de producción.
 
 Cada página indexable declara canonical absoluto del idioma actual sobre `https://abacoqd.com/`. La política para `abacodev.com` queda pendiente: confirmar si redirige a `abacoqd.com`, si convive temporalmente o si queda como dominio anterior. No se documenta una redirección 301 definitiva hasta confirmación.
 
+## 4.5 Correo operativo de contacto y reserva
+
+El correo receptor definitivo para avisos es `info@abacoqd.com`. El envío real queda pendiente de configuración técnica en producción con estos datos:
+
+- `SMTP host`
+- `SMTP port`
+- `SMTP username`
+- `SMTP password` o app password
+- `SMTP encryption`
+- `MAIL_FROM_ADDRESS`
+- `MAIL_FROM_NAME`
+- `Reply-To` si aplica
+- revisión SPF/DKIM/DMARC del dominio
+
 ## 4. Legal, privacidad y cookies
 
 Cumplimiento básico LSSI/RGPD. Hay texto base aportado por cliente para aviso legal, privacidad y cookies, pero queda marcado como **texto base aportado, pendiente de adaptación legal final a normativa vigente**. No se publica como definitivo sin revisión jurídica.
@@ -161,7 +161,7 @@ Datos confirmados para el aviso legal:
 - CIF: B-88229364.
 - Domicilio: Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid, España.
 - Registro Mercantil: Registro Mercantil de Madrid, Tomo 38273, Folio 65, Sección GNE, Hoja Nº 681002.
-- Email: info@abacodev.com.
+- Email: info@abacoqd.com.
 - Web canónica final del nuevo sitio: https://abacoqd.com/.
 - URL legal histórica aportada: https://www.abacodev.com/.
 - Dominio histórico/investigado: https://abacodev.com/.
@@ -176,7 +176,7 @@ El aviso legal final debe adaptarse al dominio definitivo `abacoqd.com`. El text
 Debe cubrir:
 
 - responsable del tratamiento: ABACO DIGITAL DEVELOPMENTS, S.L.;
-- contacto de privacidad: info@abacodev.com;
+- contacto de privacidad: info@abacoqd.com;
 - dirección postal: Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid;
 - datos de contacto recogidos en `contact_messages`;
 - datos de reserva según proveedor;
@@ -226,5 +226,5 @@ HTML semántico, un H1 por vista, jerarquía de headings, alt editable, contrast
 - Proveedor de reserva y si requiere cookies/embeds.
 - Stack definitivo de analítica/cookies y CMP.
 - Revisión jurídica final de aviso legal, privacidad y cookies.
-- Proyectos/logos publicables y permisos.
-- Qué detalles de servicios quedan indexables el 30/06.
+- Recibir los datos SMTP corporativos para contacto y reserva.
+- Decidir si en una fase posterior se publica EN real con URLs propias.

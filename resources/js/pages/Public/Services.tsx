@@ -302,7 +302,9 @@ export default function Services({ services }: ServicesProps) {
                                                 className="flex size-full items-center justify-center p-5"
                                             >
                                                 <ServiceMockup
-                                                    variant={presentation.mockup}
+                                                    variant={
+                                                        presentation.mockup
+                                                    }
                                                 />
                                             </div>
                                         )}
@@ -433,10 +435,7 @@ export default function Services({ services }: ServicesProps) {
                                     className="inline-flex items-center gap-2 rounded-xl bg-qd-lime px-5 py-3 text-sm font-bold text-qd-ink transition hover:brightness-95"
                                 >
                                     {t('servicesPage.cta.primary')}
-                                    <ArrowRight
-                                        aria-hidden="true"
-                                        size={16}
-                                    />
+                                    <ArrowRight aria-hidden="true" size={16} />
                                 </a>
                                 <a
                                     href={bookingShow.url()}

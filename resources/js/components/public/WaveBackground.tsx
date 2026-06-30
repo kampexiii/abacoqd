@@ -110,7 +110,9 @@ const createLineAnimation = (group: SVGGElement, speedFactor: number) => {
     timeline.seek(gsap.utils.random(10, 20, 1) / speedFactor);
 };
 
-export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundProps) {
+export default function WaveBackground({
+    hiddenUntilElementId,
+}: WaveBackgroundProps) {
     const rootRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -124,7 +126,9 @@ export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundP
         let hiddenFrame = 0;
         let mounted = true;
 
-        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const mediaQuery = window.matchMedia(
+            '(prefers-reduced-motion: reduce)',
+        );
 
         const hideWhileExcludedElementIsVisible = () => {
             if (!hiddenUntilElementId) {
@@ -133,7 +137,8 @@ export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundP
                 return;
             }
 
-            const excludedElement = document.getElementById(hiddenUntilElementId);
+            const excludedElement =
+                document.getElementById(hiddenUntilElementId);
             const shouldHide =
                 excludedElement !== null &&
                 excludedElement.getBoundingClientRect().bottom > 0;
@@ -160,7 +165,9 @@ export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundP
                 return;
             }
 
-            root.dataset.motion = isMotionPaused(mediaQuery) ? 'reduced' : 'animated';
+            root.dataset.motion = isMotionPaused(mediaQuery)
+                ? 'reduced'
+                : 'animated';
 
             if (root.dataset.motion === 'reduced') {
                 root.style.removeProperty('--qd-wave-runtime-opacity');
@@ -171,8 +178,9 @@ export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundP
             animationContext = gsap.context(() => {
                 const speedFactor = readSpeedFactor(root);
                 const targetOpacity =
-                    getComputedStyle(root).getPropertyValue('--qd-wave-opacity').trim() ||
-                    '0.42';
+                    getComputedStyle(root)
+                        .getPropertyValue('--qd-wave-opacity')
+                        .trim() || '0.42';
 
                 gsap.fromTo(
                     root,
@@ -194,14 +202,21 @@ export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundP
                     );
 
                     paths.forEach((path) => {
-                        const baseOpacity = Number(path.dataset.opacity ?? 0.14);
+                        const baseOpacity = Number(
+                            path.dataset.opacity ?? 0.14,
+                        );
                         const opacityMin = Math.max(0.06, baseOpacity - 0.07);
                         const opacityMax = Math.min(0.32, baseOpacity + 0.08);
 
                         gsap.to(path, {
-                            duration: gsap.utils.random(60, 112, 1) / speedFactor,
+                            duration:
+                                gsap.utils.random(60, 112, 1) / speedFactor,
                             ease: 'sine.inOut',
-                            opacity: gsap.utils.random(opacityMin, opacityMax, 0.01),
+                            opacity: gsap.utils.random(
+                                opacityMin,
+                                opacityMax,
+                                0.01,
+                            ),
                             repeat: -1,
                             yoyo: true,
                         });
@@ -223,7 +238,9 @@ export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundP
             attributes: true,
         });
 
-        window.addEventListener('scroll', requestHiddenStateUpdate, { passive: true });
+        window.addEventListener('scroll', requestHiddenStateUpdate, {
+            passive: true,
+        });
         window.addEventListener('resize', requestHiddenStateUpdate);
 
         return () => {
@@ -242,7 +259,11 @@ export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundP
     }, [hiddenUntilElementId]);
 
     return (
-        <div ref={rootRef} className="qd-wave pointer-events-none" aria-hidden="true">
+        <div
+            ref={rootRef}
+            className="qd-wave pointer-events-none"
+            aria-hidden="true"
+        >
             <svg
                 className="qd-wave__svg"
                 focusable="false"
@@ -258,9 +279,15 @@ export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundP
                         y2="909.66"
                         gradientUnits="userSpaceOnUse"
                     >
-                        <stop offset="0%" stopColor="var(--qd-wave-line-from)" />
+                        <stop
+                            offset="0%"
+                            stopColor="var(--qd-wave-line-from)"
+                        />
                         <stop offset="54%" stopColor="var(--qd-wave-line-to)" />
-                        <stop offset="100%" stopColor="var(--qd-wave-line-from)" />
+                        <stop
+                            offset="100%"
+                            stopColor="var(--qd-wave-line-from)"
+                        />
                     </linearGradient>
                     <linearGradient
                         id="wave-gradient-soft"
@@ -270,9 +297,18 @@ export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundP
                         y2="909.66"
                         gradientUnits="userSpaceOnUse"
                     >
-                        <stop offset="0%" stopColor="var(--qd-wave-line-soft)" />
-                        <stop offset="52%" stopColor="var(--qd-wave-line-from)" />
-                        <stop offset="100%" stopColor="var(--qd-wave-line-soft)" />
+                        <stop
+                            offset="0%"
+                            stopColor="var(--qd-wave-line-soft)"
+                        />
+                        <stop
+                            offset="52%"
+                            stopColor="var(--qd-wave-line-from)"
+                        />
+                        <stop
+                            offset="100%"
+                            stopColor="var(--qd-wave-line-soft)"
+                        />
                     </linearGradient>
                     <linearGradient
                         id="wave-gradient-accent"
@@ -283,8 +319,14 @@ export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundP
                         gradientUnits="userSpaceOnUse"
                     >
                         <stop offset="0%" stopColor="var(--qd-wave-line-to)" />
-                        <stop offset="72%" stopColor="var(--qd-wave-line-soft)" />
-                        <stop offset="100%" stopColor="var(--qd-wave-line-to)" />
+                        <stop
+                            offset="72%"
+                            stopColor="var(--qd-wave-line-soft)"
+                        />
+                        <stop
+                            offset="100%"
+                            stopColor="var(--qd-wave-line-to)"
+                        />
                     </linearGradient>
                     <filter
                         id="wave-blur-soft"
@@ -299,7 +341,10 @@ export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundP
                 </defs>
 
                 <g className="qd-wave__stage">
-                    <g className="qd-wave__ambient" filter="url(#wave-blur-soft)">
+                    <g
+                        className="qd-wave__ambient"
+                        filter="url(#wave-blur-soft)"
+                    >
                         {WAVE_LAYERS.slice(1, 5).map((layer, layerIndex) => (
                             <g
                                 key={`ambient-${layerIndex}`}
@@ -313,7 +358,9 @@ export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundP
                                         <path
                                             className="qd-wave__path qd-wave__path--ambient"
                                             d={WAVE_PATH}
-                                            fill={gradientByLayer[layer.gradient]}
+                                            fill={
+                                                gradientByLayer[layer.gradient]
+                                            }
                                             opacity={layer.opacity}
                                         />
                                     </g>
@@ -341,7 +388,9 @@ export default function WaveBackground({ hiddenUntilElementId }: WaveBackgroundP
                                             d={WAVE_PATH}
                                             data-opacity={layer.opacity}
                                             data-wave-path
-                                            fill={gradientByLayer[layer.gradient]}
+                                            fill={
+                                                gradientByLayer[layer.gradient]
+                                            }
                                             opacity={layer.opacity}
                                         />
                                     </g>

@@ -1,6 +1,6 @@
 # PUBLIC_01 — Home / Landing (fuente de verdad única)
 
-Última revisión: 14 de junio de 2026.
+Última revisión: 28 de junio de 2026.
 
 Esta es la **única fuente de verdad de la landing**. Fusiona el handoff de orden/dark-light/frames con el detalle sección por sección. Sustituye a los antiguos documentos de handoff y detalle de la home. Fuente de verdad visual: `mockups/abacoqd-web.pen`. Paleta, tipografía, tokens, componentes y animaciones globales en `04_IDENTIDAD_UI_COMPONENTES.md`. Modelo de datos en `02_MODELO_DATOS.md`. La metodología se resume aquí y se detalla en `PUBLIC_02_METODOLOGIA_PROCESO.md`.
 
@@ -13,7 +13,7 @@ Esta es la **única fuente de verdad de la landing**. Fusiona el handoff de orde
 | Campo | Valor |
 |---|---|
 | Ruta ES | `/` |
-| Ruta EN | `/en` |
+| Ruta EN | futura, no bloqueante |
 | Dominio final público | `https://abacoqd.com/` |
 | Prioridad | P0 — lanzamiento 30 de junio |
 | Componente | `resources/js/pages/Public/Home.tsx` |
@@ -58,13 +58,13 @@ Capturas a exportar en `docs/assets/mockups/landing/` (export manual por bug de 
 - **Reserva:** el CTA de reserva vive **solo** en Hero y CTA final.
 - **Fondo animado (Wave Background):** capa de fondo global, sutil y muy lenta, presente en todas las vistas públicas. Criterio, variables y referencia visual en `04_IDENTIDAD_UI_COMPONENTES.md`.
 
-## Pendientes globales antes de programar
+## Pendientes reales de cierre documental
 
 - **Estudio inicial gratuito:** decisión comercial PENDIENTE. No publicar la palabra "Gratuito" ni el bloque-puente hasta confirmar la política (ver Metodología y `PUBLIC_02_METODOLOGIA_PROCESO.md`).
 - **Dato 40%** del CTA final: copy aprobado por cliente para el mockup/landing.
-- **Copy del CTA final:** `Empieza a ahorrar tiempo` (ES) vs `Start saving time` (EN).
+- **Copy del CTA final EN:** solo aplica si en una fase posterior se publica inglés real.
 - **Ratificar paleta + logo** (reunión 16/06) antes de tokenizar el design system.
-- **Logos/proyectos de la sección Colaboraciones:** solo con permiso de partners/proyectos validados.
+- **Logos/proyectos de la sección Colaboraciones:** el portfolio actual se considera autorizado salvo indicación expresa en contra.
 - **Redes reales** del footer (pendientes). Email, teléfono, WhatsApp y dirección ya están confirmados.
 - **Responsive:** mockups en desktop 1440; reflow móvil definido por sección abajo.
 - **Exportar las 14 capturas** a `docs/assets/mockups/landing/` (manual desde Pencil).
@@ -73,7 +73,7 @@ Capturas a exportar en `docs/assets/mockups/landing/` (export manual por bug de 
 
 ## 1. Hero
 
-**Objetivo.** En el primer viewport el visitante entiende que Abaco Developments desarrolla soluciones digitales a medida con criterio técnico, CRM/datos, IA aplicada y un camino inmediato a reservar una primera sesión.
+**Objetivo.** En el primer viewport el visitante entiende que AbacoQD desarrolla soluciones digitales a medida con criterio técnico, CRM/datos, IA aplicada y un camino inmediato a reservar una primera sesión.
 
 **Estructura visual.** Topbar flotante + eyebrow centrado `IA · DESARROLLO RÁPIDO · A MEDIDA` + H1 (único de la página) `Desarrollos rápidos a medida, impulsados por IA` (`impulsados` en teal) + soporte breve `Creamos soluciones digitales ágiles, económicas y adaptadas a cada cliente.` + CTAs `Reservar una consulta` (primario) y `Ver servicios` (secundario ghost) + recurso visual (cubo wireframe cristalino y translúcido con aristas azul corporativo, energía/glow azul y highlights azul hielo controlados) + franja de 5 beneficios (IA & automatización, Desarrollos a medida, Entregas rápidas, Precios competitivos, Tecnología moderna).
 
@@ -240,7 +240,7 @@ Capturas a exportar en `docs/assets/mockups/landing/` (export manual por bug de 
 
 **Estado de decisión.** Diseño visual aprobado. Estructura aprobada. Mockup tipo editor/código aprobado. Variantes claro y oscuro aprobadas. Titular con `40%` aprobado por cliente.
 
-**Estructura visual aprobada.** Card central redondeada con borde sutil, glow teal/limón tenue y textura de circuito de fondo. Abre con eyebrow `EMPECEMOS` + logo AbacoQD/Abaco Developments según marca validada + H2 gancho + subtítulo + badges + mockup de editor de código + CTAs.
+**Estructura visual aprobada.** Card central redondeada con borde sutil, glow teal/limón tenue y textura de circuito de fondo. Abre con eyebrow `EMPECEMOS` + logo AbacoQD + H2 gancho + subtítulo + badges + mockup de editor de código + CTAs.
 
 **Maquetación desktop.** Card centrada con contenido en columna; editor de código embebido a un lado o bajo el copy según frame; chips bajo el H2; CTA primario lime + secundario texto.
 
@@ -277,18 +277,18 @@ Capturas a exportar en `docs/assets/mockups/landing/` (export manual por bug de 
 
 **Objetivo.** Cierre de marca y navegación secundaria. Aquí sí va el logo.
 
-**Estructura visual.** Logo de Abaco Developments + 4 columnas (Marca, Explorar, Servicios, Contacto) + barra legal inferior. Sin tarjetas, mucho aire.
+**Estructura visual.** Logo de AbacoQD + 4 columnas (Marca, Explorar, Servicios, Contacto) + barra legal inferior. Sin tarjetas, mucho aire.
 
 **Maquetación desktop.** Hairline superior + glow radial teal tenue + nodos; 4 columnas en fila; barra legal a pie con `©` a la izquierda y enlaces legales a la derecha.
 
 **Maquetación mobile.** Columnas apiladas (2×2 o 1 columna); barra legal al final en bloque.
 
 **Columnas.**
-- **Marca:** logo + `Desarrollos a medida potenciados por IA.` / `Iniciativa de Abaco Developments.` + `Construimos con estrategia, diseño y tecnología.`
+- **Marca:** logo + `Desarrollos a medida potenciados por IA.` + `Construimos con estrategia, diseño y tecnología.`
 - **Explorar:** Inicio, Metodología, Servicios, Proyectos, Quiénes somos, Blog, Contacto.
 - **Servicios:** Desarrollo web, Aplicaciones a medida, Automatización, Diseño UX/UI, Consultoría digital.
-- **Contacto:** Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid; info@abacodev.com; +34 91 020 00 89; WhatsApp +34 647 51 81 00 si se muestra como contacto rápido. LinkedIn/GitHub solo si se confirman perfiles reales.
-- **Barra legal:** `© 2026 Abaco Developments. Todos los derechos reservados.` + `Privacidad` / `Cookies` / `Aviso legal`.
+- **Contacto:** Calle Núñez de Balboa 35 A, Piso 5, Oficina A1, 28001 Madrid; info@abacoqd.com; +34 91 020 00 89; WhatsApp +34 647 51 81 00 si se muestra como contacto rápido. LinkedIn/GitHub solo si se confirman perfiles reales.
+- **Barra legal:** `© 2026 AbacoQD. Todos los derechos reservados.` + `Privacidad` / `Cookies` / `Aviso legal`.
 
 **Animaciones propias.** Sin animaciones pesadas; glow tenue estático; como mucho fade-in al entrar.
 
@@ -312,7 +312,7 @@ Capturas a exportar en `docs/assets/mockups/landing/` (export manual por bug de 
 
 ## Funcionalidad transversal (base, no futuro)
 
-- Cambio de idioma ES/EN (topbar) manteniendo la vista; SEO por idioma (`hreflang` es/en/x-default).
+- Cambio de idioma UI sin tratar EN como SEO activo hasta que exista una versión inglesa real.
 - Tema claro/oscuro/sistema (toggle topbar).
 - Accesibilidad universal: botón flotante izquierdo.
 - Chatbot: botón flotante derecho (apoyado en `faqs`).
@@ -326,10 +326,10 @@ El asistente puede orientar a Servicios, Proyectos, Quiénes somos, Blog, Contac
 
 ## SEO global
 
-- Title ES: `Abaco Developments — Consultoría tecnológica, CRM e IA aplicada`.
+- Title ES: `AbacoQD — Consultoría tecnológica, CRM e IA aplicada`.
 - Description por idioma con CRM, fidelización, analítica, desarrollo digital e IA aplicada, sin promesas no verificadas.
 - Canonical sobre `https://abacoqd.com/`.
-- `hreflang` es/en/x-default cuando exista `/en`.
+- Sin `hreflang` EN mientras el lanzamiento siga siendo Spanish-first.
 - JSON-LD: `Organization` + `WebSite`.
 - OG global con imagen de marca (pendiente generar asset OG).
 - H1 único en Hero; secciones con H2.

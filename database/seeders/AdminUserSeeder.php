@@ -9,11 +9,10 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * Usuario super_admin de acceso al panel — SOLO entorno local/desarrollo.
+ * Usuario administrador de apoyo para entornos no productivos.
  *
- * Credenciales locales (no producción): admin@abacoqd.local / password.
- * Es idempotente (firstOrCreate por email): no duplica ni resetea la contraseña
- * si el usuario ya existe. En producción no crea nada.
+ * El seeder es idempotente y no modifica el usuario si ya existe.
+ * No se ejecuta en producción.
  */
 class AdminUserSeeder extends Seeder
 {

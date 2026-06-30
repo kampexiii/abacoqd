@@ -11,15 +11,27 @@ export default function CtaSection() {
     return (
         <section id="contacto" className="abaco-section abaco-cta-section">
             <div className="abaco-section__inner">
-                <div ref={ref} className={cn('abaco-cta-panel abaco-grid-surface abaco-reveal', inView && 'is-visible')}>
+                <div
+                    ref={ref}
+                    className={cn(
+                        'abaco-cta-panel abaco-grid-surface abaco-reveal',
+                        inView && 'is-visible',
+                    )}
+                >
                     <h2>{t('home.cta.title')}</h2>
                     <p>{t('home.cta.subtitle')}</p>
                     <div className="abaco-cta-panel__actions">
-                        <a className="abaco-cta-panel__primary" href="#contacto">
+                        <a
+                            className="abaco-cta-panel__primary"
+                            href="#contacto"
+                        >
                             <CalendarCheck aria-hidden="true" size={19} />
                             <span>{t('home.cta.primaryCta')}</span>
                         </a>
-                        <a className="abaco-cta-panel__secondary" href="#footer">
+                        <a
+                            className="abaco-cta-panel__secondary"
+                            href="#footer"
+                        >
                             <span>{t('home.cta.secondaryCta')}</span>
                             <ArrowRight aria-hidden="true" size={18} />
                         </a>
