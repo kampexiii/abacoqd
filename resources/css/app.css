@@ -590,18 +590,47 @@ html {
 /* ---------------------------------------------------------------------------
    Cubo ligero experimental del hero (rama experiment/lightweight-hero-cube).
    Alternativa sin Three.js: cubo CSS 3D + núcleo de energía simulado con
-   gradientes + fragmentos dispersables por scroll. Solo transform/opacity.
+   gradientes + mini cubos dispersables por scroll. Solo transform/opacity.
    La variable --decompose (0→1) la escribe AbacoCrystalCubeLite según el scroll.
 --------------------------------------------------------------------------- */
 .qd-litecube {
     --qd-litecube-size: clamp(184px, 26vw, 268px);
     --qd-litecube-half: calc(var(--qd-litecube-size) / 2);
     --decompose: 0;
-    /* Desplazamiento de cada cara hacia fuera al hacer scroll: parte de la
-       mitad de la arista (cubo cerrado) y añade hasta 120px según --decompose,
-       de modo que las 6 caras salen por su normal y el cubo se abre. */
-    --qd-litecube-face-out: calc(
-        var(--qd-litecube-half) + var(--decompose) * 120px
+    /* Amplitud del reparto de los mini cubos por el hero (1 = completo). Se
+       reduce en móvil para que no invadan texto ni CTAs. */
+    --qd-litecube-spread: 1;
+    /* Sub-progresos: rápido pero gradual en el primer tramo de scroll.
+       · 0.00→0.35: el cubo principal se encoge como un solo bloque.
+       · 0.15→0.55: el flash crece y tapa la desaparición.
+       · 0.22→0.52: los mini cubos emergen dentro del radio del flash.
+       · 0.50→1.00: completan el viaje a su campo final. */
+    --p-shrink: clamp(0, calc(var(--decompose) / 0.35), 1);
+    --p-cube-fade: clamp(0, calc((var(--decompose) - 0.18) / 0.28), 1);
+    --p-flash-rise: clamp(0, calc((var(--decompose) - 0.15) / 0.2), 1);
+    --p-flash-fall: clamp(0, calc((var(--decompose) - 0.42) / 0.3), 1);
+    --p-flash: clamp(0, calc(var(--p-flash-rise) - var(--p-flash-fall)), 1);
+    --p-flash-residual: clamp(0, calc((var(--decompose) - 0.35) / 0.35), 1);
+    --p-mini: clamp(0, calc((var(--decompose) - 0.24) / 0.32), 1);
+    --p-mini-scale: clamp(0, calc((var(--decompose) - 0.24) / 0.54), 1);
+    --p-mini-emerge: clamp(0, calc((var(--decompose) - 0.22) / 0.3), 1);
+    --p-mini-settle: clamp(0, calc((var(--decompose) - 0.5) / 0.5), 1);
+    --p-mini-emerge-ease: calc(
+        var(--p-mini-emerge) * var(--p-mini-emerge) *
+            (3 - 2 * var(--p-mini-emerge))
+    );
+    --p-mini-settle-ease: calc(
+        var(--p-mini-settle) * var(--p-mini-settle) *
+            (3 - 2 * var(--p-mini-settle))
+    );
+    --p-mini-scale-ease: calc(
+        var(--p-mini-scale) * var(--p-mini-scale) *
+            (3 - 2 * var(--p-mini-scale))
+    );
+    --p-mini-path: clamp(
+        0,
+        calc(var(--p-mini-emerge-ease) * 0.2 + var(--p-mini-settle-ease) * 0.8),
+        1
     );
     position: absolute;
     inset: 0;
@@ -617,17 +646,21 @@ html {
 
 .qd-litecube__scene {
     position: relative;
+    z-index: 1;
     width: var(--qd-litecube-size);
     height: var(--qd-litecube-size);
     /* translateY(15%): baja el cubo dentro del hero para que respire bajo los
-       CTAs y quede más centrado (antes 6%, quedaba demasiado alto). La escena
-       apenas encoge y apenas se atenúa al descomponerse: son las caras y los
-       fragmentos los que salen y se desvanecen, no toda la escena. */
+       CTAs y quede más centrado. El cubo grande se encoge como un bloque:
+       ninguna cara se desplaza de forma independiente. */
     transform: translateY(15%) rotateX(-16deg)
-        scale(calc(1 - var(--decompose) * 0.12));
+        scale3d(
+            calc(1 - var(--p-shrink) * 0.82),
+            calc(1 - var(--p-shrink) * 0.74),
+            calc(1 - var(--p-shrink) * 0.9)
+        );
     transform-style: preserve-3d;
-    opacity: calc(1 - var(--decompose) * 0.15);
-    transition: opacity 120ms linear;
+    opacity: calc(1 - var(--p-cube-fade));
+    transition: opacity 80ms linear;
 }
 
 /* Núcleo de energía: glow radial teal/cian que late. Simula la energía interior
@@ -675,10 +708,6 @@ html {
     backface-visibility: hidden;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-    /* Al descomponerse, la carcasa (las 6 caras) se desvanece casi por completo
-       para que se vean el núcleo de energía y los fragmentos que salen. */
-    opacity: calc(1 - var(--decompose) * 0.9);
-    transition: opacity 140ms linear;
 }
 
 .dark .qd-litecube__face {
@@ -712,6 +741,69 @@ html {
     display: block;
 }
 
+/* Flash central: nace durante la implosión, tapa la desaparición del cubo grande
+   y se apaga mientras los mini cubos terminan de ocupar el hero. */
+.qd-litecube__burst {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    width: calc(var(--qd-litecube-size) * 1.12);
+    height: calc(var(--qd-litecube-size) * 1.12);
+    border-radius: 999px;
+    pointer-events: none;
+    opacity: calc(
+        var(--p-flash) * 0.92 + var(--p-flash-residual) * (1 - var(--p-mini)) *
+            0.16
+    );
+    transform: translate(-50%, -50%)
+        scale(
+            calc(
+                0.18 + var(--p-flash-rise) * 2.05 + var(--p-mini-emerge-ease) *
+                    0.34
+            )
+        );
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.96) 0%,
+        rgba(223, 250, 255, 0.84) 13%,
+        rgba(57, 198, 230, 0.54) 30%,
+        rgba(183, 243, 74, 0.22) 44%,
+        rgba(24, 183, 176, 0.12) 58%,
+        transparent 72%
+    );
+    filter: blur(calc(4px + var(--p-flash) * 8px));
+    mix-blend-mode: screen;
+}
+
+.qd-litecube__burst::before {
+    position: absolute;
+    inset: -24%;
+    content: '';
+    border-radius: inherit;
+    background: conic-gradient(
+        from 24deg,
+        transparent 0deg,
+        rgba(57, 198, 230, 0.18) 18deg,
+        transparent 42deg,
+        rgba(183, 243, 74, 0.14) 80deg,
+        transparent 116deg,
+        rgba(24, 183, 176, 0.16) 154deg,
+        transparent 208deg,
+        rgba(223, 250, 255, 0.2) 252deg,
+        transparent 318deg,
+        rgba(57, 198, 230, 0.16) 344deg,
+        transparent 360deg
+    );
+    opacity: calc(var(--p-flash) * 0.82);
+    filter: blur(2px);
+    transform: rotate(calc(var(--p-mini) * 42deg));
+}
+
+/* Campo de mini cubos. Va por encima de toda la caja del hero (no dentro de la
+   escena inclinada) para poder repartirse en el plano de la pantalla. Cada mini
+   cubo parte del centro (dentro del cubo grande) y viaja a su destino disperso
+   según --decompose. */
 .qd-litecube__shards {
     position: absolute;
     inset: 0;
@@ -719,102 +811,71 @@ html {
     transform-style: preserve-3d;
 }
 
-/* Cada fragmento es un mini cubo CSS 3D real, no un cuadrado plano: la propia
-   pieza es la cara frontal y los pseudo-elementos ::before/::after son la cara
-   superior y la lateral (plegadas con rotateX/rotateY dentro de un contexto
-   preserve-3d), así tiene cuerpo y volumen visibles.
-
-   Invisible con el cubo compuesto (--decompose 0); al bajar se dispersa en 3D
-   (translate x/y/z), tumba (rotate) y aparece. `translate`/`rotate`/`scale`
-   individuales llevan la descomposición; `transform` fija una inclinación base
-   para que siempre se vean tres caras (aspecto de cubo, no de rectángulo). */
+/* Envoltorio de cada mini cubo: primero emerge dentro del radio del flash
+   (--p-mini-path <= 0.2) y luego completa la salida hacia su posición dispersa.
+   La arista base es 20% del cubo grande; la escala final baja con la profundidad
+   para simular lejanía. Solo transform/opacity. */
 .qd-litecube__shard {
+    --qd-minicube-edge: calc(var(--qd-litecube-size) * var(--msize));
+    --qd-minicube-half: calc(var(--qd-minicube-edge) / 2);
     position: absolute;
     top: 50%;
     left: 50%;
-    width: var(--size);
-    height: calc(var(--size) * var(--ar));
-    margin: calc(var(--size) * var(--ar) / -2) 0 0 calc(var(--size) / -2);
+    width: var(--qd-minicube-edge);
+    height: var(--qd-minicube-edge);
+    margin: calc(var(--qd-minicube-half) * -1) 0 0
+        calc(var(--qd-minicube-half) * -1);
     transform-style: preserve-3d;
-    /* Cara frontal del mini cubo. */
-    border: 1px solid rgba(24, 183, 176, calc(0.6 * var(--depth)));
-    border-radius: 3px;
-    background: linear-gradient(
-        135deg,
-        rgba(223, 250, 255, 0.7) 0%,
-        rgba(57, 198, 230, 0.32) 52%,
-        rgba(24, 183, 176, 0.16) 100%
-    );
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.6),
-        0 8px 16px rgba(7, 17, 26, 0.16);
-    opacity: calc(var(--decompose) * var(--depth) * 0.95);
-    translate: calc(var(--sx) * var(--decompose))
-        calc(var(--sy) * var(--decompose)) calc(var(--sz) * var(--decompose));
+    opacity: calc(var(--p-mini) * (0.52 + var(--depth) * 0.48));
+    translate: calc(
+            var(--tx) * var(--p-mini-path) * var(--qd-litecube-spread) * 1vw
+        )
+        calc(var(--ty) * var(--p-mini-path) * var(--qd-litecube-spread) * 1vh)
+        calc(var(--tz) * var(--p-mini-path) * 1px);
+    /* Emerge desde pequeño dentro del flash hasta su tamaño final. */
+    scale: calc((0.06 + var(--p-mini-scale-ease) * 0.94) * var(--depth));
+    filter: blur(calc((1 - var(--depth)) * 0.9px));
+}
+
+/* El cubo en sí: inclinación base fija (siempre se ven tres caras) + giro que
+   gana con el scroll. Réplica del cubo grande a escala. */
+.qd-litecube__minicube {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
     rotate: var(--ax) var(--ay) var(--az)
-        calc(var(--spin) * var(--decompose) * 1deg);
-    scale: calc((0.4 + var(--depth) * 0.7) * (0.72 + var(--decompose) * 0.4));
-    /* Inclinación base fija: revela cara superior y lateral desde el inicio. */
-    transform: rotateX(-24deg) rotateY(28deg);
+        calc(var(--spin) * var(--p-mini-path) * 1deg);
+    transform: rotateX(calc(var(--tiltX) * 1deg))
+        rotateY(calc(var(--tiltY) * 1deg));
 }
 
-/* Cara superior del mini cubo: se pliega hacia atrás desde el borde superior. */
-.qd-litecube__shard::before {
-    content: '';
+/* Cada una de las 6 caras del mini cubo: cristal teal + isotipo (mismo asset
+   que el cubo grande, vía background para no meter 84 <img>). Sin backdrop-filter
+   por coste (hay muchas caras). */
+.qd-litecube__miniface {
     position: absolute;
     inset: 0;
-    transform-origin: top;
-    transform: rotateX(90deg);
+    border: 1px solid rgba(24, 183, 176, 0.5);
     border-radius: 3px;
-    background: linear-gradient(
-        160deg,
-        rgba(240, 253, 255, 0.85),
-        rgba(120, 220, 238, 0.5)
-    );
+    background:
+        url('/assets/branding/marca/logos/abacoqd-isotipo.svg') center / 60%
+            no-repeat,
+        linear-gradient(
+            150deg,
+            rgba(255, 255, 255, 0.82),
+            rgba(200, 238, 244, 0.5)
+        );
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
     backface-visibility: hidden;
 }
 
-/* Cara lateral del mini cubo: se pliega hacia atrás desde el borde derecho. */
-.qd-litecube__shard::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    transform-origin: right;
-    transform: rotateY(90deg);
-    border-radius: 3px;
-    background: linear-gradient(
-        135deg,
-        rgba(24, 183, 176, 0.42),
-        rgba(11, 94, 112, 0.4)
-    );
-    backface-visibility: hidden;
-}
-
-.dark .qd-litecube__shard {
-    background: linear-gradient(
-        135deg,
-        rgba(200, 238, 244, 0.36) 0%,
-        rgba(24, 183, 176, 0.2) 100%
-    );
-    box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.16),
-        0 10px 20px rgba(0, 0, 0, 0.44);
-}
-
-.dark .qd-litecube__shard::before {
-    background: linear-gradient(
-        160deg,
-        rgba(120, 220, 238, 0.5),
-        rgba(24, 183, 176, 0.3)
-    );
-}
-
-.dark .qd-litecube__shard::after {
-    background: linear-gradient(
-        135deg,
-        rgba(24, 183, 176, 0.3),
-        rgba(4, 30, 38, 0.5)
-    );
+.dark .qd-litecube__miniface {
+    border-color: rgba(57, 198, 230, 0.42);
+    background:
+        url('/assets/branding/marca/logos/abacoqd-isotipo-inverse.svg') center /
+            60% no-repeat,
+        linear-gradient(150deg, rgba(13, 27, 38, 0.72), rgba(8, 45, 51, 0.6));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 
 @keyframes qd-litecube-spin {
@@ -859,8 +920,12 @@ html {
 
 /* Reduced-motion (SO + widget): cubo estático a tamaño final, sin intro, sin
    latido ni dispersión idle. El JS mantiene --decompose en 0, así que los
-   fragmentos quedan ocultos. */
+   mini cubos y el flash quedan ocultos. */
 @media (prefers-reduced-motion: reduce) {
+    .qd-litecube {
+        --decompose: 0 !important;
+    }
+
     .qd-litecube,
     .qd-litecube__cube,
     .qd-litecube__core,
@@ -869,11 +934,27 @@ html {
     }
 }
 
+html.a11y-reduce-motion .qd-litecube {
+    --decompose: 0 !important;
+}
+
 html.a11y-reduce-motion .qd-litecube,
 html.a11y-reduce-motion .qd-litecube__cube,
 html.a11y-reduce-motion .qd-litecube__core,
 html.a11y-reduce-motion .qd-litecube__shard {
     animation: none;
+}
+
+/* En pantallas estrechas el campo de mini cubos se reparte menos para no invadir
+   el texto ni los CTAs (el título ocupa todo el ancho). */
+@media (max-width: 700px) {
+    .qd-litecube {
+        --qd-litecube-spread: 0.58;
+    }
+
+    .qd-litecube__shard:nth-child(n + 19) {
+        display: none;
+    }
 }
 
 .abaco-particles {

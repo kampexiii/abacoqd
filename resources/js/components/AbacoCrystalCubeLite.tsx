@@ -4,10 +4,12 @@ import type { CSSProperties } from 'react';
 /**
  * Variante experimental LIGERA del cubo del hero (rama
  * experiment/lightweight-hero-cube). NO usa Three.js/WebGL: es un cubo CSS 3D
- * con caras de cristal + un núcleo de energía simulado con gradientes + una
- * dispersión de fragmentos ligada al scroll. Objetivo: conservar la sensación
- * (cubo protagonista, volumen, energía, descomposición) sacando Three.js del
- * bundle inicial de Home.
+ * con caras de cristal + un núcleo de energía simulado con gradientes. Al hacer
+ * scroll el cubo principal se encoge como bloque, un flash central oculta la
+ * desaparición y desde ese flash salen MINI CUBOS (réplicas del principal, hasta
+ * ~20% de su tamaño) repartidos por ancho, alto y profundidad del hero. Objetivo:
+ * conservar la sensación (cubo protagonista, volumen, energía, descomposición en
+ * cubos) sacando Three.js del bundle inicial de Home.
  *
  * No sustituye a `AbacoCrystalCube.tsx` (que se conserva intacto); AbacoHero
  * elige la variante con una constante.
@@ -17,13 +19,10 @@ import type { CSSProperties } from 'react';
  * trabajo de scroll cuando el hero sale del viewport y limpia sus listeners.
  */
 
-// 16 fragmentos en lugar de los 42 del cubo WebGL: bastan para sugerir la
-// descomposición sin el coste de 42 nodos. Cada fragmento se renderiza como un
-// mini cubo CSS (cara frontal + cara superior/lateral con pseudo-elementos, ver
-// app.css), no como un rectángulo plano. Disposición determinista por índice
-// (dirección de dispersión, profundidad Z, tamaño, proporción, retardo y
-// eje/velocidad de giro fijos), así el cubo se descompone igual en cada carga.
-const SHARD_COUNT = 16;
+// 20 mini cubos (vs. 42 fragmentos del cubo WebGL): llenan mejor el hero sin
+// ensuciar la composición. Cada uno es un cubo CSS 3D completo (6 caras de
+// cristal con isotipo), no una cara ni un prisma plano.
+const MINI_CUBE_MAX_SIZE = 0.2;
 
 const rand = (seed: number): number => {
     const value = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
@@ -31,53 +30,99 @@ const rand = (seed: number): number => {
     return value - Math.floor(value);
 };
 
+const ISOTYPE_LIGHT = '/assets/branding/marca/logos/abacoqd-isotipo.svg';
+const ISOTYPE_DARK = '/assets/branding/marca/logos/abacoqd-isotipo-inverse.svg';
+
 type Shard = {
-    readonly sx: number;
-    readonly sy: number;
-    readonly sz: number;
-    readonly size: number;
-    readonly ar: number;
+    // Destino disperso del mini cubo, en vw/vh relativos al centro del cubo, de
+    // modo que las piezas se reparten por todo el ancho/alto del hero.
+    readonly tx: number;
+    readonly ty: number;
+    // Profundidad Z en px. Menor Z = más lejos = menor escala final.
+    readonly tz: number;
+    // Arista base del mini cubo como fracción del cubo principal (máx. 20%).
+    readonly msize: number;
+    // Cercanía (0.74–1): controla escala final/opacidad para simular profundidad.
     readonly depth: number;
+    // Eje y magnitud del giro que gana con el scroll.
     readonly ax: number;
     readonly ay: number;
     readonly az: number;
     readonly spin: number;
+    // Inclinación base fija: garantiza que siempre se vean tres caras (aspecto
+    // de cubo, no de cuadrado plano) desde que la pieza aparece.
+    readonly tiltX: number;
+    readonly tiltY: number;
 };
 
-const SHARDS: readonly Shard[] = Array.from({ length: SHARD_COUNT }, (_, i) => {
-    const angle = rand(i * 3 + 1) * Math.PI * 2;
-    // Distancia mínima alta (130px) para que las piezas abandonen de verdad el
-    // volumen del cubo (cuyas caras explotan hasta ~half+120px) y no queden
-    // flotando dentro.
-    const distance = 130 + rand(i * 5 + 2) * 160;
+type ShardTarget = Pick<Shard, 'tx' | 'ty' | 'tz'>;
+
+// Campo final controlado y repetible: bandas altas, medias y bajas con Z
+// variado. Se cargan laterales/extremos y se deja la columna central superior
+// más ligera para proteger título, subtítulo y CTAs.
+const SHARD_TARGETS: readonly ShardTarget[] = [
+    { tx: -46, ty: -24, tz: -420 },
+    { tx: -30, ty: -18, tz: -330 },
+    { tx: 28, ty: -20, tz: -360 },
+    { tx: 45, ty: -25, tz: -390 },
+    { tx: -40, ty: -7, tz: -210 },
+    { tx: -22, ty: -3, tz: -120 },
+    { tx: 21, ty: -5, tz: -180 },
+    { tx: 39, ty: -8, tz: -250 },
+    { tx: -48, ty: 8, tz: 80 },
+    { tx: -32, ty: 11, tz: -40 },
+    { tx: 32, ty: 9, tz: 30 },
+    { tx: 48, ty: 6, tz: 120 },
+    { tx: -42, ty: 24, tz: 210 },
+    { tx: -25, ty: 30, tz: 90 },
+    { tx: -8, ty: 24, tz: -160 },
+    { tx: 10, ty: 29, tz: -80 },
+    { tx: 27, ty: 25, tz: 170 },
+    { tx: 43, ty: 32, tz: 260 },
+    { tx: -14, ty: -26, tz: -440 },
+    { tx: 14, ty: -27, tz: -410 },
+];
+
+const SHARDS: readonly Shard[] = SHARD_TARGETS.map(({ tx, ty, tz }, i) => {
+    const depth = 0.74 + Math.max(0, Math.min(1, (tz + 420) / 720)) * 0.26;
 
     return {
-        sx: Math.cos(angle) * distance,
-        sy: Math.sin(angle) * distance * 0.82,
-        // Profundidad ±150px para que se dispersen en 3D, no en un plano.
-        sz: (rand(i * 9 + 6) - 0.5) * 300,
-        size: 18 + rand(i * 11 + 4) * 26,
-        // Proporción alto/ancho: unos más cuadrados, otros más prismáticos.
-        ar: 0.72 + rand(i * 31 + 12) * 0.7,
-        depth: 0.5 + rand(i * 7 + 3) * 0.9,
+        tx,
+        ty,
+        tz,
+        msize: MINI_CUBE_MAX_SIZE,
+        depth,
         ax: rand(i * 17 + 7),
         ay: rand(i * 19 + 8),
         // az siempre ≥0.3: evita un eje de rotación degenerado (0 0 0).
         az: 0.3 + rand(i * 23 + 9) * 0.7,
-        spin: 120 + rand(i * 29 + 10) * 240,
+        spin: 90 + rand(i * 29 + 10) * 200,
+        tiltX: -20 - rand(i * 13 + 5) * 16,
+        tiltY: 20 + rand(i * 31 + 12) * 40,
     };
 });
 
-// Las 6 caras cierran el cubo. `--qd-litecube-face-out` = mitad de la arista +
-// desplazamiento por scroll (var(--decompose)); así, al bajar, cada cara sale
-// hacia fuera a lo largo de su normal y el cubo se abre/explota (ver app.css).
+// Las 6 caras del cubo principal permanecen cerradas: el bloque completo se
+// encoge/desvanece, nunca se separan caras.
 const FACE_TRANSFORMS: readonly string[] = [
-    'translateZ(var(--qd-litecube-face-out))',
-    'rotateY(180deg) translateZ(var(--qd-litecube-face-out))',
-    'rotateY(90deg) translateZ(var(--qd-litecube-face-out))',
-    'rotateY(-90deg) translateZ(var(--qd-litecube-face-out))',
-    'rotateX(90deg) translateZ(var(--qd-litecube-face-out))',
-    'rotateX(-90deg) translateZ(var(--qd-litecube-face-out))',
+    'translateZ(var(--qd-litecube-half))',
+    'rotateY(180deg) translateZ(var(--qd-litecube-half))',
+    'rotateY(90deg) translateZ(var(--qd-litecube-half))',
+    'rotateY(-90deg) translateZ(var(--qd-litecube-half))',
+    'rotateX(90deg) translateZ(var(--qd-litecube-half))',
+    'rotateX(-90deg) translateZ(var(--qd-litecube-half))',
+];
+
+// Las 6 caras de cada mini cubo; `--qd-minicube-half` = mitad de su arista (se
+// deriva de --msize en app.css). Misma disposición que el cubo grande → cada
+// pieza es una réplica en pequeño.
+const MINI_FACE_TRANSFORMS: readonly string[] = [
+    'translateZ(var(--qd-minicube-half))',
+    'rotateY(180deg) translateZ(var(--qd-minicube-half))',
+    'rotateY(90deg) translateZ(var(--qd-minicube-half))',
+    'rotateY(-90deg) translateZ(var(--qd-minicube-half))',
+    'rotateX(90deg) translateZ(var(--qd-minicube-half))',
+    'rotateX(-90deg) translateZ(var(--qd-minicube-half))',
 ];
 
 export default function AbacoCrystalCubeLite() {
@@ -96,44 +141,67 @@ export default function AbacoCrystalCubeLite() {
 
         let frame: number | null = null;
         let running = false;
+        let targetProgress = 0;
+        let currentProgress = 0;
 
-        // Descomposición ligada al scroll del hero: al bajar, los fragmentos se
-        // dispersan y el cubo retrocede. Solo escribe la variable --decompose;
-        // el reparto lo hace el CSS con transform/opacity.
-        const update = (): void => {
-            frame = null;
-
+        // Descomposición ligada al scroll del hero: el cubo principal se encoge,
+        // el flash central cubre el cambio y los mini cubos viajan a destino.
+        // Solo escribe --decompose; el reparto lo hace CSS con transform/opacity.
+        const readTargetProgress = (): number => {
             const hero = root.closest('.qd-hero');
 
             if (!hero) {
-                return;
+                return targetProgress;
             }
 
             if (prefersReduced()) {
+                return 0;
+            }
+
+            const rect = hero.getBoundingClientRect();
+            const travel = Math.min(260, Math.max(150, rect.height * 0.25));
+
+            return Math.max(0, Math.min(1, -rect.top / travel));
+        };
+
+        const tick = (): void => {
+            frame = null;
+
+            const delta = targetProgress - currentProgress;
+
+            if (Math.abs(delta) < 0.001) {
+                currentProgress = targetProgress;
+            } else {
+                currentProgress += delta * 0.18;
+            }
+
+            root.style.setProperty('--decompose', currentProgress.toFixed(3));
+
+            if (
+                running &&
+                Math.abs(targetProgress - currentProgress) >= 0.001
+            ) {
+                frame = window.requestAnimationFrame(tick);
+            }
+        };
+
+        const request = (): void => {
+            if (!running) {
+                return;
+            }
+
+            targetProgress = readTargetProgress();
+
+            if (prefersReduced()) {
+                currentProgress = 0;
                 root.style.setProperty('--decompose', '0');
 
                 return;
             }
 
-            const rect = hero.getBoundingClientRect();
-            // Progreso 0→1 en el primer ~60% de scroll del hero: la explosión se
-            // ve claramente antes de que el hero salga de pantalla.
-            const raw = Math.max(
-                0,
-                Math.min(1, -rect.top / (rect.height * 0.6)),
-            );
-            // easeOutQuad: el cubo empieza a abrirse en cuanto se hace scroll y
-            // alcanza la descomposición plena sin necesidad de bajar del todo.
-            const eased = raw * (2 - raw);
-            root.style.setProperty('--decompose', eased.toFixed(3));
-        };
-
-        const request = (): void => {
-            if (frame !== null || !running) {
-                return;
+            if (frame === null) {
+                frame = window.requestAnimationFrame(tick);
             }
-
-            frame = window.requestAnimationFrame(update);
         };
 
         const start = (): void => {
@@ -144,7 +212,7 @@ export default function AbacoCrystalCubeLite() {
             running = true;
             window.addEventListener('scroll', request, { passive: true });
             window.addEventListener('resize', request);
-            update();
+            request();
         };
 
         const stop = (): void => {
@@ -217,41 +285,56 @@ export default function AbacoCrystalCubeLite() {
                             style={{ transform }}
                         >
                             <img
-                                src="/assets/branding/marca/logos/abacoqd-isotipo.svg"
+                                src={ISOTYPE_LIGHT}
                                 alt=""
                                 className="qd-litecube__logo qd-litecube__logo--light"
                             />
                             <img
-                                src="/assets/branding/marca/logos/abacoqd-isotipo-inverse.svg"
+                                src={ISOTYPE_DARK}
                                 alt=""
                                 className="qd-litecube__logo qd-litecube__logo--dark"
                             />
                         </div>
                     ))}
                 </div>
+            </div>
 
-                <div className="qd-litecube__shards">
-                    {SHARDS.map((shard, index) => (
-                        <span
-                            key={index}
-                            className="qd-litecube__shard"
-                            style={
-                                {
-                                    '--sx': `${shard.sx.toFixed(1)}px`,
-                                    '--sy': `${shard.sy.toFixed(1)}px`,
-                                    '--sz': `${shard.sz.toFixed(1)}px`,
-                                    '--size': `${shard.size.toFixed(1)}px`,
-                                    '--ar': shard.ar.toFixed(3),
-                                    '--depth': shard.depth.toFixed(2),
-                                    '--ax': shard.ax.toFixed(3),
-                                    '--ay': shard.ay.toFixed(3),
-                                    '--az': shard.az.toFixed(3),
-                                    '--spin': shard.spin.toFixed(1),
-                                } as CSSProperties
-                            }
-                        />
-                    ))}
-                </div>
+            <div className="qd-litecube__burst" />
+
+            {/* Campo de mini cubos (fuera de la escena inclinada para repartirse
+                en el plano de la pantalla). Cada uno es un cubo 3D completo. */}
+            <div className="qd-litecube__shards">
+                {SHARDS.map((shard, index) => (
+                    <div
+                        key={index}
+                        className="qd-litecube__shard"
+                        style={
+                            {
+                                '--tx': shard.tx.toFixed(2),
+                                '--ty': shard.ty.toFixed(2),
+                                '--tz': shard.tz.toFixed(1),
+                                '--msize': shard.msize.toFixed(3),
+                                '--depth': shard.depth.toFixed(2),
+                                '--ax': shard.ax.toFixed(3),
+                                '--ay': shard.ay.toFixed(3),
+                                '--az': shard.az.toFixed(3),
+                                '--spin': shard.spin.toFixed(1),
+                                '--tiltX': shard.tiltX.toFixed(1),
+                                '--tiltY': shard.tiltY.toFixed(1),
+                            } as CSSProperties
+                        }
+                    >
+                        <div className="qd-litecube__minicube">
+                            {MINI_FACE_TRANSFORMS.map((transform) => (
+                                <div
+                                    key={transform}
+                                    className="qd-litecube__miniface"
+                                    style={{ transform }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     );
