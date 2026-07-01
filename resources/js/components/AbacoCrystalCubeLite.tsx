@@ -57,30 +57,39 @@ type Shard = {
 
 type ShardTarget = Pick<Shard, 'tx' | 'ty' | 'tz'>;
 
-// Campo final controlado y repetible: bandas altas, medias y bajas con Z
-// variado. Se cargan laterales/extremos y se deja la columna central superior
-// más ligera para proteger título, subtítulo y CTAs.
+// Campo final controlado y repetible, repartido por TODO el hero en cinco
+// bandas verticales (de arriba del todo a abajo del todo) y balanceado
+// izquierda/derecha. Las bandas extremas (muy arriba / muy abajo) sí pueden
+// acercarse al centro porque quedan por encima del título o por debajo de los
+// CTAs; en la franja del texto (ty ~ -30..+5) las piezas se mantienen a los
+// lados (|tx| alto) para no invadir título, subtítulo ni botones. Z variado
+// para dar profundidad (piezas lejanas más pequeñas y tenues).
 const SHARD_TARGETS: readonly ShardTarget[] = [
-    { tx: -46, ty: -24, tz: -420 },
-    { tx: -30, ty: -18, tz: -330 },
-    { tx: 28, ty: -20, tz: -360 },
-    { tx: 45, ty: -25, tz: -390 },
-    { tx: -40, ty: -7, tz: -210 },
-    { tx: -22, ty: -3, tz: -120 },
-    { tx: 21, ty: -5, tz: -180 },
-    { tx: 39, ty: -8, tz: -250 },
-    { tx: -48, ty: 8, tz: 80 },
-    { tx: -32, ty: 11, tz: -40 },
-    { tx: 32, ty: 9, tz: 30 },
-    { tx: 48, ty: 6, tz: 120 },
-    { tx: -42, ty: 24, tz: 210 },
-    { tx: -25, ty: 30, tz: 90 },
-    { tx: -8, ty: 24, tz: -160 },
-    { tx: 10, ty: 29, tz: -80 },
-    { tx: 27, ty: 25, tz: 170 },
-    { tx: 43, ty: 32, tz: 260 },
-    { tx: -14, ty: -26, tz: -440 },
-    { tx: 14, ty: -27, tz: -410 },
+    // Banda superior (por encima del título)
+    { tx: -34, ty: -42, tz: -380 },
+    { tx: -11, ty: -46, tz: -300 },
+    { tx: 15, ty: -44, tz: -330 },
+    { tx: 36, ty: -40, tz: -410 },
+    // Franja superior lateral (lejos del título)
+    { tx: -47, ty: -24, tz: -170 },
+    { tx: -29, ty: -19, tz: -70 },
+    { tx: 30, ty: -22, tz: -130 },
+    { tx: 45, ty: -25, tz: -210 },
+    // Franja media (muy abiertos a los lados)
+    { tx: -50, ty: -3, tz: 40 },
+    { tx: -33, ty: 5, tz: -30 },
+    { tx: 34, ty: -2, tz: 60 },
+    { tx: 49, ty: 7, tz: 120 },
+    // Franja inferior media
+    { tx: -44, ty: 23, tz: 190 },
+    { tx: -19, ty: 27, tz: 80 },
+    { tx: 19, ty: 21, tz: 150 },
+    { tx: 43, ty: 25, tz: 240 },
+    // Banda inferior (por debajo de los CTAs)
+    { tx: -31, ty: 41, tz: 70 },
+    { tx: -8, ty: 45, tz: -50 },
+    { tx: 13, ty: 42, tz: 130 },
+    { tx: 35, ty: 38, tz: 210 },
 ];
 
 const SHARDS: readonly Shard[] = SHARD_TARGETS.map(({ tx, ty, tz }, i) => {
