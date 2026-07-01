@@ -7,12 +7,15 @@ use App\Models\Partner;
 use App\Models\Post;
 use App\Models\Project;
 use App\Models\Service;
+use App\Support\Media\ImageVariantService;
 use Illuminate\Database\Eloquent\Builder;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class HomeController extends Controller
 {
+    public function __construct(private readonly ImageVariantService $images) {}
+
     /**
      * Render the public landing.
      *
@@ -97,6 +100,8 @@ class HomeController extends Controller
             'clientLogo' => $project->logo,
             'clientLogoDark' => $project->logo_dark,
             'clientLogoAlt' => $project->logo_alt,
+            'clientLogoVariants' => $this->images->existingVariants($project->logo, ImageVariantService::LOGO_WIDTHS),
+            'clientLogoDarkVariants' => $this->images->existingVariants($project->logo_dark, ImageVariantService::LOGO_WIDTHS),
             'year' => $project->year,
             'developmentMode' => $project->partners->isEmpty() ? 'solo' : 'cooperative',
             'services' => $project->services
@@ -108,6 +113,8 @@ class HomeController extends Controller
                     'logo' => $partner->logo,
                     'logoDark' => $partner->logo_dark,
                     'logoAlt' => $partner->logo_alt,
+                    'logoVariants' => $this->images->existingVariants($partner->logo, ImageVariantService::LOGO_WIDTHS),
+                    'logoDarkVariants' => $this->images->existingVariants($partner->logo_dark, ImageVariantService::LOGO_WIDTHS),
                 ])
                 ->values(),
         ];
@@ -128,6 +135,7 @@ class HomeController extends Controller
             'summary' => $service->summary,
             'icon' => $service->icon,
             'image' => $service->image,
+            'imageVariants' => $this->images->existingVariants($service->image, ImageVariantService::SERVICE_WIDTHS),
             'isDetailEnabled' => $service->is_detail_enabled,
             'settings' => $service->settings,
         ];
@@ -144,6 +152,7 @@ class HomeController extends Controller
             'slug' => $post->slug,
             'excerpt' => $post->excerpt,
             'coverImage' => $post->featured_image,
+            'coverImageVariants' => $this->images->existingVariants($post->featured_image, ImageVariantService::BLOG_WIDTHS),
             'category' => $post->category ? [
                 'name' => $post->category->name,
                 'slug' => $post->category->slug,

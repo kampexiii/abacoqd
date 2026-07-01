@@ -1,4 +1,6 @@
 import type { Locale } from '@/hooks/use-language';
+import { responsiveImageAttributes } from '@/lib/media';
+import type { ImageVariant } from '@/lib/media';
 
 /**
  * Tipos y helpers de datos del Blog público compartidos entre `Blog.tsx`,
@@ -37,6 +39,7 @@ export type BlogPostSummary = {
     readonly slug: LocalizedText;
     readonly excerpt: LocalizedText;
     readonly coverImage: string | null;
+    readonly coverImageVariants?: readonly ImageVariant[];
     readonly category: BlogCategorySummary | null;
     readonly publishedAt: string | null;
     readonly readingTime: number | null;
@@ -45,6 +48,13 @@ export type BlogPostSummary = {
 type BlogCoverImageAttributes = {
     readonly src: string;
     readonly srcSet?: string;
+    readonly sizes?: string;
+    readonly width?: number;
+    readonly height?: number;
+};
+
+type BlogCoverImageOptions = {
+    readonly sizes?: string;
     readonly width?: number;
     readonly height?: number;
 };
@@ -83,8 +93,35 @@ const BLOG_COVER_IMAGE_VARIANTS: Record<string, BlogCoverImageAttributes> = {
 
 export function blogCoverImageAttributes(
     src: string,
+    variants?: readonly ImageVariant[] | null,
+    options: BlogCoverImageOptions = {},
 ): BlogCoverImageAttributes {
-    return BLOG_COVER_IMAGE_VARIANTS[src] ?? { src };
+    const responsiveAttributes = responsiveImageAttributes(
+        src,
+        variants,
+        options,
+    );
+
+    if (responsiveAttributes.srcSet) {
+        return responsiveAttributes;
+    }
+
+    const knownAttributes = BLOG_COVER_IMAGE_VARIANTS[src];
+
+    if (!knownAttributes) {
+        return {
+            src,
+            width: options.width,
+            height: options.height,
+        };
+    }
+
+    return {
+        ...knownAttributes,
+        sizes: options.sizes,
+        width: options.width ?? knownAttributes.width,
+        height: options.height ?? knownAttributes.height,
+    };
 }
 
 /** Entrada del índice "En esta página" del detalle (un H2 por entrada). */

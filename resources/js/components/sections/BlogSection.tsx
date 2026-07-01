@@ -24,19 +24,25 @@ import { cn } from '@/lib/utils';
 
 function CoverVisual({
     src,
+    variants,
     sizes,
 }: {
     readonly src: string | null;
+    readonly variants?: BlogPostSummary['coverImageVariants'];
     readonly sizes: string;
 }) {
     if (src) {
-        const image = blogCoverImageAttributes(src);
+        const image = blogCoverImageAttributes(src, variants, {
+            sizes,
+            width: 960,
+            height: 540,
+        });
 
         return (
             <img
                 src={image.src}
                 srcSet={image.srcSet}
-                sizes={image.srcSet ? sizes : undefined}
+                sizes={image.sizes}
                 width={image.width}
                 height={image.height}
                 alt=""
@@ -121,6 +127,9 @@ export default function BlogSection({
                             <div className="qd-blog-card__visual">
                                 <CoverVisual
                                     src={featuredPost.coverImage}
+                                    variants={
+                                        featuredPost.coverImageVariants
+                                    }
                                     sizes="(min-width: 1024px) 52vw, calc(100vw - 2.5rem)"
                                 />
                             </div>
@@ -173,6 +182,7 @@ export default function BlogSection({
                                 <div className="qd-blog-card__visual">
                                     <CoverVisual
                                         src={post.coverImage}
+                                        variants={post.coverImageVariants}
                                         sizes="(min-width: 1024px) 38vw, calc(100vw - 2.5rem)"
                                     />
                                 </div>

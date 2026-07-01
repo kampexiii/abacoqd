@@ -353,6 +353,25 @@ test('uploading an image stores it as webp under the service slug', function () 
     expect($service->image)->toBe('/uploads/services/servicio-nuevo.webp');
 
     Storage::disk('public_uploads')->assertExists('services/servicio-nuevo.webp');
+    Storage::disk('public_uploads')->assertMissing('services/servicio-nuevo-480w.webp');
+});
+
+test('uploading a large service image creates responsive webp variants', function () {
+    if (! extension_loaded('gd') || ! function_exists('imagewebp')) {
+        $this->markTestSkipped('GD con soporte WebP no disponible.');
+    }
+
+    $this->actingAs(adminUser());
+
+    $this->post(route('admin.services.store'), validServicePayload([
+        'image' => UploadedFile::fake()->image('foto.png', 1400, 900),
+    ]))->assertRedirect(route('admin.services.index'));
+
+    Storage::disk('public_uploads')->assertExists('services/servicio-nuevo.webp');
+    Storage::disk('public_uploads')->assertExists('services/servicio-nuevo-480w.webp');
+    Storage::disk('public_uploads')->assertExists('services/servicio-nuevo-640w.webp');
+    Storage::disk('public_uploads')->assertExists('services/servicio-nuevo-960w.webp');
+    Storage::disk('public_uploads')->assertExists('services/servicio-nuevo-1280w.webp');
 });
 
 test('uploading a new image while renaming the slug deletes the previous file', function () {
@@ -361,6 +380,8 @@ test('uploading a new image while renaming the slug deletes the previous file', 
     }
 
     Storage::disk('public_uploads')->put('services/servicio-original.webp', 'bytes');
+    Storage::disk('public_uploads')->put('services/servicio-original-480w.webp', 'bytes');
+    Storage::disk('public_uploads')->put('services/servicio-original-960w.webp', 'bytes');
 
     $service = Service::factory()->create([
         'slug' => ['es' => 'servicio-original', 'en' => 'original-service'],
@@ -373,18 +394,22 @@ test('uploading a new image while renaming the slug deletes the previous file', 
         route('admin.services.update', $service),
         validServicePayload([
             'slug' => ['es' => 'servicio-renombrado', 'en' => 'renamed-service'],
-            'image' => UploadedFile::fake()->image('nueva.png', 64, 64),
+            'image' => UploadedFile::fake()->image('nueva.png', 1400, 900),
         ]),
     )->assertRedirect(route('admin.services.index'));
 
     expect($service->refresh()->image)->toBe('/uploads/services/servicio-renombrado.webp');
 
     Storage::disk('public_uploads')->assertExists('services/servicio-renombrado.webp');
+    Storage::disk('public_uploads')->assertExists('services/servicio-renombrado-480w.webp');
     Storage::disk('public_uploads')->assertMissing('services/servicio-original.webp');
+    Storage::disk('public_uploads')->assertMissing('services/servicio-original-480w.webp');
+    Storage::disk('public_uploads')->assertMissing('services/servicio-original-960w.webp');
 });
 
 test('removing the image clears the field and deletes the file', function () {
     Storage::disk('public_uploads')->put('services/servicio-original.webp', 'bytes');
+    Storage::disk('public_uploads')->put('services/servicio-original-480w.webp', 'bytes');
 
     $service = Service::factory()->create([
         'slug' => ['es' => 'servicio-original', 'en' => 'original-service'],
@@ -402,6 +427,7 @@ test('removing the image clears the field and deletes the file', function () {
     )->assertRedirect(route('admin.services.index'));
 
     Storage::disk('public_uploads')->assertMissing('services/servicio-original.webp');
+    Storage::disk('public_uploads')->assertMissing('services/servicio-original-480w.webp');
 
     expect($service->refresh()->image)->toBeNull();
 });

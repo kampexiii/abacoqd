@@ -140,6 +140,8 @@ test('un logo SVG benigno se acepta y se guarda tal cual', function () {
 
     expect($partner->logo)->toBe('/uploads/partners/acme-security-logo.svg');
     Storage::disk('public_uploads')->assertExists('partners/acme-security-logo.svg');
+    Storage::disk('public_uploads')->assertMissing('partners/acme-security-logo.webp');
+    Storage::disk('public_uploads')->assertMissing('partners/acme-security-logo-320w.webp');
 });
 
 test('un logo por encima del límite de tamaño se rechaza', function () {

@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Support\Media\ImageVariantService;
 use App\Support\Seo\SeoResolver;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ServiceController extends Controller
 {
+    public function __construct(private readonly ImageVariantService $images) {}
+
     /**
      * Show the public services listing from the canonical services table.
      *
@@ -87,6 +90,7 @@ class ServiceController extends Controller
             'summary' => $service->summary,
             'icon' => $service->icon,
             'image' => $service->image,
+            'imageVariants' => $this->images->existingVariants($service->image, ImageVariantService::SERVICE_WIDTHS),
             'isDetailEnabled' => $service->is_detail_enabled,
             'settings' => $service->settings,
         ];

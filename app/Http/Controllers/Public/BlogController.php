@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\Tag;
+use App\Support\Media\ImageVariantService;
 use App\Support\Seo\SeoResolver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -16,6 +17,8 @@ use Inertia\Response;
 class BlogController extends Controller
 {
     private const PER_PAGE = 9;
+
+    public function __construct(private readonly ImageVariantService $images) {}
 
     /**
      * Show the public Blog listing.
@@ -139,6 +142,7 @@ class BlogController extends Controller
             'slug' => $post->slug,
             'excerpt' => $post->excerpt,
             'coverImage' => $post->featured_image,
+            'coverImageVariants' => $this->images->existingVariants($post->featured_image, ImageVariantService::BLOG_WIDTHS),
             'category' => $post->category ? [
                 'name' => $post->category->name,
                 'slug' => $post->category->slug,

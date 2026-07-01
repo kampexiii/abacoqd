@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Partner;
 use App\Models\Project;
 use App\Models\Service;
+use App\Support\Media\ImageVariantService;
 use App\Support\Seo\SeoResolver;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -13,6 +14,8 @@ use Inertia\Response;
 class ProjectController extends Controller
 {
     private const PER_PAGE = 9;
+
+    public function __construct(private readonly ImageVariantService $images) {}
 
     /**
      * Show the public Proyectos listing.
@@ -105,13 +108,17 @@ class ProjectController extends Controller
             'detailUrl' => $slug ? "/proyectos/{$slug}" : null,
             'summary' => $project->summary,
             'coverImage' => $project->cover_image,
+            'coverImageVariants' => $this->images->existingVariants($project->cover_image, ImageVariantService::PROJECT_WIDTHS),
             'thumbnailImage' => $project->thumbnail_image,
+            'thumbnailImageVariants' => $this->images->existingVariants($project->thumbnail_image, ImageVariantService::PROJECT_WIDTHS),
             'technologies' => is_array($project->technologies) ? array_values($project->technologies) : [],
             'year' => $project->year,
             'clientName' => $project->client_name,
             'clientLogo' => $project->logo,
             'clientLogoDark' => $project->logo_dark,
             'clientLogoAlt' => $project->logo_alt,
+            'clientLogoVariants' => $this->images->existingVariants($project->logo, ImageVariantService::LOGO_WIDTHS),
+            'clientLogoDarkVariants' => $this->images->existingVariants($project->logo_dark, ImageVariantService::LOGO_WIDTHS),
             'services' => $this->mapServices($project),
             'developmentMode' => $project->partners->isEmpty() ? 'solo' : 'cooperative',
             'partners' => $this->mapPartners($project),
@@ -158,7 +165,7 @@ class ProjectController extends Controller
      * Partners que co-desarrollaron el proyecto junto a AbacoQD (proyecto
      * cooperativo). No se expone el rol técnico de `partner_project`.
      *
-     * @return list<array{id: int, name: string, logo: string|null, logoDark: string|null, logoAlt: string|null, website: string|null}>
+     * @return list<array{id: int, name: string, logo: string|null, logoDark: string|null, logoAlt: string|null, logoVariants: list<array{width: int, src: string}>, logoDarkVariants: list<array{width: int, src: string}>, website: string|null}>
      */
     private function mapPartners(Project $project): array
     {
@@ -169,6 +176,8 @@ class ProjectController extends Controller
                 'logo' => $partner->logo,
                 'logoDark' => $partner->logo_dark,
                 'logoAlt' => $partner->logo_alt,
+                'logoVariants' => $this->images->existingVariants($partner->logo, ImageVariantService::LOGO_WIDTHS),
+                'logoDarkVariants' => $this->images->existingVariants($partner->logo_dark, ImageVariantService::LOGO_WIDTHS),
                 'website' => $partner->website,
             ])
             ->all());

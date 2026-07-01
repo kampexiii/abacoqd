@@ -42,6 +42,21 @@ test('una sola imagen de proyecto alimenta portada y miniatura con la misma ruta
         ->and($project->thumbnail_image)->toBe($project->cover_image);
 
     Storage::disk('public_uploads')->assertExists('projects/proyecto-test-cover.webp');
+    Storage::disk('public_uploads')->assertMissing('projects/proyecto-test-cover-640w.webp');
+});
+
+test('una imagen grande de proyecto genera variantes responsivas', function () {
+    $this->actingAs(User::factory()->create(['role' => 'admin']));
+
+    $this->post(route('admin.projects.store'), projectMediaPayload([
+        'cover_image' => UploadedFile::fake()->image('foto.png', 1800, 1000),
+    ]))->assertRedirect(route('admin.projects.index'));
+
+    Storage::disk('public_uploads')->assertExists('projects/proyecto-test-cover.webp');
+    Storage::disk('public_uploads')->assertExists('projects/proyecto-test-cover-640w.webp');
+    Storage::disk('public_uploads')->assertExists('projects/proyecto-test-cover-960w.webp');
+    Storage::disk('public_uploads')->assertExists('projects/proyecto-test-cover-1280w.webp');
+    Storage::disk('public_uploads')->assertExists('projects/proyecto-test-cover-1600w.webp');
 });
 
 test('los logos de cliente se guardan como rutas WebP, no como binarios', function () {
@@ -61,10 +76,27 @@ test('los logos de cliente se guardan como rutas WebP, no como binarios', functi
 
     Storage::disk('public_uploads')->assertExists('projects/proyecto-test-logo.webp');
     Storage::disk('public_uploads')->assertExists('projects/proyecto-test-logo-dark.webp');
+    Storage::disk('public_uploads')->assertMissing('projects/proyecto-test-logo-320w.webp');
+    Storage::disk('public_uploads')->assertMissing('projects/proyecto-test-logo-dark-320w.webp');
+});
+
+test('los logos raster grandes generan variantes acotadas para logo', function () {
+    $this->actingAs(User::factory()->create(['role' => 'admin']));
+
+    $this->post(route('admin.projects.store'), projectMediaPayload([
+        'logo' => UploadedFile::fake()->image('logo.png', 900, 300),
+    ]))->assertRedirect(route('admin.projects.index'));
+
+    Storage::disk('public_uploads')->assertExists('projects/proyecto-test-logo.webp');
+    Storage::disk('public_uploads')->assertExists('projects/proyecto-test-logo-320w.webp');
+    Storage::disk('public_uploads')->assertExists('projects/proyecto-test-logo-640w.webp');
+    Storage::disk('public_uploads')->assertMissing('projects/proyecto-test-logo-960w.webp');
 });
 
 test('quitar la imagen del proyecto limpia portada y miniatura', function () {
     Storage::disk('public_uploads')->put('projects/acme-cover.webp', 'bytes');
+    Storage::disk('public_uploads')->put('projects/acme-cover-640w.webp', 'bytes');
+    Storage::disk('public_uploads')->put('projects/acme-cover-1280w.webp', 'bytes');
 
     $project = Project::factory()->create([
         'slug' => ['es' => 'acme', 'en' => null],
@@ -80,6 +112,8 @@ test('quitar la imagen del proyecto limpia portada y miniatura', function () {
     ]))->assertRedirect(route('admin.projects.index'));
 
     Storage::disk('public_uploads')->assertMissing('projects/acme-cover.webp');
+    Storage::disk('public_uploads')->assertMissing('projects/acme-cover-640w.webp');
+    Storage::disk('public_uploads')->assertMissing('projects/acme-cover-1280w.webp');
 
     $project->refresh();
     expect($project->cover_image)->toBeNull()

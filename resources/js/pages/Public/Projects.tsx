@@ -12,6 +12,8 @@ import PublicPageHero from '@/components/public/PublicPageHero';
 import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
+import { responsiveImageAttributes } from '@/lib/media';
+import type { ImageVariant } from '@/lib/media';
 import { cn } from '@/lib/utils';
 import { show as bookingShow } from '@/routes/booking';
 import { show as contactShow } from '@/routes/contact';
@@ -31,13 +33,17 @@ type PublicProject = {
     readonly detailUrl: string | null;
     readonly summary: LocalizedText;
     readonly coverImage: string | null;
+    readonly coverImageVariants?: readonly ImageVariant[];
     readonly thumbnailImage: string | null;
+    readonly thumbnailImageVariants?: readonly ImageVariant[];
     readonly technologies: readonly unknown[];
     readonly year: number | null;
     readonly clientName: string | null;
     readonly clientLogo: string | null;
     readonly clientLogoDark: string | null;
     readonly clientLogoAlt: string | null;
+    readonly clientLogoVariants?: readonly ImageVariant[];
+    readonly clientLogoDarkVariants?: readonly ImageVariant[];
     readonly services: readonly ProjectService[];
     readonly developmentMode: 'solo' | 'cooperative';
 };
@@ -271,6 +277,16 @@ export default function Projects({ projects }: ProjectsProps) {
         const summary = localizedText(project.summary, locale);
         const slug = localizedText(project.slug, locale);
         const cover = project.coverImage ?? project.thumbnailImage;
+        const coverVariants = project.coverImage
+            ? project.coverImageVariants
+            : project.thumbnailImageVariants;
+        const coverImage = cover
+            ? responsiveImageAttributes(cover, coverVariants, {
+                  sizes: '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, calc(100vw - 2.5rem)',
+                  width: 1600,
+                  height: 1000,
+              })
+            : null;
         const serviceNames = project.services.map((service) =>
             localizedText(service.name, locale),
         );
@@ -284,6 +300,28 @@ export default function Projects({ projects }: ProjectsProps) {
             project.developmentMode === 'cooperative'
                 ? t('projectDetail.development.cooperativeLabel')
                 : t('projectDetail.development.soloLabel');
+        const clientLogo = project.clientLogo
+            ? responsiveImageAttributes(
+                  project.clientLogo,
+                  project.clientLogoVariants,
+                  {
+                      sizes: '112px',
+                      width: 320,
+                      height: 160,
+                  },
+              )
+            : null;
+        const clientLogoDark = project.clientLogoDark
+            ? responsiveImageAttributes(
+                  project.clientLogoDark,
+                  project.clientLogoDarkVariants,
+                  {
+                      sizes: '112px',
+                      width: 320,
+                      height: 160,
+                  },
+              )
+            : null;
 
         return (
             <article className="group flex flex-col overflow-hidden rounded-2xl border border-qd-mist bg-qd-white shadow-[0_18px_60px_-42px_rgba(7,17,26,0.35)] transition duration-300 hover:-translate-y-1 hover:border-qd-teal-2/70 dark:border-qd-white/10 dark:bg-qd-white/5 dark:hover:border-qd-teal/70">
@@ -292,11 +330,16 @@ export default function Projects({ projects }: ProjectsProps) {
                         href={cardUrl}
                         aria-label={`${t('projectsPage.card.viewProject')}: ${title}`}
                     >
-                        {cover ? (
+                        {coverImage ? (
                             <img
-                                src={cover}
+                                src={coverImage.src}
+                                srcSet={coverImage.srcSet}
+                                sizes={coverImage.sizes}
+                                width={coverImage.width}
+                                height={coverImage.height}
                                 alt={title}
                                 loading="lazy"
+                                decoding="async"
                                 className="aspect-16/10 w-full object-cover"
                             />
                         ) : (
@@ -322,23 +365,31 @@ export default function Projects({ projects }: ProjectsProps) {
 
                 <div className="flex flex-1 flex-col p-6">
                     <div className="flex min-h-9 items-center gap-3">
-                        {project.clientLogo ? (
+                        {clientLogo ? (
                             <span className="flex h-9 max-w-28 items-center">
                                 <img
-                                    src={project.clientLogo}
+                                    src={clientLogo.src}
+                                    srcSet={clientLogo.srcSet}
+                                    sizes={clientLogo.sizes}
+                                    width={clientLogo.width}
+                                    height={clientLogo.height}
                                     alt={project.clientLogoAlt ?? clientLabel}
                                     className={cn(
                                         'max-h-8 w-auto max-w-28 object-contain',
-                                        project.clientLogoDark && 'dark:hidden',
-                                        !project.clientLogoDark &&
+                                        clientLogoDark && 'dark:hidden',
+                                        !clientLogoDark &&
                                             'dark:brightness-0 dark:invert',
                                     )}
                                     loading="lazy"
                                     decoding="async"
                                 />
-                                {project.clientLogoDark && (
+                                {clientLogoDark && (
                                     <img
-                                        src={project.clientLogoDark}
+                                        src={clientLogoDark.src}
+                                        srcSet={clientLogoDark.srcSet}
+                                        sizes={clientLogoDark.sizes}
+                                        width={clientLogoDark.width}
+                                        height={clientLogoDark.height}
                                         alt={
                                             project.clientLogoAlt ?? clientLabel
                                         }

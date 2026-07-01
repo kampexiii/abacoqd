@@ -18,7 +18,12 @@ import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
 import type { BlogPostSummary, BlogTocItem, LocalizedText } from '@/lib/blog';
-import { formatPostDate, localizedText, postHref } from '@/lib/blog';
+import {
+    blogCoverImageAttributes,
+    formatPostDate,
+    localizedText,
+    postHref,
+} from '@/lib/blog';
 import { cn } from '@/lib/utils';
 import { show as bookingShow } from '@/routes/booking';
 import { show as contactShow } from '@/routes/contact';
@@ -65,6 +70,13 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
     const date = formatPostDate(post.publishedAt, locale);
     const contentHtml = localizedText(post.contentHtml, locale);
     const toc = post.toc[locale] ?? post.toc.es ?? post.toc.en ?? [];
+    const coverImage = post.coverImage
+        ? blogCoverImageAttributes(post.coverImage, post.coverImageVariants, {
+              sizes: '(min-width: 1024px) 65vw, calc(100vw - 2.5rem)',
+              width: 1280,
+              height: 720,
+          })
+        : null;
 
     const shareUrl = (): string =>
         typeof window === 'undefined' ? '' : window.location.href;
@@ -137,10 +149,17 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
 
                         {/* Portada integrada en el cuerpo, con borde neón */}
                         <div className="qd-blog-cover mt-6 aspect-video w-full overflow-hidden rounded-2xl">
-                            {post.coverImage ? (
+                            {coverImage ? (
                                 <img
-                                    src={post.coverImage}
+                                    src={coverImage.src}
+                                    srcSet={coverImage.srcSet}
+                                    sizes={coverImage.sizes}
+                                    width={coverImage.width}
+                                    height={coverImage.height}
                                     alt={title}
+                                    loading="eager"
+                                    fetchPriority="high"
+                                    decoding="async"
                                     className="h-full w-full object-cover"
                                 />
                             ) : (
@@ -308,6 +327,17 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
                                             item.publishedAt,
                                             locale,
                                         );
+                                        const itemCover = item.coverImage
+                                            ? blogCoverImageAttributes(
+                                                  item.coverImage,
+                                                  item.coverImageVariants,
+                                                  {
+                                                      sizes: '80px',
+                                                      width: 320,
+                                                      height: 180,
+                                                  },
+                                              )
+                                            : null;
 
                                         return (
                                             <li key={item.id}>
@@ -316,12 +346,26 @@ export default function BlogPost({ post, related }: BlogPostPageProps) {
                                                     className="group flex gap-3"
                                                 >
                                                     <span className="h-14 w-20 shrink-0 overflow-hidden rounded-lg border border-qd-mist bg-qd-mist dark:border-white/10 dark:bg-white/5">
-                                                        {item.coverImage ? (
+                                                        {itemCover ? (
                                                             <img
                                                                 src={
-                                                                    item.coverImage
+                                                                    itemCover.src
+                                                                }
+                                                                srcSet={
+                                                                    itemCover.srcSet
+                                                                }
+                                                                sizes={
+                                                                    itemCover.sizes
+                                                                }
+                                                                width={
+                                                                    itemCover.width
+                                                                }
+                                                                height={
+                                                                    itemCover.height
                                                                 }
                                                                 alt=""
+                                                                loading="lazy"
+                                                                decoding="async"
                                                                 className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.05]"
                                                             />
                                                         ) : (

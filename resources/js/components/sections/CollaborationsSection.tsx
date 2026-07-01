@@ -5,6 +5,8 @@ import type { CSSProperties } from 'react';
 import { useInView } from '@/hooks/use-in-view';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
+import { responsiveImageAttributes } from '@/lib/media';
+import type { ImageVariant } from '@/lib/media';
 import { cn } from '@/lib/utils';
 
 // El texto localizado se mantiene en este módulo para evitar dependencias con
@@ -24,6 +26,8 @@ type CollaborationPartner = {
     readonly logo: string | null;
     readonly logoDark?: string | null;
     readonly logoAlt?: string | null;
+    readonly logoVariants?: readonly ImageVariant[];
+    readonly logoDarkVariants?: readonly ImageVariant[];
 };
 
 export type CollaborationItem = {
@@ -35,6 +39,8 @@ export type CollaborationItem = {
     readonly clientLogo: string | null;
     readonly clientLogoDark?: string | null;
     readonly clientLogoAlt?: string | null;
+    readonly clientLogoVariants?: readonly ImageVariant[];
+    readonly clientLogoDarkVariants?: readonly ImageVariant[];
     readonly year: number | null;
     readonly developmentMode: DevelopmentMode;
     readonly services: readonly LocalizedText[];
@@ -71,6 +77,7 @@ type OrbitItem = {
     readonly key: string;
     readonly clientName: string;
     readonly logoLight: string;
+    readonly logoVariants?: readonly ImageVariant[];
     readonly alt: string;
     readonly href: string;
 };
@@ -222,6 +229,7 @@ const toOrbitItem = (
         key: String(item.id),
         clientName,
         logoLight: item.clientLogo,
+        logoVariants: item.clientLogoVariants,
         alt: item.clientLogoAlt ?? clientName,
         href: itemHref(item),
     };
@@ -524,6 +532,15 @@ function DesktopCollaborationsOrbit({
                     getItemAngle(index, 0, itemCount),
                     DEFAULT_ORBIT_SIZE * (ORBIT_RADIUS_PERCENT / 100),
                 );
+                const logo = responsiveImageAttributes(
+                    item.logoLight,
+                    item.logoVariants,
+                    {
+                        sizes: '96px',
+                        width: 320,
+                        height: 160,
+                    },
+                );
 
                 return (
                     <a
@@ -543,7 +560,11 @@ function DesktopCollaborationsOrbit({
                         tabIndex={initialState.visible ? 0 : -1}
                     >
                         <img
-                            src={item.logoLight}
+                            src={logo.src}
+                            srcSet={logo.srcSet}
+                            sizes={logo.sizes}
+                            width={logo.width}
+                            height={logo.height}
                             alt={item.alt}
                             loading="lazy"
                             decoding="async"
@@ -673,14 +694,29 @@ function MobileCollaborationCard({
     );
     const href = itemHref(project);
     const partner = project.partners[0] ?? null;
+    const logo = project.clientLogo
+        ? responsiveImageAttributes(
+              project.clientLogo,
+              project.clientLogoVariants,
+              {
+                  sizes: '96px',
+                  width: 320,
+                  height: 160,
+              },
+          )
+        : null;
 
     return (
         <article className="qd-collab-card">
             <div className="qd-collab-card__head">
-                {project.clientLogo ? (
+                {logo ? (
                     <span className="qd-collab-card__logo">
                         <img
-                            src={project.clientLogo}
+                            src={logo.src}
+                            srcSet={logo.srcSet}
+                            sizes={logo.sizes}
+                            width={logo.width}
+                            height={logo.height}
                             alt={project.clientLogoAlt ?? clientLabel}
                             loading="lazy"
                             decoding="async"

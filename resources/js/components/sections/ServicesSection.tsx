@@ -2,6 +2,7 @@ import { ArrowRight, Send } from 'lucide-react';
 
 import { useInView } from '@/hooks/use-in-view';
 import { useLanguage } from '@/hooks/use-language';
+import { responsiveImageAttributes } from '@/lib/media';
 import {
     localizedText,
     resolveServiceKey,
@@ -351,6 +352,17 @@ export default function ServicesSection({
                                 const ctaLabel = service.isDetailEnabled
                                     ? t('home.services.cardView')
                                     : t('home.services.cardConsult');
+                                const image = service.image
+                                    ? responsiveImageAttributes(
+                                          service.image,
+                                          service.imageVariants,
+                                          {
+                                              sizes: '(min-width: 1024px) 33vw, calc(100vw - 2.5rem)',
+                                              width: 1280,
+                                              height: 720,
+                                          },
+                                      )
+                                    : null;
 
                                 return (
                                     <a
@@ -360,11 +372,16 @@ export default function ServicesSection({
                                         aria-label={`${ctaLabel}: ${title}`}
                                     >
                                         <div className="qd-srv-card__media">
-                                            {service.image ? (
+                                            {image ? (
                                                 <img
-                                                    src={service.image}
+                                                    src={image.src}
+                                                    srcSet={image.srcSet}
+                                                    sizes={image.sizes}
+                                                    width={image.width}
+                                                    height={image.height}
                                                     alt=""
                                                     loading="lazy"
+                                                    decoding="async"
                                                     className="qd-srv-card__image"
                                                 />
                                             ) : (

@@ -18,6 +18,7 @@ import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
+import { responsiveImageAttributes } from '@/lib/media';
 import {
     localizedText,
     resolveServiceKey,
@@ -121,6 +122,17 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
         t(`${translationPath}.summary`);
     const legacyImageSrc = SERVICE_DETAIL_IMAGES[serviceKey ?? 'web'];
     const detailImageSrc = service.image ?? legacyImageSrc ?? null;
+    const detailImage = detailImageSrc
+        ? responsiveImageAttributes(
+              detailImageSrc,
+              service.image ? service.imageVariants : null,
+              {
+                  sizes: '(min-width: 1024px) 45vw, calc(100vw - 2.5rem)',
+                  width: 1280,
+                  height: 720,
+              },
+          )
+        : null;
     const slug = serviceSlug(service, locale);
     const contactUrl = contactShow.url({
         query: {
@@ -250,12 +262,17 @@ export default function ServiceDetail({ service }: ServiceDetailProps) {
                             className="py-8 lg:min-h-107.5 lg:py-0 lg:pl-8"
                         >
                             <figure className="h-full overflow-hidden rounded-3xl border border-qd-ink/10 bg-qd-white shadow-[0_26px_90px_-48px_rgba(7,17,26,0.55)] dark:border-white/10 dark:bg-qd-surface">
-                                {detailImageSrc ? (
+                                {detailImage ? (
                                     <img
-                                        src={detailImageSrc}
+                                        src={detailImage.src}
+                                        srcSet={detailImage.srcSet}
+                                        sizes={detailImage.sizes}
+                                        width={detailImage.width}
+                                        height={detailImage.height}
                                         alt={title}
                                         loading="eager"
                                         fetchPriority="high"
+                                        decoding="async"
                                         className="aspect-video h-full min-h-72 w-full object-contain lg:min-h-full"
                                     />
                                 ) : (

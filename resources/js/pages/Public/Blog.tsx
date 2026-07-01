@@ -152,7 +152,11 @@ function FeaturedPostCard({
         ? localizedText(post.category.name, locale)
         : null;
     const coverImage = post.coverImage
-        ? blogCoverImageAttributes(post.coverImage)
+        ? blogCoverImageAttributes(post.coverImage, post.coverImageVariants, {
+              sizes: '(min-width: 640px) 50vw, calc(100vw - 2.5rem)',
+              width: 1280,
+              height: 720,
+          })
         : null;
 
     return (
@@ -165,11 +169,7 @@ function FeaturedPostCard({
                     <img
                         src={coverImage.src}
                         srcSet={coverImage.srcSet}
-                        sizes={
-                            coverImage.srcSet
-                                ? '(min-width: 640px) 50vw, calc(100vw - 2.5rem)'
-                                : undefined
-                        }
+                        sizes={coverImage.sizes}
                         width={coverImage.width}
                         height={coverImage.height}
                         alt=""
@@ -225,7 +225,11 @@ export function PostCard({
         ? localizedText(post.category.name, locale)
         : null;
     const coverImage = post.coverImage
-        ? blogCoverImageAttributes(post.coverImage)
+        ? blogCoverImageAttributes(post.coverImage, post.coverImageVariants, {
+              sizes: '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, calc(100vw - 2.5rem)',
+              width: 960,
+              height: 540,
+          })
         : null;
 
     return (
@@ -238,11 +242,7 @@ export function PostCard({
                     <img
                         src={coverImage.src}
                         srcSet={coverImage.srcSet}
-                        sizes={
-                            coverImage.srcSet
-                                ? '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, calc(100vw - 2.5rem)'
-                                : undefined
-                        }
+                        sizes={coverImage.sizes}
                         width={coverImage.width}
                         height={coverImage.height}
                         alt=""

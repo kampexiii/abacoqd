@@ -12,6 +12,7 @@ import PublicPageHero from '@/components/public/PublicPageHero';
 import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
+import { responsiveImageAttributes } from '@/lib/media';
 import {
     localizedText,
     resolveServiceKey,
@@ -282,6 +283,17 @@ export default function Services({ services }: ServicesProps) {
                             const summary =
                                 localizedText(service.summary, locale) ||
                                 t(`${servicePath}.description`);
+                            const image = service.image
+                                ? responsiveImageAttributes(
+                                      service.image,
+                                      service.imageVariants,
+                                      {
+                                          sizes: '(min-width: 1024px) 50vw, calc(100vw - 2.5rem)',
+                                          width: 1280,
+                                          height: 720,
+                                      },
+                                  )
+                                : null;
 
                             return (
                                 <article
@@ -289,11 +301,16 @@ export default function Services({ services }: ServicesProps) {
                                     className="group overflow-hidden rounded-2xl border border-qd-mist bg-qd-white shadow-[0_18px_60px_-42px_rgba(7,17,26,0.38)] transition duration-300 hover:-translate-y-1 hover:border-qd-teal-2/55 hover:shadow-[0_26px_80px_-48px_rgba(15,143,149,0.45)] dark:border-qd-white/10 dark:bg-qd-white/5 dark:hover:border-qd-teal/60"
                                 >
                                     <div className="relative aspect-video overflow-hidden bg-linear-to-br from-qd-mist to-qd-white dark:from-qd-surface dark:to-qd-ink">
-                                        {service.image ? (
+                                        {image ? (
                                             <img
-                                                src={service.image}
+                                                src={image.src}
+                                                srcSet={image.srcSet}
+                                                sizes={image.sizes}
+                                                width={image.width}
+                                                height={image.height}
                                                 alt=""
                                                 loading="lazy"
+                                                decoding="async"
                                                 className="size-full object-cover transition duration-500 group-hover:scale-[1.035]"
                                             />
                                         ) : (

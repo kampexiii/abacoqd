@@ -2,10 +2,7 @@
 
 namespace App\Services\Media;
 
-use GdImage;
-use Illuminate\Support\Facades\Storage;
-use InvalidArgumentException;
-use RuntimeException;
+use App\Support\Media\ImageVariantService;
 
 /**
  * Convierte la imagen de proyecto (portada) y los logos de cliente/empresa de
@@ -22,11 +19,7 @@ class ProjectImageService
 {
     use InteractsWithPublicUploads;
 
-    private const DISK = 'public_uploads';
-
     private const DIRECTORY = 'projects';
-
-    private const QUALITY = 88;
 
     /**
      * @param  string|null  $extensionHint  Extensión original del archivo subido
@@ -42,82 +35,15 @@ class ProjectImageService
      */
     public function storeFromPath(string $sourcePath, string $slug, string $variant, ?string $extensionHint = null): string
     {
-        if (! is_file($sourcePath)) {
-            throw new InvalidArgumentException("Source image not found: {$sourcePath}");
-        }
+        $isLogo = $variant !== 'cover';
 
-        $extension = strtolower($extensionHint ?? pathinfo($sourcePath, PATHINFO_EXTENSION));
-
-        if ($extension === 'svg') {
-            return $this->storeSvg($sourcePath, $slug, $variant);
-        }
-
-        return $this->storeRaster($sourcePath, $slug, $variant);
-    }
-
-    private function storeSvg(string $sourcePath, string $slug, string $variant): string
-    {
-        $contents = file_get_contents($sourcePath);
-
-        if ($contents === false || ! str_contains($contents, '<svg')) {
-            throw new InvalidArgumentException("File is not a valid SVG: {$sourcePath}");
-        }
-
-        $this->assertSvgIsSafe($contents, $sourcePath);
-
-        $path = self::DIRECTORY.'/'."{$slug}-{$variant}.svg";
-
-        Storage::disk(self::DISK)->put($path, $contents);
-
-        return '/uploads/'.$path;
-    }
-
-    private function storeRaster(string $sourcePath, string $slug, string $variant): string
-    {
-        if (! extension_loaded('gd') || ! function_exists('imagewebp')) {
-            throw new RuntimeException('La extensión GD con soporte WebP no está disponible en este entorno.');
-        }
-
-        $image = $this->readImage($sourcePath);
-
-        imagepalettetotruecolor($image);
-        imagealphablending($image, true);
-        imagesavealpha($image, true);
-
-        ob_start();
-        $converted = imagewebp($image, null, self::QUALITY);
-        $contents = ob_get_clean();
-
-        if (! $converted || ! is_string($contents) || $contents === '') {
-            throw new RuntimeException("No se pudo convertir la imagen a WebP: {$sourcePath}");
-        }
-
-        $path = self::DIRECTORY.'/'."{$slug}-{$variant}.webp";
-
-        Storage::disk(self::DISK)->put($path, $contents);
-
-        return '/uploads/'.$path;
-    }
-
-    private function readImage(string $sourcePath): GdImage
-    {
-        $info = getimagesize($sourcePath);
-
-        if ($info === false) {
-            throw new InvalidArgumentException("File is not a valid image: {$sourcePath}");
-        }
-
-        $image = match ($info[2]) {
-            IMAGETYPE_PNG => imagecreatefrompng($sourcePath),
-            IMAGETYPE_JPEG => imagecreatefromjpeg($sourcePath),
-            IMAGETYPE_WEBP => imagecreatefromwebp($sourcePath),
-            default => throw new InvalidArgumentException('Formato de imagen no soportado: usa PNG, JPEG o WebP.'),
-        };
-
-        if (! $image instanceof GdImage) {
-            throw new RuntimeException("No se pudo leer la imagen: {$sourcePath}");
-        }
-
-        return $image;
+        return (new ImageVariantService)->storeFromPath(
+            $sourcePath,
+            self::DIRECTORY,
+            "{$slug}-{$variant}",
+            $isLogo ? ImageVariantService::LOGO_WIDTHS : ImageVariantService::PROJECT_WIDTHS,
+            $extensionHint,
+            allowSvg: $isLogo,
+        )['path'];
     }
 }

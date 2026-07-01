@@ -11,6 +11,7 @@ import {
 import type { LucideIcon } from 'lucide-react';
 
 import type { Locale } from '@/hooks/use-language';
+import type { ImageVariant } from '@/lib/media';
 
 export type ServiceKey =
     | 'web'
@@ -44,6 +45,7 @@ export type PublicService = {
     readonly summary: LocalizedText;
     readonly icon: string | null;
     readonly image: string | null;
+    readonly imageVariants?: readonly ImageVariant[];
     readonly isDetailEnabled: boolean;
     readonly settings: unknown;
 };

@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\TeamMember;
+use App\Support\Media\ImageVariantService;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class AboutController extends Controller
 {
+    public function __construct(private readonly ImageVariantService $images) {}
+
     /**
      * Show the public Quiénes somos page.
      * docs/07_VISTAS/PUBLIC_10_QUIENES_SOMOS.md.
@@ -44,6 +47,7 @@ class AboutController extends Controller
                     'bio' => $member->bio,
                     'photo' => $member->photo,
                     'photoAlt' => $member->photo_alt,
+                    'photoVariants' => $this->images->existingVariants($member->photo, ImageVariantService::TEAM_MEMBER_WIDTHS),
                     'linkedinUrl' => $member->linkedin_url,
                     'githubUrl' => $member->github_url,
                     'personalUrl' => $member->personal_url,

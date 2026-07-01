@@ -23,6 +23,8 @@ import { useInView } from '@/hooks/use-in-view';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
+import { responsiveImageAttributes } from '@/lib/media';
+import type { ImageVariant } from '@/lib/media';
 import { cn } from '@/lib/utils';
 import { show as bookingShow } from '@/routes/booking';
 import { show as contactShow } from '@/routes/contact';
@@ -72,6 +74,7 @@ type AboutTeamMember = {
     readonly role: LocalizedText | null;
     readonly bio: LocalizedText | null;
     readonly photo: string | null;
+    readonly photoVariants?: readonly ImageVariant[];
     readonly photoAlt: string | null;
     readonly linkedinUrl: string | null;
     readonly githubUrl: string | null;
@@ -98,14 +101,27 @@ function TeamMemberCard({
     const bio = localizedText(member.bio, locale);
     const hasSocial =
         member.linkedinUrl || member.githubUrl || member.personalUrl;
+    const photo = member.photo
+        ? responsiveImageAttributes(member.photo, member.photoVariants, {
+              sizes: '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, calc(100vw - 2.5rem)',
+              width: 768,
+              height: 960,
+          })
+        : null;
 
     return (
         <article className="abaco-card-hover flex h-full w-full flex-col rounded-2xl border border-qd-mist bg-qd-white p-8 text-center hover:-translate-y-1 hover:border-qd-teal-2/50 dark:border-qd-white/10 dark:bg-qd-surface dark:hover:border-qd-teal/50">
             <div className="overflow-hidden rounded-xl border border-qd-mist bg-qd-mist p-1.5 dark:border-qd-teal/15 dark:bg-qd-white/5">
-                {member.photo ? (
+                {photo ? (
                     <img
-                        src={member.photo}
+                        src={photo.src}
+                        srcSet={photo.srcSet}
+                        sizes={photo.sizes}
+                        width={photo.width}
+                        height={photo.height}
                         alt={member.photoAlt ?? member.name}
+                        loading="lazy"
+                        decoding="async"
                         className="aspect-4/5 w-full rounded-lg object-cover object-[center_18%]"
                     />
                 ) : (

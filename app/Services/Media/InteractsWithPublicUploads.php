@@ -2,10 +2,7 @@
 
 namespace App\Services\Media;
 
-use App\Support\SvgSafetyGuard;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use InvalidArgumentException;
+use App\Support\Media\ImageVariantService;
 
 /**
  * Borrado del archivo físico anterior cuando una imagen/asset se sustituye o
@@ -24,45 +21,16 @@ use InvalidArgumentException;
  */
 trait InteractsWithPublicUploads
 {
-    private const PUBLIC_UPLOADS_DISK = 'public_uploads';
-
     /**
      * Elimina el archivo anterior referenciado por una ruta pública
      * (`/uploads/...`). No hace nada si la ruta es nula, vacía, no apunta al
      * disco de uploads (p. ej. una URL externa o un asset versionado fuera de
      * `public/uploads`) o intenta escapar del disco con `..` (path traversal).
+     * Para imágenes WebP también limpia las variantes `*-NNNw.webp` generadas
+     * junto al archivo principal.
      */
     public function delete(?string $publicPath): void
     {
-        if ($publicPath === null || $publicPath === '') {
-            return;
-        }
-
-        if (! Str::startsWith($publicPath, '/uploads/')) {
-            return;
-        }
-
-        $relative = Str::after($publicPath, '/uploads/');
-
-        if ($relative === '' || $relative === $publicPath || Str::contains($relative, '..')) {
-            return;
-        }
-
-        Storage::disk(self::PUBLIC_UPLOADS_DISK)->delete($relative);
-    }
-
-    /**
-     * Defensa en profundidad: el SVG ya pasa por `Rules\SafeSvgUpload` en la
-     * validación del FormRequest (antes de llegar aquí), pero este punto de
-     * guardado vuelve a comprobarlo por si se invoca desde otra vía (seeders,
-     * comandos futuros) que no pase por esa validación.
-     */
-    private function assertSvgIsSafe(string $contents, string $sourcePath): void
-    {
-        try {
-            SvgSafetyGuard::ensureSafe($contents);
-        } catch (InvalidArgumentException $exception) {
-            throw new InvalidArgumentException("{$exception->getMessage()} ({$sourcePath})", previous: $exception);
-        }
+        (new ImageVariantService)->deletePublicPath($publicPath);
     }
 }

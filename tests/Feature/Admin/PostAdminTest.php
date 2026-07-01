@@ -4,6 +4,8 @@ use App\Enums\PostStatus;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 function publishedPostPayload(PostCategory $category, array $overrides = []): array
 {
@@ -93,4 +95,30 @@ test('an existing published date is preserved when resubmitted unchanged', funct
     )->assertRedirect(route('admin.posts.index'));
 
     expect($post->refresh()->published_at->format('Y-m-d H:i'))->toBe($date->format('Y-m-d H:i'));
+});
+
+test('uploading a blog cover creates responsive webp variants', function () {
+    if (! extension_loaded('gd') || ! function_exists('imagewebp')) {
+        $this->markTestSkipped('GD con soporte WebP no disponible.');
+    }
+
+    Storage::fake('public_uploads');
+
+    $category = PostCategory::factory()->create();
+
+    $this->actingAs(User::factory()->create(['role' => 'admin']));
+
+    $this->post(route('admin.posts.store'), publishedPostPayload($category, [
+        'image' => UploadedFile::fake()->image('cover.png', 1400, 900),
+    ]))->assertRedirect(route('admin.posts.index'));
+
+    $post = Post::query()->where('slug_es', 'titulo-destacado')->firstOrFail();
+
+    expect($post->featured_image)->toBe('/uploads/blog/posts/titulo-destacado.webp');
+
+    Storage::disk('public_uploads')->assertExists('blog/posts/titulo-destacado.webp');
+    Storage::disk('public_uploads')->assertExists('blog/posts/titulo-destacado-480w.webp');
+    Storage::disk('public_uploads')->assertExists('blog/posts/titulo-destacado-640w.webp');
+    Storage::disk('public_uploads')->assertExists('blog/posts/titulo-destacado-960w.webp');
+    Storage::disk('public_uploads')->assertExists('blog/posts/titulo-destacado-1280w.webp');
 });

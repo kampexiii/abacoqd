@@ -63,6 +63,8 @@ function teamMemberMediaPayload(TeamMember $member, array $overrides = []): arra
 
 test('removing a service image deletes the underlying file', function () {
     Storage::disk('public_uploads')->put('services/servicio.webp', 'bytes');
+    Storage::disk('public_uploads')->put('services/servicio-480w.webp', 'bytes');
+    Storage::disk('public_uploads')->put('services/servicio-960w.webp', 'bytes');
 
     $service = Service::factory()->create([
         'slug' => ['es' => 'servicio', 'en' => 'service'],
@@ -76,6 +78,8 @@ test('removing a service image deletes the underlying file', function () {
     ]))->assertRedirect(route('admin.services.index'));
 
     Storage::disk('public_uploads')->assertMissing('services/servicio.webp');
+    Storage::disk('public_uploads')->assertMissing('services/servicio-480w.webp');
+    Storage::disk('public_uploads')->assertMissing('services/servicio-960w.webp');
     expect($service->refresh()->image)->toBeNull();
 });
 
@@ -101,6 +105,8 @@ test('replacing an SVG partner logo with a raster image deletes the old SVG', fu
 
 test('replacing a team member photo removes the previously stored file', function () {
     Storage::disk('public_uploads')->put('team-members/legacy.webp', 'old-bytes');
+    Storage::disk('public_uploads')->put('team-members/legacy-320w.webp', 'old-bytes');
+    Storage::disk('public_uploads')->put('team-members/legacy-512w.webp', 'old-bytes');
 
     $member = TeamMember::factory()->create([
         'slug' => 'pablo',
@@ -110,16 +116,23 @@ test('replacing a team member photo removes the previously stored file', functio
     $this->actingAs(User::factory()->create(['role' => 'admin']));
 
     $this->put(route('admin.team-members.update', $member), teamMemberMediaPayload($member, [
-        'photo' => UploadedFile::fake()->image('nueva.png', 16, 16),
+        'photo' => UploadedFile::fake()->image('nueva.png', 900, 1100),
     ]))->assertRedirect(route('admin.team-members.index'));
 
     Storage::disk('public_uploads')->assertMissing('team-members/legacy.webp');
+    Storage::disk('public_uploads')->assertMissing('team-members/legacy-320w.webp');
+    Storage::disk('public_uploads')->assertMissing('team-members/legacy-512w.webp');
     Storage::disk('public_uploads')->assertExists('team-members/pablo.webp');
+    Storage::disk('public_uploads')->assertExists('team-members/pablo-320w.webp');
+    Storage::disk('public_uploads')->assertExists('team-members/pablo-512w.webp');
+    Storage::disk('public_uploads')->assertExists('team-members/pablo-768w.webp');
     expect($member->refresh()->photo)->toBe('/uploads/team-members/pablo.webp');
 });
 
 test('removing a team member photo deletes the file and clears the column', function () {
     Storage::disk('public_uploads')->put('team-members/pablo.webp', 'bytes');
+    Storage::disk('public_uploads')->put('team-members/pablo-320w.webp', 'bytes');
+    Storage::disk('public_uploads')->put('team-members/pablo-512w.webp', 'bytes');
 
     $member = TeamMember::factory()->create([
         'slug' => 'pablo',
@@ -133,6 +146,8 @@ test('removing a team member photo deletes the file and clears the column', func
     ]))->assertRedirect(route('admin.team-members.index'));
 
     Storage::disk('public_uploads')->assertMissing('team-members/pablo.webp');
+    Storage::disk('public_uploads')->assertMissing('team-members/pablo-320w.webp');
+    Storage::disk('public_uploads')->assertMissing('team-members/pablo-512w.webp');
     expect($member->refresh()->photo)->toBeNull();
 });
 

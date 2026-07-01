@@ -16,6 +16,8 @@ import SeoHead from '@/components/seo/SeoHead';
 import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
+import { responsiveImageAttributes } from '@/lib/media';
+import type { ImageVariant } from '@/lib/media';
 import { cn } from '@/lib/utils';
 import { show as bookingShow } from '@/routes/booking';
 import { show as contactShow } from '@/routes/contact';
@@ -36,6 +38,8 @@ type ProjectPartner = {
     readonly logo: string | null;
     readonly logoDark: string | null;
     readonly logoAlt: string | null;
+    readonly logoVariants?: readonly ImageVariant[];
+    readonly logoDarkVariants?: readonly ImageVariant[];
     readonly website: string | null;
 };
 
@@ -46,12 +50,16 @@ type ProjectCardRecord = {
     readonly detailUrl: string | null;
     readonly summary: LocalizedText;
     readonly coverImage: string | null;
+    readonly coverImageVariants?: readonly ImageVariant[];
     readonly thumbnailImage: string | null;
+    readonly thumbnailImageVariants?: readonly ImageVariant[];
     readonly year: number | null;
     readonly clientName: string | null;
     readonly clientLogo: string | null;
     readonly clientLogoDark: string | null;
     readonly clientLogoAlt: string | null;
+    readonly clientLogoVariants?: readonly ImageVariant[];
+    readonly clientLogoDarkVariants?: readonly ImageVariant[];
     readonly services: readonly ProjectService[];
     readonly developmentMode: DevelopmentMode;
     readonly partners: readonly ProjectPartner[];
@@ -111,23 +119,54 @@ function ClientLogo({
         );
     }
 
+    const logo = responsiveImageAttributes(
+        project.clientLogo,
+        project.clientLogoVariants,
+        {
+            sizes: '180px',
+            width: 320,
+            height: 160,
+        },
+    );
+    const darkLogo = project.clientLogoDark
+        ? responsiveImageAttributes(
+              project.clientLogoDark,
+              project.clientLogoDarkVariants,
+              {
+                  sizes: '180px',
+                  width: 320,
+                  height: 160,
+              },
+          )
+        : null;
+
     return (
         <span className={cn('inline-flex items-center', className)}>
             <img
-                src={project.clientLogo}
+                src={logo.src}
+                srcSet={logo.srcSet}
+                sizes={logo.sizes}
+                width={logo.width}
+                height={logo.height}
                 alt={alt}
                 loading="lazy"
+                decoding="async"
                 className={cn(
                     'h-full w-auto object-contain',
-                    project.clientLogoDark && 'dark:hidden',
-                    !project.clientLogoDark && 'dark:brightness-0 dark:invert',
+                    darkLogo && 'dark:hidden',
+                    !darkLogo && 'dark:brightness-0 dark:invert',
                 )}
             />
-            {project.clientLogoDark && (
+            {darkLogo && (
                 <img
-                    src={project.clientLogoDark}
+                    src={darkLogo.src}
+                    srcSet={darkLogo.srcSet}
+                    sizes={darkLogo.sizes}
+                    width={darkLogo.width}
+                    height={darkLogo.height}
                     alt={alt}
                     loading="lazy"
+                    decoding="async"
                     className="hidden h-full w-auto object-contain dark:block"
                 />
             )}
@@ -166,23 +205,46 @@ function PartnerLogo({ partner }: { readonly partner: ProjectPartner }) {
         );
     }
 
+    const logo = responsiveImageAttributes(partner.logo, partner.logoVariants, {
+        sizes: '128px',
+        width: 320,
+        height: 160,
+    });
+    const darkLogo = partner.logoDark
+        ? responsiveImageAttributes(partner.logoDark, partner.logoDarkVariants, {
+              sizes: '128px',
+              width: 320,
+              height: 160,
+          })
+        : null;
+
     return (
         <span className="inline-flex h-9 items-center">
             <img
-                src={partner.logo}
+                src={logo.src}
+                srcSet={logo.srcSet}
+                sizes={logo.sizes}
+                width={logo.width}
+                height={logo.height}
                 alt={alt}
                 loading="lazy"
+                decoding="async"
                 className={cn(
                     'h-full w-auto max-w-32 object-contain',
-                    partner.logoDark && 'dark:hidden',
-                    !partner.logoDark && 'dark:brightness-0 dark:invert',
+                    darkLogo && 'dark:hidden',
+                    !darkLogo && 'dark:brightness-0 dark:invert',
                 )}
             />
-            {partner.logoDark && (
+            {darkLogo && (
                 <img
-                    src={partner.logoDark}
+                    src={darkLogo.src}
+                    srcSet={darkLogo.srcSet}
+                    sizes={darkLogo.sizes}
+                    width={darkLogo.width}
+                    height={darkLogo.height}
                     alt={alt}
                     loading="lazy"
+                    decoding="async"
                     className="hidden h-full w-auto max-w-32 object-contain dark:block"
                 />
             )}
@@ -202,6 +264,18 @@ export default function ProjectDetail({
     const gallery = asStringList(project.gallery);
     const cover =
         project.coverImage ?? project.thumbnailImage ?? gallery[0] ?? null;
+    const coverVariants = project.coverImage
+        ? project.coverImageVariants
+        : project.thumbnailImage
+          ? project.thumbnailImageVariants
+          : null;
+    const coverImage = cover
+        ? responsiveImageAttributes(cover, coverVariants, {
+              sizes: '(min-width: 1280px) 1216px, calc(100vw - 2.5rem)',
+              width: 1600,
+              height: 900,
+          })
+        : null;
     const contactUrl = contactShow.url({
         query: { proyecto: localizedText(project.slug, locale) },
     });
@@ -456,15 +530,20 @@ export default function ProjectDetail({
             )}
 
             {/* Imagen del proyecto */}
-            {cover && (
+            {coverImage && (
                 <section className="bg-qd-white dark:bg-qd-ink">
                     <div className="mx-auto max-w-310 px-5 pb-14 sm:px-8 sm:pb-16">
                         <figure className="group relative overflow-hidden rounded-3xl border border-qd-ink/10 bg-qd-bg p-1.5 shadow-[0_34px_90px_-52px_rgba(7,17,26,0.5)] dark:border-qd-white/10 dark:bg-qd-surface">
                             <div className="relative overflow-hidden rounded-[1.35rem]">
                                 <img
-                                    src={cover}
+                                    src={coverImage.src}
+                                    srcSet={coverImage.srcSet}
+                                    sizes={coverImage.sizes}
+                                    width={coverImage.width}
+                                    height={coverImage.height}
                                     alt={title}
                                     loading="lazy"
+                                    decoding="async"
                                     className="aspect-video w-full object-cover transition duration-500 motion-safe:group-hover:scale-[1.02]"
                                 />
                                 <div
@@ -527,6 +606,20 @@ export default function ProjectDetail({
                                 );
                                 const itemCover =
                                     item.coverImage ?? item.thumbnailImage;
+                                const itemCoverVariants = item.coverImage
+                                    ? item.coverImageVariants
+                                    : item.thumbnailImageVariants;
+                                const relatedCover = itemCover
+                                    ? responsiveImageAttributes(
+                                          itemCover,
+                                          itemCoverVariants,
+                                          {
+                                              sizes: '120px',
+                                              width: 640,
+                                              height: 512,
+                                          },
+                                      )
+                                    : null;
 
                                 return (
                                     <article
@@ -534,11 +627,20 @@ export default function ProjectDetail({
                                         className="grid grid-cols-[120px_1fr] gap-4 rounded-xl border border-qd-ink/10 bg-qd-white p-3 shadow-[0_20px_60px_-48px_rgba(7,17,26,0.5)] dark:border-qd-white/10 dark:bg-qd-white/5"
                                     >
                                         <a href={projectUrl(item, locale)}>
-                                            {itemCover ? (
+                                            {relatedCover ? (
                                                 <img
-                                                    src={itemCover}
+                                                    src={relatedCover.src}
+                                                    srcSet={
+                                                        relatedCover.srcSet
+                                                    }
+                                                    sizes={relatedCover.sizes}
+                                                    width={relatedCover.width}
+                                                    height={
+                                                        relatedCover.height
+                                                    }
                                                     alt={itemTitle}
                                                     loading="lazy"
+                                                    decoding="async"
                                                     className="aspect-5/4 w-full rounded-lg object-cover"
                                                 />
                                             ) : (
