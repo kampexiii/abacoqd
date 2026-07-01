@@ -2690,10 +2690,27 @@ html.a11y-reduce-motion *::after {
         inset 0 -18px 38px rgba(15, 143, 149, 0.08);
     text-decoration: none;
     pointer-events: none;
-    transition:
-        box-shadow 200ms ease,
-        border-color 200ms ease;
     will-change: transform, opacity;
+}
+
+/* Glow/borde del estado activo en un pseudo-elemento: se anima solo `opacity`
+   (compuesta) en lugar de transicionar box-shadow/border-color en la burbuja,
+   que provocaba un repintado no compuesto (lo marcaba Lighthouse). El
+   drop-shadow es exterior, así que no cubre el logo. */
+.qd-collab-logo-bubble::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(15, 143, 149, 0.52);
+    box-shadow: 0 24px 62px rgba(15, 143, 149, 0.24);
+    opacity: 0;
+    transition: opacity 200ms ease;
+    pointer-events: none;
+}
+
+.qd-collab-logo-bubble.is-active::after {
+    opacity: 1;
 }
 
 .dark .qd-collab-logo-bubble {
@@ -2705,20 +2722,9 @@ html.a11y-reduce-motion *::after {
         inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-.qd-collab-logo-bubble.is-active {
-    border-color: rgba(15, 143, 149, 0.52);
-    box-shadow:
-        0 24px 62px rgba(15, 143, 149, 0.24),
-        inset 0 1px 0 rgba(255, 255, 255, 0.78),
-        inset 0 -20px 44px rgba(15, 143, 149, 0.1);
-}
-
-.dark .qd-collab-logo-bubble.is-active {
+.dark .qd-collab-logo-bubble::after {
     border-color: rgba(57, 198, 230, 0.42);
-    box-shadow:
-        0 26px 68px rgba(24, 183, 176, 0.19),
-        inset 0 1px 0 rgba(255, 255, 255, 0.14),
-        inset 0 -20px 44px rgba(24, 183, 176, 0.14);
+    box-shadow: 0 26px 68px rgba(24, 183, 176, 0.19);
 }
 
 .qd-collab-logo-bubble.is-visible {
@@ -2741,7 +2747,8 @@ html.a11y-reduce-motion *::after {
     filter: saturate(1.04) contrast(1.02);
 }
 
-.qd-collab-orbital[data-motion='reduced'] .qd-collab-logo-bubble {
+.qd-collab-orbital[data-motion='reduced'] .qd-collab-logo-bubble,
+.qd-collab-orbital[data-motion='reduced'] .qd-collab-logo-bubble::after {
     transition: none;
 }
 
