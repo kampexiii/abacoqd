@@ -152,6 +152,11 @@ export default function AbacoCrystalCubeLite() {
         let running = false;
         let targetProgress = 0;
         let currentProgress = 0;
+        // Marca que hay que re-medir la geometría del hero. La medición
+        // (getBoundingClientRect) se hace SIEMPRE dentro del rAF, nunca en el
+        // handler de scroll, para no provocar forced reflow (lectura de layout
+        // tras invalidar estilos en el mismo frame).
+        let needsMeasure = false;
 
         // Descomposición como ANIMACIÓN disparada (no ligada 1:1 al scroll): al
         // empezar a bajar dentro del hero el objetivo salta a 1 y el lerp de
@@ -188,6 +193,13 @@ export default function AbacoCrystalCubeLite() {
         const tick = (): void => {
             frame = null;
 
+            // Lectura de geometría batcheada al inicio del frame (antes de
+            // escribir --decompose): read-then-write, sin forced reflow.
+            if (needsMeasure) {
+                targetProgress = readTargetProgress();
+                needsMeasure = false;
+            }
+
             const delta = targetProgress - currentProgress;
 
             if (Math.abs(delta) < 0.001) {
@@ -211,14 +223,17 @@ export default function AbacoCrystalCubeLite() {
                 return;
             }
 
-            targetProgress = readTargetProgress();
-
             if (prefersReduced()) {
+                targetProgress = 0;
                 currentProgress = 0;
+                needsMeasure = false;
                 root.style.setProperty('--decompose', '0');
 
                 return;
             }
+
+            // No se lee geometría en el handler de scroll: se difiere al rAF.
+            needsMeasure = true;
 
             if (frame === null) {
                 frame = window.requestAnimationFrame(tick);
