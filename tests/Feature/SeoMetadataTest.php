@@ -67,11 +67,11 @@ test('public pages serve open graph and twitter card metadata in the initial htm
     $response->assertSee('name="twitter:title" content="'.e($title).'"', false);
     $response->assertSee('name="twitter:description" content="'.e($description).'"', false);
 
-    // Decisión actual: sin un raster de marca social versionado, og:image se
-    // omite (no se inventa asset). Este bloque no introduce hreflang (los datos
-    // estructurados JSON-LD se cubren en SeoStructuredDataTest).
-    $response->assertDontSee('property="og:image"', false);
-    $response->assertDontSee('name="twitter:image"', false);
+    // og:image por defecto: tarjeta social 1200×630 versionada, servida como URL
+    // absoluta sobre el dominio canónico. Este bloque no introduce hreflang (los
+    // datos estructurados JSON-LD se cubren en SeoStructuredDataTest).
+    $response->assertSee('property="og:image" content="https://abacoqd.com/assets/branding/social/og-default.png"', false);
+    $response->assertSee('name="twitter:image" content="https://abacoqd.com/assets/branding/social/og-default.png"', false);
     $response->assertDontSee('hreflang', false);
 });
 

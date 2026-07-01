@@ -83,10 +83,10 @@ return [
         | `seo_metadata` no trae `og_image`. Debe ser un raster (PNG/JPG/WebP)
         | absoluto o una ruta servible bajo el dominio canónico; los logos de
         | marca actuales son SVG y las plataformas sociales no los renderizan.
-        | El valor permanece en `null` hasta disponer de un raster social
-        | versionado (p. ej. '/assets/branding/og-image.png').
+        | Por defecto se sirve la tarjeta social 1200×630 versionada (logo de
+        | marca sobre fondo claro); `ABACO_SEO_OG_IMAGE` permite sobrescribirla.
         */
-        'og_image' => env('ABACO_SEO_OG_IMAGE') ?: null,
+        'og_image' => env('ABACO_SEO_OG_IMAGE') ?: '/assets/branding/social/og-default.png',
     ],
 
 ];
