@@ -62,16 +62,14 @@ class ImageVariantService
     {
         $relative = $this->relativePathFromPublic($publicPath);
 
-        if ($relative === null || pathinfo($relative, PATHINFO_EXTENSION) !== 'webp') {
+        if ($relative === null || ! $this->isRasterRelativePath($relative)) {
             return [];
         }
 
-        $directory = trim((string) pathinfo($relative, PATHINFO_DIRNAME), '.');
-        $basename = pathinfo($relative, PATHINFO_FILENAME);
         $variants = [];
 
         foreach ($this->normalizedWidths($widths, null) as $width) {
-            $variantRelative = ($directory !== '' ? $directory.'/' : '')."{$basename}-{$width}w.webp";
+            $variantRelative = $this->variantRelativePath($relative, $width);
 
             if (Storage::disk(self::DISK)->exists($variantRelative)) {
                 $variants[] = [
@@ -95,6 +93,131 @@ class ImageVariantService
         $paths = [$relative, ...$this->associatedVariantRelativePaths($relative)];
 
         Storage::disk(self::DISK)->delete(array_values(array_unique($paths)));
+    }
+
+    /**
+     * @param  list<int>  $widths
+     * @return array{
+     *     path: string,
+     *     skipped: bool,
+     *     reason: string|null,
+     *     original_width: int|null,
+     *     original_height: int|null,
+     *     expected: list<string>,
+     *     missing: list<string>,
+     *     created: list<string>
+     * }
+     */
+    public function generateVariantsForExistingPublicPath(string $publicPath, array $widths, bool $dryRun = false): array
+    {
+        $emptyResult = [
+            'path' => $publicPath,
+            'skipped' => true,
+            'reason' => null,
+            'original_width' => null,
+            'original_height' => null,
+            'expected' => [],
+            'missing' => [],
+            'created' => [],
+        ];
+
+        $relative = $this->relativePathFromPublic($publicPath);
+
+        if ($relative === null) {
+            return [...$emptyResult, 'reason' => 'outside_uploads'];
+        }
+
+        if ($this->isVariantRelativePath($relative)) {
+            return [...$emptyResult, 'reason' => 'already_variant'];
+        }
+
+        $extension = strtolower(pathinfo($relative, PATHINFO_EXTENSION));
+
+        if ($extension === 'svg') {
+            return [...$emptyResult, 'reason' => 'svg'];
+        }
+
+        if (! $this->isRasterExtension($extension)) {
+            return [...$emptyResult, 'reason' => 'unsupported_extension'];
+        }
+
+        if (! Storage::disk(self::DISK)->exists($relative)) {
+            return [...$emptyResult, 'reason' => 'missing_source'];
+        }
+
+        $sourcePath = Storage::disk(self::DISK)->path($relative);
+        $info = getimagesize($sourcePath);
+
+        if ($info === false || empty($info[0]) || empty($info[1])) {
+            return [...$emptyResult, 'reason' => 'invalid_image'];
+        }
+
+        $sourceWidth = (int) $info[0];
+        $sourceHeight = (int) $info[1];
+        $expected = [];
+        $missing = [];
+
+        foreach ($this->normalizedWidths($widths, $sourceWidth) as $width) {
+            $variantRelative = $this->variantRelativePath($relative, $width);
+            $variantPublic = self::PUBLIC_PREFIX.$variantRelative;
+            $expected[] = $variantPublic;
+
+            if (! Storage::disk(self::DISK)->exists($variantRelative)) {
+                $missing[] = $variantPublic;
+            }
+        }
+
+        if ($missing === [] || $dryRun) {
+            return [
+                ...$emptyResult,
+                'skipped' => false,
+                'reason' => null,
+                'original_width' => $sourceWidth,
+                'original_height' => $sourceHeight,
+                'expected' => $expected,
+                'missing' => $missing,
+            ];
+        }
+
+        $this->assertGdCanWriteWebp();
+
+        $image = $this->readImage($sourcePath, (int) $info[2]);
+        $created = [];
+
+        try {
+            $this->prepareImage($image);
+
+            foreach ($missing as $variantPublic) {
+                $variantRelative = Str::after($variantPublic, self::PUBLIC_PREFIX);
+                $width = $this->variantWidthFromRelativePath($variantRelative);
+
+                if ($width === null) {
+                    continue;
+                }
+
+                $resized = $this->resizeImage($image, $sourceWidth, $sourceHeight, $width);
+
+                try {
+                    Storage::disk(self::DISK)->put($variantRelative, $this->webpContents($resized, $sourcePath));
+                    $created[] = $variantPublic;
+                } finally {
+                    imagedestroy($resized);
+                }
+            }
+        } finally {
+            imagedestroy($image);
+        }
+
+        return [
+            ...$emptyResult,
+            'skipped' => false,
+            'reason' => null,
+            'original_width' => $sourceWidth,
+            'original_height' => $sourceHeight,
+            'expected' => $expected,
+            'missing' => $missing,
+            'created' => $created,
+        ];
     }
 
     /**
@@ -330,7 +453,7 @@ class ImageVariantService
      */
     private function associatedVariantRelativePaths(string $relative): array
     {
-        if (pathinfo($relative, PATHINFO_EXTENSION) !== 'webp') {
+        if (! $this->isRasterRelativePath($relative)) {
             return [];
         }
 
@@ -343,5 +466,39 @@ class ImageVariantService
             Storage::disk(self::DISK)->files($directory),
             fn (string $path): bool => preg_match($pattern, $path) === 1,
         ));
+    }
+
+    private function variantRelativePath(string $relative, int $width): string
+    {
+        $directory = trim((string) pathinfo($relative, PATHINFO_DIRNAME), '.');
+        $basename = pathinfo($relative, PATHINFO_FILENAME);
+
+        return ($directory !== '' ? $directory.'/' : '')."{$basename}-{$width}w.webp";
+    }
+
+    private function isVariantRelativePath(string $relative): bool
+    {
+        return preg_match('/-\d+w\.webp$/', $relative) === 1;
+    }
+
+    private function isRasterRelativePath(string $relative): bool
+    {
+        return $this->isRasterExtension(strtolower(pathinfo($relative, PATHINFO_EXTENSION)));
+    }
+
+    private function isRasterExtension(string $extension): bool
+    {
+        return in_array($extension, ['jpg', 'jpeg', 'png', 'webp'], true);
+    }
+
+    private function variantWidthFromRelativePath(string $relative): ?int
+    {
+        if (preg_match('/-(\d+)w\.webp$/', $relative, $matches) !== 1) {
+            return null;
+        }
+
+        $width = (int) $matches[1];
+
+        return $width > 0 ? $width : null;
     }
 }

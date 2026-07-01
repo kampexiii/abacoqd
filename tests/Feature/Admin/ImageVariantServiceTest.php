@@ -80,6 +80,20 @@ test('deleting a public image path also deletes associated variants', function (
     Storage::disk('public_uploads')->assertExists('services/otro-480w.webp');
 });
 
+test('deleting a legacy raster public image path also deletes associated webp variants', function () {
+    Storage::disk('public_uploads')->put('services/servicio.jpg', 'main');
+    Storage::disk('public_uploads')->put('services/servicio-480w.webp', 'variant');
+    Storage::disk('public_uploads')->put('services/servicio-1280w.webp', 'variant');
+    Storage::disk('public_uploads')->put('services/servicio-other.webp', 'keep');
+
+    (new ImageVariantService)->deletePublicPath('/uploads/services/servicio.jpg');
+
+    Storage::disk('public_uploads')->assertMissing('services/servicio.jpg');
+    Storage::disk('public_uploads')->assertMissing('services/servicio-480w.webp');
+    Storage::disk('public_uploads')->assertMissing('services/servicio-1280w.webp');
+    Storage::disk('public_uploads')->assertExists('services/servicio-other.webp');
+});
+
 test('benign svg logos are kept as svg without raster variants', function () {
     $result = (new ImageVariantService)->storeFromPath(
         UploadedFile::fake()->createWithContent(
@@ -123,6 +137,20 @@ test('listing existing variants ignores missing files', function () {
 
     $variants = (new ImageVariantService)->existingVariants(
         '/uploads/services/servicio.webp',
+        [480, 640],
+    );
+
+    expect($variants)->toBe([
+        ['width' => 480, 'src' => '/uploads/services/servicio-480w.webp'],
+    ]);
+});
+
+test('listing existing variants works for legacy raster public image paths', function () {
+    Storage::disk('public_uploads')->put('services/servicio.jpg', 'main');
+    Storage::disk('public_uploads')->put('services/servicio-480w.webp', 'variant');
+
+    $variants = (new ImageVariantService)->existingVariants(
+        '/uploads/services/servicio.jpg',
         [480, 640],
     );
 
