@@ -17,9 +17,11 @@ import type { CSSProperties } from 'react';
  * trabajo de scroll cuando el hero sale del viewport y limpia sus listeners.
  */
 
-// 14 fragmentos en lugar de los 42 del cubo WebGL: bastan para sugerir la
-// descomposición sin el coste de 42 nodos. Disposición determinista por índice.
-const SHARD_COUNT = 14;
+// 16 fragmentos en lugar de los 42 del cubo WebGL: bastan para sugerir la
+// descomposición sin el coste de 42 nodos. Disposición determinista por índice
+// (dirección de dispersión, profundidad Z, tamaño, retardo y eje/velocidad de
+// giro fijos), así el cubo se descompone igual en cada carga.
+const SHARD_COUNT = 16;
 
 const rand = (seed: number): number => {
     const value = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
@@ -30,21 +32,33 @@ const rand = (seed: number): number => {
 type Shard = {
     readonly sx: number;
     readonly sy: number;
+    readonly sz: number;
     readonly size: number;
     readonly delay: number;
     readonly depth: number;
+    readonly ax: number;
+    readonly ay: number;
+    readonly az: number;
+    readonly spin: number;
 };
 
 const SHARDS: readonly Shard[] = Array.from({ length: SHARD_COUNT }, (_, i) => {
     const angle = rand(i * 3 + 1) * Math.PI * 2;
-    const distance = 110 + rand(i * 5 + 2) * 170;
+    const distance = 95 + rand(i * 5 + 2) * 150;
 
     return {
         sx: Math.cos(angle) * distance,
         sy: Math.sin(angle) * distance * 0.82,
-        size: 14 + rand(i * 11 + 4) * 26,
+        // Profundidad ±130px para que se dispersen en 3D, no en un plano.
+        sz: (rand(i * 9 + 6) - 0.5) * 260,
+        size: 16 + rand(i * 11 + 4) * 30,
         delay: rand(i * 13 + 5) * 4,
         depth: 0.5 + rand(i * 7 + 3) * 0.9,
+        ax: rand(i * 17 + 7),
+        ay: rand(i * 19 + 8),
+        // az siempre ≥0.3: evita un eje de rotación degenerado (0 0 0).
+        az: 0.3 + rand(i * 23 + 9) * 0.7,
+        spin: 120 + rand(i * 29 + 10) * 240,
     };
 });
 
@@ -212,9 +226,14 @@ export default function AbacoCrystalCubeLite() {
                                 {
                                     '--sx': `${shard.sx.toFixed(1)}px`,
                                     '--sy': `${shard.sy.toFixed(1)}px`,
+                                    '--sz': `${shard.sz.toFixed(1)}px`,
                                     '--size': `${shard.size.toFixed(1)}px`,
                                     '--delay': `${shard.delay.toFixed(2)}s`,
                                     '--depth': shard.depth.toFixed(2),
+                                    '--ax': shard.ax.toFixed(3),
+                                    '--ay': shard.ay.toFixed(3),
+                                    '--az': shard.az.toFixed(3),
+                                    '--spin': shard.spin.toFixed(1),
                                 } as CSSProperties
                             }
                         />
