@@ -408,9 +408,14 @@ export default function AbacoCrystalCube() {
             return undefined;
         }
 
-        const reducedMotion = window.matchMedia(
-            '(prefers-reduced-motion: reduce)',
-        ).matches;
+        // Respeta reduced-motion del SO y del widget de accesibilidad (clase
+        // html.a11y-reduce-motion). Es `let` para actualizarse en vivo cuando el
+        // widget togglea la clase: lo recoge el observer de tema, que ya escucha
+        // los cambios de clase en <html>.
+        const readReducedMotion = (): boolean =>
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+            document.documentElement.classList.contains('a11y-reduce-motion');
+        let reducedMotion = readReducedMotion();
         const renderer = new THREE.WebGLRenderer({
             alpha: true,
             antialias: true,
@@ -782,6 +787,10 @@ export default function AbacoCrystalCube() {
                 logoTexture,
                 dark ? LOGO_TEXTURE_PATH_DARK : LOGO_TEXTURE_PATH_LIGHT,
             );
+
+            // Recalcula reduced-motion cuando cambian las clases de <html>: el
+            // widget de accesibilidad togglea html.a11y-reduce-motion en vivo.
+            reducedMotion = readReducedMotion();
         };
 
         applyTheme();
