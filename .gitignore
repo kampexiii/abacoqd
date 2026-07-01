@@ -47,3 +47,7 @@ yarn-error.log
 
 # Plantilla local enviada a Andrés. No es contenido confirmado del sitio.
 docs/informacionRequeridaSitioWeb.odt
+
+# Entregables del proyecto y notas con credenciales: NO versionar (secretos).
+docs/entrega/
+docs/preparacionPDFinformacion.md
