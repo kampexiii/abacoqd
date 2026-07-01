@@ -9,6 +9,15 @@ export const SUPPORTED_LOCALES: readonly Locale[] = ['es', 'en'] as const;
 const FALLBACK_LOCALE: Locale = 'es';
 
 type Translations = Record<string, unknown>;
+type LanguageSnapshot = {
+    readonly locale: Locale;
+    readonly version: number;
+    // El diccionario activo viaja dentro del snapshot para que sea un valor
+    // reactivo observable por React Compiler. Es `undefined` mientras el idioma
+    // se está cargando (EN async); en cuanto llega, su referencia cambia y todo
+    // texto memoizado que dependa de él se recalcula sin click adicional.
+    readonly dictionary: Translations | undefined;
+};
 
 // ES viaja en el bundle como idioma por defecto y como fallback siempre
 // disponible: evita el parpadeo del primer render y garantiza que ninguna clave
@@ -30,13 +39,31 @@ const requested = new Set<Locale>(['es']);
 const listeners = new Set<() => void>();
 let currentLocale: Locale = FALLBACK_LOCALE;
 
-// El snapshot de useSyncExternalStore: se incrementa al cambiar de idioma y al
-// terminar de cargar un diccionario asíncrono, de modo que los componentes
-// re-renderizan cuando EN llega después del primer paint.
+// El snapshot de useSyncExternalStore. Cambia (referencia nueva) al cambiar de
+// idioma y al terminar de cargar un diccionario asíncrono. `version` garantiza
+// identidad nueva siempre; `dictionary` es el valor reactivo que React Compiler
+// usa para recalcular las traducciones cuando EN llega tras el primer paint.
 let version = 0;
+
+const buildSnapshot = (): LanguageSnapshot => ({
+    locale: currentLocale,
+    version,
+    dictionary: translations[currentLocale],
+});
+
+let snapshot: LanguageSnapshot = buildSnapshot();
+
+// ES está siempre presente en el bundle, así que el snapshot de servidor lleva
+// su diccionario ya resuelto y es una referencia estable (requisito de SSR).
+const serverSnapshot: LanguageSnapshot = {
+    locale: FALLBACK_LOCALE,
+    version: 0,
+    dictionary: es,
+};
 
 const notify = (): void => {
     version += 1;
+    snapshot = buildSnapshot();
     listeners.forEach((listener) => listener());
 };
 
@@ -72,7 +99,12 @@ const setCookie = (name: string, value: string, days = 365): void => {
     }
 
     const maxAge = days * 24 * 60 * 60;
-    document.cookie = `${name}=${value};path=/;max-age=${maxAge};SameSite=Lax`;
+
+    try {
+        document.cookie = `${name}=${value};path=/;max-age=${maxAge};SameSite=Lax`;
+    } catch {
+        // Preferencia no persistible en cookie: localStorage/memoria cubren UI.
+    }
 };
 
 const isSupportedLocale = (value: string | null): value is Locale => {
@@ -84,9 +116,13 @@ const getStoredLocale = (): Locale => {
         return FALLBACK_LOCALE;
     }
 
-    const stored = localStorage.getItem('locale');
+    try {
+        const stored = localStorage.getItem('locale');
 
-    return isSupportedLocale(stored) ? stored : FALLBACK_LOCALE;
+        return isSupportedLocale(stored) ? stored : FALLBACK_LOCALE;
+    } catch {
+        return FALLBACK_LOCALE;
+    }
 };
 
 const applyLocale = (locale: Locale): void => {
@@ -103,9 +139,19 @@ const subscribe = (callback: () => void) => {
     return () => listeners.delete(callback);
 };
 
-const resolveKey = (locale: Locale, key: string): string | undefined => {
+const getSnapshot = (): LanguageSnapshot => snapshot;
+const getServerSnapshot = (): LanguageSnapshot => serverSnapshot;
+
+const resolveKey = (
+    dictionary: Translations | undefined,
+    key: string,
+): string | undefined => {
+    if (!dictionary) {
+        return undefined;
+    }
+
     const segments = key.split('.');
-    let node: unknown = translations[locale];
+    let node: unknown = dictionary;
 
     for (const segment of segments) {
         if (typeof node !== 'object' || node === null) {
@@ -118,8 +164,14 @@ const resolveKey = (locale: Locale, key: string): string | undefined => {
     return typeof node === 'string' ? node : undefined;
 };
 
-const translate = (locale: Locale, key: string): string => {
-    return resolveKey(locale, key) ?? resolveKey(FALLBACK_LOCALE, key) ?? key;
+// Resuelve contra el diccionario activo y cae al fallback ES (siempre cargado).
+// Recibe el diccionario por parámetro —no lo lee del global— para que la lógica
+// dependa de un valor reactivo del snapshot y React Compiler pueda recalcular.
+const translate = (
+    dictionary: Translations | undefined,
+    key: string,
+): string => {
+    return resolveKey(dictionary, key) ?? resolveKey(es, key) ?? key;
 };
 
 export function initializeLanguage(): void {
@@ -128,6 +180,7 @@ export function initializeLanguage(): void {
     }
 
     currentLocale = getStoredLocale();
+    snapshot = buildSnapshot();
     applyLocale(currentLocale);
     // Si la preferencia guardada es EN, se precarga su diccionario ya en el
     // arranque para minimizar el parpadeo tras la hidratación.
@@ -135,26 +188,40 @@ export function initializeLanguage(): void {
 }
 
 export function useLanguage(): UseLanguageReturn {
-    useSyncExternalStore(
+    const currentSnapshot = useSyncExternalStore(
         subscribe,
-        () => version,
-        () => version,
+        getSnapshot,
+        getServerSnapshot,
     );
 
-    const locale = currentLocale;
+    const locale = currentSnapshot.locale;
+    // `dictionary` es reactivo: cuando EN termina de cargar, su referencia
+    // cambia (undefined → objeto) aunque `locale` siga siendo 'en'. React
+    // Compiler observa ese cambio y recalcula `t`, así que el texto pasa a
+    // inglés sin click extra ni recarga.
+    const dictionary = currentSnapshot.dictionary;
 
     const setLocale = (next: Locale): void => {
+        if (!isSupportedLocale(next)) {
+            return;
+        }
+
         currentLocale = next;
 
-        localStorage.setItem('locale', next);
+        try {
+            localStorage.setItem('locale', next);
+        } catch {
+            // Preferencia no persistible: el cambio en memoria sigue activo.
+        }
+
         setCookie('locale', next);
 
         applyLocale(next);
-        ensureLocaleLoaded(next);
         notify();
+        ensureLocaleLoaded(next);
     };
 
-    const t = (key: string): string => translate(locale, key);
+    const t = (key: string): string => translate(dictionary, key);
 
     return { locale, setLocale, t } as const;
 }
