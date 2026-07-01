@@ -69,9 +69,10 @@ class SiteSettings
                 'count' => is_numeric($count) ? (int) $count : null,
                 'location' => config('site.google_reviews.location'),
             ],
-            'footer' => [
-                'text' => self::value($o, 'footer_text', config('site.footer.text')),
-            ],
+            // `footer_text` sigue siendo editable/persistible desde el admin
+            // (ver editable()), pero no se expone en el payload público porque
+            // ninguna vista pública lo consume: exponerlo solo añadía un
+            // `footer.text: null` inerte al JSON de props.
         ];
     }
 

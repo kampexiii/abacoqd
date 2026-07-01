@@ -23,9 +23,6 @@ export type SiteSettings = {
         readonly count: number | null;
         readonly location: string | null;
     };
-    readonly footer: {
-        readonly text: string | null;
-    };
 };
 
 const EMPTY_SITE_SETTINGS: SiteSettings = {
@@ -38,7 +35,6 @@ const EMPTY_SITE_SETTINGS: SiteSettings = {
     },
     social: { linkedin: null, facebook: null },
     googleReviews: { url: null, rating: null, count: null, location: null },
-    footer: { text: null },
 };
 
 export function useSiteSettings(): SiteSettings {
