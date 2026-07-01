@@ -512,6 +512,8 @@ function DesktopCollaborationsOrbit({
                     src={ABACO_ISOTIPO_COLOR}
                     alt=""
                     aria-hidden="true"
+                    width={266}
+                    height={168}
                     className="qd-collab-orbital__pivot-logo"
                     loading="lazy"
                     decoding="async"

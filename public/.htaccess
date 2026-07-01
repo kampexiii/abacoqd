@@ -1,3 +1,16 @@
+<IfModule mod_headers.c>
+    <IfModule mod_setenvif.c>
+        SetEnvIfNoCase Request_URI "^/build/assets/.+\.(?:css|js|mjs|woff2?|ttf|otf|eot|svg|png|jpe?g|gif|webp|avif|ico)$" abacoqd_immutable_asset=1
+
+        Header set Cache-Control "public, max-age=31536000, immutable" env=abacoqd_immutable_asset
+    </IfModule>
+
+    <FilesMatch "\.(?:html?|php)$">
+        Header set Cache-Control "no-cache, private, must-revalidate"
+        Header set Pragma "no-cache"
+    </FilesMatch>
+</IfModule>
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes

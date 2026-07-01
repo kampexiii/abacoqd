@@ -42,6 +42,51 @@ export type BlogPostSummary = {
     readonly readingTime: number | null;
 };
 
+type BlogCoverImageAttributes = {
+    readonly src: string;
+    readonly srcSet?: string;
+    readonly width?: number;
+    readonly height?: number;
+};
+
+const BLOG_COVER_IMAGE_VARIANTS: Record<string, BlogCoverImageAttributes> = {
+    '/uploads/blog/posts/ia-supervisada-acelerar-sin-perder-criterio-tecnico.webp':
+        {
+            src: '/uploads/blog/posts/ia-supervisada-acelerar-sin-perder-criterio-tecnico-960w.webp',
+            srcSet: [
+                '/uploads/blog/posts/ia-supervisada-acelerar-sin-perder-criterio-tecnico-640w.webp 640w',
+                '/uploads/blog/posts/ia-supervisada-acelerar-sin-perder-criterio-tecnico-960w.webp 960w',
+            ].join(', '),
+            width: 960,
+            height: 540,
+        },
+    '/uploads/blog/posts/que-es-abacoqd-y-como-trabaja.webp': {
+        src: '/uploads/blog/posts/que-es-abacoqd-y-como-trabaja-960w.webp',
+        srcSet: [
+            '/uploads/blog/posts/que-es-abacoqd-y-como-trabaja-640w.webp 640w',
+            '/uploads/blog/posts/que-es-abacoqd-y-como-trabaja-960w.webp 960w',
+        ].join(', '),
+        width: 960,
+        height: 640,
+    },
+    '/uploads/blog/posts/abacoqd-renovamos-identidad-software-a-medida-rapidez-criterio.webp':
+        {
+            src: '/uploads/blog/posts/abacoqd-renovamos-identidad-software-a-medida-rapidez-criterio-960w.webp',
+            srcSet: [
+                '/uploads/blog/posts/abacoqd-renovamos-identidad-software-a-medida-rapidez-criterio-640w.webp 640w',
+                '/uploads/blog/posts/abacoqd-renovamos-identidad-software-a-medida-rapidez-criterio-960w.webp 960w',
+            ].join(', '),
+            width: 960,
+            height: 540,
+        },
+};
+
+export function blogCoverImageAttributes(
+    src: string,
+): BlogCoverImageAttributes {
+    return BLOG_COVER_IMAGE_VARIANTS[src] ?? { src };
+}
+
 /** Entrada del índice "En esta página" del detalle (un H2 por entrada). */
 export type BlogTocItem = {
     readonly id: string;

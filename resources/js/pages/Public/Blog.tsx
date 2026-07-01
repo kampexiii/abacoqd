@@ -6,7 +6,12 @@ import { useLanguage } from '@/hooks/use-language';
 import type { Locale } from '@/hooks/use-language';
 import PublicLayout from '@/layouts/public-layout';
 import type { BlogCategorySummary, BlogPostSummary } from '@/lib/blog';
-import { formatPostDate, localizedText, postHref } from '@/lib/blog';
+import {
+    blogCoverImageAttributes,
+    formatPostDate,
+    localizedText,
+    postHref,
+} from '@/lib/blog';
 import { cn } from '@/lib/utils';
 import { show as bookingShow } from '@/routes/booking';
 import { show as contactShow } from '@/routes/contact';
@@ -146,6 +151,9 @@ function FeaturedPostCard({
     const category = post.category
         ? localizedText(post.category.name, locale)
         : null;
+    const coverImage = post.coverImage
+        ? blogCoverImageAttributes(post.coverImage)
+        : null;
 
     return (
         <a
@@ -153,11 +161,21 @@ function FeaturedPostCard({
             className="group grid overflow-hidden rounded-3xl border border-qd-mist bg-qd-white transition hover:-translate-y-1 hover:border-qd-teal-2/60 hover:shadow-[0_24px_70px_-42px_rgba(15,143,149,0.45)] sm:grid-cols-2 dark:border-white/10 dark:bg-qd-surface dark:hover:border-qd-teal/60"
         >
             <div className="h-56 overflow-hidden sm:h-full">
-                {post.coverImage ? (
+                {coverImage ? (
                     <img
-                        src={post.coverImage}
+                        src={coverImage.src}
+                        srcSet={coverImage.srcSet}
+                        sizes={
+                            coverImage.srcSet
+                                ? '(min-width: 640px) 50vw, calc(100vw - 2.5rem)'
+                                : undefined
+                        }
+                        width={coverImage.width}
+                        height={coverImage.height}
                         alt=""
                         className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+                        loading="eager"
+                        decoding="async"
                     />
                 ) : (
                     <CoverFallback />
@@ -206,6 +224,9 @@ export function PostCard({
     const category = post.category
         ? localizedText(post.category.name, locale)
         : null;
+    const coverImage = post.coverImage
+        ? blogCoverImageAttributes(post.coverImage)
+        : null;
 
     return (
         <a
@@ -213,11 +234,21 @@ export function PostCard({
             className="group flex flex-col overflow-hidden rounded-2xl border border-qd-mist bg-qd-white transition hover:-translate-y-1 hover:border-qd-teal-2/60 hover:shadow-[0_18px_44px_-30px_rgba(15,143,149,0.4)] dark:border-white/10 dark:bg-qd-surface dark:hover:border-qd-teal/60"
         >
             <div className="h-44 overflow-hidden">
-                {post.coverImage ? (
+                {coverImage ? (
                     <img
-                        src={post.coverImage}
+                        src={coverImage.src}
+                        srcSet={coverImage.srcSet}
+                        sizes={
+                            coverImage.srcSet
+                                ? '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, calc(100vw - 2.5rem)'
+                                : undefined
+                        }
+                        width={coverImage.width}
+                        height={coverImage.height}
                         alt=""
                         className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+                        loading="lazy"
+                        decoding="async"
                     />
                 ) : (
                     <CoverFallback />

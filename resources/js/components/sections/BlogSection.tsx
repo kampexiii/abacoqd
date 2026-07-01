@@ -3,7 +3,12 @@ import { ArrowRight, FileText } from 'lucide-react';
 import { useInView } from '@/hooks/use-in-view';
 import { useLanguage } from '@/hooks/use-language';
 import type { BlogPostSummary } from '@/lib/blog';
-import { formatPostDate, localizedText, postHref } from '@/lib/blog';
+import {
+    blogCoverImageAttributes,
+    formatPostDate,
+    localizedText,
+    postHref,
+} from '@/lib/blog';
 import { cn } from '@/lib/utils';
 
 /**
@@ -17,9 +22,29 @@ import { cn } from '@/lib/utils';
  * controlado.
  */
 
-function CoverVisual({ src }: { readonly src: string | null }) {
+function CoverVisual({
+    src,
+    sizes,
+}: {
+    readonly src: string | null;
+    readonly sizes: string;
+}) {
     if (src) {
-        return <img src={src} alt="" className="h-full w-full object-cover" />;
+        const image = blogCoverImageAttributes(src);
+
+        return (
+            <img
+                src={image.src}
+                srcSet={image.srcSet}
+                sizes={image.srcSet ? sizes : undefined}
+                width={image.width}
+                height={image.height}
+                alt=""
+                className="h-full w-full object-cover"
+                loading="lazy"
+                decoding="async"
+            />
+        );
     }
 
     return (
@@ -94,7 +119,10 @@ export default function BlogSection({
                     >
                         <article className="qd-blog-main">
                             <div className="qd-blog-card__visual">
-                                <CoverVisual src={featuredPost.coverImage} />
+                                <CoverVisual
+                                    src={featuredPost.coverImage}
+                                    sizes="(min-width: 1024px) 52vw, calc(100vw - 2.5rem)"
+                                />
                             </div>
                             <div className="qd-blog-card__body qd-blog-card__body--featured">
                                 <div className="qd-blog-main__copy">
@@ -143,7 +171,10 @@ export default function BlogSection({
                                 className="qd-blog-secondary"
                             >
                                 <div className="qd-blog-card__visual">
-                                    <CoverVisual src={post.coverImage} />
+                                    <CoverVisual
+                                        src={post.coverImage}
+                                        sizes="(min-width: 1024px) 38vw, calc(100vw - 2.5rem)"
+                                    />
                                 </div>
                                 <div className="qd-blog-card__body">
                                     {post.category && (
