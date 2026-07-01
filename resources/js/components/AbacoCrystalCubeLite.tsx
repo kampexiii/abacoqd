@@ -134,10 +134,28 @@ const MINI_FACE_TRANSFORMS: readonly string[] = [
     'rotateX(-90deg) translateZ(var(--qd-minicube-half))',
 ];
 
-export default function AbacoCrystalCubeLite() {
+type AbacoCrystalCubeLiteProps = {
+    /**
+     * Variante móvil ligera: el cubo principal queda ensamblado (sin
+     * descomposición por scroll) y no se renderiza el campo de mini cubos ni el
+     * flash. Reduce DOM y trabajo de pintado/compuesto en móvil.
+     */
+    readonly simplified?: boolean;
+};
+
+export default function AbacoCrystalCubeLite({
+    simplified = false,
+}: AbacoCrystalCubeLiteProps) {
     const rootRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
+        // Variante móvil ligera: sin descomposición por scroll. El cubo principal
+        // queda ensamblado (--decompose = 0 por defecto en app.css) y gira por CSS;
+        // no se registran listeners de scroll/resize, ni rAF, ni observers.
+        if (simplified) {
+            return undefined;
+        }
+
         const root = rootRef.current;
 
         if (!root) {
@@ -306,7 +324,7 @@ export default function AbacoCrystalCubeLite() {
             motionObserver.disconnect();
             stop();
         };
-    }, []);
+    }, [simplified]);
 
     return (
         <div ref={rootRef} className="qd-litecube" aria-hidden="true">
@@ -335,43 +353,48 @@ export default function AbacoCrystalCubeLite() {
                 </div>
             </div>
 
-            <div className="qd-litecube__burst" />
+            {/* Flash + campo de mini cubos: solo en la variante completa. En
+                móvil (simplified) se omiten para aligerar DOM y pintado; el cubo
+                principal se mantiene como protagonista. */}
+            {!simplified && <div className="qd-litecube__burst" />}
 
             {/* Campo de mini cubos (fuera de la escena inclinada para repartirse
                 en el plano de la pantalla). Cada uno es un cubo 3D completo. */}
-            <div className="qd-litecube__shards">
-                {SHARDS.map((shard, index) => (
-                    <div
-                        key={index}
-                        className="qd-litecube__shard"
-                        style={
-                            {
-                                '--tx': shard.tx.toFixed(2),
-                                '--ty': shard.ty.toFixed(2),
-                                '--tz': shard.tz.toFixed(1),
-                                '--msize': shard.msize.toFixed(3),
-                                '--depth': shard.depth.toFixed(2),
-                                '--ax': shard.ax.toFixed(3),
-                                '--ay': shard.ay.toFixed(3),
-                                '--az': shard.az.toFixed(3),
-                                '--spin': shard.spin.toFixed(1),
-                                '--tiltX': shard.tiltX.toFixed(1),
-                                '--tiltY': shard.tiltY.toFixed(1),
-                            } as CSSProperties
-                        }
-                    >
-                        <div className="qd-litecube__minicube">
-                            {MINI_FACE_TRANSFORMS.map((transform) => (
-                                <div
-                                    key={transform}
-                                    className="qd-litecube__miniface"
-                                    style={{ transform }}
-                                />
-                            ))}
+            {!simplified && (
+                <div className="qd-litecube__shards">
+                    {SHARDS.map((shard, index) => (
+                        <div
+                            key={index}
+                            className="qd-litecube__shard"
+                            style={
+                                {
+                                    '--tx': shard.tx.toFixed(2),
+                                    '--ty': shard.ty.toFixed(2),
+                                    '--tz': shard.tz.toFixed(1),
+                                    '--msize': shard.msize.toFixed(3),
+                                    '--depth': shard.depth.toFixed(2),
+                                    '--ax': shard.ax.toFixed(3),
+                                    '--ay': shard.ay.toFixed(3),
+                                    '--az': shard.az.toFixed(3),
+                                    '--spin': shard.spin.toFixed(1),
+                                    '--tiltX': shard.tiltX.toFixed(1),
+                                    '--tiltY': shard.tiltY.toFixed(1),
+                                } as CSSProperties
+                            }
+                        >
+                            <div className="qd-litecube__minicube">
+                                {MINI_FACE_TRANSFORMS.map((transform) => (
+                                    <div
+                                        key={transform}
+                                        className="qd-litecube__miniface"
+                                        style={{ transform }}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
