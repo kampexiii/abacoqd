@@ -57,6 +57,24 @@ export default defineConfig({
             plugins: [cspSafeEsToolkitGlobalThis()],
         },
     },
+    build: {
+        rollupOptions: {
+            output: {
+                // Agrupa TODOS los iconos de lucide-react en un único chunk
+                // `icons` en vez de decenas de archivos minúsculos (uno por
+                // icono). Reduce el número de peticiones y de <link
+                // modulepreload> del <head> en cada página, acortando el árbol
+                // de dependencias de red (la principal palanca de perf en móvil).
+                manualChunks(id: string) {
+                    if (id.includes('node_modules/lucide-react')) {
+                        return 'icons';
+                    }
+
+                    return undefined;
+                },
+            },
+        },
+    },
     plugins: [
         cspSafeEsToolkitGlobalThis(),
         laravel({
