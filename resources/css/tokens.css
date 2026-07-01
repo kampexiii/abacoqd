@@ -29,7 +29,11 @@
     --qd-ink: #07111a;
     --qd-surface: #0d1b26;
     --qd-teal: #18b7b0;
-    --qd-teal-2: #0f8f95;
+    /* Teal profundo para TEXTO en modo claro: #0a767c cumple WCAG AA (≥4.5:1)
+       sobre blanco/mist/glass. En oscuro se restaura el teal original más vivo
+       (.dark), donde ya cumple sobre fondos ink. Los glows/rgba usan el triplete
+       --qd-teal-2-rgb, que se mantiene vívido y no cambia. */
+    --qd-teal-2: #0a767c;
     --qd-cyan: #39c6e6;
     --qd-lime: #b7f34a;
     --qd-mist: #e8eff0;
@@ -71,6 +75,11 @@
 }
 
 .dark {
+    /* Teal-2 vivo original en oscuro: sobre fondos ink ya cumple AA como texto
+       (~4.5:1) y mantiene el aspecto de marca. El oscurecido AA solo aplica al
+       modo claro. */
+    --qd-teal-2: #0f8f95;
+
     /* Texto secundario en oscuro */
     --qd-text-high: #d6e2e5;
     --qd-text-medium: #9db0b8;
