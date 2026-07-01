@@ -153,8 +153,12 @@ export default function AbacoCrystalCubeLite() {
         let targetProgress = 0;
         let currentProgress = 0;
 
-        // Descomposición ligada al scroll del hero: el cubo principal se encoge,
-        // el flash central cubre el cambio y los mini cubos viajan a destino.
+        // Descomposición como ANIMACIÓN disparada (no ligada 1:1 al scroll): al
+        // empezar a bajar dentro del hero el objetivo salta a 1 y el lerp de
+        // tick() reproduce la secuencia COMPLETA (encoge → flash → reparto);
+        // al volver arriba salta a 0 y la reproduce entera en sentido inverso.
+        // Así nunca se queda congelada a medias si detienes el scroll. Umbrales
+        // con histéresis (ida > vuelta) para no oscilar en el punto de disparo.
         // Solo escribe --decompose; el reparto lo hace CSS con transform/opacity.
         const readTargetProgress = (): number => {
             const hero = root.closest('.qd-hero');
@@ -168,9 +172,17 @@ export default function AbacoCrystalCubeLite() {
             }
 
             const rect = hero.getBoundingClientRect();
-            const travel = Math.min(260, Math.max(150, rect.height * 0.25));
+            const scrolled = -rect.top;
+            const forwardTrigger = Math.max(60, rect.height * 0.08);
+            const backwardTrigger = Math.max(20, rect.height * 0.03);
 
-            return Math.max(0, Math.min(1, -rect.top / travel));
+            // Ensamblado → se descompone al pasar el umbral de ida.
+            // Descompuesto → se recompone al bajar del umbral de vuelta.
+            if (targetProgress < 0.5) {
+                return scrolled > forwardTrigger ? 1 : 0;
+            }
+
+            return scrolled < backwardTrigger ? 0 : 1;
         };
 
         const tick = (): void => {
