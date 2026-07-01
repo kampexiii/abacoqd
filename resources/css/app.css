@@ -661,6 +661,9 @@ html {
     transform-style: preserve-3d;
     opacity: calc(1 - var(--p-cube-fade));
     transition: opacity 80ms linear;
+    /* Capa GPU estable: la escala/opacidad ligada al scroll se compone sin
+       repintar el subárbol en cada frame. */
+    will-change: transform, opacity;
 }
 
 /* Núcleo de energía: glow radial teal/cian que late. Simula la energía interior
@@ -679,6 +682,7 @@ html {
     );
     filter: blur(6px);
     animation: qd-litecube-pulse 3.6s ease-in-out infinite;
+    will-change: transform, opacity;
 }
 
 .qd-litecube__cube {
@@ -687,6 +691,7 @@ html {
     z-index: 1;
     transform-style: preserve-3d;
     animation: qd-litecube-spin 20s linear infinite;
+    will-change: transform;
 }
 
 .qd-litecube__face {
@@ -772,8 +777,13 @@ html {
         rgba(24, 183, 176, 0.12) 58%,
         transparent 72%
     );
-    filter: blur(calc(4px + var(--p-flash) * 8px));
+    /* Blur de radio FIJO: antes variaba con --p-flash y obligaba a re-ejecutar
+       el shader de desenfoque en cada frame de scroll (causa principal del
+       tirón del flash). Con radio fijo + will-change, el escalado y la opacidad
+       se componen en GPU sobre una rasterización cacheada. */
+    filter: blur(10px);
     mix-blend-mode: screen;
+    will-change: transform, opacity;
 }
 
 .qd-litecube__burst::before {
@@ -834,7 +844,9 @@ html {
         calc(var(--tz) * var(--p-mini-path) * 1px);
     /* Emerge desde pequeño dentro del flash hasta su tamaño final. */
     scale: calc((0.06 + var(--p-mini-scale-ease) * 0.94) * var(--depth));
-    filter: blur(calc((1 - var(--depth)) * 0.9px));
+    /* Sin filter: blur() (antes ~0.23px, imperceptible) para no repintar cada
+       pieza en cada frame; el movimiento se compone en GPU. */
+    will-change: transform, translate, scale, opacity;
 }
 
 /* El cubo en sí: inclinación base fija (siempre se ven tres caras) + giro que
@@ -847,6 +859,7 @@ html {
         calc(var(--spin) * var(--p-mini-path) * 1deg);
     transform: rotateX(calc(var(--tiltX) * 1deg))
         rotateY(calc(var(--tiltY) * 1deg));
+    will-change: rotate;
 }
 
 /* Cada una de las 6 caras del mini cubo: cristal teal + isotipo (mismo asset
