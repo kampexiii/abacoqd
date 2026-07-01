@@ -384,11 +384,7 @@ html {
 .qd-hero__cube-wrap {
     width: min(680px, 94vw);
     height: clamp(300px, 35svh, 460px);
-    /* Separación garantizada por encima del cubo respecto a los CTAs (Reservar
-       consulta / Ver servicios), en cualquier pantalla incluido móvil. Sustituye
-       el margen negativo previo (que lo pegaba a los botones). Escala con el
-       viewport pero nunca baja de ~2rem. */
-    margin-top: clamp(2rem, 7svh, 5.5rem);
+    margin-top: -0.2rem;
 }
 
 /* Franja de beneficios del hero (5 ítems). Actúa como separador a todo el
@@ -637,7 +633,12 @@ html {
         1
     );
     position: absolute;
-    inset: 0;
+    /* Baja TODO el sistema del cubo (cubo + flash + mini cubos, que son hijos de
+       .qd-litecube y se mueven juntos) respecto al hero, para separarlo de los
+       CTAs en cualquier pantalla. El offset superior desplaza el centro ~½ de su
+       valor; se usa inset (no transform) para no chocar con la animación de
+       intro. Ajustable: subir el valor lo baja más. */
+    inset: 20svh 0 0 0;
     display: grid;
     place-items: center;
     pointer-events: none;
