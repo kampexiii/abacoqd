@@ -3,6 +3,14 @@
         SetEnvIfNoCase Request_URI "^/build/assets/.+\.(?:css|js|mjs|woff2?|ttf|otf|eot|svg|png|jpe?g|gif|webp|avif|ico)$" abacoqd_immutable_asset=1
 
         Header set Cache-Control "public, max-age=31536000, immutable" env=abacoqd_immutable_asset
+
+        # Imágenes subidas (uploads): caché larga (1 año) para acelerar visitas
+        # repetidas y mejorar LCP. NO se marca `immutable` porque los nombres se
+        # derivan del slug (sin hash de contenido): si se reemplaza una imagen
+        # con el mismo nombre, un hard-refresh permite volver a descargarla.
+        SetEnvIfNoCase Request_URI "^/uploads/.+\.(?:webp|avif|png|jpe?g|gif|svg|ico)$" abacoqd_upload_asset=1
+
+        Header set Cache-Control "public, max-age=31536000" env=abacoqd_upload_asset
     </IfModule>
 
     <FilesMatch "\.(?:html?|php)$">
@@ -17,6 +25,11 @@
     </IfModule>
 
     RewriteEngine On
+
+    # Redirect www to non-www (host canónico abacoqd.com, evita contenido
+    # duplicado). %1 captura el host sin el prefijo www.
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
