@@ -8,10 +8,18 @@ import {
     Wallet,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { lazy, Suspense } from 'react';
 
-import AbacoCrystalCube from '@/components/AbacoCrystalCube';
+import AbacoCrystalCubeLite from '@/components/AbacoCrystalCubeLite';
 import HeroParticleField from '@/components/HeroParticleField';
 import { useLanguage } from '@/hooks/use-language';
+
+// Variante experimental del cubo del hero (rama experiment/lightweight-hero-cube).
+// 'lite' = cubo CSS ligero sin Three.js; 'webgl' = cubo original AbacoCrystalCube.
+// El cubo WebGL va en carga diferida para que Three.js NO entre en el bundle
+// inicial de Home cuando la variante activa es 'lite'. Cambiar a 'webgl' revierte.
+const HERO_CUBE_VARIANT: 'lite' | 'webgl' = 'lite';
+const AbacoCrystalCube = lazy(() => import('@/components/AbacoCrystalCube'));
 
 /**
  * Hero principal de la landing pública.
@@ -67,9 +75,15 @@ export default function AbacoHero() {
                 </div>
 
                 {/* La estructura del cubo se mantiene estable para preservar la
-                    animación principal del hero. */}
+                    animación principal del hero. Variante seleccionable arriba. */}
                 <div className="qd-hero__cube-wrap">
-                    <AbacoCrystalCube />
+                    {HERO_CUBE_VARIANT === 'lite' ? (
+                        <AbacoCrystalCubeLite />
+                    ) : (
+                        <Suspense fallback={null}>
+                            <AbacoCrystalCube />
+                        </Suspense>
+                    )}
                 </div>
 
                 <ul
