@@ -140,9 +140,11 @@ test('listing existing variants ignores missing files', function () {
         [480, 640],
     );
 
-    expect($variants)->toBe([
-        ['width' => 480, 'src' => '/uploads/services/servicio-480w.webp'],
-    ]);
+    expect($variants)->toHaveCount(1)
+        ->and($variants[0]['width'])->toBe(480)
+        ->and($variants[0]['src'])->toMatch(
+            '#^/uploads/services/servicio-480w\.webp\?v=\d+$#',
+        );
 });
 
 test('listing existing variants works for legacy raster public image paths', function () {
@@ -154,7 +156,9 @@ test('listing existing variants works for legacy raster public image paths', fun
         [480, 640],
     );
 
-    expect($variants)->toBe([
-        ['width' => 480, 'src' => '/uploads/services/servicio-480w.webp'],
-    ]);
+    expect($variants)->toHaveCount(1)
+        ->and($variants[0]['width'])->toBe(480)
+        ->and($variants[0]['src'])->toMatch(
+            '#^/uploads/services/servicio-480w\.webp\?v=\d+$#',
+        );
 });

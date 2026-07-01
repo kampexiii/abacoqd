@@ -74,12 +74,29 @@ class ImageVariantService
             if (Storage::disk(self::DISK)->exists($variantRelative)) {
                 $variants[] = [
                     'width' => $width,
-                    'src' => self::PUBLIC_PREFIX.$variantRelative,
+                    'src' => self::PUBLIC_PREFIX.$variantRelative.$this->cacheBustSuffix($variantRelative),
                 ];
             }
         }
 
         return $variants;
+    }
+
+    /**
+     * Sufijo de cache-busting `?v=<mtime>` para una URL de imagen emitida al
+     * frontend. Como los nombres se derivan del slug (sin hash de contenido),
+     * al reemplazar una imagen la URL no cambiaría y una caché larga serviría la
+     * versión vieja; el mtime hace que la URL cambie al regenerar el archivo, de
+     * modo que `/uploads/` puede cachearse a largo plazo sin servir imágenes
+     * obsoletas. El valor NO se persiste en BD: solo se añade al emitir.
+     */
+    private function cacheBustSuffix(string $relative): string
+    {
+        try {
+            return '?v='.Storage::disk(self::DISK)->lastModified($relative);
+        } catch (\Throwable) {
+            return '';
+        }
     }
 
     public function deletePublicPath(?string $publicPath): void
