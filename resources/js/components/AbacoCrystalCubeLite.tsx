@@ -18,9 +18,11 @@ import type { CSSProperties } from 'react';
  */
 
 // 16 fragmentos en lugar de los 42 del cubo WebGL: bastan para sugerir la
-// descomposición sin el coste de 42 nodos. Disposición determinista por índice
-// (dirección de dispersión, profundidad Z, tamaño, retardo y eje/velocidad de
-// giro fijos), así el cubo se descompone igual en cada carga.
+// descomposición sin el coste de 42 nodos. Cada fragmento se renderiza como un
+// mini cubo CSS (cara frontal + cara superior/lateral con pseudo-elementos, ver
+// app.css), no como un rectángulo plano. Disposición determinista por índice
+// (dirección de dispersión, profundidad Z, tamaño, proporción, retardo y
+// eje/velocidad de giro fijos), así el cubo se descompone igual en cada carga.
 const SHARD_COUNT = 16;
 
 const rand = (seed: number): number => {
@@ -34,7 +36,7 @@ type Shard = {
     readonly sy: number;
     readonly sz: number;
     readonly size: number;
-    readonly delay: number;
+    readonly ar: number;
     readonly depth: number;
     readonly ax: number;
     readonly ay: number;
@@ -44,15 +46,19 @@ type Shard = {
 
 const SHARDS: readonly Shard[] = Array.from({ length: SHARD_COUNT }, (_, i) => {
     const angle = rand(i * 3 + 1) * Math.PI * 2;
-    const distance = 95 + rand(i * 5 + 2) * 150;
+    // Distancia mínima alta (130px) para que las piezas abandonen de verdad el
+    // volumen del cubo (cuyas caras explotan hasta ~half+120px) y no queden
+    // flotando dentro.
+    const distance = 130 + rand(i * 5 + 2) * 160;
 
     return {
         sx: Math.cos(angle) * distance,
         sy: Math.sin(angle) * distance * 0.82,
-        // Profundidad ±130px para que se dispersen en 3D, no en un plano.
-        sz: (rand(i * 9 + 6) - 0.5) * 260,
-        size: 16 + rand(i * 11 + 4) * 30,
-        delay: rand(i * 13 + 5) * 4,
+        // Profundidad ±150px para que se dispersen en 3D, no en un plano.
+        sz: (rand(i * 9 + 6) - 0.5) * 300,
+        size: 18 + rand(i * 11 + 4) * 26,
+        // Proporción alto/ancho: unos más cuadrados, otros más prismáticos.
+        ar: 0.72 + rand(i * 31 + 12) * 0.7,
         depth: 0.5 + rand(i * 7 + 3) * 0.9,
         ax: rand(i * 17 + 7),
         ay: rand(i * 19 + 8),
@@ -62,14 +68,16 @@ const SHARDS: readonly Shard[] = Array.from({ length: SHARD_COUNT }, (_, i) => {
     };
 });
 
-// Las 6 caras cierran el cubo; `--qd-litecube-half` = mitad de la arista.
+// Las 6 caras cierran el cubo. `--qd-litecube-face-out` = mitad de la arista +
+// desplazamiento por scroll (var(--decompose)); así, al bajar, cada cara sale
+// hacia fuera a lo largo de su normal y el cubo se abre/explota (ver app.css).
 const FACE_TRANSFORMS: readonly string[] = [
-    'translateZ(var(--qd-litecube-half))',
-    'rotateY(180deg) translateZ(var(--qd-litecube-half))',
-    'rotateY(90deg) translateZ(var(--qd-litecube-half))',
-    'rotateY(-90deg) translateZ(var(--qd-litecube-half))',
-    'rotateX(90deg) translateZ(var(--qd-litecube-half))',
-    'rotateX(-90deg) translateZ(var(--qd-litecube-half))',
+    'translateZ(var(--qd-litecube-face-out))',
+    'rotateY(180deg) translateZ(var(--qd-litecube-face-out))',
+    'rotateY(90deg) translateZ(var(--qd-litecube-face-out))',
+    'rotateY(-90deg) translateZ(var(--qd-litecube-face-out))',
+    'rotateX(90deg) translateZ(var(--qd-litecube-face-out))',
+    'rotateX(-90deg) translateZ(var(--qd-litecube-face-out))',
 ];
 
 export default function AbacoCrystalCubeLite() {
@@ -108,11 +116,16 @@ export default function AbacoCrystalCubeLite() {
             }
 
             const rect = hero.getBoundingClientRect();
-            const progress = Math.max(
+            // Progreso 0→1 en el primer ~60% de scroll del hero: la explosión se
+            // ve claramente antes de que el hero salga de pantalla.
+            const raw = Math.max(
                 0,
-                Math.min(1, -rect.top / (rect.height * 0.9)),
+                Math.min(1, -rect.top / (rect.height * 0.6)),
             );
-            root.style.setProperty('--decompose', progress.toFixed(3));
+            // easeOutQuad: el cubo empieza a abrirse en cuanto se hace scroll y
+            // alcanza la descomposición plena sin necesidad de bajar del todo.
+            const eased = raw * (2 - raw);
+            root.style.setProperty('--decompose', eased.toFixed(3));
         };
 
         const request = (): void => {
@@ -228,7 +241,7 @@ export default function AbacoCrystalCubeLite() {
                                     '--sy': `${shard.sy.toFixed(1)}px`,
                                     '--sz': `${shard.sz.toFixed(1)}px`,
                                     '--size': `${shard.size.toFixed(1)}px`,
-                                    '--delay': `${shard.delay.toFixed(2)}s`,
+                                    '--ar': shard.ar.toFixed(3),
                                     '--depth': shard.depth.toFixed(2),
                                     '--ax': shard.ax.toFixed(3),
                                     '--ay': shard.ay.toFixed(3),
