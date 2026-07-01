@@ -1,6 +1,5 @@
 import { useSyncExternalStore } from 'react';
 
-import en from '../../../lang/en.json';
 import es from '../../../lang/es.json';
 
 export type Locale = 'es' | 'en';
@@ -11,16 +10,61 @@ const FALLBACK_LOCALE: Locale = 'es';
 
 type Translations = Record<string, unknown>;
 
-const translations: Record<Locale, Translations> = { es, en };
+// ES viaja en el bundle como idioma por defecto y como fallback siempre
+// disponible: evita el parpadeo del primer render y garantiza que ninguna clave
+// quede sin resolver. EN se carga bajo demanda (dynamic import) la primera vez
+// que se usa, para no arrastrar ambos diccionarios (~230 KB) en cada página.
+const translations: Partial<Record<Locale, Translations>> = { es };
 
-export type UseLanguageReturn = {
-    readonly locale: Locale;
-    readonly setLocale: (locale: Locale) => void;
-    readonly t: (key: string) => string;
+const loaders: Partial<Record<Locale, () => Promise<Translations>>> = {
+    en: () =>
+        import('../../../lang/en.json').then(
+            (module) => module.default as Translations,
+        ),
 };
+
+// Marca los idiomas cuya carga ya está resuelta o en curso (evita disparar el
+// import más de una vez). ES está presente desde el arranque.
+const requested = new Set<Locale>(['es']);
 
 const listeners = new Set<() => void>();
 let currentLocale: Locale = FALLBACK_LOCALE;
+
+// El snapshot de useSyncExternalStore: se incrementa al cambiar de idioma y al
+// terminar de cargar un diccionario asíncrono, de modo que los componentes
+// re-renderizan cuando EN llega después del primer paint.
+let version = 0;
+
+const notify = (): void => {
+    version += 1;
+    listeners.forEach((listener) => listener());
+};
+
+// Dispara la carga del diccionario del idioma si aún no está en memoria. Al
+// resolver, notifica para re-renderizar con las traducciones ya disponibles;
+// hasta entonces se sirve el fallback ES sin romper la vista.
+const ensureLocaleLoaded = (locale: Locale): void => {
+    if (requested.has(locale)) {
+        return;
+    }
+
+    const loader = loaders[locale];
+
+    if (!loader) {
+        return;
+    }
+
+    requested.add(locale);
+    loader()
+        .then((dictionary) => {
+            translations[locale] = dictionary;
+            notify();
+        })
+        .catch(() => {
+            // Si falla la carga se permite reintentar y se mantiene el fallback.
+            requested.delete(locale);
+        });
+};
 
 const setCookie = (name: string, value: string, days = 365): void => {
     if (typeof document === 'undefined') {
@@ -59,8 +103,6 @@ const subscribe = (callback: () => void) => {
     return () => listeners.delete(callback);
 };
 
-const notify = (): void => listeners.forEach((listener) => listener());
-
 const resolveKey = (locale: Locale, key: string): string | undefined => {
     const segments = key.split('.');
     let node: unknown = translations[locale];
@@ -87,14 +129,19 @@ export function initializeLanguage(): void {
 
     currentLocale = getStoredLocale();
     applyLocale(currentLocale);
+    // Si la preferencia guardada es EN, se precarga su diccionario ya en el
+    // arranque para minimizar el parpadeo tras la hidratación.
+    ensureLocaleLoaded(currentLocale);
 }
 
 export function useLanguage(): UseLanguageReturn {
-    const locale = useSyncExternalStore(
+    useSyncExternalStore(
         subscribe,
-        () => currentLocale,
-        () => FALLBACK_LOCALE,
+        () => version,
+        () => version,
     );
+
+    const locale = currentLocale;
 
     const setLocale = (next: Locale): void => {
         currentLocale = next;
@@ -103,6 +150,7 @@ export function useLanguage(): UseLanguageReturn {
         setCookie('locale', next);
 
         applyLocale(next);
+        ensureLocaleLoaded(next);
         notify();
     };
 
@@ -110,3 +158,9 @@ export function useLanguage(): UseLanguageReturn {
 
     return { locale, setLocale, t } as const;
 }
+
+export type UseLanguageReturn = {
+    readonly locale: Locale;
+    readonly setLocale: (locale: Locale) => void;
+    readonly t: (key: string) => string;
+};
