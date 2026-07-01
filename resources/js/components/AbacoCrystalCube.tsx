@@ -977,6 +977,7 @@ export default function AbacoCrystalCube() {
 
         const timer = new THREE.Timer();
         let frameId = 0;
+        let running = false;
         let decomposeProgress = 0;
 
         const animate = () => {
@@ -1118,10 +1119,58 @@ export default function AbacoCrystalCube() {
             backLogoGlow.material.opacity = 0.08 + boost * 0.14;
 
             renderer.render(scene, camera);
+
+            if (running) {
+                frameId = window.requestAnimationFrame(animate);
+            }
+        };
+
+        const startLoop = () => {
+            if (running) {
+                return;
+            }
+
+            running = true;
             frameId = window.requestAnimationFrame(animate);
         };
 
-        animate();
+        const stopLoop = () => {
+            if (!running) {
+                return;
+            }
+
+            running = false;
+            window.cancelAnimationFrame(frameId);
+            frameId = 0;
+        };
+
+        // Pausa el render loop cuando el hero sale del viewport (p. ej. al hacer
+        // scroll hacia abajo): deja de renderizar WebGL y de recalcular los
+        // fragmentos mientras no se ve, y reanuda al volver a entrar. No altera
+        // el aspecto ni la animación mientras el cubo es visible; el margen deja
+        // que reanude un poco antes de asomar para que no se note el reenganche.
+        const visibilityObserver =
+            typeof IntersectionObserver !== 'undefined'
+                ? new IntersectionObserver(
+                      (entries) => {
+                          const entry = entries[0];
+
+                          if (!entry) {
+                              return;
+                          }
+
+                          if (entry.isIntersecting) {
+                              startLoop();
+                          } else {
+                              stopLoop();
+                          }
+                      },
+                      { rootMargin: '160px' },
+                  )
+                : null;
+
+        visibilityObserver?.observe(mount);
+        startLoop();
 
         return () => {
             if (composeFlashTimerRef.current !== null) {
@@ -1142,7 +1191,8 @@ export default function AbacoCrystalCube() {
                 'pointercancel',
                 handleGlobalPointerRelease,
             );
-            window.cancelAnimationFrame(frameId);
+            visibilityObserver?.disconnect();
+            stopLoop();
             resizeObserver.disconnect();
             themeObserver.disconnect();
             timer.dispose();
