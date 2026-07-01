@@ -17,6 +17,7 @@
 !.env.example
 .envAbacoqd
 .envAbacoqd.*
+!.envAbacoqd.local.example
 .phpactor.json
 .phpunit.result.cache
 Homestead.json

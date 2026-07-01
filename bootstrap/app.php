@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
-return Application::configure(basePath: dirname(__DIR__))
+$app = Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
@@ -56,3 +56,14 @@ return Application::configure(basePath: dirname(__DIR__))
             ])->toResponse($request)->setStatusCode($status);
         });
     })->create();
+
+$abacoEnvironmentFile = getenv('ABACO_ENV_FILE') ?: ($_SERVER['ABACO_ENV_FILE'] ?? $_ENV['ABACO_ENV_FILE'] ?? null);
+
+if (
+    $abacoEnvironmentFile === '.envAbacoqd.local' &&
+    is_file(dirname(__DIR__).DIRECTORY_SEPARATOR.$abacoEnvironmentFile)
+) {
+    $app->loadEnvironmentFrom($abacoEnvironmentFile);
+}
+
+return $app;
