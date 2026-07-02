@@ -6,7 +6,15 @@ Referencia interna breve. La fuente de verdad activa está en `/docs` y comienza
 
 AbacoQD / Ábaco Quick Developments es el nombre documental del proyecto.
 
-La marca pública visible del sitio es Abaco Developments. La razón social ABACO DIGITAL DEVELOPMENTS, S.L. se reserva para textos legales. Dominio canónico final: `https://abacoqd.com/`. `https://abacodev.com/` se conserva como dominio histórico y `https://www.abacodev.com/` como URL legal histórica.
+Marca por capas (regla vigente, no sustituir en bloque):
+
+- **AbacoQD** = marca visible del producto: pestaña del navegador, `title`/`description` de SEO principal, logo, menú móvil, CTA y experiencia pública. El `title` del home empieza por `AbacoQD`.
+- **Abaco Developments** = contexto corporativo, origen e histórico; se mantiene en textos donde ya está bien (footer, prosa corporativa) y puede aparecer de forma secundaria en la meta description.
+- **ABACO DIGITAL DEVELOPMENTS, S.L.** = razón social; solo en legales, privacidad, cookies, facturación o datos jurídicos.
+
+No hacer sustitución global `Abaco Developments`→`AbacoQD`. Dominio canónico final: `https://abacoqd.com/`. `https://abacodev.com/` se conserva como dominio histórico y `https://www.abacodev.com/` como URL legal histórica.
+
+Nota SEO: el `title`/`description` reales del home los sirve la BD (`seo_metadata`, `page_key=home`), no solo `config/site.php`; en producción hay que actualizar ese registro (updateOrCreate idempotente), no basta con el fallback de config.
 
 AbacoQD es una iniciativa documental de Ábaco Developments especializada en desarrollos rápidos y a medida, con procesos y herramientas internas propios.
 
