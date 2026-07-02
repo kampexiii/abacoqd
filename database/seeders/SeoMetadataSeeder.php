@@ -20,48 +20,48 @@ class SeoMetadataSeeder extends Seeder
     {
         $pages = [
             'home' => [
-                'es' => ['', 'Abaco Developments - Consultoría tecnológica, CRM e IA aplicada', 'Consultoría tecnológica, CRM, datos, desarrollo digital e IA aplicada para proyectos a medida.'],
-                'en' => ['en', 'Abaco Developments - Technology consulting, CRM and applied AI', 'Technology consulting, CRM, data, digital development and applied AI for custom projects.'],
+                'es' => ['', 'AbacoQD | Desarrollo a medida rápido y seguro', 'AbacoQD desarrolla webs, aplicaciones, automatizaciones, CRM, integraciones y herramientas internas a medida, con procesos ágiles, IA supervisada y criterio técnico de Abaco Developments.'],
+                'en' => ['en', 'AbacoQD | Fast and secure custom development', 'AbacoQD builds custom websites, applications, automations, CRM systems, integrations and internal tools with agile processes, supervised AI and the technical criteria of Abaco Developments.'],
             ],
             'methodology' => [
-                'es' => ['metodologia', 'Metodología | Abaco Developments', 'Cómo trabajamos para construir soluciones rápidas, claras y a medida.'],
-                'en' => ['en/methodology', 'Methodology | Abaco Developments', 'How we work to build fast, clear and custom digital solutions.'],
+                'es' => ['metodologia', 'Metodología | AbacoQD', 'Cómo trabajamos para construir soluciones rápidas, claras y a medida.'],
+                'en' => ['en/methodology', 'Methodology | AbacoQD', 'How we work to build fast, clear and custom digital solutions.'],
             ],
             'services' => [
-                'es' => ['servicios', 'Servicios | Abaco Developments', 'Servicios de desarrollo web rápido, aplicaciones a medida, automatización con IA, CRM, integraciones y MVPs.'],
-                'en' => ['en/services', 'Services | Abaco Developments', 'Services for fast web development, custom applications, AI automation, CRM, integrations and MVPs.'],
+                'es' => ['servicios', 'Servicios | AbacoQD', 'Servicios de desarrollo web rápido, aplicaciones a medida, automatización con IA, CRM, integraciones y MVPs.'],
+                'en' => ['en/services', 'Services | AbacoQD', 'Services for fast web development, custom applications, AI automation, CRM, integrations and MVPs.'],
             ],
             'projects' => [
-                'es' => ['proyectos', 'Proyectos | Abaco Developments', 'Proyectos y colaboraciones publicables de Abaco Developments.'],
-                'en' => ['en/projects', 'Projects | Abaco Developments', 'Publishable projects and collaborations by Abaco Developments.'],
+                'es' => ['proyectos', 'Proyectos | AbacoQD', 'Proyectos y colaboraciones publicables de AbacoQD.'],
+                'en' => ['en/projects', 'Projects | AbacoQD', 'Publishable projects and collaborations by AbacoQD.'],
             ],
             'about' => [
-                'es' => ['quienes-somos', 'Quiénes somos | Abaco Developments', 'Origen, enfoque y forma de trabajo de Abaco Developments.'],
-                'en' => ['en/about', 'About us | Abaco Developments', 'Origin, approach and way of working of Abaco Developments.'],
+                'es' => ['quienes-somos', 'Quiénes somos | AbacoQD', 'Origen, enfoque y forma de trabajo de AbacoQD.'],
+                'en' => ['en/about', 'About us | AbacoQD', 'Origin, approach and way of working of AbacoQD.'],
             ],
             'blog' => [
-                'es' => ['blog', 'Blog de CRM, datos e IA aplicada | Abaco Developments', 'Ideas sobre desarrollo rápido, IA aplicada, CRM, datos y automatización.'],
-                'en' => ['en/blog', 'CRM, data and applied AI blog | Abaco Developments', 'Ideas about fast development, applied AI, CRM, data and automation.'],
+                'es' => ['blog', 'Blog de desarrollo rápido, datos e IA aplicada | AbacoQD', 'Ideas sobre desarrollo rápido, IA aplicada, CRM, datos y automatización.'],
+                'en' => ['en/blog', 'Blog on fast development, data and applied AI | AbacoQD', 'Ideas about fast development, applied AI, CRM, data and automation.'],
             ],
             'contact' => [
-                'es' => ['contacto', 'Contacto | Abaco Developments', 'Cuéntanos tu proyecto y te responderemos con un primer enfoque.'],
-                'en' => ['en/contact', 'Contact | Abaco Developments', 'Tell us about your project and we will reply with an initial approach.'],
+                'es' => ['contacto', 'Contacto | AbacoQD', 'Cuéntanos tu proyecto y te responderemos con un primer enfoque.'],
+                'en' => ['en/contact', 'Contact | AbacoQD', 'Tell us about your project and we will reply with an initial approach.'],
             ],
             'booking' => [
-                'es' => ['reserva', 'Reserva hora | Abaco Developments', 'Reserva una primera sesión o usa el fallback de contacto.'],
-                'en' => ['en/book', 'Book a call | Abaco Developments', 'Book an initial session or use the contact fallback.'],
+                'es' => ['reserva', 'Reserva hora | AbacoQD', 'Reserva una primera sesión o usa el fallback de contacto.'],
+                'en' => ['en/book', 'Book a call | AbacoQD', 'Book an initial session or use the contact fallback.'],
             ],
             'legal-notice' => [
-                'es' => ['aviso-legal', 'Aviso legal | Abaco Developments', 'Información legal de ABACO DIGITAL DEVELOPMENTS, S.L.'],
-                'en' => ['en/legal-notice', 'Legal notice | Abaco Developments', 'Legal information for ABACO DIGITAL DEVELOPMENTS, S.L.'],
+                'es' => ['aviso-legal', 'Aviso legal | AbacoQD', 'Información legal de ABACO DIGITAL DEVELOPMENTS, S.L.'],
+                'en' => ['en/legal-notice', 'Legal notice | AbacoQD', 'Legal information for ABACO DIGITAL DEVELOPMENTS, S.L.'],
             ],
             'privacy' => [
-                'es' => ['privacidad', 'Privacidad | Abaco Developments', 'Información sobre tratamiento de datos y derechos de privacidad.'],
-                'en' => ['en/privacy', 'Privacy | Abaco Developments', 'Information about data processing and privacy rights.'],
+                'es' => ['privacidad', 'Privacidad | AbacoQD', 'Información sobre tratamiento de datos y derechos de privacidad.'],
+                'en' => ['en/privacy', 'Privacy | AbacoQD', 'Information about data processing and privacy rights.'],
             ],
             'cookies' => [
-                'es' => ['cookies', 'Cookies | Abaco Developments', 'Información sobre cookies técnicas y preferencias de consentimiento.'],
-                'en' => ['en/cookies', 'Cookies | Abaco Developments', 'Information about technical cookies and consent preferences.'],
+                'es' => ['cookies', 'Cookies | AbacoQD', 'Información sobre cookies técnicas y preferencias de consentimiento.'],
+                'en' => ['en/cookies', 'Cookies | AbacoQD', 'Information about technical cookies and consent preferences.'],
             ],
         ];
 

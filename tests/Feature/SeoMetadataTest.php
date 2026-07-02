@@ -44,7 +44,7 @@ test('a service detail resolves its seo from the model with an absolute es canon
         ->assertInertia(fn ($page) => $page
             ->where('seo.canonical', 'https://abacoqd.com/servicios/aplicaciones-a-medida')
             ->where('seo.robots', 'index,follow')
-            ->where('seo.title', 'Aplicaciones a medida | Abaco Developments')
+            ->where('seo.title', 'Aplicaciones a medida | AbacoQD')
             ->where('seo.description', 'Herramientas internas adaptadas a procesos reales.')
         );
 });

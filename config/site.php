@@ -71,11 +71,11 @@ return [
     |
     */
     'seo' => [
-        'brand' => 'Abaco Developments',
+        'brand' => 'AbacoQD',
         // Razón social para textos legales y `legalName` en datos estructurados.
         'legal_name' => 'ABACO DIGITAL DEVELOPMENTS, S.L.',
-        'title' => 'Abaco Developments — Desarrollo digital a medida potenciado por IA',
-        'description' => 'Desarrollos web y aplicaciones a medida, rápidos y potenciados por IA, con procesos optimizados y herramientas internas propias.',
+        'title' => 'AbacoQD | Desarrollo a medida rápido y seguro',
+        'description' => 'AbacoQD desarrolla webs, aplicaciones, automatizaciones, CRM, integraciones y herramientas internas a medida, con procesos ágiles, IA supervisada y criterio técnico de Abaco Developments.',
         'robots' => 'index,follow',
 
         /*
